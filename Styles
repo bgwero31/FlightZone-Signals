@@ -12,25 +12,34 @@ h1 {
     font-size: 32px;
 }
 
-/* Button Styles */
-.download-button {
+/* Paragraph Styles */
+p {
+    font-size: 18px;
+    color: #333;
+}
+
+/* Link Styles */
+.prediction-link {
     display: inline-block;
-    padding: 15px 25px;
+    padding: 10px 20px;
     background-color: #28a745;
     color: white;
     text-decoration: none;
     border-radius: 5px;
     font-size: 18px;
+    margin: 10px;
 }
 
-.download-button:hover {
+.prediction-link:hover {
     background-color: #218838;
 }
 
-/* Image Styles */
-img {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 10px;
-    margin-top: 20px;
+/* List Styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
 }
