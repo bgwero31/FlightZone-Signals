@@ -2,46 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlightZone Signals</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #1a1a2e;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background: #0f3460;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .container {
-            padding: 20px;
-        }
-        .button {
-            display: inline-block;
-            background: #e94560;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-        .button:hover {
-            background: #ff2e63;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="header">🚀 FlightZone Signals 🚀</div>
-    <div class="container">
-        <h1>Welcome to FlightZone Signals</h1>
-        <p>Get accurate JetX predictions and maximize your winnings!</p>
-        <a href="https://t.me/FlightZoneSignals" class="button">Join Our Telegram</a>
-    </div>
+    <header>
+        <h1>FlightZone Signals</h1>
+        <p>Your Ultimate Aviator n JetX Prediction Platform</p>
+    </header>
+
+    <section class="predictions">
+        <h2>🔮 Live Predictions</h2>
+        <div id="prediction-box">Loading predictions...</div>
+        <button onclick="refreshPredictions()">🔄 Refresh Predictions</button>
+    </section>
+
+    <section class="features">
+        <h2>🚀 Why Choose FlightZone?</h2>
+        <ul>
+            <li>✅ Real-time Aviator n JetX predictions</li>
+            <li>✅ Accurate AI-generated odds</li>
+            <li>✅ Trusted by thousands of players</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 FlightZone Signals | All Rights Reserved</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
