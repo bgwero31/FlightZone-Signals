@@ -4,13 +4,26 @@
    <head>
     <title>FlightZone Signals - JetX Predictor</title>
     <style>
-        body {
-            background-color: #121212; /* Dark background */
-            color: white; /* White text */
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
+        <body>
+    <div class="container">
+        <h1>🚀 FlightZone Signals - JetX Predictor</h1>
+        <p>Get accurate JetX predictions with AI-powered signals!</p>
+        <button onclick="generatePrediction()">🔮 Generate Signals</button>
+        <h2 id="prediction">Waiting for prediction...</h2>
+    </div>
+
+    <script>
+        function generatePrediction() {
+            document.getElementById("prediction").innerText = "🔄 Generating...";
+
+            setTimeout(() => {
+                let odds = ["1.5X", "2.0X", "5.0X Risk", "4.5X"];
+                let randomOdds = odds[Math.floor(Math.random() * odds.length)];
+                document.getElementById("prediction").innerText = "🎯 Prediction: " + randomOdds;
+            }, 5000);
         }
+    </script>
+</body>
 
         .container {
             max-width: 600px;
