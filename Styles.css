@@ -1,9 +1,12 @@
 body {
-    background-image: url('https://drive.google.com/uc?export=view&id=1BmlM_xg3GFg-11WpEP3T5xUyuLYqyYPd');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    background-image: url('https://drive.google.com/uc?export=view&id=1BmlM_xg3GFg-11WpEP3T5xUyuLYqyYPd'); /* Google Drive Image Link */
+    background-size: cover; /* Make the background cover the entire screen */
+    background-position: center; /* Center the background image */
+    background-attachment: fixed; /* Keep the image fixed while scrolling */
+
 }
 
 header {
