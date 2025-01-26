@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Predictions - FlightZone Signals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: black;
+            color: white;
+        }
+        h1 {
+            background: rgba(255, 204, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            color: purple;
+        }
+        .site-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px;
+            border-radius: 8px;
+        }
+        .prediction {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .risk {
+            color: red;
+            font-weight: bold;
+        }
+        #clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px 25px;
+            background: #ff9900;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff6600;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
+    <div id="clock">Loading Time...</div>
+    <button onclick="generatePredictions()">🎲 Generate Signals</button>
+    <div id="signals"></div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function generatePredictions() {
+            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
+            let output = "";
+
+            const now = new Date();
+            let startMinutes = now.getMinutes();
+            let currentHour = now.getHours();
+
+            bettingSites.forEach(site => {
+                output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
+
+                for (let i = 0; i < 10; i++) {
+                    let minutes = (startMinutes + i) % 60;
+                    let seconds = Math.floor(Math.random() * 60);
+
+                    let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
+                    let riskMultiplier = (Math.random() * (4.50 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
+
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x | <span class="risk">Risk ${riskMultiplier}x</span></p>`;
+                }
+                output += "</div>";
+            });
+
+            document.getElementById('signals').innerHTML = output;
+        }
+
+        // Auto-update predictions every 10 minutes (600,000 milliseconds)
+        setInterval(generatePredictions, 600000);
+    </script>
+
+</body>
+</html>
