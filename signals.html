@@ -9,13 +9,13 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background: black;
-            color: light green;
+            color: white;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
             padding: 15px;
             border-radius: 10px;
-            color: black;
+            color: purple;
         }
         .site-section {
             background: rgba(255, 255, 255, 0.1);
@@ -39,7 +39,7 @@
         button {
             padding: 12px 25px;
             background: #ff9900;
-            color: purple;
+            color: white;
             border: none;
             font-size: 16px;
             border-radius: 5px;
@@ -80,19 +80,15 @@
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
+                    let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
+                    let riskMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Risk between 3.00x - 5.00x
 
-                    let multiplier;
-                    let category = Math.random();
-
-                    if (category < 0.7) {
-                        multiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // 1.50x - 2.50x (target)
-                    } else {
-                        multiplier = (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2); // 3.00x - 5.00x (risk)
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
+                    output += `<p class="prediction">Target ${targetMultiplier}x</p>`;
+                    
+                    if (riskMultiplier) {
+                        output += `<p class="prediction risk">Risk ${riskMultiplier}x</p>`;
                     }
-
-                    let riskLabel = multiplier >= 3.00 ? `<span class='risk'>🔥 Risk</span>` : "";
-
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | 🎯 Target: ${multiplier}x ${riskLabel}</p>`;
                 }
                 output += "</div>";
             });
