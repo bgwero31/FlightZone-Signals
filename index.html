@@ -1,87 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <head>
-    <title>FlightZone Signals - JetX Predictor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlightZone Signals by B JAY</title>
     <style>
-        <body>
-    <div class="container">
-        <h1>🚀 FlightZone Signals - JetX Predictor</h1>
-        <p>Get accurate JetX predictions with AI-powered signals!</p>
-        <button onclick="generatePrediction()">🔮 Generate Signals</button>
-        <h2 id="prediction">Waiting for prediction...</h2>
-    </div>
-
-    <script>
-        function generatePrediction() {
-            document.getElementById("prediction").innerText = "🔄 Generating...";
-
-            setTimeout(() => {
-                let odds = ["1.5X", "2.0X", "5.0X Risk", "4.5X"];
-                let randomOdds = odds[Math.floor(Math.random() * odds.length)];
-                document.getElementById("prediction").innerText = "🎯 Prediction: " + randomOdds;
-            }, 5000);
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://source.unsplash.com/1600x900/?airplane,sky');
+            background-size: cover;
+            background-position: center;
+            color: light green;
         }
-    </script>
-</body>
-
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #1e1e1e;
+        h1 {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            display: inline-block;
+            border-radius: 8px;
+        }
+        button {
+            padding: 12px 25px;
+            background: #ff9900;
+            color: purple;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff6600;
+        }
+        #signals {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            max-width: 600px;
         }
-
-        h1 {
-            color: #00ffcc;
+        h3 {
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 5px;
         }
-
-        button {
-            background: #ffcc00;
-            color: black;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            background: #ff9900;
+        p {
+            font-size: 18px;
+            margin: 5px 0;
         }
     </style>
-   </head> <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlightZone Signals</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>FlightZone Signals</h1>
-        <p>Your Ultimate Aviator n JetX Prediction Platform</p>
-    </header>
 
-    <section class="predictions">
-        <h2>🔮 Live Predictions</h2>
-        <div id="prediction-box">Loading predictions...</div>
-        <button onclick="refreshPredictions()">🔄 Refresh Predictions</button>
-    </section>
+    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
+    <br><br>
+    <button onclick="generateSignals()">🎲 Get Signal</button>
+    <div id="signals"></div>
 
-    <section class="features">
-        <h2>🚀 Why Choose FlightZone?</h2>
-        <ul>
-            <li>✅ Real-time Aviator n JetX predictions</li>
-            <li>✅ Accurate AI-generated odds</li>
-            <li>✅ Trusted by thousands of players</li>
-        </ul>
-    </section>
+    <script>
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { hour12: false });
+        }
 
-    <footer>
-        <p>&copy; 2025 FlightZone Signals | All Rights Reserved</p>
-    </footer>
+        function generateSignals() {
+            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City"];
+            let output = `<h3>📡 Signal Set for ${getCurrentTime()}</h3>`;
 
-    <script src="script.js"></script>
+            bettingSites.forEach(site => {
+                output += `<h3>${site}</h3>`;
+                for (let i = 0; i < 10; i++) {
+                    let minutes = Math.floor(Math.random() * 60);
+                    let seconds = Math.floor(Math.random() * 60);
+                    let multiplier = (Math.random() * (12 - 1) + 1).toFixed(2); // Random multiplier between 1x - 12x
+                    let riskLabel = multiplier >= 10 ? " 🔥 (risk)" : "";
+
+                    output += `<p>🕒 ${minutes}:${seconds} | 🎯 Target: ${multiplier}x ${riskLabel}</p>`;
+                }
+            });
+
+            document.getElementById('signals').innerHTML = output;
+        }
+    </script>
+
 </body>
 </html>
