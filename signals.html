@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background: black;
-            color: white;
+            color: light green;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -39,7 +39,7 @@
         button {
             padding: 12px 25px;
             background: #ff9900;
-            color: white;
+            color: purple;
             border: none;
             font-size: 16px;
             border-radius: 5px;
@@ -84,15 +84,13 @@
                     let multiplier;
                     let category = Math.random();
 
-                    if (category < 0.4) {
-                        multiplier = (Math.random() * (1.90 - 1.50) + 1.50).toFixed(2); // 1.50x - 1.90x
-                    } else if (category < 0.8) {
-                        multiplier = (Math.random() * (4.00 - 2.00) + 2.00).toFixed(2); // 2.00x - 4.00x
+                    if (category < 0.7) {
+                        multiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // 1.50x - 2.50x (target)
                     } else {
-                        multiplier = (Math.random() * (10.00 - 5.00) + 5.00).toFixed(2); // 5.00x - 10.00x
+                        multiplier = (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2); // 3.00x - 5.00x (risk)
                     }
 
-                    let riskLabel = multiplier >= 5.00 ? `<span class='risk'>🔥 Risk 5x to 10x flicking that odd</span>` : "";
+                    let riskLabel = multiplier >= 3.00 ? `<span class='risk'>🔥 Risk</span>` : "";
 
                     output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | 🎯 Target: ${multiplier}x ${riskLabel}</p>`;
                 }
