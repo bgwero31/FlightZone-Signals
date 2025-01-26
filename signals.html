@@ -15,7 +15,7 @@
             background: rgba(255, 204, 0, 0.8);
             padding: 15px;
             border-radius: 10px;
-            color: purple;
+            color: black;
         }
         .site-section {
             background: rgba(255, 255, 255, 0.1);
@@ -26,6 +26,7 @@
         .prediction {
             font-size: 18px;
             margin: 5px 0;
+            color: purple;
         }
         .risk {
             color: red;
@@ -83,12 +84,11 @@
                     let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
                     let riskMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Risk between 3.00x - 5.00x
 
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
-                    output += `<p class="prediction">Target ${targetMultiplier}x</p>`;
-                    
                     if (riskMultiplier) {
                         output += `<p class="prediction risk">Risk ${riskMultiplier}x</p>`;
                     }
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
+                    output += `<p class="prediction">Target ${targetMultiplier}x</p>`;
                 }
                 output += "</div>";
             });
