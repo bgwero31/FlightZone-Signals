@@ -11,7 +11,7 @@
             background-image: url('https://source.unsplash.com/1600x900/?airplane,sky');
             background-size: cover;
             background-position: center;
-            color: purple;
+            color: white;
         }
         h1 {
             background: rgba(0, 0, 0, 0.7);
@@ -19,18 +19,55 @@
             display: inline-block;
             border-radius: 8px;
         }
+        .section {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: left;
+        }
+        .section h2 {
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 5px;
+        }
         button {
-            padding: 15px 30px;
-            background: #ffcc00;
-            color: black;
+            padding: 12px 25px;
+            background: #ff9900;
+            color: white;
             border: none;
-            font-size: 18px;
-            border-radius: 8px;
+            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
         }
         button:hover {
-            background: #ff9900;
+            background: #ff6600;
+        }
+        .form-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            margin: auto;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+        }
+        .form-container button {
+            background: green;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+        #price {
+            color: red;
+            font-weight: bold;
+            font-size: 24px;
         }
     </style>
 </head>
@@ -40,10 +77,54 @@
     <br><br>
     <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
 
+    <div class="section">
+        <h2>💡 About B.JAY BOTS</h2>
+        <p>At B.JAY BOTS, we provide next-level AI-powered prediction bots to help you maximize your winnings effortlessly. Whether you're playing Aviator, JetX, or other crash games, our intelligent algorithms give you the edge to win more and lose less!</p>
+    </div>
+
+    <div class="section">
+        <h2>🛠 What We Offer</h2>
+        <ul>
+            <li>✅ Aviator Prediction Bot – Real-time high-accuracy signals for the best odds.</li>
+            <li>✅ JETX Purple Bot – Specially designed to catch purple multipliers effortlessly.</li>
+            <li>✅ Live Updates & Alerts – Stay ahead with instant notifications on winning odds.</li>
+            <li>✅ User-Friendly Dashboard – Easy-to-use interface with instant access to predictions.</li>
+            <li>✅ Exclusive Community – Join a network of serious bettors and get insider strategies!</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>💰 Pricing Plan – Only <span id="price">$30</span> Per Application!</h2>
+        <p>🔥 Get any bot for just <span id="price">$30</span> 🔥</p>
+        <p>💡 Limited offer: First 5 users get FREE access to the JETX Purple Bot!</p>
+    </div>
+
+    <div class="section">
+        <h2>📩 Sign Up Now & Start Winning!</h2>
+        <form action="signup.php" method="post" class="form-container">
+            <label for="name"><b>Full Name</b></label>
+            <input type="text" placeholder="Enter Your Name" name="name" required>
+
+            <label for="email"><b>Email</b></label>
+            <input type="email" placeholder="Enter Your Email" name="email" required>
+
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Create a Password" name="password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+
     <script>
         function openSignalsPage() {
-            window.location.href = "signals.html";
+            window.location.href = "signals.html"; // Opens the predictions page
         }
+
+        function flickerPrice() {
+            var price = document.getElementById("price");
+            price.style.color = (price.style.color === "red") ? "blue" : "red";
+        }
+        setInterval(flickerPrice, 1000);
     </script>
 
 </body>
