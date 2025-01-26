@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Predictions - FlightZone Signals by B JAY</title>
+    <title>Live Predictions - FlightZone Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background: black;
-            color: purple;
+            color: white;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -80,8 +80,19 @@
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
-                    let multiplier = (Math.random() * (12 - 1) + 1).toFixed(2); // Random multiplier between 1x - 12x
-                    let riskLabel = multiplier >= 10 ? "<span class='risk'>🔥 (risk)</span>" : "";
+
+                    let multiplier;
+                    let category = Math.random();
+
+                    if (category < 0.4) {
+                        multiplier = (Math.random() * (1.90 - 1.50) + 1.50).toFixed(2); // 1.50x - 1.90x
+                    } else if (category < 0.8) {
+                        multiplier = (Math.random() * (4.00 - 2.00) + 2.00).toFixed(2); // 2.00x - 4.00x
+                    } else {
+                        multiplier = (Math.random() * (10.00 - 5.00) + 5.00).toFixed(2); // 5.00x - 10.00x
+                    }
+
+                    let riskLabel = multiplier >= 5.00 ? `<span class='risk'>🔥 Risk 5x to 10x flicking that odd</span>` : "";
 
                     output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | 🎯 Target: ${multiplier}x ${riskLabel}</p>`;
                 }
