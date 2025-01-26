@@ -8,8 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: black;
-            color: white;
+            background: purple;
+            color: black;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -26,7 +26,6 @@
         .prediction {
             font-size: 18px;
             margin: 5px 0;
-            color: purple;
         }
         .risk {
             color: red;
@@ -40,7 +39,7 @@
         button {
             padding: 12px 25px;
             background: #ff9900;
-            color: white;
+            color: gray;
             border: none;
             font-size: 16px;
             border-radius: 5px;
@@ -81,14 +80,11 @@
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
-                    let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
-                    let riskMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Risk between 3.00x - 5.00x
 
-                    if (riskMultiplier) {
-                        output += `<p class="prediction risk">Risk ${riskMultiplier}x</p>`;
-                    }
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
-                    output += `<p class="prediction">Target ${targetMultiplier}x</p>`;
+                    let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
+                    let riskMultiplier = (Math.random() * (4.50 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
+
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x | <span class="risk">Risk ${riskMultiplier}x</span></p>`;
                 }
                 output += "</div>";
             });
