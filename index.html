@@ -4,33 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlightZone Signals by B JAY</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://source.unsplash.com/1600x900/?airplane,sky');
+            background-size: cover;
+            background-position: center;
+            color: purple;
+        }
+        h1 {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            display: inline-block;
+            border-radius: 8px;
+        }
+        button {
+            padding: 15px 30px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff9900;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>FlightZone Signals</h1>
-        <p>Your Ultimate JetX Prediction Platform</p>
-    </header>
 
-    <section class="predictions">
-        <h2>🔮 Live Predictions</h2>
-        <div id="prediction-box">Loading predictions...</div>
-        <button onclick="refreshPredictions()">🔄 Refresh Predictions</button>
-    </section>
+    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
+    <br><br>
+    <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
 
-    <section class="features">
-        <h2>🚀 Why Choose FlightZone?</h2>
-        <ul>
-            <li>✅ Real-time JetX predictions</li>
-            <li>✅ Accurate AI-generated odds</li>
-            <li>✅ Trusted by thousands of players</li>
-        </ul>
-    </section>
+    <script>
+        function openSignalsPage() {
+            window.location.href = "signals.html";
+        }
+    </script>
 
-    <footer>
-        <p>&copy; 2025 FlightZone Signals by B JAY | All Rights Reserved</p>
-    </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
