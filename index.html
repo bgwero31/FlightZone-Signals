@@ -3,33 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlightZone Signals by B JAY</title>
+    <title>Live Predictions - FlightZone Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-image: url('https://source.unsplash.com/1600x900/?airplane,sky');
-            background-size: cover;
-            background-position: center;
             color: white;
+            background-image: url('background.jpg'); /* Add your image here */
+            background-size: cover; /* Make the background cover the entire screen */
+            background-position: center; /* Center the background image */
+            background-attachment: fixed; /* Keep the image fixed while scrolling */
         }
         h1 {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(255, 204, 0, 0.8);
             padding: 15px;
-            display: inline-block;
-            border-radius: 8px;
-        }
-        .section {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
             border-radius: 10px;
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: left;
+            color: Purple;
         }
-        .section h2 {
-            border-bottom: 2px solid #ffcc00;
-            padding-bottom: 5px;
+        .site-container {
+            display: flex;
+            justify-content: space-evenly; /* Space the sections evenly */
+            flex-wrap: wrap; /* Allow sections to wrap on smaller screens */
+            gap: 20px; /* Space between sections */
+        }
+        .site-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px;
+            border-radius: 8px;
+            width: 250px; /* You can adjust the width as needed */
+            vertical-align: top;
+        }
+        .prediction {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .risk {
+            color: green;
+            font-weight: bold;
+        }
+        #clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
         button {
             padding: 12px 25px;
@@ -44,87 +60,285 @@
         button:hover {
             background: #ff6600;
         }
-        .form-container {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
-            margin: auto;
+        .input-container {
+            margin-top: 20px;
         }
-        .form-container input {
-            width: 100%;
+        .password-input, .game-selector {
             padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-        }
-        .form-container button {
-            background: green;
-            color: white;
-            padding: 10px;
-            width: 100%;
             font-size: 16px;
+            margin-right: 10px;
+            border-radius: 5px;
         }
-        #price {
-            color: red;
-            font-weight: bold;
-            font-size: 24px;
+        .hide {
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
-    <br><br>
-    <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
+    <div id="clock">Loading Time...</div>
 
-    <div class="section">
-        <h2>💡 About B.JAY BOTS</h2>
-        <p>At B.JAY BOTS, we provide next-level AI-powered prediction bots to help you maximize your winnings effortlessly. Whether you're playing Aviator, JetX, or other crash games, our intelligent algorithms give you the edge to win more and lose less!</p>
+    <!-- Password and Game Selection (hidden after successful login) -->
+    <div class="input-container" id="password-section">
+        <input type="password" id="password" class="password-input" placeholder="Enter Password">
+        <button onclick="validatePassword()">🎲 Get Free Signals</button>
     </div>
 
-    <div class="section">
-        <h2>🛠 What We Offer</h2>
-        <ul>
-            <li>✅ Aviator Prediction Bot – Real-time high-accuracy signals for the best odds.</li>
-            <li>✅ JETX Purple Bot – Specially designed to catch purple multipliers effortlessly.</li>
-            <li>✅ Live Updates & Alerts – Stay ahead with instant notifications on winning odds.</li>
-            <li>✅ User-Friendly Dashboard – Easy-to-use interface with instant access to predictions.</li>
-            <li>✅ Exclusive Community – Join a network of serious bettors and get insider strategies!</li>
-        </ul>
+    <div id="game-selection" class="hide">
+        <select id="game" class="game-selector">
+            <option value="jetx">JetX</option>
+            <option value="aviator">Aviator</option>
+        </select>
+        <button onclick="generatePredictions()">🎲 Generate Signals</button>
     </div>
 
-    <div class="section">
-        <h2>💰 Pricing Plan – Only <span id="price">$30</span> Per Application!</h2>
-        <p>🔥 Get any bot for just <span id="price">$30</span> 🔥</p>
-        <p>💡 Limited offer: First 5 users get FREE access to the JETX Purple Bot!</p>
-    </div>
-
-    <div class="section">
-        <h2>📩 Sign Up Now & Start Winning!</h2>
-        <form action="signup.php" method="post" class="form-container">
-            <label for="name"><b>Full Name</b></label>
-            <input type="text" placeholder="Enter Your Name" name="name" required>
-
-            <label for="email"><b>Email</b></label>
-            <input type="email" placeholder="Enter Your Email" name="email" required>
-
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Create a Password" name="password" required>
-
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
+    <div id="signals" class="site-container"></div>
 
     <script>
-        function openSignalsPage() {
-            window.location.href = "signals.html"; // Ensure signals.html is in the same folder
+        // Function to update the clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Function to validate password and start generating predictions
+        function validatePassword() {
+            const enteredPassword = document.getElementById("password").value;
+            const correctPassword = "bjay2025";
+
+            if (enteredPassword === correctPassword) {
+                // Hide the password section and show the game selection
+                document.getElementById("password-section").classList.add("hide");
+                document.getElementById("game-selection").classList.remove("hide");
+            } else {
+                alert("Incorrect password! Please try again.");
+            }
         }
 
-        function flickerPrice() {
-            var price = document.getElementById("price");
-            price.style.color = (price.style.color === "red") ? "blue" : "red";
+        // Function to generate predictions based on selected game (JetX or Aviator)
+        function generatePredictions() {
+            const game = document.getElementById("game").value;
+            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
+            let output = "";
+
+            const now = new Date();
+            let startMinutes = now.getMinutes();
+            let currentHour = now.getHours();
+
+            bettingSites.forEach(site => {
+                output += `<div class="site-section"><h2>📡 ${site} Signals (${game.toUpperCase()})</h2>`;
+
+                for (let i = 0; i < 10; i++) {
+                    let minutes = (startMinutes + i) % 60;
+                    let seconds = Math.floor(Math.random() * 60);
+
+                    if (game === "jetx") {
+                        // For JetX, we use "Catch" instead of "Target" and "Steady Climb" instead of risk
+                        let catchMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Catch between 1.50x - 2.50x
+                        let steadyClimbMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Steady Climb between 3.00x - 5.00x
+
+                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
+                        output += `<p class="prediction">Catch ${catchMultiplier}x</p>`;
+                        
+                        if (steadyClimbMultiplier) {
+                            output += `<p class="prediction risk">Steady Climb ${steadyClimbMultiplier}x</p>`;
+                        }
+                    } else if (game === "aviator") {
+                        // For Aviator, we use "Target" and "Risk"
+                        let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
+                        let riskMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Risk between 3.00x - 5.00x
+
+                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
+                        output += `<p class="prediction">Target ${targetMultiplier}x</p>`;
+                        
+                        if (riskMultiplier) {
+                            output += `<p class="prediction risk">Risk ${riskMultiplier}x</p>`;
+                        }
+                    }
+                }
+                output += "</div>";
+            });
+
+            document.getElementById('signals').innerHTML = output;
         }
-        setInterval(flickerPrice, 1000);
+
+        // Auto-update predictions every 10 minutes (600,000 milliseconds)
+        setInterval(generatePredictions, 600000);
+    </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Predictions - FlightZone Signals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: white;
+            background-image: url('background.jpg'); /* Add your image here */
+            background-size: cover; /* Make the background cover the entire screen */
+            background-position: center; /* Center the background image */
+            background-attachment: fixed; /* Keep the image fixed while scrolling */
+        }
+        h1 {
+            background: rgba(255, 204, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            color: black;
+        }
+        .site-container {
+            display: flex;
+            justify-content: space-evenly; /* Space the sections evenly */
+            flex-wrap: wrap; /* Allow sections to wrap on smaller screens */
+            gap: 20px; /* Space between sections */
+        }
+        .site-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px;
+            border-radius: 8px;
+            width: 250px; /* You can adjust the width as needed */
+            vertical-align: top;
+        }
+        .prediction {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .risk {
+            color: red;
+            font-weight: bold;
+        }
+        #clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px 25px;
+            background: #ff9900;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff6600;
+        }
+        .input-container {
+            margin-top: 20px;
+        }
+        .password-input, .game-selector {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
+    <div id="clock">Loading Time...</div>
+
+    <!-- Password and Game Selection (hidden after successful login) -->
+    <div class="input-container" id="password-section">
+        <input type="password" id="password" class="password-input" placeholder="Enter Password">
+        <button onclick="validatePassword()">🎲 Get Free Signals</button>
+    </div>
+
+    <div id="game-selection" class="hide">
+        <select id="game" class="game-selector">
+            <option value="jetx">JetX</option>
+            <option value="aviator">Aviator</option>
+        </select>
+        <button onclick="generatePredictions()">🎲 Generate Signals</button>
+    </div>
+
+    <div id="signals" class="site-container"></div>
+
+    <script>
+        // Function to update the clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Function to validate password and start generating predictions
+        function validatePassword() {
+            const enteredPassword = document.getElementById("password").value;
+            const correctPassword = "bjay2025";
+
+            if (enteredPassword === correctPassword) {
+                // Hide the password section and show the game selection
+                document.getElementById("password-section").classList.add("hide");
+                document.getElementById("game-selection").classList.remove("hide");
+            } else {
+                alert("Incorrect password! Please try again.");
+            }
+        }
+
+        // Function to generate predictions based on selected game (JetX or Aviator)
+        function generatePredictions() {
+            const game = document.getElementById("game").value;
+            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
+            let output = "";
+
+            const now = new Date();
+            let startMinutes = now.getMinutes();
+            let currentHour = now.getHours();
+
+            bettingSites.forEach(site => {
+                output += `<div class="site-section"><h2>📡 ${site} Signals (${game.toUpperCase()})</h2>`;
+
+                for (let i = 0; i < 10; i++) {
+                    let minutes = (startMinutes + i) % 60;
+                    let seconds = Math.floor(Math.random() * 60);
+
+                    if (game === "jetx") {
+                        // For JetX, we use "Catch" instead of "Target" and "Steady Climb" instead of risk
+                        let catchMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Catch between 1.50x - 2.50x
+                        let steadyClimbMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Steady Climb between 3.00x - 5.00x
+
+                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
+                        output += `<p class="prediction">Catch ${catchMultiplier}x</p>`;
+                        
+                        if (steadyClimbMultiplier) {
+                            output += `<p class="prediction risk">Steady Climb ${steadyClimbMultiplier}x</p>`;
+                        }
+                    } else if (game === "aviator") {
+                        // For Aviator, we use "Target" and "Risk"
+                        let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
+                        let riskMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Risk between 3.00x - 5.00x
+
+                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
+                        output += `<p class="prediction">Target ${targetMultiplier}x</p>`;
+                        
+                        if (riskMultiplier) {
+                            output += `<p class="prediction risk">Risk ${riskMultiplier}x</p>`;
+                        }
+                    }
+                }
+                output += "</div>";
+            });
+
+            document.getElementById('signals').innerHTML = output;
+        }
+
+        // Auto-update predictions every 10 minutes (600,000 milliseconds)
+        setInterval(generatePredictions, 600000);
     </script>
 
 </body>
