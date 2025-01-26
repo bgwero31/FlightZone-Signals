@@ -1,10 +1,9 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #121212;
-    color: #ffffff;
-    text-align: center;
+    background-image: url('https://drive.google.com/uc?export=view&id=1BmlM_xg3GFg-11WpEP3T5xUyuLYqyYPd');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
 }
 
 header {
