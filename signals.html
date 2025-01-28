@@ -8,8 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: black;
-            color: diamond blue;
+            background: diamond blue;
+            color: black;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -55,6 +55,12 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
         }
+        .select-game {
+            margin: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -62,23 +68,23 @@
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
     <div id="clock">Loading Time...</div>
     
-    <!-- Password and Selection Form -->
+    <!-- Login Form -->
     <div class="password-section">
         <label for="password">Enter Password:</label>
         <input type="password" id="password" placeholder="Password" />
         <br /><br />
-        <label for="game">Select Game:</label>
-        <select id="game">
-            <option value="aviator">Aviator</option>
-            <option value="jetx">JetX</option>
-        </select>
-        <br /><br />
         <button onclick="login()">Login</button>
     </div>
     
+    <!-- Predictions Section -->
     <div id="predictions" style="display:none;">
-        <div class="site-section">
-            <h2>🎲 Generate Signals</h2>
+        <div class="select-game">
+            <label for="game">Select Game:</label>
+            <select id="game">
+                <option value="aviator">Aviator</option>
+                <option value="jetx">JetX</option>
+            </select>
+            <br /><br />
             <button onclick="generatePredictions()">Generate Signals</button>
         </div>
         <div id="signals"></div>
@@ -138,38 +144,15 @@
                         riskMultiplier = (Math.random() * (4.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
                     }
 
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x | <span class="risk">Risk ${riskMultiplier}x</span></p>`;
+                    // Randomize whether to show risk or not for each round
+                    let showRisk = Math.random() > 0.5; // 50% chance to show risk
+
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">Risk ${riskMultiplier}x</span>` : ''}</p>`;
                 }
                 output += "</div>";
             });
 
             document.getElementById('signals').innerHTML = output;
-
-            // Start the random flicker effect
-            randomFlicker();
-        }
-
-        // Random Flickering Effect
-        function randomFlicker() {
-            setInterval(() => {
-                const randomTime = Math.floor(Math.random() * 30); // Random seconds (0-29 seconds)
-                const flickerDuration = Math.floor(Math.random() * 6) + 3; // Random flicker duration (between 3 and 8 seconds)
-
-                setTimeout(() => {
-                    // Flicker the risk element randomly
-                    document.querySelectorAll('.risk').forEach(riskElement => {
-                        let isVisible = Math.random() > 0.5;
-                        riskElement.style.visibility = isVisible ? 'visible' : 'hidden';
-                    });
-                }, randomTime * 1000);
-
-                setTimeout(() => {
-                    // Stop flickering after the set duration
-                    document.querySelectorAll('.risk').forEach(riskElement => {
-                        riskElement.style.visibility = 'visible';
-                    });
-                }, (randomTime + flickerDuration) * 1000);
-            }, 10000); // Repeat every 10 seconds
         }
     </script>
 
