@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background: black;
-            color: black;
+            color: white;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -49,28 +49,14 @@
         button:hover {
             background: #ff6600;
         }
-        .password-section {
+        .password-section, .game-selection {
             margin: 15px;
             padding: 10px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
         }
-
-        .flicker {
-            animation: flicker 0.5s infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .notification {
-            font-size: 16px;
-            color: yellow;
-            font-weight: bold;
-            margin-left: 10px;
+        .prediction-area {
+            display: none;
         }
     </style>
 </head>
@@ -79,20 +65,26 @@
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
     <div id="clock">Loading Time...</div>
     
-    <!-- Password and Selection Form -->
+    <!-- Password Form -->
     <div class="password-section">
         <label for="password">Enter Password:</label>
         <input type="password" id="password" placeholder="Password" />
         <br /><br />
+        <button onclick="checkPassword()">🎲 Enter</button>
+    </div>
+
+    <!-- Game Selection Form -->
+    <div class="game-selection" style="display:none;">
         <label for="game">Select Game:</label>
         <select id="game">
             <option value="aviator">Aviator</option>
             <option value="jetx">JetX</option>
         </select>
         <br /><br />
-        <button onclick="generatePredictions()">🎲 Generate Signals</button>
+        <button onclick="generatePredictions()">Generate Signals</button>
     </div>
-    
+
+    <!-- Predictions -->
     <div id="signals"></div>
 
     <script>
@@ -103,15 +95,19 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        function generatePredictions() {
+        function checkPassword() {
             const password = document.getElementById('password').value;
-            const selectedGame = document.getElementById('game').value;
 
-            // Check if password is correct
-            if (password !== "bjay2025") {
+            if (password === "bjay2025") {
+                document.querySelector('.password-section').style.display = 'none';
+                document.querySelector('.game-selection').style.display = 'block';
+            } else {
                 alert("Incorrect password. Please try again.");
-                return;
             }
+        }
+
+        function generatePredictions() {
+            const selectedGame = document.getElementById('game').value;
 
             const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
             let output = "";
@@ -137,20 +133,18 @@
                         riskMultiplier = (Math.random() * (4.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
                     }
 
-                    // Check if risk is approaching the target
-                    let riskClass = "";
-                    let notification = "";
-                    if (parseFloat(riskMultiplier) >= parseFloat(targetMultiplier) * 0.9) {
-                        riskClass = "flicker"; // Apply flickering effect
-                        notification = "<span class='notification'>⚠️ Be ready to risk!</span>";
+                    if (Math.random() < 0.3) {
+                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x | <span class="risk">Risk ${riskMultiplier}x</span></p>`;
+                    } else {
+                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x</p>`;
                     }
-
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x | <span class="risk ${riskClass}">Risk ${riskMultiplier}x</span> ${notification}</p>`;
                 }
                 output += "</div>";
             });
 
             document.getElementById('signals').innerHTML = output;
+            document.querySelector('.game-selection').style.display = 'none';
+            document.querySelector('.prediction-area').style.display = 'block';
         }
 
         // Auto-update predictions every 10 minutes (600,000 milliseconds)
