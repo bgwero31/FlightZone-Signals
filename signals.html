@@ -39,22 +39,30 @@
         .container {
             display: flex;
             justify-content: space-between;
+            margin: 20px;
         }
-        .left-column, .right-column {
+        .column {
             width: 48%;
         }
         button {
             padding: 12px 25px;
-            background: #ff9900;
             color: white;
             border: none;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
+            width: 100%;
+            margin: 10px 0;
         }
         button:hover {
-            background: #ff6600;
+            opacity: 0.8;
+        }
+        .choose-game {
+            background-color: #4CAF50; /* Green */
+        }
+        .generate-signal {
+            background-color: #FF5722; /* Orange */
         }
         .password-section {
             margin: 15px;
@@ -81,8 +89,8 @@
     <!-- Predictions Page Section -->
     <div class="container">
         <!-- Left Column: Betting Game Selection -->
-        <div class="left-column">
-            <h3>🎮 Choose Betting Game:</h3>
+        <div class="column">
+            <button class="choose-game" onclick="selectGame()">🎮 Choose Game</button>
             <label for="game">Select Game:</label>
             <select id="game">
                 <option value="aviator">Aviator</option>
@@ -91,8 +99,8 @@
         </div>
 
         <!-- Right Column: Generate Signals Button -->
-        <div class="right-column">
-            <button onclick="generatePredictions()">🎲 Generate Signals</button>
+        <div class="column">
+            <button class="generate-signal" onclick="generatePredictions()">🎲 Generate Signals</button>
         </div>
     </div>
 
@@ -106,7 +114,7 @@
             const now = new Date();
             document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
         }
-        setInterval(updateClock, 1000);
+        setInterval(updateClock, 1000); // Clock updates every second
         updateClock();
 
         function login() {
@@ -119,8 +127,17 @@
             }
 
             loggedIn = true;
-            alert("Login successful! You can now generate predictions.");
+            alert("Login successful!");
             document.querySelector('.password-section').style.display = 'none'; // Hide login after successful login
+        }
+
+        function selectGame() {
+            if (!loggedIn) {
+                alert("Please log in first.");
+                return;
+            }
+            const selectedGame = document.getElementById('game').value;
+            alert(`You selected ${selectedGame}. Now you can generate signals.`);
         }
 
         function generatePredictions() {
@@ -145,16 +162,29 @@
                     let seconds = Math.floor(Math.random() * 60);
 
                     let targetMultiplier, riskMultiplier;
+                    let randomRiskChance = Math.random(); // To randomize when to apply risk
 
                     if (selectedGame === "aviator") {
                         targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
-                        riskMultiplier = (Math.random() * (4.50 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
+                        if (randomRiskChance > 0.5) {
+                            riskMultiplier = (Math.random() * (4.50 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
+                        } else {
+                            riskMultiplier = null; // No risk for this round
+                        }
                     } else {
                         targetMultiplier = (Math.random() * (2.00 - 1.20) + 1.20).toFixed(2); // Target between 1.20x - 2.00x (for JetX)
-                        riskMultiplier = (Math.random() * (4.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
+                        if (randomRiskChance > 0.5) {
+                            riskMultiplier = (Math.random() * (4.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
+                        } else {
+                            riskMultiplier = null; // No risk for this round
+                        }
                     }
 
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x | <span class="risk">Risk ${riskMultiplier}x</span></p>`;
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x`;
+                    if (riskMultiplier) {
+                        output += ` | <span class="risk">Risk ${riskMultiplier}x</span>`;
+                    }
+                    output += `</p>`;
                 }
                 output += "</div>";
             });
