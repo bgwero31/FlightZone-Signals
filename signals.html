@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background: black;
-            color: white;
+            color: diamond blue;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -22,13 +22,14 @@
             padding: 20px;
             margin: 15px;
             border-radius: 8px;
-            display: inline-block;
-            width: 300px;
-            vertical-align: top;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
         }
         .prediction {
             font-size: 18px;
-            margin: 5px 0;
+            margin: 5px;
+            display: inline-block;
         }
         .risk {
             color: red;
@@ -52,43 +53,16 @@
         button:hover {
             background: #ff6600;
         }
-        .input-container {
-            margin-top: 20px;
-        }
-        .password-input, .game-selector {
-            padding: 10px;
-            font-size: 16px;
-            margin-right: 10px;
-            border-radius: 5px;
-        }
-        .hide {
-            display: none;
-        }
     </style>
 </head>
 <body>
 
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
     <div id="clock">Loading Time...</div>
-
-    <!-- Password and Game Selection (hidden after successful login) -->
-    <div class="input-container" id="password-section">
-        <input type="password" id="password" class="password-input" placeholder="Enter Password">
-        <button onclick="validatePassword()">🎲 Get Free Signals</button>
-    </div>
-
-    <div id="game-selection" class="hide">
-        <select id="game" class="game-selector">
-            <option value="jetx">JetX</option>
-            <option value="aviator">Aviator</option>
-        </select>
-        <button onclick="generatePredictions()">🎲 Generate Signals</button>
-    </div>
-
+    <button onclick="generatePredictions()">🎲 Generate Signals</button>
     <div id="signals"></div>
 
     <script>
-        // Function to update the clock
         function updateClock() {
             const now = new Date();
             document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
@@ -96,23 +70,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Function to validate password and start generating predictions
-        function validatePassword() {
-            const enteredPassword = document.getElementById("password").value;
-            const correctPassword = "bjay2025";
-
-            if (enteredPassword === correctPassword) {
-                // Hide the password section and show the game selection
-                document.getElementById("password-section").classList.add("hide");
-                document.getElementById("game-selection").classList.remove("hide");
-            } else {
-                alert("Incorrect password! Please try again.");
-            }
-        }
-
-        // Function to generate predictions based on selected game (JetX or Aviator)
         function generatePredictions() {
-            const game = document.getElementById("game").value;
             const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
             let output = "";
 
@@ -121,35 +79,16 @@
             let currentHour = now.getHours();
 
             bettingSites.forEach(site => {
-                output += `<div class="site-section"><h2>📡 ${site} Signals (${game.toUpperCase()})</h2>`;
+                output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
 
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
 
-                    if (game === "jetx") {
-                        // For JetX, we use "Catch" instead of "Target" and "Steady Climb" instead of risk
-                        let catchMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Catch between 1.50x - 2.50x
-                        let steadyClimbMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Steady Climb between 3.00x - 5.00x
+                    let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
+                    let riskMultiplier = (Math.random() * (4.50 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
 
-                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
-                        output += `<p class="prediction">Catch ${catchMultiplier}x</p>`;
-                        
-                        if (steadyClimbMultiplier) {
-                            output += `<p class="prediction risk">Steady Climb ${steadyClimbMultiplier}x</p>`;
-                        }
-                    } else if (game === "aviator") {
-                        // For Aviator, we use "Target" and "Risk"
-                        let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
-                        let riskMultiplier = Math.random() < 0.5 ? (Math.random() * (5.00 - 3.00) + 3.00).toFixed(2) : null; // Risk between 3.00x - 5.00x
-
-                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>`;
-                        output += `<p class="prediction">Target ${targetMultiplier}x</p>`;
-                        
-                        if (riskMultiplier) {
-                            output += `<p class="prediction risk">Risk ${riskMultiplier}x</p>`;
-                        }
-                    }
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x | <span class="risk">Risk ${riskMultiplier}x</span></p>`;
                 }
                 output += "</div>";
             });
