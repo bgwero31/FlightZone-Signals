@@ -61,17 +61,43 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
         }
-        .flash-prediction {
-            font-size: 18px;
-            color: #ff9900;
-            font-weight: bold;
-            padding: 10px;
-            margin-top: 10px;
-            background: rgba(255, 255, 255, 0.3);
+        .contact-links {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
             border-radius: 8px;
+        }
+        .contact-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            background: #0078ff;
+            border-radius: 5px;
             display: inline-block;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: 0.3s;
+        }
+        .contact-links a:hover {
+            background: #005bb5;
+        }
+        .play-now {
+            padding: 12px 25px;
+            background: #00ff00;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: 0.3s;
+        }
+        .play-now.show {
+            display: block;
         }
     </style>
 </head>
@@ -102,6 +128,15 @@
         </div>
         <div id="signals"></div>
     </div>
+
+    <!-- Contact Links Section -->
+    <div class="contact-links">
+        <p>Join our community on:</p>
+        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>
+        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
+    </div>
+
+    <div class="play-now" id="play-now-btn">Play Now 2x</div>
 
     <script>
         let isLoggedIn = false;
@@ -143,32 +178,6 @@
             bettingSites.forEach(site => {
                 output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
 
-                // Randomly flash the "play now 2x" prediction
-                let flashCount = Math.floor(Math.random() * 3) + 2; // Random number between 2 and 4 flashes
-                let flashInterval = Math.floor(Math.random() * 3 + 2); // Random flash interval between 2 and 5 seconds
-
-                for (let i = 0; i < flashCount; i++) {
-                    setTimeout(() => {
-                        const flashPrediction = document.createElement('div');
-                        flashPrediction.classList.add('flash-prediction');
-                        flashPrediction.innerText = "⚡ 2x Now ⚡";
-                        document.querySelector('.site-section').appendChild(flashPrediction);
-                        
-                        // Flash the prediction for 10 seconds then remove it
-                        setTimeout(() => {
-                            flashPrediction.style.opacity = 1;
-                        }, 100);
-
-                        setTimeout(() => {
-                            flashPrediction.style.opacity = 0;
-                        }, 3000);
-
-                        setTimeout(() => {
-                            flashPrediction.remove();
-                        }, 3500);
-                    }, Math.random() * (flashInterval * 1000)); // Flash interval timing
-                }
-
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
@@ -192,6 +201,26 @@
             });
 
             document.getElementById('signals').innerHTML = output;
+            
+            // Randomly show Play Now button
+            randomizePlayNowButton();
+        }
+
+        function randomizePlayNowButton() {
+            const playNowButton = document.getElementById('play-now-btn');
+            let randomTime = Math.floor(Math.random() * (10000 - 1000) + 1000); // Random time between 1s and 10s
+            let nextRandomTime = Math.floor(Math.random() * (100000 - 10000) + 10000); // Time after 1.4 minutes to show button again
+
+            // Show the button for 10 seconds
+            setTimeout(() => {
+                playNowButton.classList.add('show');
+                setTimeout(() => {
+                    playNowButton.classList.remove('show');
+                }, 10000);
+            }, randomTime);
+
+            // Show the button again after 1.4 minutes (random interval)
+            setTimeout(randomizePlayNowButton, nextRandomTime);
         }
     </script>
 
