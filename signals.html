@@ -81,24 +81,6 @@
         .contact-links a:hover {
             background: #005bb5;
         }
-        .play-now {
-            padding: 12px 25px;
-            background: #00ff00;
-            color: white;
-            border: none;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: 0.3s;
-        }
-        .play-now.show {
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -136,7 +118,8 @@
         <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
     </div>
 
-    <div class="play-now" id="play-now-btn">Play Now 2x</div>
+    <!-- Beep Sound -->
+    <audio id="beepSound" src="beep.mp3" preload="auto"></audio>
 
     <script>
         let isLoggedIn = false;
@@ -159,6 +142,11 @@
             } else {
                 alert('Incorrect password. Please try again.');
             }
+        }
+
+        function playNow() {
+            const beepSound = document.getElementById("beepSound");
+            beepSound.play();
         }
 
         function generatePredictions() {
@@ -196,31 +184,19 @@
                     let showRisk = Math.random() > 0.5; // 50% chance to show risk
 
                     output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">Risk ${riskMultiplier}x</span>` : ''}</p>`;
+                    
+                    // Randomize "Play Now" button every 1.5 minutes
+                    if (Math.random() < 0.1) { // 10% chance for each round to show "Play Now"
+                        let randomMultiplier = (Math.random() < 0.5) ? '2x' : `${Math.floor(Math.random() * 5) + 2}x`; // 2x or random 2x - 6x
+                        setTimeout(() => {
+                            output += `<p class="prediction"><button onclick="playNow()">Play Now ${randomMultiplier}</button></p>`;
+                        }, i * 1000); // Random timing for the appearance
+                    }
                 }
                 output += "</div>";
             });
 
             document.getElementById('signals').innerHTML = output;
-            
-            // Randomly show Play Now button
-            randomizePlayNowButton();
-        }
-
-        function randomizePlayNowButton() {
-            const playNowButton = document.getElementById('play-now-btn');
-            let randomTime = Math.floor(Math.random() * (10000 - 1000) + 1000); // Random time between 1s and 10s
-            let nextRandomTime = Math.floor(Math.random() * (100000 - 10000) + 10000); // Time after 1.4 minutes to show button again
-
-            // Show the button for 10 seconds
-            setTimeout(() => {
-                playNowButton.classList.add('show');
-                setTimeout(() => {
-                    playNowButton.classList.remove('show');
-                }, 10000);
-            }, randomTime);
-
-            // Show the button again after 1.4 minutes (random interval)
-            setTimeout(randomizePlayNowButton, nextRandomTime);
         }
     </script>
 
