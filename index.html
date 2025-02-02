@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlightZone Signals by B JAY</title>
+    <title>FlightZone Signals by B JAY | Valentine's Edition</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-image: url('https://source.unsplash.com/1600x900/?airplane,sky');
+            background-image: url('https://source.unsplash.com/1600x900/?valentine,heart');
             background-size: cover;
             background-position: center;
-            color: diamond blue;
+            color: #ffffff;
+            transition: all 0.3s ease;
         }
         h1 {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(255, 0, 0, 0.7);
             padding: 15px;
             display: inline-block;
             border-radius: 8px;
+            font-size: 2.5em;
+        }
+        h1 span {
+            color: #ff3366; /* Valentine's Red Color */
         }
         .section {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.6);
             padding: 20px;
             border-radius: 10px;
             max-width: 600px;
@@ -28,24 +33,40 @@
             text-align: left;
         }
         .section h2 {
-            border-bottom: 2px solid #ffcc00;
+            border-bottom: 2px solid #ff3366;
             padding-bottom: 5px;
+            color: #ff3366;
         }
         button {
             padding: 12px 25px;
-            background: #ff9900;
+            background: #ff3366;
             color: white;
             border: none;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
+            margin: 10px;
         }
         button:hover {
-            background: #ff6600;
+            background: #ff6699;
+        }
+        .telegram-button {
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        .telegram-button:hover {
+            background-color: #ff6699;
         }
         .form-container {
-            background: #f9f9f9;
+            background: #ffffff;
             padding: 20px;
             border-radius: 10px;
             width: 300px;
@@ -58,11 +79,12 @@
             border: 1px solid #ccc;
         }
         .form-container button {
-            background: green;
+            background: #ff3366;
             color: white;
             padding: 10px;
             width: 100%;
             font-size: 16px;
+            border-radius: 5px;
         }
         #price {
             color: red;
@@ -73,7 +95,7 @@
 </head>
 <body>
 
-    <h1>🚀 FlightZone Signals by B JAY ✈️</h1>
+    <h1>💘 FlightZone Signals by B JAY 💘</h1>
     <br><br>
     <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
 
@@ -81,8 +103,8 @@
     <div class="section">
         <h2>Available Bots</h2>
         <ul>
-            <li>1. JETX PURPLE BOT</li>
-            <li>2. AVIATOR PREDICTOR PRO</li>
+            <li>❤️ JETX PURPLE BOT</li>
+            <li>💘 AVIATOR PREDICTOR PRO</li>
         </ul>
     </div>
 
@@ -93,9 +115,9 @@
     </div>
 
     <div class="section">
-        <h2>💰 Pricing Plan – Only <span id="price">$30</span> Per Application!</h2>
-        <p>🔥 Get any bot for just <span id="price">$30</span> 🔥</p>
-        <p>💡 Limited offer: First 5 users get FREE access to the JETX Purple Bot!</p>
+        <h2>💰 Valentine's Special Price – Only <span id="price">$30</span> Per Application!</h2>
+        <p>❤️ Get any bot for just <span id="price">$30</span> 💘</p>
+        <p>💝 Limited offer: First 5 users get FREE access to the JETX Purple Bot!</p>
     </div>
 
     <div class="section">
@@ -114,6 +136,11 @@
         </form>
     </div>
 
+    <!-- Telegram Link Button -->
+    <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">
+        <button class="telegram-button">Join Our Telegram ❤️</button>
+    </a>
+
     <script>
         function openSignalsPage() {
             window.location.href = "signals.html"; // Opens the predictions page
@@ -121,29 +148,10 @@
 
         function flickerPrice() {
             var price = document.getElementById("price");
-            price.style.color = (price.style.color === "red") ? "blue" : "red";
+            price.style.color = (price.style.color === "red") ? "#ff3366" : "red";
         }
         setInterval(flickerPrice, 1000);
     </script>
 
 </body>
-</html><a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">
-    <button class="telegram-button">Join Our Telegram</button>
-</a>
-
-<style>
-    .telegram-button {
-        background-color: #0088cc;
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        font-size: 18px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-
-    .telegram-button:hover {
-        background-color: #006a99;
-    }
-</style>
+</html>
