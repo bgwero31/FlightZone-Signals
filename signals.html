@@ -3,210 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlightZone Signals - Betting Predictions</title>
+    <title>Live Predictions - FlightZone Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
-        .container {
             text-align: center;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 90%;
-            max-width: 800px;
+            background: #87CEEB;
+            color: black;
         }
         h1 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-        }
-        .password-section {
-            margin-bottom: 20px;
-        }
-        .password-section input {
-            padding: 10px;
-            margin: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #45a049;
+            background: rgba(255, 204, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            color: black;
         }
         .site-section {
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            margin: 15px;
+            border-radius: 8px;
         }
         .prediction {
-            background-color: #eef7ef;
-            padding: 10px;
+            font-size: 18px;
             margin: 5px 0;
-            border-radius: 5px;
-            font-weight: bold;
         }
         .risk {
             color: red;
+            font-weight: bold;
+        }
+        #clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
         .play-now {
-            background-color: #ff6347;
+            background: red;
             color: white;
-            padding: 10px 20px;
-            border: none;
+            padding: 10px 15px;
             border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            display: none; /* Initially hidden */
-        }
-        .play-now:hover {
-            background-color: #e5533c;
-        }
-        .clock {
             font-size: 18px;
-            margin: 20px 0;
+            display: none;
             font-weight: bold;
-            color: #333;
         }
-        .social-links {
-            margin-top: 20px;
+        .password-section {
+            margin: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
         }
-        .social-links a {
-            margin: 10px;
+        .contact-links {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .contact-links a {
             text-decoration: none;
-            color: #4CAF50;
+            color: white;
             font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            background: #0078ff;
+            border-radius: 5px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .contact-links a:hover {
+            background: #005bb5;
         }
     </style>
 </head>
 <body>
+    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
+    <div id="clock">Loading Time...</div>
 
-<div class="container">
-    <h1>FlightZone Signals - Betting Predictions</h1>
+    <!-- Login Form -->
     <div class="password-section">
-        <input type="password" id="password" placeholder="Enter Password">
-        <button class="button" onclick="login()">Login</button>
+        <label for="password">Enter Password:</label>
+        <input type="password" id="password" placeholder="Password" />
+        <br /><br />
+        <button onclick="login()">Login</button>
     </div>
 
-    <div id="predictions" style="display: none;">
-        <p class="clock" id="clock">🕒 00:00:00</p>
-
-        <div>
-            <label for="game">Select Game:</label>
-            <select id="game">
-                <option value="aviator">Aviator</option>
-                <option value="jetx">JetX</option>
-            </select>
-            <button class="button" onclick="generatePredictions()">Generate Predictions</button>
-        </div>
-
+    <!-- Predictions Section -->
+    <div id="predictions" style="display:none;">
         <div id="signals"></div>
     </div>
 
-    <!-- Social Media Links -->
-    <div class="social-links">
-        <a href="https://wa.me/1234567890" target="_blank">WhatsApp</a>
-        <a href="https://t.me/yourusername" target="_blank">Telegram</a>
+    <!-- Contact Links Section -->
+    <div class="contact-links">
+        <p>Join our community on:</p>
+        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>
+        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
     </div>
-</div>
 
-<script>
-    let isLoggedIn = false;
+    <script>
+        let isLoggedIn = false;
 
-    function updateClock() {
-        const now = new Date();
-        document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    function login() {
-        const password = document.getElementById('password').value;
-
-        if (password === 'bjay#') {
-            alert('Login Successful!');
-            isLoggedIn = true;
-            document.querySelector('.password-section').style.display = 'none'; // Hide login section
-            document.querySelector('#predictions').style.display = 'block'; // Show predictions
-        } else {
-            alert('Incorrect password. Please try again.');
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
         }
-    }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    function generatePredictions() {
-        if (!isLoggedIn) {
-            alert("Please log in first.");
-            return;
+        function login() {
+            const password = document.getElementById('password').value;
+
+            if (password === 'bjay2025#') {
+                alert('Login Successful!');
+                isLoggedIn = true;
+                document.querySelector('.password-section').style.display = 'none';
+                document.querySelector('#predictions').style.display = 'block';
+                generatePredictions();
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
         }
 
-        const selectedGame = document.getElementById('game').value;
-        const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "Zanzibet", "Bet247", "1Win"];
-        let output = "";
+        function generatePredictions() {
+            if (!isLoggedIn) {
+                alert("Please log in first.");
+                return;
+            }
 
-        const now = new Date();
-        let startMinutes = now.getMinutes();
-        let currentHour = now.getHours();
+            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
+            let output = "";
 
-        bettingSites.forEach(site => {
-            output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
-            let playNowShown = false; // Track if the Play Now button is shown already
+            bettingSites.forEach(site => {
+                output += `<div class="site-section">
+                    <h2>📡 ${site} Signals</h2>
+                    <div class="play-now" id="playNow-${site.replace(/\s+/g, '')}"></div>
+                    <div id="predictions-${site.replace(/\s+/g, '')}"></div>
+                </div>`;
+            });
+
+            document.getElementById('signals').innerHTML = output;
+
+            // Generate signals & handle "Play Now" button
+            bettingSites.forEach(site => {
+                showPlayNow(site);
+                generateSitePredictions(site);
+            });
+        }
+
+        function generateSitePredictions(site) {
+            let output = "";
+            let now = new Date();
+            let startMinutes = now.getMinutes();
+            let currentHour = now.getHours();
 
             for (let i = 0; i < 10; i++) {
                 let minutes = (startMinutes + i) % 60;
                 let seconds = Math.floor(Math.random() * 60);
-
-                let targetMultiplier, riskMultiplier;
-
-                if (selectedGame === "aviator") {
-                    targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
-                    riskMultiplier = (Math.random() * (3.00 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
-                } else {
-                    targetMultiplier = (Math.random() * (2.00 - 1.20) + 1.20).toFixed(2); // Target between 1.20x - 2.00x (for JetX)
-                    riskMultiplier = (Math.random() * (3.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
-                }
-
-                // Randomize whether to show risk or not for each round
-                let showRisk = Math.random() > 0.5; // 50% chance to show risk
+                let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2);
+                let riskMultiplier = (Math.random() * (4.50 - 2.50) + 2.50).toFixed(2);
+                let showRisk = Math.random() > 0.5;
 
                 output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">Risk ${riskMultiplier}x</span>` : ''}</p>`;
-
-                // Randomly show the "Play Now" button for any site
-                if (!playNowShown && Math.random() > 0.8) { // 20% chance to show "Play Now" button
-                    let randomMultiplier = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2); // Play Now between 2x - 6x
-                    output += `<button class="play-now" id="playNowButton" onclick="alert('Playing now at ${randomMultiplier}x!')">Play Now ${randomMultiplier}x</button>`;
-                    playNowShown = true;
-
-                    // Make the button appear and disappear
-                    setTimeout(() => {
-                        const button = document.getElementById("playNowButton");
-                        button.style.display = 'none'; // Hide the button after a certain time
-                    }, 5000); // Button stays visible for 5 seconds
-                }
             }
-            output += "</div>";
-        });
 
-        document.getElementById('signals').innerHTML = output;
+            document.getElementById(`predictions-${site.replace(/\s+/g, '')}`).innerHTML = output;
+        }
 
-        // Randomly make the Play Now button reappear after 1.40 minutes (84 seconds)
-        setTimeout(() => {
-            generatePredictions();
-        }, 84000); // Retry after 84 seconds
-    }
-</script>
+        function showPlayNow(site) {
+            let playNowDiv = document.getElementById(`playNow-${site.replace(/\s+/g, '')}`);
+            let playNowText = Math.random() > 0.5 ? "Play Now 2x" : `Play Now ${Math.floor(Math.random() * (6 - 2 + 1) + 2)}x`;
+
+            playNowDiv.innerText = playNowText;
+            playNowDiv.style.display = "block";
+
+            // Play beep sound
+            let beep = new Audio("https://www.soundjay.com/button/beep-07.wav");
+            beep.play();
+
+            setTimeout(() => {
+                playNowDiv.style.display = "none";
+            }, 10000);
+
+            setTimeout(() => {
+                showPlayNow(site);
+            }, 84000);
+        }
+    </script>
 
 </body>
 </html>
