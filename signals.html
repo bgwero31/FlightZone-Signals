@@ -143,15 +143,18 @@
             bettingSites.forEach(site => {
                 output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
 
-                // Randomly flash the "2x now" prediction
-                if (Math.random() > 0.7) { // 30% chance for each site
+                // Randomly flash the "play now 2x" prediction
+                let flashCount = Math.floor(Math.random() * 3) + 2; // Random number between 2 and 4 flashes
+                let flashInterval = Math.floor(Math.random() * 3 + 2); // Random flash interval between 2 and 5 seconds
+
+                for (let i = 0; i < flashCount; i++) {
                     setTimeout(() => {
                         const flashPrediction = document.createElement('div');
                         flashPrediction.classList.add('flash-prediction');
                         flashPrediction.innerText = "⚡ 2x Now ⚡";
                         document.querySelector('.site-section').appendChild(flashPrediction);
                         
-                        // Flash the prediction for 3 seconds then remove it
+                        // Flash the prediction for 10 seconds then remove it
                         setTimeout(() => {
                             flashPrediction.style.opacity = 1;
                         }, 100);
@@ -163,7 +166,7 @@
                         setTimeout(() => {
                             flashPrediction.remove();
                         }, 3500);
-                    }, Math.random() * 2000); // Random time delay for when it appears
+                    }, Math.random() * (flashInterval * 1000)); // Flash interval timing
                 }
 
                 for (let i = 0; i < 10; i++) {
