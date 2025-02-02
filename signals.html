@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Predictions - FlightZone Signals</title>
+    <title>FlightZone Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: #87CEEB;
+            background: diamond blue;
             color: black;
         }
         h1 {
@@ -18,7 +18,7 @@
             color: black;
         }
         .site-section {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             margin: 15px;
             border-radius: 8px;
@@ -36,16 +36,26 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
-        .play-now {
-            background: red;
+        button {
+            padding: 12px 25px;
+            background: #ff9900;
             color: white;
-            padding: 10px 15px;
+            border: none;
+            font-size: 16px;
             border-radius: 5px;
-            font-size: 18px;
-            display: none;
-            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff6600;
         }
         .password-section {
+            margin: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+        .select-game {
             margin: 15px;
             padding: 10px;
             background: rgba(255, 255, 255, 0.2);
@@ -74,9 +84,11 @@
     </style>
 </head>
 <body>
+<p>Premium Signal: <span id="premium_prediction">Loading...</span></p>
+<script src="premium.js"></script>
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
     <div id="clock">Loading Time...</div>
-
+    
     <!-- Login Form -->
     <div class="password-section">
         <label for="password">Enter Password:</label>
@@ -84,9 +96,18 @@
         <br /><br />
         <button onclick="login()">Login</button>
     </div>
-
+    
     <!-- Predictions Section -->
     <div id="predictions" style="display:none;">
+        <div class="select-game">
+            <label for="game">Select Game:</label>
+            <select id="game">
+                <option value="aviator">Aviator (Risk)</option>
+                <option value="jetx">JetX (Steady Climb)</option>
+            </select>
+            <br /><br />
+            <button onclick="generatePredictions()">Generate Signals</button>
+        </div>
         <div id="signals"></div>
     </div>
 
@@ -99,7 +120,7 @@
 
     <script>
         let isLoggedIn = false;
-
+        
         function updateClock() {
             const now = new Date();
             document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
@@ -113,9 +134,8 @@
             if (password === 'bjay2025#') {
                 alert('Login Successful!');
                 isLoggedIn = true;
-                document.querySelector('.password-section').style.display = 'none';
-                document.querySelector('#predictions').style.display = 'block';
-                generatePredictions();
+                document.querySelector('.password-section').style.display = 'none'; // Hide login section
+                document.querySelector('#predictions').style.display = 'block'; // Show predictions
             } else {
                 alert('Incorrect password. Please try again.');
             }
@@ -127,63 +147,54 @@
                 return;
             }
 
+            const selectedGame = document.getElementById('game').value;
             const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
             let output = "";
 
+            const now = new Date();
+            let startMinutes = now.getMinutes();
+            let currentHour = now.getHours();
+
             bettingSites.forEach(site => {
-                output += `<div class="site-section">
-                    <h2>📡 ${site} Signals</h2>
-                    <div class="play-now" id="playNow-${site.replace(/\s+/g, '')}"></div>
-                    <div id="predictions-${site.replace(/\s+/g, '')}"></div>
-                </div>`;
+                output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
+
+                for (let i = 0; i < 10; i++) {
+                    let minutes = (startMinutes + i) % 60;
+                    let seconds = Math.floor(Math.random() * 60);
+
+                    let targetMultiplier, riskMultiplier;
+
+                    if (selectedGame === "aviator") {
+                        targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
+                        riskMultiplier = (Math.random() * (3.00 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
+                    } else {
+                        targetMultiplier = (Math.random() * (2.00 - 1.20) + 1.20).toFixed(2); // Target between 1.20x - 2.00x (for JetX)
+                        riskMultiplier = (Math.random() * (3.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
+                    }
+
+                    // Randomize whether to show risk or not for each round
+                    let showRisk = Math.random() > 0.5; // 50% chance to show risk
+                    let randomPlayNow = Math.random() < 0.1; // 10% chance to show "Play Now" button
+                    let playNowMultiplier = (Math.random() < 0.5 ? '2x' : '6x');
+
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">Risk ${riskMultiplier}x</span>` : ''}</p>`;
+
+                    if (randomPlayNow) {
+                        output += `<button class="play-now">Play Now ${playNowMultiplier}</button>`;
+                    }
+                }
+                output += "</div>";
             });
 
             document.getElementById('signals').innerHTML = output;
 
-            // Generate signals & handle "Play Now" button
-            bettingSites.forEach(site => {
-                showPlayNow(site);
-                generateSitePredictions(site);
-            });
-        }
-
-        function generateSitePredictions(site) {
-            let output = "";
-            let now = new Date();
-            let startMinutes = now.getMinutes();
-            let currentHour = now.getHours();
-
-            for (let i = 0; i < 10; i++) {
-                let minutes = (startMinutes + i) % 60;
-                let seconds = Math.floor(Math.random() * 60);
-                let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2);
-                let riskMultiplier = (Math.random() * (4.50 - 2.50) + 2.50).toFixed(2);
-                let showRisk = Math.random() > 0.5;
-
-                output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">Risk ${riskMultiplier}x</span>` : ''}</p>`;
-            }
-
-            document.getElementById(`predictions-${site.replace(/\s+/g, '')}`).innerHTML = output;
-        }
-
-        function showPlayNow(site) {
-            let playNowDiv = document.getElementById(`playNow-${site.replace(/\s+/g, '')}`);
-            let playNowText = Math.random() > 0.5 ? "Play Now 2x" : `Play Now ${Math.floor(Math.random() * (6 - 2 + 1) + 2)}x`;
-
-            playNowDiv.innerText = playNowText;
-            playNowDiv.style.display = "block";
-
-            // Play beep sound
-            let beep = new Audio("https://www.soundjay.com/button/beep-07.wav");
-            beep.play();
-
-            setTimeout(() => {
-                playNowDiv.style.display = "none";
-            }, 10000);
-
-            setTimeout(() => {
-                showPlayNow(site);
-            }, 84000);
+            // Play Now button random show/hide
+            setInterval(function() {
+                const playNowButtons = document.querySelectorAll('.play-now');
+                playNowButtons.forEach(button => {
+                    button.style.display = Math.random() < 0.5 ? 'block' : 'none'; // Randomly show/hide
+                });
+            }, 84000); // Appears every 84 seconds
         }
     </script>
 
