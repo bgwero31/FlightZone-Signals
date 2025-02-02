@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlightZone Signals</title>
+    <title>Live Predictions - FlightZone Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: diamond blue;
+            background: #f0f0f0;
             color: black;
         }
         h1 {
@@ -22,6 +22,7 @@
             padding: 20px;
             margin: 15px;
             border-radius: 8px;
+            position: relative;
         }
         .prediction {
             font-size: 18px;
@@ -81,14 +82,25 @@
         .contact-links a:hover {
             background: #005bb5;
         }
+        .play-now {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff9900;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: none;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
-<p>Premium Signal: <span id="premium_prediction">Loading...</span></p>
-<script src="premium.js"></script>
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
     <div id="clock">Loading Time...</div>
-    
+
     <!-- Login Form -->
     <div class="password-section">
         <label for="password">Enter Password:</label>
@@ -96,14 +108,14 @@
         <br /><br />
         <button onclick="login()">Login</button>
     </div>
-    
+
     <!-- Predictions Section -->
     <div id="predictions" style="display:none;">
         <div class="select-game">
             <label for="game">Select Game:</label>
             <select id="game">
-                <option value="aviator">Aviator (Risk)</option>
-                <option value="jetx">JetX (Steady Climb)</option>
+                <option value="aviator">Aviator</option>
+                <option value="jetx">JetX</option>
             </select>
             <br /><br />
             <button onclick="generatePredictions()">Generate Signals</button>
@@ -120,7 +132,7 @@
 
     <script>
         let isLoggedIn = false;
-        
+
         function updateClock() {
             const now = new Date();
             document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
@@ -157,7 +169,10 @@
 
             bettingSites.forEach(site => {
                 output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
-
+                const playNowButton = document.createElement('button');
+                playNowButton.classList.add('play-now');
+                playNowButton.textContent = `Play Now 2x`; // Change multiplier as needed for testing
+                
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
@@ -166,37 +181,37 @@
 
                     if (selectedGame === "aviator") {
                         targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2); // Target between 1.50x - 2.50x
-                        riskMultiplier = (Math.random() * (3.00 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
                     } else {
                         targetMultiplier = (Math.random() * (2.00 - 1.20) + 1.20).toFixed(2); // Target between 1.20x - 2.00x (for JetX)
-                        riskMultiplier = (Math.random() * (3.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
                     }
 
-                    // Randomize whether to show risk or not for each round
-                    let showRisk = Math.random() > 0.5; // 50% chance to show risk
-                    let randomPlayNow = Math.random() < 0.1; // 10% chance to show "Play Now" button
-                    let playNowMultiplier = (Math.random() < 0.5 ? '2x' : '6x');
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x</p>`;
 
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">Risk ${riskMultiplier}x</span>` : ''}</p>`;
-
-                    if (randomPlayNow) {
-                        output += `<button class="play-now">Play Now ${playNowMultiplier}</button>`;
+                    // Display the "Play Now" button only when needed
+                    if (Math.random() > 0.5) {
+                        document.querySelector('.site-section').appendChild(playNowButton);
+                        playNowButton.style.display = 'inline-block';
+                        setTimeout(() => {
+                            playNowButton.style.display = 'none';
+                        }, 15000); // Hide after 15 seconds
                     }
                 }
+
                 output += "</div>";
             });
 
             document.getElementById('signals').innerHTML = output;
 
-            // Play Now button random show/hide
-            setInterval(function() {
-                const playNowButtons = document.querySelectorAll('.play-now');
-                playNowButtons.forEach(button => {
-                    button.style.display = Math.random() < 0.5 ? 'block' : 'none'; // Randomly show/hide
+            // Handle play now button timing for each site
+            setInterval(() => {
+                document.querySelectorAll('.play-now').forEach((btn) => {
+                    btn.style.display = 'none'; // Hide after 15 seconds
+                    setTimeout(() => {
+                        btn.style.display = 'inline-block'; // Reappear after 84 seconds
+                    }, 84000); // Reappear after 84 seconds
                 });
-            }, 84000); // Appears every 84 seconds
+            }, 84000);
         }
     </script>
-
 </body>
 </html>
