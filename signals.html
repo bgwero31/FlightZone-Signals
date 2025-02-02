@@ -61,25 +61,17 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
         }
-        .contact-links {
-            margin-top: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 8px;
-        }
-        .contact-links a {
-            text-decoration: none;
-            color: white;
+        .flash-prediction {
             font-size: 18px;
-            padding: 10px 20px;
-            margin: 10px;
-            background: #0078ff;
-            border-radius: 5px;
+            color: #ff9900;
+            font-weight: bold;
+            padding: 10px;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
             display: inline-block;
-            transition: 0.3s;
-        }
-        .contact-links a:hover {
-            background: #005bb5;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
     </style>
 </head>
@@ -109,13 +101,6 @@
             <button onclick="generatePredictions()">Generate Signals</button>
         </div>
         <div id="signals"></div>
-    </div>
-
-    <!-- Contact Links Section -->
-    <div class="contact-links">
-        <p>Join our community on:</p>
-        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>
-        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
     </div>
 
     <script>
@@ -158,6 +143,29 @@
             bettingSites.forEach(site => {
                 output += `<div class="site-section"><h2>📡 ${site} Signals</h2>`;
 
+                // Randomly flash the "2x now" prediction
+                if (Math.random() > 0.7) { // 30% chance for each site
+                    setTimeout(() => {
+                        const flashPrediction = document.createElement('div');
+                        flashPrediction.classList.add('flash-prediction');
+                        flashPrediction.innerText = "⚡ 2x Now ⚡";
+                        document.querySelector('.site-section').appendChild(flashPrediction);
+                        
+                        // Flash the prediction for 3 seconds then remove it
+                        setTimeout(() => {
+                            flashPrediction.style.opacity = 1;
+                        }, 100);
+
+                        setTimeout(() => {
+                            flashPrediction.style.opacity = 0;
+                        }, 3000);
+
+                        setTimeout(() => {
+                            flashPrediction.remove();
+                        }, 3500);
+                    }, Math.random() * 2000); // Random time delay for when it appears
+                }
+
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
@@ -169,7 +177,7 @@
                         riskMultiplier = (Math.random() * (3.00 - 2.51) + 2.51).toFixed(2); // Risk between 2.51x - 4.50x
                     } else {
                         targetMultiplier = (Math.random() * (2.00 - 1.20) + 1.20).toFixed(2); // Target between 1.20x - 2.00x (for JetX)
-                        steady climbMultiplier = (Math.random() * (3.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
+                        riskMultiplier = (Math.random() * (3.00 - 2.00) + 2.00).toFixed(2); // Risk between 2.00x - 4.00x
                     }
 
                     // Randomize whether to show risk or not for each round
