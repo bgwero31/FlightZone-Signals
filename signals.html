@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betting Signals and Predictions</title>
+    <title>FlightZone Signals - Betting Predictions</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,6 +27,7 @@
         }
         h1 {
             color: #4CAF50;
+            margin-bottom: 20px;
         }
         .password-section {
             margin-bottom: 20px;
@@ -69,6 +70,7 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
+            display: none; /* Initially hidden */
         }
         .play-now:hover {
             background-color: #e5533c;
@@ -79,12 +81,21 @@
             font-weight: bold;
             color: #333;
         }
+        .social-links {
+            margin-top: 20px;
+        }
+        .social-links a {
+            margin: 10px;
+            text-decoration: none;
+            color: #4CAF50;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Betting Signals and Predictions</h1>
+    <h1>FlightZone Signals - Betting Predictions</h1>
     <div class="password-section">
         <input type="password" id="password" placeholder="Enter Password">
         <button class="button" onclick="login()">Login</button>
@@ -103,6 +114,12 @@
         </div>
 
         <div id="signals"></div>
+    </div>
+
+    <!-- Social Media Links -->
+    <div class="social-links">
+        <a href="https://wa.me/1234567890" target="_blank">WhatsApp</a>
+        <a href="https://t.me/yourusername" target="_blank">Telegram</a>
     </div>
 </div>
 
@@ -136,7 +153,7 @@
         }
 
         const selectedGame = document.getElementById('game').value;
-        const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
+        const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "Zanzibet", "Bet247", "1Win"];
         let output = "";
 
         const now = new Date();
@@ -169,13 +186,14 @@
                 // Randomly show the "Play Now" button for any site
                 if (!playNowShown && Math.random() > 0.8) { // 20% chance to show "Play Now" button
                     let randomMultiplier = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2); // Play Now between 2x - 6x
-                    output += `<button class="play-now" onclick="alert('Playing now at ${randomMultiplier}x!')">Play Now ${randomMultiplier}x</button>`;
+                    output += `<button class="play-now" id="playNowButton" onclick="alert('Playing now at ${randomMultiplier}x!')">Play Now ${randomMultiplier}x</button>`;
                     playNowShown = true;
 
-                    // Make the button appear for 10 seconds and disappear
+                    // Make the button appear and disappear
                     setTimeout(() => {
-                        playNowShown = false; // Reset and allow showing it again later
-                    }, 10000); // Button stays for 10 seconds
+                        const button = document.getElementById("playNowButton");
+                        button.style.display = 'none'; // Hide the button after a certain time
+                    }, 5000); // Button stays visible for 5 seconds
                 }
             }
             output += "</div>";
