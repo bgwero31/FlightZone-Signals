@@ -20,7 +20,7 @@
         }
         .predictions {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(3, 1fr); /* 3 columns for 6 times */
             gap: 10px;
             margin-top: 20px;
         }
@@ -35,6 +35,19 @@
         .active {
             background-color: #ff3366;
         }
+        .info {
+            margin-top: 40px;
+            color: white;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .contact {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ff3366;
+        }
     </style>
 </head>
 <body>
@@ -47,35 +60,48 @@
         <button onclick="getSignals()">Get Signals</button>
 
         <div id="predictions" class="predictions"></div>
+
+        <!-- Info about the bot and contact -->
+        <div class="info">
+            <p><strong>About the JetX Master Predictor:</strong><br>
+            The JetX Master Predictor provides live betting signals for various sites. We utilize advanced algorithms to provide the best predictions.</p>
+            <p class="contact">For more information or to get in touch, contact B.Jay.</p>
+        </div>
     </div>
 
     <script>
-        var predictionTimes = [
-            { time: "11:26", odd: null },
-            { time: "11:27", odd: null },
-            { time: "11:28", odd: null },
-            { time: "11:29", odd: null },
-            { time: "11:30", odd: null },
-            { time: "11:31", odd: null },
-            { time: "11:32", odd: null },
-            { time: "11:33", odd: null },
-            { time: "11:34", odd: null },
-            { time: "11:35", odd: null },
-            { time: "11:36", odd: null },
-            { time: "11:37", odd: null },
-            { time: "11:38", odd: null },
-            { time: "11:39", odd: null },
-            { time: "11:40", odd: null },
-        ];
-
+        var predictionTimes = [];
         var currentTime = new Date();
 
+        // Function to format the time into HH:MM:SS
         function formatTime(date) {
             let minutes = date.getMinutes();
             let seconds = date.getSeconds();
             return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
         }
 
+        // Function to generate the prediction times starting from the next two minutes
+        function generatePredictionTimes() {
+            let now = new Date();
+            let nextMinute = now.getMinutes() + 2; // Start from the next 2 minutes
+            if (nextMinute >= 60) {
+                nextMinute = nextMinute - 60; // Handle the case for when minutes reach 60
+            }
+
+            for (let i = 0; i < 6; i++) { // Only generate 6 prediction times
+                let time = new Date(now);
+                time.setMinutes(nextMinute + i);
+                if (time.getMinutes() >= 60) {
+                    time.setMinutes(time.getMinutes() - 60); // Handle hour overflow
+                }
+                predictionTimes.push({
+                    time: formatTime(time),
+                    odd: null
+                });
+            }
+        }
+
+        // Function to start the clock and update the time every second
         function startClock() {
             setInterval(function() {
                 let now = new Date();
@@ -83,10 +109,15 @@
             }, 1000);
         }
 
+        // Function to handle the "Get Signals" button click
         function getSignals() {
-            let predictionsDiv = document.getElementById('predictions');
-            predictionsDiv.innerHTML = ''; // Clear predictions area
+            predictionTimes = [];
+            generatePredictionTimes(); // Generate prediction times starting from the next 2 minutes
 
+            let predictionsDiv = document.getElementById('predictions');
+            predictionsDiv.innerHTML = ''; // Clear the predictions area
+
+            // Display prediction buttons for the next 6 minutes
             predictionTimes.forEach(function(prediction) {
                 let button = document.createElement('button');
                 button.classList.add('prediction-button');
@@ -94,9 +125,12 @@
                 button.setAttribute('data-time', prediction.time);
                 predictionsDiv.appendChild(button);
             });
+
+            // Start the signal cycle
             startSignalCycle();
         }
 
+        // Function to start the signal cycle and trigger odds
         function startSignalCycle() {
             setInterval(function() {
                 let now = new Date();
@@ -104,14 +138,18 @@
 
                 predictionTimes.forEach(function(prediction) {
                     let button = document.querySelector(`button[data-time='${prediction.time}']`);
-                    if (formattedTime === prediction.time) {
-                        let randomOdd = Math.floor(Math.random() * 3) + 2; // Get random odd between 2 and 3
-                        prediction.odd = randomOdd; // Set random odd
+
+                    // If the current time matches the prediction time, trigger the odd
+                    if (formattedTime === prediction.time && prediction.odd === null) {
+                        let randomOdd = Math.floor(Math.random() * 3) + 2; // Random odd between 2x and 3x
+                        prediction.odd = randomOdd; // Set the odd
                         button.classList.add('active');
-                        button.textContent = `${prediction.time} - ${prediction.odd}x`;
+                        button.textContent = `${prediction.time} - ${prediction.odd}x`; // Show the odd
                     } else if (formattedTime !== prediction.time && button.classList.contains('active')) {
+                        // Once the minute changes, reset the button to show only the time
                         button.classList.remove('active');
-                        button.textContent = prediction.time; // Reset the button to just show time
+                        button.textContent = prediction.time;
+                        prediction.odd = null; // Reset the odd
                     }
                 });
             }, 1000); // Check every second
