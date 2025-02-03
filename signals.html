@@ -167,8 +167,8 @@
                     let now = new Date();
                     let minutes = (now.getMinutes() + i) % 60;
                     let seconds = Math.floor(Math.random() * 60);
-                    let targetMultiplier = (Math.random() * (2.50 - 1.50) + 1.50).toFixed(2);
-                    let riskMultiplier = (Math.random() * (4.50 - 2.51) + 2.51).toFixed(2);
+                    let targetMultiplier = (Math.random() * (2.00 - 1.40) + 1.50).toFixed(2);
+                    let riskMultiplier = (Math.random() * (3.50 - 2.01) + 2.51).toFixed(2);
 
                     let playNow = Math.random() < 0.2 ? ` <span class="play-now">🔥 Play Now ${Math.random() < 0.5 ? "2x" : (Math.random() * (6.00 - 2.50) + 2.50).toFixed(2) + "x"} 🔥</span>` : "";
 
