@@ -58,7 +58,7 @@
             font-size: 16px;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: all 0.5s ease-in-out;
         }
 
         .prediction-button:hover {
@@ -68,12 +68,7 @@
 
         .prediction-button.active {
             background-color: #ff3366;
-            animation: flash 1s infinite alternate;
-        }
-
-        @keyframes flash {
-            from { background-color: #ff3366; }
-            to { background-color: #ff6699; }
+            transition: background-color 0.5s ease-in-out;
         }
 
         .info {
