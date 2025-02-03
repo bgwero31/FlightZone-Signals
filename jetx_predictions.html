@@ -4,145 +4,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX Master Predictor - Signals</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: linear-gradient(to right, #1E90FF, #32CD32); /* Blue to Green */
+            background: linear-gradient(45deg, #1a2a6c, #4a90e2, #26a69a);
+            background-size: 200% 200%;
+            animation: backgroundAnimation 10s infinite;
             color: white;
-            transition: background 1s ease-in-out;
+        }
+        
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 50px auto;
         }
 
         h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 34px;
-            text-transform: uppercase;
-            color: #ff3366;
-            margin-top: 40px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
 
-        .container {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0 0 20px rgba(0, 255, 127, 0.6); /* Green glow */
-            transition: background 1s ease-in-out;
+        #clock {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #00ffcc;
         }
 
-        .container:hover {
-            background: rgba(255, 51, 102, 0.8);
+        #countdown {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #ffcc00;
+            font-weight: bold;
         }
 
-        .prediction {
-            background: linear-gradient(135deg, #1E90FF, #32CD32);
+        .predictions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .prediction-button {
+            background-color: #333;
             padding: 15px;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 16px;
             color: white;
-            font-weight: bold;
-            margin: 10px 0;
-            transition: background 0.5s;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: relative;
         }
 
-        .prediction.active {
-            background: #ff3366;
-            box-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
-            animation: pulse 1s infinite alternate;
+        .prediction-button:hover {
+            background-color: #ff3366;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
+        .active {
+            background-color: #ff3366;
+            animation: flashEffect 1s ease-in-out;
         }
 
-        .countdown {
-            font-size: 20px;
-            color: yellow;
-            margin-top: 15px;
-            font-weight: bold;
+        @keyframes flashEffect {
+            0% { box-shadow: 0 0 15px #ff3366; }
+            100% { box-shadow: 0 0 0px #ff3366; }
         }
 
+        .info {
+            margin-top: 40px;
+            color: white;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .contact {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffcc00;
+        }
     </style>
 </head>
 <body>
 
     <h1>JetX Master Predictor - Signals</h1>
+
+    <div id="clock"></div>
+    <div id="countdown">Next Prediction in: <span id="timer">--:--</span></div>
+
     <div class="container">
-        <button onclick="getSignals()">Start Predictions</button>
-        <div id="predictions"></div>
-        <div id="countdown" class="countdown">Next Signal In: --:--</div>
+        <button onclick="getSignals()">Get Signals</button>
+
+        <div id="predictions" class="predictions"></div>
+
+        <div class="info">
+            <p><strong>About the JetX Master Predictor:</strong><br>
+            The JetX Master Predictor provides live betting signals for various sites using advanced algorithms.</p>
+            <p class="contact">For more information, contact B.Jay.</p>
+        </div>
     </div>
 
     <script>
-        let predictionTimes = [];
-        let currentPredictionIndex = 0;
-        let countdownInterval;
+        var predictionTimes = [];
+        var countdownTimer;
         
+        function formatTimeWithoutSeconds(date) {
+            let minutes = date.getMinutes();
+            return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}`;
+        }
+
         function generatePredictionTimes() {
             let now = new Date();
-            let startMinute = now.getMinutes() + 1;  // Start next minute
-            predictionTimes = [];
+            let nextMinute = now.getMinutes() + 1;
+            if (nextMinute >= 60) nextMinute -= 60;
 
-            for (let i = 0; i < 6; i++) { // Generate 6 times
+            let sequentialTimes = [];
+            for (let i = 0; i < 6; i++) {
                 let time = new Date(now);
-                time.setMinutes(startMinute + (i * 2)); // Increase by 2 mins per prediction
-                if (time.getMinutes() >= 60) {
-                    time.setMinutes(time.getMinutes() - 60);
-                    time.setHours(time.getHours() + 1);
-                }
-                predictionTimes.push(`${time.getHours()}:${time.getMinutes().toString().padStart(2, '0')}`);
+                time.setMinutes(nextMinute + (i * (Math.random() > 0.5 ? 2 : 1.5))); // Random 2 min or 1.5 min
+                if (time.getMinutes() >= 60) time.setMinutes(time.getMinutes() - 60);
+                sequentialTimes.push(time);
             }
+
+            predictionTimes = sequentialTimes.map(time => formatTimeWithoutSeconds(time));
+        }
+
+        function startClock() {
+            setInterval(function() {
+                let now = new Date();
+                document.getElementById('clock').innerHTML = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            }, 1000);
         }
 
         function getSignals() {
+            predictionTimes = [];
             generatePredictionTimes();
-            displayNextPrediction();
-        }
-
-        function displayNextPrediction() {
+            
             let predictionsDiv = document.getElementById('predictions');
             predictionsDiv.innerHTML = '';
 
-            if (currentPredictionIndex < predictionTimes.length) {
-                let predictionTime = predictionTimes[currentPredictionIndex];
-                let odd = (Math.random() * 5 + 2).toFixed(2); // Random odds between 2x - 7x
-                
-                let predictionElement = document.createElement('div');
-                predictionElement.classList.add('prediction', 'active');
-                predictionElement.innerHTML = `<strong>${predictionTime}</strong> - ${odd}x`;
+            predictionTimes.forEach(function(time) {
+                let button = document.createElement('button');
+                button.classList.add('prediction-button');
+                button.textContent = time;
+                button.setAttribute('data-time', time);
+                predictionsDiv.appendChild(button);
+            });
 
-                predictionsDiv.appendChild(predictionElement);
-
-                startCountdown(60); // 60 seconds countdown
-                setTimeout(() => {
-                    predictionElement.classList.remove('active');
-                    predictionsDiv.innerHTML = `<strong>${predictionTime}</strong>`; // Remove odd after 1 min
-                    setTimeout(displayNextPrediction, 500); // Move to next prediction
-                }, 60000); // Hide odd after 60s
-                
-                currentPredictionIndex++;
-            } else {
-                predictionsDiv.innerHTML = "<strong>Predictions Completed</strong>";
-                clearInterval(countdownInterval);
-            }
+            startSignalCycle();
+            startCountdown();
         }
 
-        function startCountdown(seconds) {
-            let countdownDiv = document.getElementById('countdown');
-            clearInterval(countdownInterval);
+        function startSignalCycle() {
+            setInterval(function() {
+                let now = new Date();
+                let formattedTime = formatTimeWithoutSeconds(now);
 
-            countdownInterval = setInterval(() => {
-                if (seconds > 0) {
-                    countdownDiv.innerHTML = `Next Signal In: ${seconds--}s`;
+                predictionTimes.forEach(function(time) {
+                    let button = document.querySelector(`button[data-time='${time}']`);
+                    
+                    if (formattedTime === time && !button.classList.contains('active')) {
+                        let randomOdd = Math.floor(Math.random() * 3) + 2;
+                        button.classList.add('active');
+                        button.textContent = `${time} - ${randomOdd}x`;
+                        flashLightEffect(button);
+                        startCountdown();
+                    } else if (formattedTime !== time && button.classList.contains('active')) {
+                        button.classList.remove('active');
+                        button.textContent = time;
+                    }
+                });
+            }, 1000);
+        }
+
+        function startCountdown() {
+            clearInterval(countdownTimer);
+            let seconds = 90; // 1.5 minutes default countdown
+
+            countdownTimer = setInterval(function() {
+                let minutes = Math.floor(seconds / 60);
+                let remainingSeconds = seconds % 60;
+                document.getElementById('timer').textContent = `${minutes}:${remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds}`;
+
+                if (seconds <= 0) {
+                    clearInterval(countdownTimer);
                 } else {
-                    clearInterval(countdownInterval);
+                    seconds--;
                 }
             }, 1000);
         }
+
+        function flashLightEffect(button) {
+            button.style.boxShadow = "0 0 20px #ffcc00";
+            setTimeout(() => {
+                button.style.boxShadow = "none";
+            }, 1000);
+        }
+
+        startClock();
     </script>
+
 </body>
 </html>
