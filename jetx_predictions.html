@@ -4,53 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX Master Predictor - Signals</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+        
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: linear-gradient(45deg, #1a2a6c, #4a90e2, #26a69a);
-            background-size: 200% 200%;
-            animation: backgroundAnimation 10s infinite;
+            background: linear-gradient(to right, #1E90FF, #32CD32); /* Blue to Green */
             color: white;
+            transition: background 1s ease-in-out;
         }
-        
-        @keyframes backgroundAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
+
         .container {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             max-width: 600px;
             margin: 50px auto;
-        }
-
-        h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 28px;
-            color: #ffcc00;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-        }
-
-        #clock {
-            font-size: 22px;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #00ffcc;
-        }
-
-        #countdown {
-            font-size: 20px;
-            margin: 10px 0;
-            color: #ffcc00;
-            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0, 255, 127, 0.6); /* Green glow */
+            transition: all 0.3s ease-in-out;
         }
 
         .predictions {
@@ -61,35 +33,54 @@
         }
 
         .prediction-button {
-            background-color: #333;
+            background: linear-gradient(135deg, #1E90FF, #32CD32); /* Blue to Green Gradient */
             padding: 15px;
             border-radius: 10px;
             font-size: 16px;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
-            position: relative;
+            transition: transform 0.3s, background 0.5s;
+            font-weight: bold;
         }
 
         .prediction-button:hover {
-            background-color: #ff3366;
+            background: #ff3366;
+            transform: scale(1.1);
         }
 
         .active {
-            background-color: #ff3366;
-            animation: flashEffect 1s ease-in-out;
+            background: #ff3366;
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
+            animation: pulse 1s infinite alternate;
         }
 
-        @keyframes flashEffect {
-            0% { box-shadow: 0 0 15px #ff3366; }
-            100% { box-shadow: 0 0 0px #ff3366; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        #clock {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .countdown {
+            font-size: 20px;
+            color: yellow;
+            margin-top: 10px;
+            font-weight: bold;
         }
 
         .info {
             margin-top: 40px;
-            color: white;
-            font-size: 16px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.6);
             padding: 20px;
             border-radius: 10px;
         }
@@ -97,20 +88,18 @@
         .contact {
             margin-top: 20px;
             font-size: 18px;
-            color: #ffcc00;
+            color: #ff3366;
         }
     </style>
 </head>
 <body>
 
     <h1>JetX Master Predictor - Signals</h1>
-
     <div id="clock"></div>
-    <div id="countdown">Next Prediction in: <span id="timer">--:--</span></div>
+    <div id="countdown" class="countdown">Next Signal In: --:--</div>
 
     <div class="container">
         <button onclick="getSignals()">Get Signals</button>
-
         <div id="predictions" class="predictions"></div>
 
         <div class="info">
@@ -121,45 +110,75 @@
     </div>
 
     <script>
-        var predictionTimes = [];
-        var countdownTimer;
-        
+        let predictionTimes = [];
+        let countdownInterval;
+
         function formatTimeWithoutSeconds(date) {
+            let hours = date.getHours();
             let minutes = date.getMinutes();
-            return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}`;
+            return `${hours}:${minutes < 10 ? "0" + minutes : minutes}`;
         }
 
         function generatePredictionTimes() {
             let now = new Date();
-            let nextMinute = now.getMinutes() + 1;
-            if (nextMinute >= 60) nextMinute -= 60;
-
+            let startMinute = now.getMinutes() + 1;
             let sequentialTimes = [];
+
             for (let i = 0; i < 6; i++) {
                 let time = new Date(now);
-                time.setMinutes(nextMinute + (i * (Math.random() > 0.5 ? 2 : 1.5))); // Random 2 min or 1.5 min
-                if (time.getMinutes() >= 60) time.setMinutes(time.getMinutes() - 60);
-                sequentialTimes.push(time);
+                time.setMinutes(startMinute + (i * 2));
+                
+                if (time.getMinutes() >= 60) {
+                    time.setMinutes(time.getMinutes() - 60);
+                    time.setHours(time.getHours() + 1);
+                }
+
+                let formattedTime = formatTimeWithoutSeconds(time);
+                if (!sequentialTimes.includes(formattedTime)) {
+                    sequentialTimes.push(formattedTime);
+                }
             }
 
-            predictionTimes = sequentialTimes.map(time => formatTimeWithoutSeconds(time));
+            predictionTimes = sequentialTimes;
         }
 
         function startClock() {
-            setInterval(function() {
+            setInterval(() => {
                 let now = new Date();
-                document.getElementById('clock').innerHTML = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+                document.getElementById('clock').innerHTML = formatTimeWithoutSeconds(now) + ":" + (now.getSeconds() < 10 ? "0" + now.getSeconds() : now.getSeconds());
             }, 1000);
+        }
+
+        function updateCountdown() {
+            if (predictionTimes.length === 0) return;
+            
+            let now = new Date();
+            let nextTime = predictionTimes[0].split(":");
+            let nextHour = parseInt(nextTime[0]);
+            let nextMinute = parseInt(nextTime[1]);
+            
+            let future = new Date();
+            future.setHours(nextHour, nextMinute, 0);
+
+            let diff = Math.floor((future - now) / 1000);
+            if (diff < 0) {
+                getSignals();
+                return;
+            }
+
+            let minutes = Math.floor(diff / 60);
+            let seconds = diff % 60;
+            document.getElementById('countdown').innerHTML = `Next Signal In: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
         }
 
         function getSignals() {
             predictionTimes = [];
             generatePredictionTimes();
-            
+
             let predictionsDiv = document.getElementById('predictions');
             predictionsDiv.innerHTML = '';
 
-            predictionTimes.forEach(function(time) {
+            predictionTimes.forEach(time => {
                 let button = document.createElement('button');
                 button.classList.add('prediction-button');
                 button.textContent = time;
@@ -167,25 +186,24 @@
                 predictionsDiv.appendChild(button);
             });
 
+            if (countdownInterval) clearInterval(countdownInterval);
+            countdownInterval = setInterval(updateCountdown, 1000);
+
             startSignalCycle();
-            startCountdown();
         }
 
         function startSignalCycle() {
-            setInterval(function() {
-                let now = new Date();
-                let formattedTime = formatTimeWithoutSeconds(now);
+            setInterval(() => {
+                let now = formatTimeWithoutSeconds(new Date());
 
-                predictionTimes.forEach(function(time) {
+                predictionTimes.forEach(time => {
                     let button = document.querySelector(`button[data-time='${time}']`);
-                    
-                    if (formattedTime === time && !button.classList.contains('active')) {
+
+                    if (now === time && !button.classList.contains('active')) {
                         let randomOdd = Math.floor(Math.random() * 3) + 2;
                         button.classList.add('active');
                         button.textContent = `${time} - ${randomOdd}x`;
-                        flashLightEffect(button);
-                        startCountdown();
-                    } else if (formattedTime !== time && button.classList.contains('active')) {
+                    } else if (now !== time && button.classList.contains('active')) {
                         button.classList.remove('active');
                         button.textContent = time;
                     }
@@ -193,32 +211,7 @@
             }, 1000);
         }
 
-        function startCountdown() {
-            clearInterval(countdownTimer);
-            let seconds = 90; // 1.5 minutes default countdown
-
-            countdownTimer = setInterval(function() {
-                let minutes = Math.floor(seconds / 60);
-                let remainingSeconds = seconds % 60;
-                document.getElementById('timer').textContent = `${minutes}:${remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds}`;
-
-                if (seconds <= 0) {
-                    clearInterval(countdownTimer);
-                } else {
-                    seconds--;
-                }
-            }, 1000);
-        }
-
-        function flashLightEffect(button) {
-            button.style.boxShadow = "0 0 20px #ffcc00";
-            setTimeout(() => {
-                button.style.boxShadow = "none";
-            }, 1000);
-        }
-
         startClock();
     </script>
-
 </body>
 </html>
