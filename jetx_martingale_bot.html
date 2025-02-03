@@ -5,56 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JETX MARTINGALE BOT</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&display=swap');
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Oswald', sans-serif;
             background-color: #111;
-            color: green;
+            color: white;
             text-align: center;
-            background-image: url('https://source.unsplash.com/1600x900/?gambling,casino');
+            background-image: url('https://source.unsplash.com/1600x900/?casino,betting');
             background-size: cover;
             background-position: center;
-            padding: 0;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            padding: 50px;
         }
-
         h1 {
             font-size: 3em;
-            background: linear-gradient(to right, #ff3366, #ff6699);
-            color: transparent;
-            -webkit-background-clip: text;
-            animation: fadeColor 3s infinite alternate;
-            margin-top: 50px;
+            color: #ffcc00;
+            text-transform: uppercase;
         }
-
-        @keyframes fadeColor {
-            0% {
-                background: linear-gradient(to right, #ff3366, #ff6699);
-            }
-            100% {
-                background: linear-gradient(to right, #ff6699, #ff3366);
-            }
-        }
-
         .form-container {
-            background: rgba(0, 0, 0, 0.7);
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.8);
             padding: 30px;
             border-radius: 10px;
             display: inline-block;
             text-align: left;
             max-width: 400px;
-            margin-top: 50px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
         }
-
-        .form-container h2 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-
         .form-container input {
             width: 100%;
             padding: 12px;
@@ -62,12 +38,13 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+            background: #222;
+            color: white;
         }
-
         .form-container button {
             width: 100%;
-            background-color: #ff3366;
-            color: white;
+            background-color: #ffcc00;
+            color: black;
             padding: 12px;
             font-size: 1.2em;
             border-radius: 5px;
@@ -75,62 +52,50 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         .form-container button:hover {
-            background-color: #ff6699;
+            background-color: #ffdd44;
         }
-
-        .description {
-            margin: 50px auto;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 20px;
-            max-width: 800px;
-            font-size: 1.2em;
-            text-align: left;
-        }
-
-        .contact-links {
+        .info {
             margin-top: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1em;
+        }
+        .links {
+            margin-top: 20px;
             font-size: 1.2em;
         }
-
-        .contact-links a {
-            color: #ff3366;
+        .links a {
+            color: #ffcc00;
             text-decoration: none;
-            padding: 10px;
-            margin: 10px;
-            display: inline-block;
-        }
-
-        .contact-links a:hover {
-            background-color: #ff6699;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <h1>🔥 JETX MARTINGALE BOT 🔥</h1>
+    <h1>JETX MARTINGALE BOT</h1>
 
     <div class="form-container">
-        <h2>Login</h2>
-        <form action="submit_betting_info.php" method="post">
-            <input type="text" id="site" name="site" placeholder="Enter Betting Site URL" required>
-
-            <input type="password" id="password" name="password" value="2025bjay@" readonly>
-
+        <form action="page2.html" method="post">
+            <input type="text" name="site" placeholder="Enter Betting Site" required>
+            <input type="password" name="password" placeholder="Enter Password" required>
             <button type="submit">Login</button>
         </form>
     </div>
 
-    <div class="description">
-        <p>The <strong>JETX MARTINGALE BOT</strong> is designed for players who want to maximize their winnings using the Martingale betting system. This bot adapts to the game's flow, helping you make calculated bets to recover losses and achieve consistent profits.</p>
+    <div class="info">
+        <p>The <strong>JETX MARTINGALE BOT</strong> is designed to help you win strategically using the Martingale system. It adapts to your game and gives calculated betting tips to maximize profits.</p>
     </div>
 
-    <div class="contact-links">
-        <p>For support, join:</p>
-        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp Group</a>
-        <a href="https://t.me/YourTelegramLink" target="_blank">Telegram Group</a>
+    <div class="links">
+        <p>📢 Connect with B.Jay:</p>
+        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp Group</a> | 
+        <a href="https://t.me/yourtelegramlink" target="_blank">Telegram</a>
     </div>
 
 </body>
