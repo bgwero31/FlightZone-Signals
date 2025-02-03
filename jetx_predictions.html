@@ -19,7 +19,7 @@
             color: #ffcc00;
         }
         .container {
-            background: linear-gradient(45deg, #004d99, #00cc66);
+            background: linear-gradient(45deg, #004d99, #9900cc);
             padding: 20px;
             border-radius: 15px;
             max-width: 600px;
@@ -66,19 +66,12 @@
             font-size: 18px;
             color: #ff3366;
         }
-        #countdown {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #ffcc00;
-        }
     </style>
 </head>
 <body>
 
     <h1>JetX Master Predictor - Signals</h1>
     <div id="clock"></div>
-    <div id="countdown">Next Prediction in: 60s</div>
 
     <div class="container">
         <button onclick="getSignals()">Get Signals</button>
@@ -94,7 +87,6 @@
     <script>
         var predictionTimes = [];
         var currentPrediction = null;
-        var countdown = 60;
 
         function formatTimeWithoutSeconds(date) {
             let minutes = date.getMinutes();
@@ -147,11 +139,10 @@
                     let button = document.querySelector(`button[data-time='${formattedTime}']`);
                     if (button && formattedTime !== currentPrediction) {
                         currentPrediction = formattedTime;
-                        let randomOdd = (Math.random() * 2 + 2).toFixed(2); 
+                        let randomOdd = (Math.random() * 1 + 2).toFixed(2); 
 
                         button.classList.add('active');
                         button.textContent = `${formattedTime} - ${randomOdd}x`;
-                        countdown = 60;
 
                         setTimeout(() => {
                             button.classList.remove('active');
@@ -162,15 +153,7 @@
             }, 1000);
         }
 
-        function startCountdown() {
-            setInterval(() => {
-                document.getElementById("countdown").textContent = `Next Prediction in: ${countdown}s`;
-                if (countdown > 0) countdown--;
-            }, 1000);
-        }
-
         startClock();
-        startCountdown();
     </script>
 </body>
 </html>
