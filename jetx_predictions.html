@@ -91,18 +91,36 @@
                 nextMinute = nextMinute - 60; // Handle the case for when minutes reach 60
             }
 
-            // Generate prediction times for 6 minutes ahead of the current time
-            for (let i = 0; i < 6; i++) { 
+            // Create an array to store six random prediction times
+            let randomTimes = [];
+            for (let i = 0; i < 6; i++) {
                 let time = new Date(now);
                 time.setMinutes(nextMinute + i);
                 if (time.getMinutes() >= 60) {
                     time.setMinutes(time.getMinutes() - 60); // Handle hour overflow
                 }
-                predictionTimes.push({
+                randomTimes.push(time);
+            }
+
+            // Shuffle the array to space out the times randomly
+            randomTimes = shuffleArray(randomTimes);
+
+            // Format the times and store them in predictionTimes
+            predictionTimes = randomTimes.map(time => {
+                return {
                     time: formatTime(time),
                     odd: null
-                });
+                };
+            });
+        }
+
+        // Function to shuffle an array randomly
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
             }
+            return array;
         }
 
         // Function to start the clock and update the time every second
@@ -116,7 +134,7 @@
         // Function to handle the "Get Signals" button click
         function getSignals() {
             predictionTimes = [];
-            generatePredictionTimes(); // Generate prediction times starting from the next 2 minutes
+            generatePredictionTimes(); // Generate random prediction times
 
             let predictionsDiv = document.getElementById('predictions');
             predictionsDiv.innerHTML = ''; // Clear the predictions area
