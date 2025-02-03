@@ -83,44 +83,38 @@
             return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}`;
         }
 
-        // Function to generate the prediction times starting from the next 2 minutes
+        // Function to generate the next 10 sequential prediction times
         function generatePredictionTimes() {
             let now = new Date();
-            let nextMinute = now.getMinutes() + 2; // Start from the next 2 minutes
+            let nextMinute = now.getMinutes() + 1; // Start from the next minute
             if (nextMinute >= 60) {
                 nextMinute = nextMinute - 60; // Handle the case for when minutes reach 60
             }
 
-            // Create an array to store six random prediction times
-            let randomTimes = [];
-            for (let i = 0; i < 6; i++) {
+            // Create an array to store ten sequential prediction times
+            let sequentialTimes = [];
+            for (let i = 0; i < 10; i++) {
                 let time = new Date(now);
                 time.setMinutes(nextMinute + i);
                 if (time.getMinutes() >= 60) {
                     time.setMinutes(time.getMinutes() - 60); // Handle hour overflow
                 }
-                randomTimes.push(time);
+                sequentialTimes.push(time);
             }
 
-            // Shuffle the array to space out the times randomly
-            randomTimes = shuffleArray(randomTimes);
-
             // Format the times and store them in predictionTimes
-            predictionTimes = randomTimes.map(time => {
-                return {
-                    time: formatTime(time),
-                    odd: null
-                };
-            });
+            predictionTimes = sequentialTimes.map(time => formatTime(time));
+
+            // Randomize the order of the times
+            shuffleArray(predictionTimes);
         }
 
-        // Function to shuffle an array randomly
+        // Function to shuffle the array (randomize the order)
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]]; // Swap elements
             }
-            return array;
         }
 
         // Function to start the clock and update the time every second
@@ -134,17 +128,17 @@
         // Function to handle the "Get Signals" button click
         function getSignals() {
             predictionTimes = [];
-            generatePredictionTimes(); // Generate random prediction times
+            generatePredictionTimes(); // Generate and randomize sequential prediction times
 
             let predictionsDiv = document.getElementById('predictions');
             predictionsDiv.innerHTML = ''; // Clear the predictions area
 
-            // Display prediction buttons for the next 6 minutes
-            predictionTimes.forEach(function(prediction) {
+            // Display prediction buttons for the next 10 minutes
+            predictionTimes.forEach(function(time) {
                 let button = document.createElement('button');
                 button.classList.add('prediction-button');
-                button.textContent = prediction.time;
-                button.setAttribute('data-time', prediction.time);
+                button.textContent = time;
+                button.setAttribute('data-time', time);
                 predictionsDiv.appendChild(button);
             });
 
@@ -158,25 +152,25 @@
                 let now = new Date();
                 let formattedTime = formatTime(now); // Get HH:MM format
 
-                predictionTimes.forEach(function(prediction) {
-                    let button = document.querySelector(`button[data-time='${prediction.time}']`);
+                predictionTimes.forEach(function(time) {
+                    let button = document.querySelector(`button[data-time='${time}']`);
 
                     // If the current time matches the prediction time, trigger the odd
-                    if (formattedTime === prediction.time && prediction.odd === null) {
+                    if (formattedTime === time && !button.classList.contains('active')) {
                         let randomOdd = Math.floor(Math.random() * 3) + 2; // Random odd between 2x and 3x
-                        prediction.odd = randomOdd; // Set the odd
                         button.classList.add('active');
-                        button.textContent = `${prediction.time} - ${prediction.odd}x`; // Show the odd
-                    } else if (formattedTime !== prediction.time && button.classList.contains('active')) {
+                        button.textContent = `${time} - ${randomOdd}x`; // Show the odd
+                    } else if (formattedTime !== time && button.classList.contains('active')) {
                         // Once the minute changes, reset the button to show only the time
                         button.classList.remove('active');
-                        button.textContent = prediction.time;
-                        prediction.odd = null; // Reset the odd
+                        button.textContent = time;
                     }
                 });
             }, 1000); // Check every second
         }
 
+        // Start the clock when the page loads
+        startClock();
     </script>
 </body>
 </html>
