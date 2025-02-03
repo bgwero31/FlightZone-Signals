@@ -3,79 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Master Predictor Signals</title>
+    <title>JetX Master Predictor - Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1c1c1c;
-            color: #fff;
             text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            margin-top: 50px;
-            font-size: 36px;
-        }
-
-        .signal-container {
-            margin-top: 30px;
-            padding: 20px;
-            border: 2px solid #fff;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .back-button {
-            background-color: #FF5733;
+            background-color: #111;
             color: white;
-            border: none;
-            padding: 15px 20px;
-            margin: 20px;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
             border-radius: 10px;
-            font-size: 20px;
+            max-width: 400px;
+            margin: 50px auto;
+        }
+        input, select, button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+        input {
+            background: #222;
+            color: white;
+        }
+        select {
+            background: #444;
+            color: white;
+        }
+        button {
+            background: #ff3366;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-
-        .back-button:hover {
-            background-color: #C70039;
-        }
-
-        .prediction {
-            font-size: 24px;
-            margin-top: 20px;
-            font-weight: bold;
-            color: #FFD700;
+        button:hover {
+            background: #ff6699;
         }
     </style>
 </head>
 <body>
 
-    <h1>JetX Master Predictor Signals</h1>
+    <h1>JetX Master Predictor Login</h1>
+    <div class="container">
+        <label>Password:</label>
+        <input type="password" id="password" placeholder="Enter Password" required>
 
-    <div class="signal-container">
-        <h3>Next Prediction:</h3>
-        <p class="prediction" id="signal">Loading...</p>
+        <label>Select Betting Site:</label>
+        <select id="bettingSite">
+            <option value="Africa Bet">Africa Bet</option>
+            <option value="MWOS Betting">MWOS Betting</option>
+            <option value="Spin City">Spin City</option>
+            <option value="Zanzibet">Zanzibet</option>
+            <option value="Bet247">Bet247</option>
+        </select>
+
+        <button onclick="validateLogin()">Enter</button>
     </div>
 
-    <button class="back-button" onclick="goBack()">⬅️ Back to Predictor</button>
-
     <script>
-        function goBack() {
-            window.location.href = 'jetx_master_predictor.html'; // Redirect back to the main page
-        }
+        function validateLogin() {
+            var password = document.getElementById("password").value;
+            var bettingSite = document.getElementById("bettingSite").value;
 
-        // Generate a random prediction every minute
-        function generateSignal() {
-            const multipliers = ['2x', '3x', '4x', '5x', '6x'];
-            const randomMultiplier = multipliers[Math.floor(Math.random() * multipliers.length)];
-            document.getElementById('signal').textContent = `Prediction: ${randomMultiplier}`;
+            if (password === "BJay2025$") { // Change this to your secret password
+                localStorage.setItem("bettingSite", bettingSite);
+                window.location.href = "jetx_predictions.html"; // Redirects to predictions page
+            } else {
+                alert("Incorrect password! Try again.");
+            }
         }
-
-        generateSignal(); // Initial prediction
-        setInterval(generateSignal, 60000); // Update every minute
     </script>
 
 </body>
