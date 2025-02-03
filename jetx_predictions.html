@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Master Predictor - Predictions</title>
+    <title>JetX Master Predictor - Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,125 +11,112 @@
             background-color: #111;
             color: white;
         }
-        #clock {
-            font-size: 30px;
-            margin: 20px;
-        }
-        .prediction {
-            display: inline-block;
-            padding: 10px;
-            margin: 10px;
-            background-color: #333;
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
             border-radius: 10px;
-            cursor: pointer;
-            color: white;
+            max-width: 600px;
+            margin: 50px auto;
         }
-        .prediction:hover {
-            background-color: #444;
+        .predictions {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .prediction-button {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
         }
         .active {
             background-color: #ff3366;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .prediction-button {
-            padding: 10px;
-            margin: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-            border: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>JetX Master Predictor - Predictions</h1>
-    
-    <div id="clock"></div> <!-- Clock display -->
+    <h1>JetX Master Predictor - Signals</h1>
+
+    <div id="clock"></div>
 
     <div class="container">
-        <button class="prediction-button" onclick="getPredictions()">Get Signals</button>
-        
-        <div id="predictions"></div> <!-- Dynamic predictions will appear here -->
+        <button onclick="getSignals()">Get Signals</button>
+
+        <div id="predictions" class="predictions"></div>
     </div>
 
     <script>
-        var predictionButtons = [];  // Store prediction buttons for flashing odds
+        var predictionTimes = [
+            { time: "11:26", odd: null },
+            { time: "11:27", odd: null },
+            { time: "11:28", odd: null },
+            { time: "11:29", odd: null },
+            { time: "11:30", odd: null },
+            { time: "11:31", odd: null },
+            { time: "11:32", odd: null },
+            { time: "11:33", odd: null },
+            { time: "11:34", odd: null },
+            { time: "11:35", odd: null },
+            { time: "11:36", odd: null },
+            { time: "11:37", odd: null },
+            { time: "11:38", odd: null },
+            { time: "11:39", odd: null },
+            { time: "11:40", odd: null },
+        ];
 
-        // Clock functionality
-        function updateClock() {
-            var now = new Date();
-            var hours = now.getHours().toString().padStart(2, '0');
-            var minutes = now.getMinutes().toString().padStart(2, '0');
-            var seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
+        var currentTime = new Date();
 
-            // Check if any prediction button should flash based on current time
-            predictionButtons.forEach(function(button) {
-                var buttonTime = button.dataset.time;  // Get the time from the button
-                var currentTime = hours + ":" + minutes;
+        function formatTime(date) {
+            let minutes = date.getMinutes();
+            let seconds = date.getSeconds();
+            return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+        }
 
-                if (currentTime === buttonTime) {
-                    flashOdds(button);  // Flash the odds randomly for this button
-                } else {
-                    resetButton(button);  // Reset button when time has passed
-                }
+        function startClock() {
+            setInterval(function() {
+                let now = new Date();
+                document.getElementById('clock').innerHTML = formatTime(now);
+            }, 1000);
+        }
+
+        function getSignals() {
+            let predictionsDiv = document.getElementById('predictions');
+            predictionsDiv.innerHTML = ''; // Clear predictions area
+
+            predictionTimes.forEach(function(prediction) {
+                let button = document.createElement('button');
+                button.classList.add('prediction-button');
+                button.textContent = prediction.time;
+                button.setAttribute('data-time', prediction.time);
+                predictionsDiv.appendChild(button);
             });
-        }
-        setInterval(updateClock, 1000); // Update clock every second
-
-        // Function to generate predictions based on current time
-        function getPredictions() {
-            var currentTime = new Date();
-            var currentMinute = currentTime.getMinutes();
-            
-            // Clear previous predictions
-            document.getElementById("predictions").innerHTML = "";
-
-            // Generate 5 predictions (e.g., current time + 2-3 minutes)
-            for (var i = 1; i <= 5; i++) {
-                var predictionTime = new Date(currentTime);
-                predictionTime.setMinutes(currentMinute + i * 2); // Adding 2 minutes increment
-                var predictionHour = predictionTime.getHours().toString().padStart(2, '0');
-                var predictionMinute = predictionTime.getMinutes().toString().padStart(2, '0');
-                var predictionButton = document.createElement("button");
-
-                predictionButton.classList.add("prediction");
-                predictionButton.textContent = predictionHour + ":" + predictionMinute;
-                predictionButton.dataset.time = predictionHour + ":" + predictionMinute; // Store time in button
-                predictionButton.dataset.odds = null; // Initially no odds displayed
-
-                // Add button to the predictions div
-                document.getElementById("predictions").appendChild(predictionButton);
-
-                // Store the button to later manipulate for flashing odds
-                predictionButtons.push(predictionButton);
-            }
+            startSignalCycle();
         }
 
-        // Function to randomly flash odds between 2x and 3x
-        function flashOdds(button) {
-            if (!button.dataset.odds) {  // Prevents flashing after the first time for the minute
-                button.dataset.odds = setInterval(function() {
-                    var randomOdds = Math.random() > 0.5 ? "2x" : "3x";  // Randomly pick 2x or 3x
-                    button.textContent = randomOdds;
-                    button.classList.add("active");  // Highlight the button
-                }, 500);  // Flash every 0.5 seconds
-            }
+        function startSignalCycle() {
+            setInterval(function() {
+                let now = new Date();
+                let formattedTime = formatTime(now).substr(0, 5); // Get HH:MM format
+
+                predictionTimes.forEach(function(prediction) {
+                    let button = document.querySelector(`button[data-time='${prediction.time}']`);
+                    if (formattedTime === prediction.time) {
+                        let randomOdd = Math.floor(Math.random() * 3) + 2; // Get random odd between 2 and 3
+                        prediction.odd = randomOdd; // Set random odd
+                        button.classList.add('active');
+                        button.textContent = `${prediction.time} - ${prediction.odd}x`;
+                    } else if (formattedTime !== prediction.time && button.classList.contains('active')) {
+                        button.classList.remove('active');
+                        button.textContent = prediction.time; // Reset the button to just show time
+                    }
+                });
+            }, 1000); // Check every second
         }
 
-        // Function to reset the button text after the minute passes
-        function resetButton(button) {
-            if (button.dataset.odds) {
-                clearInterval(button.dataset.odds);  // Stop flashing
-                button.dataset.odds = null;
-                button.textContent = button.dataset.time;  // Reset back to time
-                button.classList.remove("active");  // Remove highlight
-            }
-        }
     </script>
-
 </body>
 </html>
