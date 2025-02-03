@@ -8,7 +8,7 @@
         body {
             font-family: 'Arial', sans-serif;
             background-color: #111;
-            color: white;
+            color: green;
             text-align: center;
             background-image: url('https://source.unsplash.com/1600x900/?gambling,casino');
             background-size: cover;
@@ -90,18 +90,21 @@
             text-align: left;
         }
 
-        .contact-info {
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
+        .contact-links {
+            margin-top: 50px;
             font-size: 1.2em;
         }
 
-        .contact-info a {
+        .contact-links a {
             color: #ff3366;
             text-decoration: none;
-            margin: 0 10px;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .contact-links a:hover {
+            background-color: #ff6699;
         }
     </style>
 </head>
@@ -109,34 +112,25 @@
 
     <h1>🔥 JETX MARTINGALE BOT 🔥</h1>
 
-    <!-- Betting Site & Password Form -->
     <div class="form-container">
-        <h2>Proceed with Your Information</h2>
-        <form action="predictions_page.html" method="get">
-            <label for="site">Betting Site:</label>
+        <h2>Login</h2>
+        <form action="submit_betting_info.php" method="post">
             <input type="text" id="site" name="site" placeholder="Enter Betting Site URL" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter Your Password" required>
+            <input type="password" id="password" name="password" value="2025bjay@" readonly>
 
-            <button type="submit">Proceed to Predictions</button>
+            <button type="submit">Login</button>
         </form>
     </div>
 
-    <!-- Description Section -->
     <div class="description">
         <p>The <strong>JETX MARTINGALE BOT</strong> is designed for players who want to maximize their winnings using the Martingale betting system. This bot adapts to the game's flow, helping you make calculated bets to recover losses and achieve consistent profits.</p>
-        <p>Take control of your game with our bot and start winning today!</p>
     </div>
 
-    <!-- Contact Info Section -->
-    <div class="contact-info">
-        <p>For more information, contact <strong>B.Jay</strong></p>
-        <p>
-            <a href="https://t.me/BJay_Contact" target="_blank">Telegram</a>
-            |
-            <a href="https://wa.me/your_number_here" target="_blank">WhatsApp</a>
-        </p>
+    <div class="contact-links">
+        <p>For support, join:</p>
+        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp Group</a>
+        <a href="https://t.me/YourTelegramLink" target="_blank">Telegram Group</a>
     </div>
 
 </body>
