@@ -52,17 +52,12 @@
     <div class="container">
         <button class="prediction-button" onclick="getPredictions()">Get Signals</button>
         
-        <div id="predictions">
-            <button class="prediction">10:23</button>
-            <button class="prediction">10:25</button>
-            <button class="prediction">10:27</button>
-            <button class="prediction">10:29</button>
-            <button class="prediction">10:31</button>
-            <button class="prediction">10:33</button>
-        </div>
+        <div id="predictions"></div> <!-- Dynamic predictions will appear here -->
     </div>
 
     <script>
+        var predictionButtons = [];  // Store prediction buttons for flashing odds
+
         // Clock functionality
         function updateClock() {
             var now = new Date();
@@ -70,27 +65,69 @@
             var minutes = now.getMinutes().toString().padStart(2, '0');
             var seconds = now.getSeconds().toString().padStart(2, '0');
             document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
+
+            // Check if any prediction button should flash based on current time
+            predictionButtons.forEach(function(button) {
+                var buttonTime = button.dataset.time;  // Get the time from the button
+                var currentTime = hours + ":" + minutes;
+
+                if (currentTime === buttonTime) {
+                    flashOdds(button);  // Flash the odds randomly for this button
+                } else {
+                    resetButton(button);  // Reset button when time has passed
+                }
+            });
         }
         setInterval(updateClock, 1000); // Update clock every second
 
-        // Prediction button click functionality
+        // Function to generate predictions based on current time
         function getPredictions() {
-            var predictions = document.querySelectorAll('.prediction');
             var currentTime = new Date();
             var currentMinute = currentTime.getMinutes();
-            var currentSecond = currentTime.getSeconds();
+            
+            // Clear previous predictions
+            document.getElementById("predictions").innerHTML = "";
 
-            // Check if the time matches and activate the button
-            predictions.forEach(function(button) {
-                var buttonTime = button.textContent;
-                var buttonMinute = parseInt(buttonTime.split(':')[1]);
+            // Generate 5 predictions (e.g., current time + 2-3 minutes)
+            for (var i = 1; i <= 5; i++) {
+                var predictionTime = new Date(currentTime);
+                predictionTime.setMinutes(currentMinute + i * 2); // Adding 2 minutes increment
+                var predictionHour = predictionTime.getHours().toString().padStart(2, '0');
+                var predictionMinute = predictionTime.getMinutes().toString().padStart(2, '0');
+                var predictionButton = document.createElement("button");
 
-                if (buttonMinute === currentMinute) {
-                    button.classList.add('active'); // Highlight active button
-                } else {
-                    button.classList.remove('active'); // Remove highlight from non-matching times
-                }
-            });
+                predictionButton.classList.add("prediction");
+                predictionButton.textContent = predictionHour + ":" + predictionMinute;
+                predictionButton.dataset.time = predictionHour + ":" + predictionMinute; // Store time in button
+                predictionButton.dataset.odds = null; // Initially no odds displayed
+
+                // Add button to the predictions div
+                document.getElementById("predictions").appendChild(predictionButton);
+
+                // Store the button to later manipulate for flashing odds
+                predictionButtons.push(predictionButton);
+            }
+        }
+
+        // Function to randomly flash odds between 2x and 3x
+        function flashOdds(button) {
+            if (!button.dataset.odds) {  // Prevents flashing after the first time for the minute
+                button.dataset.odds = setInterval(function() {
+                    var randomOdds = Math.random() > 0.5 ? "2x" : "3x";  // Randomly pick 2x or 3x
+                    button.textContent = randomOdds;
+                    button.classList.add("active");  // Highlight the button
+                }, 500);  // Flash every 0.5 seconds
+            }
+        }
+
+        // Function to reset the button text after the minute passes
+        function resetButton(button) {
+            if (button.dataset.odds) {
+                clearInterval(button.dataset.odds);  // Stop flashing
+                button.dataset.odds = null;
+                button.textContent = button.dataset.time;  // Reset back to time
+                button.classList.remove("active");  // Remove highlight
+            }
         }
     </script>
 
