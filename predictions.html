@@ -72,7 +72,7 @@
 <body>
 
     <div class="container">
-        <div class="clock" id="clock">00:00:00</div>
+        <div class="clock" id="clock">02:00</div>
         
         <h1>🔥 JetX Martingale Predictions 🔥</h1>
 
@@ -85,37 +85,63 @@
     </div>
 
     <script>
+        let countdownTime = 120; // 120 seconds (02:00)
+        let predictionCard = document.getElementById('predictions');
+        let countdownDisplay = document.getElementById('clock');
+        let countdownInterval;
+
         function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('clock').textContent = timeString;
+            const minutes = Math.floor(countdownTime / 60);
+            const seconds = countdownTime % 60;
+            countdownDisplay.textContent = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+            countdownTime--;
+
+            if (countdownTime === 10) {
+                generatePredictions();  // Show prediction when countdown reaches 10 seconds
+            }
+
+            if (countdownTime <= 0) {
+                clearInterval(countdownInterval);
+                setTimeout(() => {
+                    // Wait for 10 seconds before starting a new countdown
+                    countdownTime = 120;
+                    predictionCard.innerHTML = '<div class="prediction-card">Waiting for Predictions...</div>';
+                    startCountdown();
+                }, 10000); // Wait 10 seconds before restarting
+            }
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+
+        function startCountdown() {
+            countdownInterval = setInterval(updateClock, 1000);
+        }
 
         function generatePredictions() {
-            const predictionsDiv = document.getElementById('predictions');
-            predictionsDiv.innerHTML = '';
-
             const predictions = [
-                '1.50x ✅',
-                '2.10x ✅',
-                '3.80x ✅',
-                'Risk 6.00x ⚠️',
-                '10.50x 🚀'
+                '2.00x ✅',
+                '2.50x ✅',
+                '3.00x ✅',
+                'Risk 4.00x ⚠️',
+                '5.00x 🚀',
+                '7.00x 🚀'
             ];
 
-            predictions.forEach(prediction => {
-                const card = document.createElement('div');
-                card.className = 'prediction-card';
-                card.textContent = prediction;
-                predictionsDiv.appendChild(card);
-            });
+            // Clear existing predictions
+            predictionCard.innerHTML = '';
+
+            // Create new prediction card
+            const card = document.createElement('div');
+            card.className = 'prediction-card';
+            const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+            card.textContent = randomPrediction;
+            predictionCard.appendChild(card);
         }
 
         function goBack() {
             window.location.href = 'index.html';
         }
+
+        // Start countdown when page loads
+        startCountdown();
     </script>
 
 </body>
