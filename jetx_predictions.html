@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX Master Predictor - Signals</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Montserrat:wght@500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
 
         body {
             font-family: Arial, sans-serif;
@@ -17,51 +17,38 @@
 
         h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 36px;
+            font-size: 34px;
             text-transform: uppercase;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
             color: #ff3366;
-            margin-top: 50px;
+            margin-top: 40px;
         }
 
         .container {
             background: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 15px;
-            max-width: 600px;
-            margin: 50px auto;
+            max-width: 500px;
+            margin: auto;
             box-shadow: 0 0 20px rgba(0, 255, 127, 0.6); /* Green glow */
             transition: background 1s ease-in-out;
         }
 
         .container:hover {
-            background: rgba(255, 51, 102, 0.8); /* Smooth transition on hover */
+            background: rgba(255, 51, 102, 0.8);
         }
 
-        .predictions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .prediction-button {
-            background: linear-gradient(135deg, #1E90FF, #32CD32); /* Blue to Green Gradient */
+        .prediction {
+            background: linear-gradient(135deg, #1E90FF, #32CD32);
             padding: 15px;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 18px;
             color: white;
-            cursor: pointer;
-            transition: transform 0.3s, background 0.5s;
             font-weight: bold;
+            margin: 10px 0;
+            transition: background 0.5s;
         }
 
-        .prediction-button:hover {
-            background: #ff3366;
-            transform: scale(1.1);
-        }
-
-        .active {
+        .prediction.active {
             background: #ff3366;
             box-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
             animation: pulse 1s infinite alternate;
@@ -69,181 +56,93 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-
-        #clock {
-            font-size: 24px;
-            margin-bottom: 20px;
+            100% { transform: scale(1.05); }
         }
 
         .countdown {
             font-size: 20px;
             color: yellow;
-            margin-top: 10px;
+            margin-top: 15px;
             font-weight: bold;
         }
 
-        .info {
-            margin-top: 40px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .contact {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #ff3366;
-        }
     </style>
 </head>
 <body>
 
     <h1>JetX Master Predictor - Signals</h1>
-    <div id="clock"></div>
-    <div id="countdown" class="countdown">Next Signal In: --:--</div>
-
     <div class="container">
-        <button onclick="getSignals()">Get Signals</button>
-        <div id="predictions" class="predictions"></div>
-
-        <div class="info">
-            <p><strong>About the JetX Master Predictor:</strong><br>
-            The JetX Master Predictor provides live betting signals for various sites using advanced algorithms.</p>
-            <p class="contact">For more information, contact B.Jay.</p>
-        </div>
+        <button onclick="getSignals()">Start Predictions</button>
+        <div id="predictions"></div>
+        <div id="countdown" class="countdown">Next Signal In: --:--</div>
     </div>
 
     <script>
         let predictionTimes = [];
-        let currentPredictions = [];
+        let currentPredictionIndex = 0;
         let countdownInterval;
-
-        function formatTimeWithoutSeconds(date) {
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-            return `${hours}:${minutes < 10 ? "0" + minutes : minutes}`;
-        }
-
+        
         function generatePredictionTimes() {
             let now = new Date();
-            let startMinute = now.getMinutes() + 1;
-            let sequentialTimes = [];
+            let startMinute = now.getMinutes() + 1;  // Start next minute
+            predictionTimes = [];
 
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 6; i++) { // Generate 6 times
                 let time = new Date(now);
-                time.setMinutes(startMinute + (i * 1));
-
+                time.setMinutes(startMinute + (i * 2)); // Increase by 2 mins per prediction
                 if (time.getMinutes() >= 60) {
                     time.setMinutes(time.getMinutes() - 60);
                     time.setHours(time.getHours() + 1);
                 }
-
-                let formattedTime = formatTimeWithoutSeconds(time);
-                if (!sequentialTimes.includes(formattedTime)) {
-                    sequentialTimes.push(formattedTime);
-                }
+                predictionTimes.push(`${time.getHours()}:${time.getMinutes().toString().padStart(2, '0')}`);
             }
-
-            predictionTimes = sequentialTimes;
-        }
-
-        function startClock() {
-            setInterval(() => {
-                let now = new Date();
-                document.getElementById('clock').innerHTML = formatTimeWithoutSeconds(now) + ":" + (now.getSeconds() < 10 ? "0" + now.getSeconds() : now.getSeconds());
-            }, 1000);
-        }
-
-        function updateCountdown() {
-            if (predictionTimes.length === 0) return;
-
-            let now = new Date();
-            let nextTime = predictionTimes[0].split(":");
-            let nextHour = parseInt(nextTime[0]);
-            let nextMinute = parseInt(nextTime[1]);
-
-            let future = new Date();
-            future.setHours(nextHour, nextMinute, 0);
-
-            let diff = Math.floor((future - now) / 1000);
-            if (diff < 0) {
-                getSignals();
-                return;
-            }
-
-            let minutes = Math.floor(diff / 60);
-            let seconds = diff % 60;
-            document.getElementById('countdown').innerHTML = `Next Signal In: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
         }
 
         function getSignals() {
-            predictionTimes = [];
             generatePredictionTimes();
+            displayNextPrediction();
+        }
 
+        function displayNextPrediction() {
             let predictionsDiv = document.getElementById('predictions');
             predictionsDiv.innerHTML = '';
 
-            predictionTimes.forEach(time => {
-                let button = document.createElement('button');
-                button.classList.add('prediction-button');
-                button.textContent = time;
-                button.setAttribute('data-time', time);
-                predictionsDiv.appendChild(button);
-            });
+            if (currentPredictionIndex < predictionTimes.length) {
+                let predictionTime = predictionTimes[currentPredictionIndex];
+                let odd = (Math.random() * 5 + 2).toFixed(2); // Random odds between 2x - 7x
+                
+                let predictionElement = document.createElement('div');
+                predictionElement.classList.add('prediction', 'active');
+                predictionElement.innerHTML = `<strong>${predictionTime}</strong> - ${odd}x`;
 
-            currentPredictions = predictionTimes.map(time => ({
-                time: time,
-                odd: (Math.random() * 3 + 2).toFixed(2)  // Random odds between 2 and 7
-            }));
+                predictionsDiv.appendChild(predictionElement);
 
-            // Update predictions every minute (smooth transition)
-            setInterval(() => {
-                let now = formatTimeWithoutSeconds(new Date());
+                startCountdown(60); // 60 seconds countdown
+                setTimeout(() => {
+                    predictionElement.classList.remove('active');
+                    predictionsDiv.innerHTML = `<strong>${predictionTime}</strong>`; // Remove odd after 1 min
+                    setTimeout(displayNextPrediction, 500); // Move to next prediction
+                }, 60000); // Hide odd after 60s
+                
+                currentPredictionIndex++;
+            } else {
+                predictionsDiv.innerHTML = "<strong>Predictions Completed</strong>";
+                clearInterval(countdownInterval);
+            }
+        }
 
-                currentPredictions.forEach(prediction => {
-                    let button = document.querySelector(`button[data-time='${prediction.time}']`);
-                    if (now === prediction.time) {
-                        button.classList.add('active');
-                        button.textContent = `${prediction.time} - ${prediction.odd}x`;
-                    } else if (now !== prediction.time) {
-                        button.classList.remove('active');
-                        button.textContent = prediction.time;
-                    }
-                });
+        function startCountdown(seconds) {
+            let countdownDiv = document.getElementById('countdown');
+            clearInterval(countdownInterval);
+
+            countdownInterval = setInterval(() => {
+                if (seconds > 0) {
+                    countdownDiv.innerHTML = `Next Signal In: ${seconds--}s`;
+                } else {
+                    clearInterval(countdownInterval);
+                }
             }, 1000);
-
-            // Start countdown for next prediction update
-            if (countdownInterval) clearInterval(countdownInterval);
-            countdownInterval = setInterval(updateCountdown, 1000);
-
-            startSignalCycle();
         }
-
-        function startSignalCycle() {
-            setInterval(() => {
-                let now = formatTimeWithoutSeconds(new Date());
-
-                currentPredictions.forEach(prediction => {
-                    let button = document.querySelector(`button[data-time='${prediction.time}']`);
-
-                    if (now === prediction.time && !button.classList.contains('active')) {
-                        let randomOdd = (Math.random() * 3 + 2).toFixed(2);  // Update with random odds
-                        button.classList.add('active');
-                        button.textContent = `${prediction.time} - ${randomOdd}x`;
-
-                        // Ensure the odds stay for 60 seconds (1 minute)
-                        setTimeout(() => {
-                            button.classList.remove('active');
-                            button.textContent = prediction.time;
-                        }, 60000);  // 1 minute visibility
-                    }
-                });
-            }, 1000); // Check every second, ensure odds stay fixed for that minute
-        }
-
-        startClock();
     </script>
 </body>
 </html>
