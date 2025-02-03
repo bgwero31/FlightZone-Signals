@@ -31,6 +31,11 @@
             max-width: 600px;
             margin: 50px auto;
             box-shadow: 0 0 20px rgba(0, 255, 127, 0.6); /* Green glow */
+            transition: background 1s ease-in-out;
+        }
+
+        .container:hover {
+            background: rgba(255, 51, 102, 0.8); /* Smooth transition on hover */
         }
 
         .predictions {
@@ -190,7 +195,7 @@
 
             currentPredictions = predictionTimes.map(time => ({
                 time: time,
-                odd: (Math.random() * 5 + 2).toFixed(2)  // Random odds between 2 and 7
+                odd: (Math.random() * 3 + 2).toFixed(2)  // Random odds between 2 and 7
             }));
 
             // Update predictions every minute (smooth transition)
@@ -224,18 +229,18 @@
                     let button = document.querySelector(`button[data-time='${prediction.time}']`);
 
                     if (now === prediction.time && !button.classList.contains('active')) {
-                        let randomOdd = (Math.random() * 5 + 2).toFixed(2);  // Update with random odds
+                        let randomOdd = (Math.random() * 3 + 2).toFixed(2);  // Update with random odds
                         button.classList.add('active');
                         button.textContent = `${prediction.time} - ${randomOdd}x`;
 
-                        // Remove after 60 seconds
+                        // Ensure the odds stay for 60 seconds (1 minute)
                         setTimeout(() => {
                             button.classList.remove('active');
                             button.textContent = prediction.time;
                         }, 60000);  // 1 minute visibility
                     }
                 });
-            }, 60000); // Check every minute, ensuring odds stay fixed within that minute
+            }, 1000); // Check every second, ensure odds stay fixed for that minute
         }
 
         startClock();
