@@ -5,64 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX Master Predictor - Signals</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #00bcd4, #3f51b5);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
-            color: white;
+            font-family: Arial, sans-serif;
             text-align: center;
-            transition: background 1s ease-in-out;
-        }
-        
-        /* Title font */
-        h1 {
-            font-family: 'Roboto', sans-serif;
-            font-size: 36px;
-            font-weight: bold;
             color: white;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            animation: backgroundAnimation 10s infinite alternate;
         }
 
-        /* Card background and transition */
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(45deg, #000428, #004e92); }
+            50% { background: linear-gradient(45deg, #360033, #0b8793); }
+            100% { background: linear-gradient(45deg, #1a2a6c, #b21f1f); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: #ffcc00;
+            transition: color 3s ease-in-out;
+            animation: textGlow 3s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px #ffcc00; }
+            50% { text-shadow: 0 0 20px #ff9900; }
+            100% { text-shadow: 0 0 30px #ff6600; }
+        }
+
         .container {
-            background: rgba(0, 0, 0, 0.8);
+            background: linear-gradient(45deg, #004d99, #9900cc);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             max-width: 600px;
             margin: 50px auto;
-            transition: background-color 0.3s ease-in-out;
+            transition: all 1s ease-in-out;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
-        /* Predictions button style */
+        .predictions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
         .prediction-button {
             background-color: #333;
             padding: 15px;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 16px;
             color: white;
             cursor: pointer;
-            transition: all 0.4s ease;
-            width: 120px;
-            margin: 5px;
+            transition: background-color 0.5s, transform 0.3s;
         }
 
         .prediction-button:hover {
             background-color: #ff3366;
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
-        .active {
+        .prediction-button {
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        .prediction-button.active {
             background-color: #ff3366;
-            box-shadow: 0 0 20px rgba(255, 51, 102, 0.7);
+            animation: flash 1s infinite alternate;
         }
 
-        /* Animation for gradient background */
-        @keyframes gradientAnimation {
-            0% {background-position: 0% 50%;}
-            50% {background-position: 100% 50%;}
-            100% {background-position: 0% 50%;}
+        @keyframes flash {
+            from { background-color: #ff3366; }
+            to { background-color: #ff6699; }
         }
 
         .info {
@@ -84,15 +99,12 @@
 <body>
 
     <h1>JetX Master Predictor - Signals</h1>
-
     <div id="clock"></div>
 
     <div class="container">
         <button onclick="getSignals()">Get Signals</button>
-
         <div id="predictions" class="predictions"></div>
 
-        <!-- Info about the bot and contact -->
         <div class="info">
             <p><strong>About the JetX Master Predictor:</strong><br>
             The JetX Master Predictor provides live betting signals for various sites. We utilize advanced algorithms to provide the best predictions.</p>
@@ -102,37 +114,27 @@
 
     <script>
         var predictionTimes = [];
+        var currentPrediction = null;
 
-        // Function to format the time into HH:MM (only hour and minute)
         function formatTimeWithoutSeconds(date) {
             let minutes = date.getMinutes();
             return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}`;
         }
 
-        // Function to generate the next 6 sequential prediction times with 2-minute intervals
         function generatePredictionTimes() {
             let now = new Date();
-            let nextMinute = now.getMinutes() + 1; // Start from the next minute
-            if (nextMinute >= 60) {
-                nextMinute = nextMinute - 60; // Handle the case for when minutes reach 60
-            }
+            let baseMinute = now.getMinutes() + 1; 
+            if (baseMinute >= 60) baseMinute = 0; 
 
-            // Create an array to store six prediction times with 2-minute intervals
-            let sequentialTimes = [];
+            predictionTimes = [];
             for (let i = 0; i < 6; i++) {
-                let time = new Date(now);
-                time.setMinutes(nextMinute + (i * 2)); // Add 2 minutes for each subsequent time
-                if (time.getMinutes() >= 60) {
-                    time.setMinutes(time.getMinutes() - 60); // Handle hour overflow
-                }
-                sequentialTimes.push(time);
+                let time = new Date();
+                time.setMinutes(baseMinute + i * 2);
+                if (time.getMinutes() >= 60) time.setMinutes(time.getMinutes() - 60);
+                predictionTimes.push(formatTimeWithoutSeconds(time));
             }
-
-            // Format the times and store them in predictionTimes
-            predictionTimes = sequentialTimes.map(time => formatTimeWithoutSeconds(time));
         }
 
-        // Function to start the clock and update the time every second
         function startClock() {
             setInterval(function() {
                 let now = new Date();
@@ -140,15 +142,11 @@
             }, 1000);
         }
 
-        // Function to handle the "Get Signals" button click
         function getSignals() {
-            predictionTimes = [];
-            generatePredictionTimes(); // Generate sequential prediction times with 2-minute intervals
-
+            generatePredictionTimes();
             let predictionsDiv = document.getElementById('predictions');
-            predictionsDiv.innerHTML = ''; // Clear the predictions area
+            predictionsDiv.innerHTML = ''; 
 
-            // Display prediction buttons for the next 6 times
             predictionTimes.forEach(function(time) {
                 let button = document.createElement('button');
                 button.classList.add('prediction-button');
@@ -157,34 +155,32 @@
                 predictionsDiv.appendChild(button);
             });
 
-            // Start the signal cycle
             startSignalCycle();
         }
 
-        // Function to start the signal cycle and trigger odds
         function startSignalCycle() {
-            setInterval(function() {
+            let interval = setInterval(function() {
                 let now = new Date();
-                let formattedTime = formatTimeWithoutSeconds(now); // Get HH:MM format without seconds
+                let formattedTime = formatTimeWithoutSeconds(now);
 
-                predictionTimes.forEach(function(time) {
-                    let button = document.querySelector(`button[data-time='${time}']`);
+                if (predictionTimes.includes(formattedTime)) {
+                    let button = document.querySelector(`button[data-time='${formattedTime}']`);
+                    if (button && formattedTime !== currentPrediction) {
+                        currentPrediction = formattedTime;
+                        let randomOdd = (Math.random() * 1 + 2).toFixed(2); 
 
-                    // If the current time matches the prediction time, trigger the odd
-                    if (formattedTime === time && !button.classList.contains('active')) {
-                        let randomOdd = (Math.random() * (3 - 2) + 2).toFixed(1); // Random odd between 2x and 3x
                         button.classList.add('active');
-                        button.textContent = `${time} - ${randomOdd}x`; // Show the odd
-                    } else if (formattedTime !== time && button.classList.contains('active')) {
-                        // Once the minute changes, reset the button to show only the time
-                        button.classList.remove('active');
-                        button.textContent = time;
+                        button.textContent = `${formattedTime} - ${randomOdd}x`;
+
+                        setTimeout(() => {
+                            button.classList.remove('active');
+                            button.textContent = formattedTime;
+                        }, 60000);
                     }
-                });
-            }, 1000); // Check every second
+                }
+            }, 1000);
         }
 
-        // Start the clock when the page loads
         startClock();
     </script>
 </body>
