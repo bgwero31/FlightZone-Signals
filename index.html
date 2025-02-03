@@ -102,10 +102,10 @@
     <!-- Section to display bot names and clickable buttons -->
     <div class="section">
         <h2>Available Bots</h2>
-        <button onclick="openBotPage('jetx_master_predictor')">❤️ JETX MASTER PREDICTOR</button>
-        <button onclick="openBotPage('jetx_purple_bot')">💘 JETX PURPLE BOT</button>
-        <button onclick="openBotPage('jetx_pink_bot')">💝 JETX PINK BOT</button>
-        <button onclick="openBotPage('jetx_martingale_bot')">🔥 JETX MARTINGALE BOT</button>
+        <button onclick="openBotPage('jetx_master_predictor.html')">❤️ JETX MASTER PREDICTOR</button>
+        <button onclick="openBotPage('jetx_purple_bot.html')">💘 JETX PURPLE BOT</button>
+        <button onclick="openBotPage('jetx_pink_bot.html')">💝 JETX PINK BOT</button>
+        <button onclick="openBotPage('jetx_martingale_bot.html')">🔥 JETX MARTINGALE BOT</button>
     </div>
 
     <div class="section">
@@ -148,24 +148,8 @@
             window.location.href = "signals.html"; // Opens the predictions page
         }
 
-        function openBotPage(botName) {
-            // Here you can set different actions for each bot
-            switch(botName) {
-                case 'jetx_master_predictor':
-                    alert('Opening JETX MASTER PREDICTOR page...');
-                    break;
-                case 'jetx_purple_bot':
-                    alert('Opening JETX PURPLE BOT page...');
-                    break;
-                case 'jetx_pink_bot':
-                    alert('Opening JETX PINK BOT page...');
-                    break;
-                case 'jetx_martingale_bot':
-                    alert('Opening JETX MARTINGALE BOT page...');
-                    break;
-                default:
-                    alert('Bot not found');
-            }
+        function openBotPage(page) {
+            window.location.href = page; // Navigates to the corresponding bot page
         }
 
         function flickerPrice() {
