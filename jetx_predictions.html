@@ -26,11 +26,15 @@
         }
         .prediction-button {
             background-color: #333;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 16px;
             color: white;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .prediction-button:hover {
+            background-color: #ff3366;
         }
         .active {
             background-color: #ff3366;
@@ -73,14 +77,13 @@
         var predictionTimes = [];
         var currentTime = new Date();
 
-        // Function to format the time into HH:MM:SS
+        // Function to format the time into HH:MM (only hour and minute)
         function formatTime(date) {
             let minutes = date.getMinutes();
-            let seconds = date.getSeconds();
-            return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+            return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}`;
         }
 
-        // Function to generate the prediction times starting from the next two minutes
+        // Function to generate the prediction times starting from the next 2 minutes
         function generatePredictionTimes() {
             let now = new Date();
             let nextMinute = now.getMinutes() + 2; // Start from the next 2 minutes
@@ -88,7 +91,8 @@
                 nextMinute = nextMinute - 60; // Handle the case for when minutes reach 60
             }
 
-            for (let i = 0; i < 6; i++) { // Only generate 6 prediction times
+            // Generate prediction times for 6 minutes ahead of the current time
+            for (let i = 0; i < 6; i++) { 
                 let time = new Date(now);
                 time.setMinutes(nextMinute + i);
                 if (time.getMinutes() >= 60) {
@@ -134,7 +138,7 @@
         function startSignalCycle() {
             setInterval(function() {
                 let now = new Date();
-                let formattedTime = formatTime(now).substr(0, 5); // Get HH:MM format
+                let formattedTime = formatTime(now); // Get HH:MM format
 
                 predictionTimes.forEach(function(prediction) {
                     let button = document.querySelector(`button[data-time='${prediction.time}']`);
