@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictions - JetX Martingale Bot</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-image: url('https://source.unsplash.com/1600x900/?casino,betting');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .clock {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .prediction-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 1.5em;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .button {
+            background-color: #ff3366;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .button:hover {
+            background-color: #ff6699;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="clock" id="clock">00:00:00</div>
+        
+        <h1>🔥 JetX Martingale Predictions 🔥</h1>
+
+        <div id="predictions">
+            <div class="prediction-card">Waiting for Predictions...</div>
+        </div>
+
+        <button class="button" onclick="generatePredictions()">Generate Signal</button>
+        <button class="back-button" onclick="goBack()">⬅ Back</button>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function generatePredictions() {
+            const predictionsDiv = document.getElementById('predictions');
+            predictionsDiv.innerHTML = '';
+
+            const predictions = [
+                '1.50x ✅',
+                '2.10x ✅',
+                '3.80x ✅',
+                'Risk 6.00x ⚠️',
+                '10.50x 🚀'
+            ];
+
+            predictions.forEach(prediction => {
+                const card = document.createElement('div');
+                card.className = 'prediction-card';
+                card.textContent = prediction;
+                predictionsDiv.appendChild(card);
+            });
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>
