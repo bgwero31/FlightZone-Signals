@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetX Master Predictor - Predictions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #111;
+            color: white;
+        }
+        #clock {
+            font-size: 30px;
+            margin: 20px;
+        }
+        .prediction {
+            display: inline-block;
+            padding: 10px;
+            margin: 10px;
+            background-color: #333;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+        }
+        .prediction:hover {
+            background-color: #444;
+        }
+        .active {
+            background-color: #ff3366;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .prediction-button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>JetX Master Predictor - Predictions</h1>
+    
+    <div id="clock"></div> <!-- Clock display -->
+
+    <div class="container">
+        <button class="prediction-button" onclick="getPredictions()">Get Signals</button>
+        
+        <div id="predictions">
+            <button class="prediction">10:23</button>
+            <button class="prediction">10:25</button>
+            <button class="prediction">10:27</button>
+            <button class="prediction">10:29</button>
+            <button class="prediction">10:31</button>
+            <button class="prediction">10:33</button>
+        </div>
+    </div>
+
+    <script>
+        // Clock functionality
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
+        }
+        setInterval(updateClock, 1000); // Update clock every second
+
+        // Prediction button click functionality
+        function getPredictions() {
+            var predictions = document.querySelectorAll('.prediction');
+            var currentTime = new Date();
+            var currentMinute = currentTime.getMinutes();
+            var currentSecond = currentTime.getSeconds();
+
+            // Check if the time matches and activate the button
+            predictions.forEach(function(button) {
+                var buttonTime = button.textContent;
+                var buttonMinute = parseInt(buttonTime.split(':')[1]);
+
+                if (buttonMinute === currentMinute) {
+                    button.classList.add('active'); // Highlight active button
+                } else {
+                    button.classList.remove('active'); // Remove highlight from non-matching times
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
