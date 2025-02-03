@@ -10,14 +10,30 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #111;
             color: white;
+            animation: backgroundAnimation 10s infinite alternate;
         }
+
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(45deg, #000428, #004e92); }
+            50% { background: linear-gradient(45deg, #360033, #0b8793); }
+            100% { background: linear-gradient(45deg, #1a2a6c, #b21f1f); }
+        }
+
         h1 {
             font-family: 'Orbitron', sans-serif;
             font-size: 32px;
             color: #ffcc00;
+            transition: color 3s ease-in-out;
+            animation: textGlow 3s infinite alternate;
         }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px #ffcc00; }
+            50% { text-shadow: 0 0 20px #ff9900; }
+            100% { text-shadow: 0 0 30px #ff6600; }
+        }
+
         .container {
             background: linear-gradient(45deg, #004d99, #9900cc);
             padding: 20px;
@@ -27,12 +43,14 @@
             transition: all 1s ease-in-out;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
+
         .predictions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-top: 20px;
         }
+
         .prediction-button {
             background-color: #333;
             padding: 15px;
@@ -42,17 +60,21 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .prediction-button:hover {
             background-color: #ff3366;
         }
+
         .active {
             background-color: #ff3366;
             animation: flash 1s infinite alternate;
         }
+
         @keyframes flash {
             from { background-color: #ff3366; }
             to { background-color: #ff6699; }
         }
+
         .info {
             margin-top: 40px;
             color: white;
@@ -61,6 +83,7 @@
             padding: 20px;
             border-radius: 10px;
         }
+
         .contact {
             margin-top: 20px;
             font-size: 18px;
