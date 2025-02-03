@@ -75,7 +75,6 @@
 
     <script>
         var predictionTimes = [];
-        var currentTime = new Date();
 
         // Function to format the time into HH:MM (only hour and minute)
         function formatTime(date) {
@@ -83,7 +82,7 @@
             return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}`;
         }
 
-        // Function to generate the next 10 sequential prediction times
+        // Function to generate the next 6 sequential prediction times with 2-minute intervals
         function generatePredictionTimes() {
             let now = new Date();
             let nextMinute = now.getMinutes() + 1; // Start from the next minute
@@ -91,11 +90,11 @@
                 nextMinute = nextMinute - 60; // Handle the case for when minutes reach 60
             }
 
-            // Create an array to store ten sequential prediction times
+            // Create an array to store six prediction times with 2-minute intervals
             let sequentialTimes = [];
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 6; i++) {
                 let time = new Date(now);
-                time.setMinutes(nextMinute + i);
+                time.setMinutes(nextMinute + (i * 2)); // Add 2 minutes for each subsequent time
                 if (time.getMinutes() >= 60) {
                     time.setMinutes(time.getMinutes() - 60); // Handle hour overflow
                 }
@@ -104,17 +103,6 @@
 
             // Format the times and store them in predictionTimes
             predictionTimes = sequentialTimes.map(time => formatTime(time));
-
-            // Randomize the order of the times
-            shuffleArray(predictionTimes);
-        }
-
-        // Function to shuffle the array (randomize the order)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-            }
         }
 
         // Function to start the clock and update the time every second
@@ -128,12 +116,12 @@
         // Function to handle the "Get Signals" button click
         function getSignals() {
             predictionTimes = [];
-            generatePredictionTimes(); // Generate and randomize sequential prediction times
+            generatePredictionTimes(); // Generate sequential prediction times with 2-minute intervals
 
             let predictionsDiv = document.getElementById('predictions');
             predictionsDiv.innerHTML = ''; // Clear the predictions area
 
-            // Display prediction buttons for the next 10 minutes
+            // Display prediction buttons for the next 6 times
             predictionTimes.forEach(function(time) {
                 let button = document.createElement('button');
                 button.classList.add('prediction-button');
