@@ -112,6 +112,7 @@
 
     <script>
         let predictionTimes = [];
+        let currentPredictions = [];
         let countdownInterval;
 
         function formatTimeWithoutSeconds(date) {
@@ -127,7 +128,7 @@
 
             for (let i = 0; i < 6; i++) {
                 let time = new Date(now);
-                time.setMinutes(startMinute + (i * 2));
+                time.setMinutes(startMinute + (i * 1));
 
                 if (time.getMinutes() >= 60) {
                     time.setMinutes(time.getMinutes() - 60);
@@ -187,6 +188,28 @@
                 predictionsDiv.appendChild(button);
             });
 
+            currentPredictions = predictionTimes.map(time => ({
+                time: time,
+                odd: (Math.random() * 5 + 2).toFixed(2)  // Random odds between 2 and 7
+            }));
+
+            // Update predictions every minute (smooth transition)
+            setInterval(() => {
+                let now = formatTimeWithoutSeconds(new Date());
+
+                currentPredictions.forEach(prediction => {
+                    let button = document.querySelector(`button[data-time='${prediction.time}']`);
+                    if (now === prediction.time) {
+                        button.classList.add('active');
+                        button.textContent = `${prediction.time} - ${prediction.odd}x`;
+                    } else if (now !== prediction.time) {
+                        button.classList.remove('active');
+                        button.textContent = prediction.time;
+                    }
+                });
+            }, 1000);
+
+            // Start countdown for next prediction update
             if (countdownInterval) clearInterval(countdownInterval);
             countdownInterval = setInterval(updateCountdown, 1000);
 
@@ -197,19 +220,22 @@
             setInterval(() => {
                 let now = formatTimeWithoutSeconds(new Date());
 
-                predictionTimes.forEach(time => {
-                    let button = document.querySelector(`button[data-time='${time}']`);
+                currentPredictions.forEach(prediction => {
+                    let button = document.querySelector(`button[data-time='${prediction.time}']`);
 
-                    if (now === time && !button.classList.contains('active')) {
-                        let randomOdd = Math.floor(Math.random() * 3) + 2;
+                    if (now === prediction.time && !button.classList.contains('active')) {
+                        let randomOdd = (Math.random() * 5 + 2).toFixed(2);  // Update with random odds
                         button.classList.add('active');
-                        button.textContent = `${time} - ${randomOdd}x`;
-                    } else if (now !== time && button.classList.contains('active')) {
-                        button.classList.remove('active');
-                        button.textContent = time;
+                        button.textContent = `${prediction.time} - ${randomOdd}x`;
+
+                        // Remove after 60 seconds
+                        setTimeout(() => {
+                            button.classList.remove('active');
+                            button.textContent = prediction.time;
+                        }, 60000);  // 1 minute visibility
                     }
                 });
-            }, 60000); // Check every minute, not every second
+            }, 60000); // Check every minute, ensuring odds stay fixed within that minute
         }
 
         startClock();
