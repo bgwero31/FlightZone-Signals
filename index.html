@@ -3,136 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> FlightZone Signals by B JAY </title>
+    <title>FlightZone Signals by B JAY</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');
 
         body {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            color: #ffffff;
-            background: linear-gradient(45deg, #000000, #220033, #440066, #220033, #000000);
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
             background-size: 400% 400%;
-            animation: gradientShift 10s infinite alternate;
+            animation: gradientMove 8s infinite ease-in-out;
+            color: #ffffff;
             transition: all 0.3s ease;
         }
 
-        @keyframes gradientShift {
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
         h1 {
-            font-size: 3.5em;
-            text-shadow: 0px 0px 20px #ff0000, 0px 0px 40px #ff3366, 0px 0px 60px #ff6699;
-            letter-spacing: 3px;
+            font-family: 'Russo One', sans-serif;
+            font-size: 2em;
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px 30px;
-            border-radius: 12px;
+            padding: 10px 20px;
             display: inline-block;
+            border-radius: 10px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
         }
 
         .section {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 25px;
-            border-radius: 12px;
-            max-width: 700px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
             margin: 20px auto;
             text-align: left;
-            border: 2px solid rgba(255, 51, 102, 0.6);
-            box-shadow: 0px 0px 20px rgba(255, 51, 102, 0.4);
         }
 
         .section h2 {
-            border-bottom: 3px solid #ff3366;
+            border-bottom: 2px solid #ff6600;
             padding-bottom: 5px;
-            color: #ff3366;
+            color: #ff6600;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8em;
         }
 
         button {
-            padding: 14px 28px;
-            background: linear-gradient(45deg, #ff0000, #ff3366);
+            padding: 10px 20px;
+            background: #ff6600;
             color: white;
             border: none;
-            font-size: 18px;
-            border-radius: 8px;
+            font-size: 14px;
+            border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0px 4px 10px rgba(255, 51, 102, 0.6);
+            margin: 10px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
         }
 
         button:hover {
-            background: linear-gradient(45deg, #ff3366, #ff0000);
-            transform: scale(1.05);
+            background: #ff8533;
         }
 
         .telegram-button {
-            background: linear-gradient(45deg, #ff0000, #ff3366);
-            padding: 18px 36px;
-            font-size: 20px;
-            border-radius: 10px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
             margin-top: 20px;
+            font-weight: bold;
         }
 
         .telegram-button:hover {
-            background: linear-gradient(45deg, #ff3366, #ff0000);
+            background-color: #ff8533;
         }
 
         #price {
-            color: #ff0000;
+            color: #ff6600;
             font-weight: bold;
-            font-size: 28px;
-            animation: priceFlicker 1s infinite alternate;
-        }
-
-        @keyframes priceFlicker {
-            0% { color: #ff0000; text-shadow: 0px 0px 15px #ff3366; }
-            100% { color: #ff3366; text-shadow: 0px 0px 25px #ff0000; }
+            font-size: 22px;
         }
     </style>
 </head>
 <body>
 
-    <h1> FlightZone Signals by B JAY </h1>
+    <h1>🚀 FlightZone Signals by B JAY 🚀</h1>
     <br><br>
     <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
 
     <div class="section">
         <h2>Available Bots</h2>
-        <button onclick="openBotPage('jetx_master_predictor.html')">🚀 JETX MASTER PREDICTOR</button>
-        <button onclick="openBotPage('jetx_purple_bot.html')">💎 JETX PURPLE BOT</button>
+        <button onclick="openBotPage('jetx_master_predictor.html')">🔥 JETX MASTER PREDICTOR</button>
+        <button onclick="openBotPage('jetx_purple_bot.html')">🟣 JETX PURPLE BOT</button>
         <button onclick="openBotPage('jetx_pink_bot.html')">💖 JETX PINK BOT</button>
         <button onclick="openBotPage('jetx_martingale_bot.html')">🔥 JETX MARTINGALE BOT</button>
     </div>
 
     <div class="section">
-        <h2>About the Bots</h2>
-        <p><strong>JETX MASTER PREDICTOR:</strong> Advanced AI-driven predictions for precision gameplay.</p>
-        <p><strong>JETX PURPLE BOT:</strong> Specializes in catching purple multipliers with **deadly accuracy**.</p>
-        <p><strong>JETX PINK BOT:</strong> Snipes the **biggest multipliers** for **massive wins**.</p>
-        <p><strong>JETX MARTINGALE BOT:</strong> Uses the **legendary Martingale strategy** for **guaranteed profits**.</p>
-    </div>
-
-    <div class="section">
-        <h2>💰 Special Price – Only <span id="price">$30</span> Per Application!</h2>
-        <p>🔥 Limited-time offer! First 5 users get **JETX Purple Bot FREE!**</p>
-    </div>
-
-    <div class="section">
-        <h2>📩 Sign Up Now & Start Winning!</h2>
-        <form action="signup.php" method="post" class="form-container">
-            <label for="name"><b>Full Name</b></label>
-            <input type="text" placeholder="Enter Your Name" name="name" required>
-
-            <label for="email"><b>Email</b></label>
-            <input type="email" placeholder="Enter Your Email" name="email" required>
-
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Create a Password" name="password" required>
-
-            <button type="submit">Sign Up</button>
-        </form>
+        <h2>💰 Special Offer – Only <span id="price">$30</span> Per App!</h2>
+        <p>🔥 Get any bot for just <span id="price">$30</span> 🚀</p>
+        <p>⚡ Limited offer: First 5 users get FREE access to the JETX Purple Bot!</p>
     </div>
 
     <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">
@@ -147,6 +124,12 @@
         function openBotPage(page) {
             window.location.href = page;
         }
+
+        function flickerPrice() {
+            var price = document.getElementById("price");
+            price.style.color = (price.style.color === "#ff6600") ? "#ff8533" : "#ff6600";
+        }
+        setInterval(flickerPrice, 1000);
     </script>
 
 </body>
