@@ -7,21 +7,46 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
         
+        /* Insane animated background transition */
+        @keyframes crazyBackground {
+            0% { background: linear-gradient(45deg, #ff00ff, #ff3366, #ff6699, #ff9933); }
+            25% { background: linear-gradient(45deg, #00c6ff, #0099ff, #33ccff, #ff66ff); }
+            50% { background: linear-gradient(45deg, #ff6600, #ff33cc, #ff0066, #ff99cc); }
+            75% { background: linear-gradient(45deg, #00ff99, #00ffcc, #ff0066, #9900ff); }
+            100% { background: linear-gradient(45deg, #ff6699, #ff3366, #ff9933, #ff00ff); }
+        }
+
+        /* Crazy flashing card animation */
+        @keyframes flashEffect {
+            0% { background-color: rgba(255, 255, 255, 0.1); box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.7); }
+            50% { background-color: rgba(255, 255, 255, 0.5); box-shadow: 0px 0px 40px rgba(255, 255, 255, 1); }
+            100% { background-color: rgba(255, 255, 255, 0.1); box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.7); }
+        }
+
+        /* Crazy glowing pulse effect for the button */
+        @keyframes pulseEffect {
+            0% { transform: scale(1); box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); }
+            50% { transform: scale(1.1); box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.9); }
+            100% { transform: scale(1); box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); }
+        }
+
         body {
             font-family: 'Orbitron', sans-serif;
-            background-image: url('https://source.unsplash.com/1600x900/?casino,betting');
             background-size: cover;
             background-position: center;
             color: white;
             text-align: center;
             padding: 20px;
+            animation: crazyBackground 4s infinite alternate; /* Crazy background animation */
+            height: 100vh;
+            margin: 0;
         }
-        
+
         .container {
             max-width: 600px;
             margin: auto;
             background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
         }
@@ -47,15 +72,7 @@
             font-size: 1.5em;
             box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
             transition: background 0.3s ease-in-out;
-        }
-
-        .flash {
-            animation: flashEffect 0.5s alternate 4;
-        }
-
-        @keyframes flashEffect {
-            0% { background: rgba(255, 255, 255, 0.8); }
-            100% { background: rgba(255, 255, 255, 0.1); }
+            animation: flashEffect 1s infinite alternate; /* Flashing card animation */
         }
 
         .button {
@@ -69,6 +86,7 @@
             transition: background 0.3s;
             display: block;
             margin: 20px auto;
+            animation: pulseEffect 2s infinite; /* Pulse animation for button */
         }
 
         .button:hover {
@@ -158,15 +176,10 @@
 
             // Create new prediction card
             const card = document.createElement('div');
-            card.className = 'prediction-card flash'; // Add flash animation
+            card.className = 'prediction-card'; // Flashing effect already added in CSS
             const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
             card.textContent = randomPrediction;
             predictionCard.appendChild(card);
-
-            // Remove flash effect after 2 seconds
-            setTimeout(() => {
-                card.classList.remove('flash');
-            }, 2000);
         }
 
         function goBack() {
