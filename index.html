@@ -5,36 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlightZone Signals by B JAY</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background: linear-gradient(-45deg, #111, #222, #333, #444);
-            background-size: 400% 400%;
-            animation: waveBackground 8s infinite linear;
+            background-color: #0f0c29;
             color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
 
-        @keyframes waveBackground {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .wave-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .waves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            bottom: 0;
+            left: 0;
         }
 
         h1 {
-            font-family: 'Orbitron', sans-serif;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 12px 20px;
-            display: inline-block;
-            border-radius: 8px;
+            font-family: 'Russo One', sans-serif;
             font-size: 2em;
-            text-shadow: 3px 3px 5px #ff3366;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            display: inline-block;
+            border-radius: 10px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
         }
 
         .section {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
             border-radius: 10px;
             max-width: 600px;
             margin: 20px auto;
@@ -42,75 +55,127 @@
         }
 
         .section h2 {
-            border-bottom: 2px solid #ff3366;
+            border-bottom: 2px solid #ff6600;
             padding-bottom: 5px;
-            color: #ff3366;
+            color: #ff6600;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8em;
         }
 
         button {
-            padding: 12px 25px;
-            background: #ff3366;
+            padding: 10px 20px;
+            background: #ff6600;
             color: white;
             border: none;
-            font-size: 16px;
+            font-size: 14px;
             border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
             margin: 10px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
         }
 
         button:hover {
-            background: #ff6699;
+            background: #ff8533;
         }
 
-        .whatsapp-button {
-            background-color: #25D366;
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contact-buttons a {
+            text-decoration: none;
+        }
+
+        .telegram-button, .whatsapp-button {
+            background-color: #ff6600;
             color: white;
-            padding: 15px 30px;
-            font-size: 18px;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s;
-            margin-top: 20px;
-            text-decoration: none;
-            display: inline-block;
+            font-weight: bold;
         }
 
-        .whatsapp-button:hover {
-            background-color: #1EBE5D;
+        .telegram-button:hover, .whatsapp-button:hover {
+            background-color: #ff8533;
+        }
+
+        #price {
+            color: #ff6600;
+            font-weight: bold;
+            font-size: 22px;
         }
     </style>
 </head>
 <body>
 
-    <h1>FlightZone Signals by B JAY </h1>
+    <div class="wave-container">
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#302b63" fill-opacity="1" 
+                  d="M0,128L30,144C60,160,120,192,180,176C240,160,300,96,360,80C420,64,480,96,540,133.3C600,171,660,213,720,218.7C780,224,840,192,900,165.3C960,139,1020,117,1080,122.7C1140,128,1200,160,1260,160C1320,160,1380,128,1410,112L1440,96L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z">
+            </path>
+        </svg>
+    </div>
 
+    <h1>FlightZone Signals by B JAY </h1>
     <br><br>
     <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
 
     <div class="section">
-        <h2>About FlightZone Signals</h2>
-        <p> FlightZone Signals by **B JAY** is the **#1 premium** JetX prediction system.</p>
-        <p> Using cutting-edge **AI technology**, our bots **predict with precision** to help you win.</p>
-        <p> Join thousands of players **making daily profits!**</p>
-        <p> **Fast updates, high accuracy, and 24/7 support.**</p>
+        <h2>Available Bots</h2>
+        <button onclick="openBotPage('jetx_master_predictor.html')">JETX MASTER PREDICTOR</button>
+        <button onclick="openBotPage('jetx_purple_bot.html')">JETX PURPLE BOT</button>
+        <button onclick="openBotPage('jetx_pink_bot.html')">JETX PINK BOT</button>
+        <button onclick="openBotPage('jetx_martingale_bot.html')">JETX MARTINGALE BOT</button>
+    </div>
+
+    <!-- Your Information Section -->
+    <div class="section">
+        <h2>🔥 Why Choose FlightZone Signals?</h2>
+        <p>🚀 **FlightZone Signals** is the most advanced JetX prediction service, powered by AI-driven algorithms.</p>
+        <p>🎯 **99% Accuracy** – Our bots analyze game patterns to provide the most accurate predictions.</p>
+        <p>💰 **Guaranteed Profits** – Join our community of winners making consistent money.</p>
+        <p>📊 **Real-Time Updates** – Instant signals to keep you ahead of the game.</p>
+        <p>🔥 **Trusted by thousands of players!**</p>
     </div>
 
     <div class="section">
-        <h2>💰 Get Your Bot Now!</h2>
-        <p>✅ 100% Accurate Signals</p>
-        <p>✅ Trusted by thousands of players</p>
-        <p>✅ Instant access after payment</p>
-        <p>🔻 **Limited Offer: Only $30 per bot!** 🔻</p>
+        <h2>💰 Special Offer – Only <span id="price">$30</span> Per App!</h2>
+        <p>🔥 Get any bot for just <span id="price">$30</span> 🚀</p>
+        <p>⚡ Limited offer: First 5 users get FREE access to the JETX Purple Bot!</p>
     </div>
 
-    <!-- WhatsApp Contact -->
-    <a href="https://wa.me/263774309795" target="_blank" class="whatsapp-button">💬 Contact B JAY on WhatsApp</a>
+    <!-- Contact Buttons (Telegram + WhatsApp) -->
+    <div class="contact-buttons">
+        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">
+            <button class="telegram-button">Join Our Telegram 🚀</button>
+        </a>
+
+        <a href="https://wa.me/263774309795" target="_blank">
+            <button class="whatsapp-button">Chat on WhatsApp 📲</button>
+        </a>
+    </div>
 
     <script>
         function openSignalsPage() {
             window.location.href = "signals.html";
         }
+
+        function openBotPage(page) {
+            window.location.href = page;
+        }
+
+        function flickerPrice() {
+            var price = document.getElementById("price");
+            price.style.color = (price.style.color === "#ff6600") ? "#ff8533" : "#ff6600";
+        }
+        setInterval(flickerPrice, 1000);
     </script>
 
 </body>
