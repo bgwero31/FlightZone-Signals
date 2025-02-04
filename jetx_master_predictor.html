@@ -4,50 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX Master Predictor - Login</title>
+    
+    <!-- Google Font for the Teardrop Effect -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
     <style>
+        /* Background Animation */
+        @keyframes neonBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Great Vibes', cursive;
             text-align: center;
-            background-color: #111;
+            background: linear-gradient(45deg, #ff0080, #8000ff, #0080ff, #00ff80);
+            background-size: 400% 400%;
+            animation: neonBackground 10s infinite alternate;
             color: white;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
         .container {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 25px;
+            border-radius: 15px;
             max-width: 400px;
-            margin: 50px auto;
+            box-shadow: 0px 0px 20px rgba(255, 0, 255, 0.7);
         }
+
         input, select, button {
             width: 90%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
-            font-size: 16px;
-            border-radius: 5px;
+            font-size: 18px;
+            border-radius: 8px;
             border: none;
+            transition: 0.3s ease-in-out;
         }
+
         input {
             background: #222;
             color: white;
+            outline: none;
         }
+
         select {
             background: #444;
             color: white;
-        }
-        button {
-            background: #ff3366;
-            color: white;
             cursor: pointer;
         }
+
+        button {
+            background: linear-gradient(90deg, #ff0080, #8000ff);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.4s ease-in-out;
+        }
+
         button:hover {
-            background: #ff6699;
+            background: linear-gradient(90deg, #8000ff, #ff0080);
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px rgba(255, 0, 255, 0.7);
+        }
+
+        h1 {
+            font-size: 35px;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <h1>JetX Master Predictor Login</h1>
     <div class="container">
+        <h1>JetX Master Predictor Login</h1>
+
         <label>Password:</label>
         <input type="password" id="password" placeholder="Enter Password" required>
 
