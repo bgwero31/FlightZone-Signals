@@ -4,68 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX Purple Bot - Signals</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Anton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #000428, #004e92);
-            color: white;
+            background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
+            color: #fff;
             font-family: 'Orbitron', sans-serif;
-        }
-
-        .container {
             text-align: center;
-            width: 90%;
-            max-width: 500px;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 25px;
-            border-radius: 10px;
+            padding: 20px;
         }
-
-        .title {
-            font-size: 2.2em;
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 24px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            color: #ff00ff;
+            margin-bottom: 10px;
         }
-
-        .signals {
-            font-size: 1.5em;
-            padding: 15px;
-            border-radius: 8px;
-            background: #ff0077;
+        .betting-site {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #FFD700;
         }
-
-        .button {
-            margin-top: 20px;
+        .signal {
+            font-size: 22px;
+            font-weight: bold;
             padding: 10px;
-            background: #ff00ff;
+            background: #ff4d4d;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 10px;
+        }
+        .next-risk {
+            font-size: 18px;
+            margin-top: 15px;
+            color: #66FF99;
+        }
+        .past-risks {
+            font-size: 16px;
+            margin-top: 15px;
+            color: #999;
+        }
+        .generate-btn {
+            background: #4CAF50;
             color: white;
+            padding: 12px 20px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
+            font-size: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
+    <h1>JetX Purple Bot - Live Signals</h1>
     <div class="container">
-        <div class="title">JetX Signals</div>
-        <div class="signals" id="signalText">Click the button for a new signal</div>
-        <button class="button" onclick="generateSignal()">Generate Signal</button>
+        <div class="betting-site" id="bettingSite"></div>
+        <div class="signal" id="currentSignal">Loading Signal...</div>
+        <div class="next-risk" id="nextRisk">Next Risk: Calculating...</div>
+        <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
+        <button class="generate-btn" onclick="generateSignal()">Generate New Signal</button>
     </div>
 
     <script>
-        function generateSignal() {
-            var randomSignal = ["2X Risk 8X", "3X Risk 12X", "4X Risk 10X", "5X Risk 15X"];
-            document.getElementById("signalText").innerText = randomSignal[Math.floor(Math.random() * randomSignal.length)];
+        let pastRisks = [];
+
+        function getRandomSignal() {
+            let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
+            let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
+            return Math.random() > 0.5 ? safeOdds : `Risk ${riskOdds}`;
         }
+
+        function generateSignal() {
+            let newSignal = getRandomSignal();
+            document.getElementById("currentSignal").innerHTML = newSignal;
+
+            if (newSignal.includes("Risk")) {
+                let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+                document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+
+                pastRisks.unshift(newSignal);
+                if (pastRisks.length > 3) pastRisks.pop();
+                document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+            }
+        }
+
+        function setBettingSite() {
+            let site = localStorage.getItem("bettingSite") || "Unknown";
+            document.getElementById("bettingSite").innerHTML = `Betting Site: ${site}`;
+        }
+
+        setBettingSite();
+        generateSignal();
+        setInterval(generateSignal, Math.floor(Math.random() * (60000 - 30000) + 30000));
     </script>
 
 </body>
