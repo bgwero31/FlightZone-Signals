@@ -20,7 +20,7 @@
                 background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
             }
             50% {
-                background: linear-gradient(135deg, #6A1B9A, #9C27B0, #8E24AA);
+                background: linear-gradient(135deg, #FF4081, #FF80AB, #FF4081);
             }
             100% {
                 background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
@@ -147,10 +147,10 @@
         }
 
         function getRandomSignal() {
-            let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
-            let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
+            let safeOdds = (Math.random() * (2.30 - 1.50) + 1.50).toFixed(2);
+            let riskOdds = (Math.random() * (4.00 - 2.50) + 2.50).toFixed(2);
             let isRisk = Math.random() > 0.5;
-            return isRisk ? `Risk ${riskOdds}` : `Target now ${safeOdds}`;
+            return isRisk ? `Risk ${riskOdds}` : `Target now${safeOdds}`;
         }
 
         function showSpinner() {
@@ -160,42 +160,43 @@
 
         function hideSpinner() {
             document.getElementById("spinner").style.display = 'none';
-            document.getElementById("currentSignal").style.opacity = '1';
         }
 
         function generateSignal() {
-            let newSignal = getRandomSignal();
-            document.getElementById("currentSignal").innerHTML = newSignal;
-            document.getElementById("currentSignal").style.opacity = '1';
+            showSpinner();
 
-            // Play beep sound when signal appears
-            let beepSound = document.getElementById("beepSound");
-            beepSound.play();
-
-            if (newSignal.includes("Risk")) {
-                let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
-
-                if (!pastRisks.includes(newSignal)) {
-                    pastRisks.unshift(newSignal);
-                    if (pastRisks.length > 3) pastRisks.pop();
-                    document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-                }
-            }
-
-            let signalTime = Math.floor(Math.random() * (18000 - 15000) + 15000); // 15-18s
-            let spinnerTime = Math.floor(Math.random() * (signalTime - 5000) + 5000); // Spinner time is more random
+            // Wait for the spinner to finish before showing odds
+            let spinnerTime = Math.floor(Math.random() * (18000 - 15000) + 15000); // 15-18s
+            let oddTime = Math.floor(Math.random() * (spinnerTime - 5000) + 5000); // Odd time shorter than spinner time
 
             setTimeout(() => {
-                document.getElementById("currentSignal").style.opacity = '0';
-                showSpinner();
-                setTimeout(() => {
-                    hideSpinner();
-                    if (isBotRunning) {
-                        scheduleNextSignal();
+                let newSignal = getRandomSignal();
+                document.getElementById("currentSignal").innerHTML = newSignal;
+                document.getElementById("currentSignal").style.opacity = '1';
+
+                // Play beep sound when signal appears
+                let beepSound = document.getElementById("beepSound");
+                beepSound.play();
+
+                if (newSignal.includes("Risk")) {
+                    let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+
+                    if (!pastRisks.includes(newSignal)) {
+                        pastRisks.unshift(newSignal);
+                        if (pastRisks.length > 3) pastRisks.pop();
+                        document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
                     }
-                }, spinnerTime);
-            }, signalTime);
+                }
+            }, spinnerTime);
+
+            // After odd time, hide the spinner
+            setTimeout(() => {
+                hideSpinner();
+                if (isBotRunning) {
+                    scheduleNextSignal();
+                }
+            }, spinnerTime + oddTime);
         }
 
         function scheduleNextSignal() {
