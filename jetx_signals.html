@@ -60,21 +60,55 @@
             border-radius: 8px;
             margin-top: 15px;
         }
+        .spinner {
+            margin-top: 20px;
+        }
+        #clock {
+            font-size: 18px;
+            margin-top: 15px;
+            color: #FFD700;
+        }
     </style>
 </head>
 <body>
 
     <h1>JetX Purple Bot - Live Signals</h1>
     <div class="container">
-        <div class="betting-site" id="bettingSite"></div>
-        <div class="signal" id="currentSignal">Loading Signal...</div>
-        <div class="next-risk" id="nextRisk">Next Risk: Calculating...</div>
+        <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
+        <div class="signal" id="currentSignal">Waiting for signal...</div>
+        <div id="spinner" class="spinner" style="display: none;">
+            <div class="loader"></div>
+        </div>
+        <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
+        <div id="clock"></div>
         <button class="generate-btn" onclick="generateSignal()">Generate New Signal</button>
     </div>
 
     <script>
         let pastRisks = [];
+        let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
+        let currentSignal = "";
+
+        function setBettingSite() {
+            document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
+        }
+
+        function updateClock() {
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("clock").innerHTML = `${hours}:${minutes}:${seconds}`;
+        }
+
+        function showSpinner() {
+            document.getElementById("spinner").style.display = 'block';
+        }
+
+        function hideSpinner() {
+            document.getElementById("spinner").style.display = 'none';
+        }
 
         function getRandomSignal() {
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
@@ -83,27 +117,33 @@
         }
 
         function generateSignal() {
-            let newSignal = getRandomSignal();
-            document.getElementById("currentSignal").innerHTML = newSignal;
+            showSpinner();
+            setTimeout(function() {
+                let newSignal = getRandomSignal();
+                document.getElementById("currentSignal").innerHTML = newSignal;
 
-            if (newSignal.includes("Risk")) {
-                let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+                if (newSignal.includes("Risk")) {
+                    let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
 
-                pastRisks.unshift(newSignal);
-                if (pastRisks.length > 3) pastRisks.pop();
-                document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-            }
+                    pastRisks.unshift(newSignal);
+                    if (pastRisks.length > 3) pastRisks.pop();
+                    document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                }
+
+                hideSpinner();
+            }, 2000);  // Simulate thinking time with spinner for 2 seconds
         }
 
-        function setBettingSite() {
-            let site = localStorage.getItem("bettingSite") || "Unknown";
-            document.getElementById("bettingSite").innerHTML = `Betting Site: ${site}`;
+        function refreshSignal() {
+            generateSignal();
+            setInterval(generateSignal, Math.floor(Math.random() * (60000 - 30000) + 30000)); // Random between 30-60 seconds
         }
 
         setBettingSite();
-        generateSignal();
-        setInterval(generateSignal, Math.floor(Math.random() * (60000 - 30000) + 30000));
+        updateClock();
+        setInterval(updateClock, 1000); // Update clock every second
+        refreshSignal();
     </script>
 
 </body>
