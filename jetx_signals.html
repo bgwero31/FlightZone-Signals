@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Purple Bot - Signals</title>
+    <title>JetX Purple Bot - Live Signals</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -12,13 +12,6 @@
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
-            animation: backgroundTransition 30s ease infinite;
-        }
-
-        @keyframes backgroundTransition {
-            0% { background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460); }
-            50% { background: linear-gradient(135deg, #2C3E50, #34495E, #1ABC9C); }
-            100% { background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460); }
         }
 
         .container {
@@ -85,38 +78,36 @@
 
         .spinner {
             margin-top: 20px;
-            display: none;
-        }
-
-        .spinner div {
-            width: 20px;
-            height: 20px;
-            margin: 0 5px;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #fff;
             border-radius: 50%;
-            background-color: #fff;
-            animation: spin 1.5s ease-in-out infinite alternate;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: auto;
         }
-
-        .spinner div:nth-child(1) { animation-delay: 0s; }
-        .spinner div:nth-child(2) { animation-delay: 0.3s; }
-        .spinner div:nth-child(3) { animation-delay: 0.6s; }
 
         @keyframes spin {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .information {
             font-size: 16px;
-            margin-top: 20px;
+            margin-top: 10px;
             color: #FFD700;
             text-align: center;
         }
 
-        .flag {
+        .flag-container {
             position: fixed;
             bottom: 10px;
             right: 10px;
+            width: 200px;
+        }
+
+        .flag {
             width: 40px;
             height: 30px;
             background: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg') no-repeat center center;
@@ -126,26 +117,23 @@
 </head>
 <body>
 
-    <h1>JetX Purple Bot</h1>
+    <h1>JetX Purple Bot - Live Signals</h1>
     <div id="clock"></div>
     <div class="container">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
-        <div id="spinner" class="spinner">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+        <div id="spinner" class="spinner"></div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <button class="generate-btn" onclick="startBot()">Generate New Signal</button>
+        <button class="generate-btn" onclick="generateSignal()">Generate Signal Manually</button>
     </div>
 
-    <div class="information">
-        <p>This is the JetX Purple Bot. It generates accurate signals for betting. Play responsibly!</p>
+    <div class="flag-container">
+        <div class="information">
+            <p>This is the JetX Purple Bot. It generates accurate signals for betting. Play responsibly!</p>
+        </div>
+        <div class="flag"></div>
     </div>
-
-    <div class="flag"></div>
 
     <script>
         let pastRisks = [];
@@ -167,7 +155,8 @@
         function getRandomSignal() {
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
             let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
-            return Math.random() > 0.5 ? `Target now ${safeOdds}` : `Risk ${riskOdds}`;
+            let isRisk = Math.random() > 0.5;
+            return isRisk ? `Risk ${riskOdds}` : `Target ${safeOdds}`;
         }
 
         function showSpinner() {
@@ -189,19 +178,26 @@
                 let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
                 document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
 
-                pastRisks.unshift(newSignal);
-                if (pastRisks.length > 3) pastRisks.pop();
-                document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                if (!pastRisks.includes(newSignal)) {
+                    pastRisks.unshift(newSignal);
+                    if (pastRisks.length > 3) pastRisks.pop();
+                    document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                }
             }
+
+            let signalTime = Math.floor(Math.random() * (60000 - 30000) + 30000); // 30-60s
+            let spinnerTime = Math.floor(Math.random() * (signalTime - 15000) + 10000); // Spinner comes in randomly
 
             setTimeout(() => {
                 document.getElementById("currentSignal").style.opacity = '0';
                 showSpinner();
                 setTimeout(() => {
                     hideSpinner();
-                    scheduleNextSignal();
-                }, 5000); // Spinner visible for 5s
-            }, 15000); // Signal stays for 15s
+                    if (isBotRunning) {
+                        scheduleNextSignal();
+                    }
+                }, spinnerTime);
+            }, signalTime);
         }
 
         function scheduleNextSignal() {
@@ -220,6 +216,7 @@
         setBettingSite();
         updateClock();
         setInterval(updateClock, 1000);
+        startBot(); // Automatically starts the bot on page load
     </script>
 
 </body>
