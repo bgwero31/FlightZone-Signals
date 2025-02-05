@@ -147,10 +147,10 @@
         }
 
         function getRandomSignal() {
-            let safeOdds = (Math.random() * (2.30 - 1.50) + 1.50).toFixed(2);
+            let safeOdds = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);
             let riskOdds = (Math.random() * (4.00 - 2.50) + 2.50).toFixed(2);
             let isRisk = Math.random() > 0.5;
-            return isRisk ? `Risk ${riskOdds}` : `Target now${safeOdds}`;
+            return isRisk ? `Risk ${riskOdds}` : `Target now ${safeOdds}`;
         }
 
         function showSpinner() {
@@ -168,6 +168,7 @@
             // Wait for the spinner to finish before showing odds
             let spinnerTime = Math.floor(Math.random() * (18000 - 15000) + 15000); // 15-18s
             let oddTime = Math.floor(Math.random() * (spinnerTime - 5000) + 5000); // Odd time shorter than spinner time
+            let oddDisplayTime = Math.floor(Math.random() * (15000 - 13000) + 13000); // 13-15s for odd duration
 
             setTimeout(() => {
                 let newSignal = getRandomSignal();
@@ -190,13 +191,13 @@
                 }
             }, spinnerTime);
 
-            // After odd time, hide the spinner
+            // After odd display time, hide the spinner
             setTimeout(() => {
                 hideSpinner();
                 if (isBotRunning) {
                     scheduleNextSignal();
                 }
-            }, spinnerTime + oddTime);
+            }, spinnerTime + oddDisplayTime);
         }
 
         function scheduleNextSignal() {
