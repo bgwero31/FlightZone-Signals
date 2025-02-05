@@ -8,7 +8,7 @@
     <style>
         body {
             background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
-            color: #fffff;
+            color: #fff;
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
@@ -18,9 +18,10 @@
             max-width: 400px;
             margin: auto;
             background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
+            padding: 30px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+            height: 400px;
         }
 
         h1 {
@@ -74,6 +75,9 @@
             font-size: 18px;
             border-radius: 8px;
             margin-top: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .spinner {
@@ -106,6 +110,9 @@
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
         <button class="generate-btn" onclick="generateSignal()">Generate Signal Manually</button>
     </div>
+
+    <!-- Add beep sound -->
+    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
     <script>
         let pastRisks = [];
@@ -146,6 +153,10 @@
             document.getElementById("currentSignal").innerHTML = newSignal;
             document.getElementById("currentSignal").style.opacity = '1';
 
+            // Play beep sound when signal appears
+            let beepSound = document.getElementById("beepSound");
+            beepSound.play();
+
             if (newSignal.includes("Risk")) {
                 let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
                 document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
@@ -157,8 +168,8 @@
                 }
             }
 
-            let signalTime = Math.floor(Math.random() * (60000 - 30000) + 30000); // 30-60s
-            let spinnerTime = Math.floor(Math.random() * (signalTime - 15000) + 10000); // Spinner comes in randomly
+            let signalTime = Math.floor(Math.random() * (18000 - 15000) + 15000); // 15-18s
+            let spinnerTime = Math.floor(Math.random() * (signalTime - 5000) + 5000); // Spinner time is more random
 
             setTimeout(() => {
                 document.getElementById("currentSignal").style.opacity = '0';
