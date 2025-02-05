@@ -1,150 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Purple Bot - Signals</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-        }
-        h1 {
-            font-size: 24px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .betting-site {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #FFD700;
-        }
-        .signal {
-            font-size: 22px;
-            font-weight: bold;
-            padding: 10px;
-            background: #ff4d4d;
-            border-radius: 8px;
-            display: inline-block;
-            margin: 10px;
-        }
-        .next-risk {
-            font-size: 18px;
-            margin-top: 15px;
-            color: #66FF99;
-        }
-        .past-risks {
-            font-size: 16px;
-            margin-top: 15px;
-            color: #999;
-        }
-        .generate-btn {
-            background: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        .spinner {
-            margin-top: 20px;
-        }
-        #clock {
-            font-size: 18px;
-            margin-top: 15px;
-            color: #FFD700;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JetX Purple Bot Signals</title>
+  <style>
+    /* General Styling */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #6a1b9a, #9c27b0);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    /* Card Container */
+    .card {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .title {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .info {
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+
+    /* Button */
+    .generate-btn {
+      padding: 15px 30px;
+      background-color: #9c27b0;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.2em;
+      transition: background 0.3s ease;
+    }
+
+    .generate-btn:hover {
+      background-color: #7b1fa2;
+    }
+
+    /* Signal Info */
+    .signal-container {
+      margin-top: 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    /* Spinner */
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1.5s linear infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Clock */
+    .clock {
+      font-size: 1.3em;
+      margin-bottom: 15px;
+    }
+  </style>
 </head>
 <body>
-
-    <h1>JetX Purple Bot - Live Signals</h1>
-    <div class="container">
-        <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
-        <div class="signal" id="currentSignal">Waiting for signal...</div>
-        <div id="spinner" class="spinner" style="display: none;">
-            <div class="loader"></div>
-        </div>
-        <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
-        <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <div id="clock"></div>
-        <button class="generate-btn" onclick="generateSignal()">Generate New Signal</button>
+  <div class="card">
+    <div class="title">JetX Purple Bot</div>
+    <div class="info">
+      <p>Generate signals based on random odds for better betting predictions.</p>
+      <p>Press the button to start generating signals.</p>
     </div>
 
-    <script>
-        let pastRisks = [];
-        let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
-        let currentSignal = "";
+    <button class="generate-btn" onclick="generateSignals()">Generate Signals</button>
 
-        function setBettingSite() {
-            document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
+    <div class="signal-container" id="signalContainer" style="display: none;">
+      <div id="bettingSite"></div>
+      <div id="clock" class="clock"></div>
+      <div id="targetOdds"></div>
+      <div id="riskOdds"></div>
+      <div id="spinner" class="spinner" style="display: none;"></div>
+    </div>
+  </div>
+
+  <script>
+    // Set static last risk
+    const lastRisk = "4.00x";
+
+    let timer;
+    let signalInterval;
+
+    function startTimer(duration, display) {
+      let timer = duration, minutes, seconds;
+      signalInterval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          clearInterval(signalInterval);
         }
+      }, 1000);
+    }
 
-        function updateClock() {
-            let now = new Date();
-            let hours = now.getHours().toString().padStart(2, '0');
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            let seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById("clock").innerHTML = `${hours}:${minutes}:${seconds}`;
-        }
+    function getRandomOdds(min, max) {
+      return (Math.random() * (max - min) + min).toFixed(2);
+    }
 
-        function showSpinner() {
-            document.getElementById("spinner").style.display = 'block';
-        }
+    function generateSignals() {
+      document.getElementById('signalContainer').style.display = 'block';
+      document.getElementById('bettingSite').innerHTML = "Betting Site: Africa Bet"; // example site
+      document.getElementById('riskOdds').innerHTML = "Risk: " + lastRisk;
 
-        function hideSpinner() {
-            document.getElementById("spinner").style.display = 'none';
-        }
+      // Start the timer countdown
+      const countdown = document.getElementById("clock");
+      startTimer(Math.floor(Math.random() * (20 - 10) + 10), countdown);
 
-        function getRandomSignal() {
-            let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
-            let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
-            return Math.random() > 0.5 ? safeOdds : `Risk ${riskOdds}`;
-        }
+      // Randomized target odds between 1.40x - 2.00x
+      let targetOdds = getRandomOdds(1.40, 2.00);
+      document.getElementById('targetOdds').innerHTML = "Target Odds: " + targetOdds;
 
-        function generateSignal() {
-            showSpinner();
-            setTimeout(function() {
-                let newSignal = getRandomSignal();
-                document.getElementById("currentSignal").innerHTML = newSignal;
+      // Display spinner for next target
+      setTimeout(function () {
+        document.getElementById('spinner').style.display = 'block';
+      }, 1000);
 
-                if (newSignal.includes("Risk")) {
-                    let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
-
-                    pastRisks.unshift(newSignal);
-                    if (pastRisks.length > 3) pastRisks.pop();
-                    document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-                }
-
-                hideSpinner();
-            }, 2000);  // Simulate thinking time with spinner for 2 seconds
-        }
-
-        function refreshSignal() {
-            generateSignal();
-            setInterval(generateSignal, Math.floor(Math.random() * (60000 - 30000) + 30000)); // Random between 30-60 seconds
-        }
-
-        setBettingSite();
-        updateClock();
-        setInterval(updateClock, 1000); // Update clock every second
-        refreshSignal();
-    </script>
-
+      // After a random interval, hide the spinner and show next target
+      setTimeout(function () {
+        document.getElementById('spinner').style.display = 'none';
+        let nextTargetOdds = getRandomOdds(1.40, 2.00);
+        document.getElementById('targetOdds').innerHTML = "Next Round Target: " + nextTargetOdds;
+        generateSignals(); // continue generating signals
+      }, Math.floor(Math.random() * (10 - 5) + 5) * 1000); // Random next round after a few seconds
+    }
+  </script>
 </body>
 </html>
