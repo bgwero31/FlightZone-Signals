@@ -100,24 +100,20 @@
             text-align: center;
         }
 
-        .flag-container {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            width: 200px;
+        .info-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
 
-        .flag {
-            width: 40px;
-            height: 30px;
-            background: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg') no-repeat center center;
-            background-size: cover;
+        .info-item {
+            margin-right: 20px;
         }
     </style>
 </head>
 <body>
 
-    <h1>JetX Purple Bot - Live Signals</h1>
+    <h1>JetX Purple Bot </h1>
     <div id="clock"></div>
     <div class="container">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
@@ -128,11 +124,19 @@
         <button class="generate-btn" onclick="generateSignal()">Generate Signal Manually</button>
     </div>
 
-    <div class="flag-container">
-        <div class="information">
-            <p>This is the JetX Purple Bot. It generates accurate signals for betting. Play responsibly!</p>
+    <div class="info-container">
+        <div class="info-item">
+            <p><strong>JetX Purple Bot:</strong> The Ultimate Game Changer</p>
         </div>
-        <div class="flag"></div>
+        <div class="info-item">
+            <p><strong>AI-powered:</strong> Real-time signal generation</p>
+        </div>
+        <div class="info-item">
+            <p><strong>Randomized Risks:</strong> No fixed patterns, always unique!</p>
+        </div>
+        <div class="info-item">
+            <p><strong>Automated:</strong> No need to click – signals generate on their own</p>
+        </div>
     </div>
 
     <script>
@@ -156,7 +160,7 @@
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
             let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
             let isRisk = Math.random() > 0.5;
-            return isRisk ? `Risk ${riskOdds}` : `Target ${safeOdds}`;
+            return isRisk ? `Risk ${riskOdds}` : `Target now ${safeOdds}`;
         }
 
         function showSpinner() {
