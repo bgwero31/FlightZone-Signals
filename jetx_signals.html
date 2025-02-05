@@ -12,22 +12,36 @@
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
+            animation: backgroundChange 15s infinite alternate;
+        }
+
+        @keyframes backgroundChange {
+            0% {
+                background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
+            }
+            50% {
+                background: linear-gradient(135deg, #6A1B9A, #9C27B0, #8E24AA);
+            }
+            100% {
+                background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
+            }
         }
 
         .container {
-            max-width: 400px;
+            max-width: 350px;
             margin: auto;
             background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 400px;
+            height: 350px;
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             text-transform: uppercase;
             margin-bottom: 10px;
+            color: #9C27B0;
         }
 
         #clock {
@@ -46,7 +60,7 @@
             font-size: 22px;
             font-weight: bold;
             padding: 10px;
-            background: #ff4d4d;
+            background: #9C27B0;
             border-radius: 8px;
             display: inline-block;
             margin: 10px;
@@ -85,7 +99,7 @@
             width: 50px;
             height: 50px;
             border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #fff;
+            border-top: 5px solid #9C27B0; /* Changed to purple */
             border-radius: 50%;
             animation: spin 1s linear infinite;
             display: none;
@@ -108,7 +122,7 @@
         <div id="spinner" class="spinner"></div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <button class="generate-btn" onclick="generateSignal()">Generate Signal Manually</button>
+        <button class="generate-btn" onclick="generateSignal()" id="generateBtn" style="display:none;">Generate Signal Manually</button>
     </div>
 
     <!-- Add beep sound -->
@@ -118,6 +132,7 @@
         let pastRisks = [];
         let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
         let isBotRunning = false;
+        let isLoggedIn = false;
 
         function setBettingSite() {
             document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
@@ -189,17 +204,26 @@
         }
 
         function startBot() {
-            if (!isBotRunning) {
+            if (!isBotRunning && isLoggedIn) {
                 isBotRunning = true;
-                document.querySelector(".generate-btn").style.display = "none";
+                document.getElementById("generateBtn").style.display = "block";
                 generateSignal();
             }
+        }
+
+        // Simulate a successful login
+        function simulateLogin() {
+            setTimeout(() => {
+                isLoggedIn = true;
+                startBot();
+            }, 2000); // Simulate login after 2 seconds
         }
 
         setBettingSite();
         updateClock();
         setInterval(updateClock, 1000);
-        startBot(); // Automatically starts the bot on page load
+
+        simulateLogin(); // Simulate login when the page loads
     </script>
 
 </body>
