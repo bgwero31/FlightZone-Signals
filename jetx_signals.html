@@ -126,7 +126,7 @@
 </head>
 <body>
 
-    <h1>JetX Purple Bot </h1>
+    <h1>JetX Purple Bot</h1>
     <div id="clock"></div>
     <div class="container">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
@@ -138,7 +138,7 @@
         </div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <button class="generate-btn" onclick="generateSignal()">Generate New Signal</button>
+        <button class="generate-btn" onclick="startBot()">Generate New Signal</button>
     </div>
 
     <div class="information">
@@ -150,6 +150,7 @@
     <script>
         let pastRisks = [];
         let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
+        let isBotRunning = false;
 
         function setBettingSite() {
             document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
@@ -166,7 +167,7 @@
         function getRandomSignal() {
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
             let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
-            return Math.random() > 0.5 ? `Target ${safeOdds}` : `Risk ${riskOdds}`;
+            return Math.random() > 0.5 ? `Target now ${safeOdds}` : `Risk ${riskOdds}`;
         }
 
         function showSpinner() {
@@ -180,22 +181,40 @@
         }
 
         function generateSignal() {
-            showSpinner();
-            setTimeout(function() {
-                let newSignal = getRandomSignal();
-                document.getElementById("currentSignal").innerHTML = newSignal;
+            let newSignal = getRandomSignal();
+            document.getElementById("currentSignal").innerHTML = newSignal;
+            document.getElementById("currentSignal").style.opacity = '1';
 
-                if (newSignal.includes("Risk")) {
-                    let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+            if (newSignal.includes("Risk")) {
+                let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+                document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
 
-                    pastRisks.unshift(newSignal);
-                    if (pastRisks.length > 3) pastRisks.pop();
-                    document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-                }
+                pastRisks.unshift(newSignal);
+                if (pastRisks.length > 3) pastRisks.pop();
+                document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+            }
 
-                hideSpinner();
-            }, Math.floor(Math.random() * (30000 - 20000) + 20000)); // Random spinner time between 20-30s
+            setTimeout(() => {
+                document.getElementById("currentSignal").style.opacity = '0';
+                showSpinner();
+                setTimeout(() => {
+                    hideSpinner();
+                    scheduleNextSignal();
+                }, 5000); // Spinner visible for 5s
+            }, 15000); // Signal stays for 15s
+        }
+
+        function scheduleNextSignal() {
+            let nextInterval = Math.floor(Math.random() * (60000 - 30000) + 30000); // 30-60s
+            setTimeout(generateSignal, nextInterval);
+        }
+
+        function startBot() {
+            if (!isBotRunning) {
+                isBotRunning = true;
+                document.querySelector(".generate-btn").style.display = "none";
+                generateSignal();
+            }
         }
 
         setBettingSite();
