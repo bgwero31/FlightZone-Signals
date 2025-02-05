@@ -109,24 +109,20 @@
     // Set static last risk
     const lastRisk = "4.00x";
 
-    let timer;
     let signalInterval;
 
-    function startTimer(duration, display) {
-      let timer = duration, minutes, seconds;
-      signalInterval = setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
-
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        display.textContent = minutes + ":" + seconds;
-
-        if (--timer < 0) {
-          clearInterval(signalInterval);
-        }
-      }, 1000);
+    // Function to show the current time (clock)
+    function updateClock() {
+      const clock = document.getElementById('clock');
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      clock.textContent = `${hours}:${minutes}:${seconds}`;
     }
+
+    // Update the clock every second
+    setInterval(updateClock, 1000);
 
     function getRandomOdds(min, max) {
       return (Math.random() * (max - min) + min).toFixed(2);
@@ -136,10 +132,6 @@
       document.getElementById('signalContainer').style.display = 'block';
       document.getElementById('bettingSite').innerHTML = "Betting Site: Africa Bet"; // example site
       document.getElementById('riskOdds').innerHTML = "Risk: " + lastRisk;
-
-      // Start the timer countdown
-      const countdown = document.getElementById("clock");
-      startTimer(Math.floor(Math.random() * (20 - 10) + 10), countdown);
 
       // Randomized target odds between 1.40x - 2.00x
       let targetOdds = getRandomOdds(1.40, 2.00);
