@@ -12,36 +12,23 @@
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
-            animation: backgroundChange 20s infinite alternate;
-        }
-
-        @keyframes backgroundChange {
-            0% {
-                background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
-            }
-            50% {
-                background: linear-gradient(135deg, #FF4081, #FF80AB, #FF4081);
-            }
-            100% {
-                background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
-            }
         }
 
         .container {
-            max-width: 350px;
+            max-width: 400px;
             margin: auto;
             background: rgba(255, 255, 255, 0.1);
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 350px;
+            height: 380px; /* Adjusting the height for better appearance */
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 24px;
             text-transform: uppercase;
             margin-bottom: 10px;
-            color: #9C27B0;
+            color: #9B4DFF;
         }
 
         #clock {
@@ -60,7 +47,7 @@
             font-size: 22px;
             font-weight: bold;
             padding: 10px;
-            background: #9C27B0;
+            background: #ff4d4d;
             border-radius: 8px;
             display: inline-block;
             margin: 10px;
@@ -89,9 +76,6 @@
             font-size: 18px;
             border-radius: 8px;
             margin-top: 15px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .spinner {
@@ -99,7 +83,7 @@
             width: 50px;
             height: 50px;
             border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #9C27B0; /* Changed to purple */
+            border-top: 5px solid #9B4DFF; /* Purple spinner */
             border-radius: 50%;
             animation: spin 1s linear infinite;
             display: none;
@@ -109,6 +93,13 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .information {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #FFD700;
+            text-align: center;
         }
     </style>
 </head>
@@ -122,22 +113,21 @@
         <div id="spinner" class="spinner"></div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <button class="generate-btn" onclick="generateSignal()" id="generateBtn" style="display:none;">Generate Signal Manually</button>
+        <!-- This is the Generate Signal button -->
+        <button class="generate-btn" onclick="generateSignal()" id="generateBtn">Generate Signal Manually</button> <!-- Generate button -->
     </div>
-
-    <!-- Add beep sound -->
-    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
     <script>
         let pastRisks = [];
         let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
         let isBotRunning = false;
-        let isLoggedIn = false;
 
+        // Set betting site
         function setBettingSite() {
             document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
         }
 
+        // Update clock
         function updateClock() {
             let now = new Date();
             let hours = now.getHours().toString().padStart(2, '0');
@@ -146,81 +136,78 @@
             document.getElementById("clock").innerHTML = `${hours}:${minutes}:${seconds}`;
         }
 
+        // Generate random signal
         function getRandomSignal() {
-            let safeOdds = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);
-            let riskOdds = (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2);
+            let safeOdds = (Math.random() * (2.00 - 1.,50) + 1.50).toFixed(2);
+            let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
             let isRisk = Math.random() > 0.5;
-            return isRisk ? `Risk ${riskOdds}` : `Target now ${safeOdds}`;
+            return isRisk ? `Risk ${riskOdds}` : `Target now${safeOdds}`;
         }
 
+        // Show spinner
         function showSpinner() {
             document.getElementById("spinner").style.display = 'block';
             document.getElementById("currentSignal").style.opacity = '0';
         }
 
+        // Hide spinner
         function hideSpinner() {
             document.getElementById("spinner").style.display = 'none';
+            document.getElementById("currentSignal").style.opacity = '1';
         }
 
-        function generateSignal() {
-            showSpinner();
+        // Play beep sound
+        function beepSound() {
+            var beep = new Audio('https://www.soundjay.com/button/beep-07.wav');
+            beep.play();
+        }
 
-            // Wait for the spinner to finish before showing odds
-            let spinnerTime = Math.floor(Math.random() * (18000 - 15000) + 15000); // 15-18s
-            let oddTime = Math.floor(Math.random() * (spinnerTime - 5000) + 5000); // Odd time shorter than spinner time
-            let oddDisplayTime = Math.floor(Math.random() * (15000 - 13000) + 13000); // 13-15s for odd duration
+        // Generate signal function
+        function generateSignal() {
+            let newSignal = getRandomSignal();
+            document.getElementById("currentSignal").innerHTML = newSignal;
+            beepSound(); // Play beep sound when the signal appears
+            document.getElementById("currentSignal").style.opacity = '1';
+
+            if (newSignal.includes("Risk")) {
+                let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+                document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+
+                if (!pastRisks.includes(newSignal)) {
+                    pastRisks.unshift(newSignal);
+                    if (pastRisks.length > 3) pastRisks.pop();
+                    document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                }
+            }
+
+            let signalTime = Math.floor(Math.random() * (15000 - 13000) + 13000); // 13-15s
+            let spinnerTime = Math.floor(Math.random() * (signalTime - 8000) + 8000); // Spinner time is greater
 
             setTimeout(() => {
-                let newSignal = getRandomSignal();
-                document.getElementById("currentSignal").innerHTML = newSignal;
-                document.getElementById("currentSignal").style.opacity = '1';
-
-                // Play beep sound when signal appears
-                let beepSound = document.getElementById("beepSound");
-                beepSound.play();
-
-                // After the odd time, hide the spinner
+                document.getElementById("currentSignal").style.opacity = '0';
+                showSpinner();
                 setTimeout(() => {
                     hideSpinner();
-                }, oddDisplayTime);
-                
-                if (newSignal.includes("Risk")) {
-                    let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
-
-                    if (!pastRisks.includes(newSignal)) {
-                        pastRisks.unshift(newSignal);
-                        if (pastRisks.length > 3) pastRisks.pop();
-                        document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-                    }
-                }
-            }, spinnerTime);
-
-            // After odd display time, hide the spinner
-            setTimeout(() => {
-                hideSpinner();
-                if (isBotRunning) {
-                    scheduleNextSignal();
-                }
-            }, spinnerTime + oddDisplayTime);
+                    generateSignal(); // Continue generating signals
+                }, spinnerTime);
+            }, signalTime);
         }
 
-        function scheduleNextSignal() {
-            let nextInterval = Math.floor(Math.random() * (60000 - 30000) + 30000); // 30-60s
-            setTimeout(generateSignal, nextInterval);
-        }
-
+        // Start the bot
         function startBot() {
-            if (!isBotRunning && isLoggedIn) {
+            if (!isBotRunning) {
                 isBotRunning = true;
-                document.getElementById("generateBtn").style.display = "block";
-                generateSignal();
+                document.querySelector(".generate-btn").style.display = "block"; // Ensure the button is shown
+                generateSignal(); // Generate a signal immediately
             }
         }
 
-        // Simulate a successful login
-        function simulateLogin() {
-            setTimeout(() => {
-                isLoggedIn = true;
-                startBot();
-            }, 2000); // Simulate login after 2
+        setBettingSite();
+        updateClock();
+        setInterval(updateClock, 1000);
+        startBot(); // Automatically start the bot on page load
+
+    </script>
+
+</body>
+</html>
