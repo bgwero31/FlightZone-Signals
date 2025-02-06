@@ -66,6 +66,10 @@
             color: #FFD700;
             margin-top: 10px;
             display: none;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .generate-btn {
@@ -85,7 +89,7 @@
             width: 30px;
             height: 30px;
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #9B4DFF;
+            border-top: 4px solid #0096FF;
             border-radius: 50%;
             animation: spin 1.2s linear infinite;
             display: none;
@@ -145,7 +149,7 @@
             let isRisk = Math.random() > 0.5;
 
             if (isRisk) {
-                let riskTime = Math.floor(Math.random() * 4) + 2;
+                let riskTime = Math.floor(Math.random() * 3) + 1;
                 riskQueue.push({ riskOdds, riskTime });
                 lastRisk = `Next Risk in ${riskTime} minutes`;
                 document.getElementById("nextRisk").innerHTML = lastRisk;
@@ -204,6 +208,10 @@
 
                 setTimeout(() => {
                     document.getElementById("currentSignal").style.opacity = '0';
+                    showSpinner();
+                    setTimeout(() => {
+                        hideSpinner();
+                    }, Math.floor(Math.random() * (5000 - 3000) + 3000));
                 }, Math.floor(Math.random() * (18000 - 15000) + 15000));
             }, spinnerTime);
         }
