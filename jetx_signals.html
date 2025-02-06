@@ -25,7 +25,7 @@
         }
 
         .container {
-            max-width: 400px;
+            max-width: 600px;
             margin: auto;
             background: rgba(255, 255, 255, 0.1);
             padding: 25px;
@@ -80,20 +80,22 @@
         .generate-btn {
             background: #4CAF50;
             color: white;
-            padding: 12px 20px;
+            padding: 12px;
             border: none;
             cursor: pointer;
             font-size: 18px;
             border-radius: 8px;
             margin-top: 15px;
+            width: 100%; /* Now spans the full width of the card/container */
+            box-sizing: border-box; /* Makes sure padding is included in the width */
         }
 
         .spinner {
             margin-top: 20px;
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #9B4DFF; /* Purple spinner */
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-top: 8px solid #9B4DFF; /* Purple spinner */
             border-radius: 50%;
             animation: spin 1s linear infinite;
             display: none;
@@ -150,8 +152,6 @@
         function getRandomSignal() {
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
             let riskOdds = (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2); // Risk odds between 2.10x and 4.00x
-            
-
             let isRisk = Math.random() > 0.5;
             return isRisk ? `Risk ${riskOdds}x` : `Target now ${safeOdds}x`;
         }
