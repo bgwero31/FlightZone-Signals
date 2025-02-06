@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Purple Bot - </title>
+    <title>JetX Purple Bot</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -15,7 +15,6 @@
             animation: backgroundTransition 10s ease-in-out infinite;
         }
 
-        /* Background Transition Effect */
         @keyframes backgroundTransition {
             0% { background: #1A1A2E; }
             25% { background: #16213E; }
@@ -25,13 +24,13 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 400px;
             margin: auto;
             background: rgba(255, 255, 255, 0.1);
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 380px;
+            height: 450px;
         }
 
         h1 {
@@ -80,24 +79,23 @@
         .generate-btn {
             background: #4CAF50;
             color: white;
-            padding: 12px;
+            padding: 12px 20px;
             border: none;
             cursor: pointer;
             font-size: 18px;
             border-radius: 8px;
+            width: 100%;
             margin-top: 15px;
-            width: 100%; /* Now spans the full width of the card/container */
-            box-sizing: border-box; /* Makes sure padding is included in the width */
         }
 
         .spinner {
-            margin-top: 20px;
-            width: 80px;
-            height: 80px;
-            border: 8px solid rgba(255, 255, 255, 0.3);
-            border-top: 8px solid #9B4DFF; /* Purple spinner */
+            margin-top: 10px;
+            width: 30px;
+            height: 30px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #9B4DFF;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
             display: none;
             margin: auto;
         }
@@ -108,10 +106,13 @@
         }
 
         .information {
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 10px;
             color: #FFD700;
             text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -125,8 +126,13 @@
         <div id="spinner" class="spinner"></div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <!-- This is the Generate Signal button -->
-        <button class="generate-btn" onclick="generateSignal()" id="generateBtn">Generate Signal</button> <!-- Generate button -->
+        <button class="generate-btn" onclick="generateSignal()" id="generateBtn">Generate Signal</button>
+
+        <div class="information">
+            JetX Purple Bot is a next-level prediction tool designed to maximize your wins and minimize your risks.  
+            Built with cutting-edge algorithms and real-time data analysis, this bot provides you with highly accurate  
+            signals that help you cash out at the perfect moment.
+        </div>
     </div>
 
     <script>
@@ -134,12 +140,10 @@
         let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
         let isBotRunning = false;
 
-        // Set betting site
         function setBettingSite() {
             document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
         }
 
-        // Update clock
         function updateClock() {
             let now = new Date();
             let hours = now.getHours().toString().padStart(2, '0');
@@ -148,37 +152,33 @@
             document.getElementById("clock").innerHTML = `${hours}:${minutes}:${seconds}`;
         }
 
-        // Generate random signal
         function getRandomSignal() {
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
-            let riskOdds = (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2); // Risk odds between 2.10x and 4.00x
+            let riskOdds = (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2);
+            
             let isRisk = Math.random() > 0.5;
             return isRisk ? `Risk ${riskOdds}x` : `Target now ${safeOdds}x`;
         }
 
-        // Show spinner
         function showSpinner() {
             document.getElementById("spinner").style.display = 'block';
             document.getElementById("currentSignal").style.opacity = '0';
         }
 
-        // Hide spinner
         function hideSpinner() {
             document.getElementById("spinner").style.display = 'none';
             document.getElementById("currentSignal").style.opacity = '1';
         }
 
-        // Play beep sound
         function beepSound() {
             var beep = new Audio('https://www.soundjay.com/button/beep-07.wav');
             beep.play();
         }
 
-        // Generate signal function
         function generateSignal() {
             let newSignal = getRandomSignal();
             document.getElementById("currentSignal").innerHTML = newSignal;
-            beepSound(); // Play beep sound when the signal appears
+            beepSound();
             document.getElementById("currentSignal").style.opacity = '1';
 
             if (newSignal.includes("Risk")) {
@@ -192,33 +192,30 @@
                 }
             }
 
-            let signalTime = Math.floor(Math.random() * (15000 - 13000) + 13000); // 13-15s
-            let spinnerTime = Math.floor(Math.random() * (signalTime - 8000) + 8000); // Spinner time is greater
+            let signalTime = Math.floor(Math.random() * (12000 - 10000) + 10000);
+            let spinnerTime = Math.floor(Math.random() * (4000 - 2000) + 2000);
 
             setTimeout(() => {
                 document.getElementById("currentSignal").style.opacity = '0';
                 showSpinner();
                 setTimeout(() => {
                     hideSpinner();
-                    generateSignal(); // Continue generating signals
+                    generateSignal();
                 }, spinnerTime);
             }, signalTime);
         }
 
-        // Start the bot
         function startBot() {
             if (!isBotRunning) {
                 isBotRunning = true;
-                document.querySelector(".generate-btn").style.display = "block"; // Ensure the button is shown
-                generateSignal(); // Generate a signal immediately
+                generateSignal();
             }
         }
 
         setBettingSite();
         updateClock();
         setInterval(updateClock, 1000);
-        startBot(); // Automatically start the bot on page load
-
+        startBot();
     </script>
 
 </body>
