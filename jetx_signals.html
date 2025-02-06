@@ -113,11 +113,11 @@
     <h1>JetX Purple Bot</h1>
     <div id="clock"></div>
     <div class="container">
-        <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
+        <div class="betting-site" id="bettingSite">Betting Site: Africa Bet</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
         <div id="spinner" class="spinner"></div>
         <div class="countdown" id="countdown">10</div>
-        <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
+        <div class="next-risk" id="nextRisk">Next Risk: No risk yet</div>
         <button class="generate-btn" onclick="generateSignal()">Generate Signal</button>
         <div class="information-box">
             JetX Purple Bot is a next-level prediction tool designed to maximize your wins and minimize your risks.  
@@ -129,6 +129,7 @@
     <script>
         let bettingSite = "Africa Bet";
         let riskQueue = [];
+        let lastRisk = "No risk yet";
 
         function updateClock() {
             let now = new Date();
@@ -146,7 +147,8 @@
             if (isRisk) {
                 let riskTime = Math.floor(Math.random() * 4) + 2;
                 riskQueue.push({ riskOdds, riskTime });
-                document.getElementById("nextRisk").innerHTML = `Next Risk in ${riskTime} minutes`;
+                lastRisk = `Next Risk in ${riskTime} minutes`;
+                document.getElementById("nextRisk").innerHTML = lastRisk;
                 return `Target now ${safeOdds}x`;
             } else {
                 return `Target now ${safeOdds}x`;
@@ -176,7 +178,7 @@
                     let riskOdd = riskQueue.shift();
                     if (riskOdd) {
                         document.getElementById("currentSignal").innerHTML = `Risk ${riskOdd.riskOdds}x`;
-                        document.getElementById("nextRisk").innerHTML = "Next Risk: Loading...";
+                        document.getElementById("nextRisk").innerHTML = lastRisk;
                     }
                 }
             }, 1000);
@@ -191,6 +193,7 @@
                 let newSignal = getRandomSignal();
                 document.getElementById("currentSignal").innerHTML = newSignal;
                 document.getElementById("currentSignal").style.opacity = '1';
+                document.getElementById("nextRisk").innerHTML = lastRisk;
 
                 if (riskQueue.length > 0) {
                     let riskOdd = riskQueue[0];
