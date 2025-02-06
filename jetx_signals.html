@@ -12,15 +12,6 @@
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
-            animation: backgroundTransition 10s ease-in-out infinite;
-        }
-
-        @keyframes backgroundTransition {
-            0% { background: #1A1A2E; }
-            25% { background: #16213E; }
-            50% { background: #0F3460; }
-            75% { background: #1A1A2E; }
-            100% { background: #16213E; }
         }
 
         .container {
@@ -30,7 +21,6 @@
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 450px;
         }
 
         h1 {
@@ -70,10 +60,12 @@
             color: #66FF99;
         }
 
-        .past-risks {
-            font-size: 16px;
-            margin-top: 15px;
-            color: #B0B0B0;
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-top: 10px;
+            display: none;
         }
 
         .generate-btn {
@@ -113,9 +105,6 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            max-width: 420px;
-            margin-left: auto;
-            margin-right: auto;
         }
     </style>
 </head>
@@ -127,25 +116,19 @@
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
         <div id="spinner" class="spinner"></div>
+        <div class="countdown" id="countdown">10</div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
-        <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <button class="generate-btn" onclick="generateSignal()" id="generateBtn">Generate Signal</button>
-    </div>
-
-    <div class="information-box">
-        JetX Purple Bot is a next-level prediction tool designed to maximize your wins and minimize your risks.  
-        Built with cutting-edge algorithms and real-time data analysis, this bot provides you with highly accurate  
-        signals that help you cash out at the perfect moment.
+        <button class="generate-btn" onclick="generateSignal()">Generate Signal</button>
+        <div class="information-box">
+            JetX Purple Bot is a next-level prediction tool designed to maximize your wins and minimize your risks.  
+            Built with cutting-edge algorithms and real-time data analysis, this bot provides you with highly accurate  
+            signals that help you cash out at the perfect moment.
+        </div>
     </div>
 
     <script>
-        let pastRisks = [];
-        let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
-        let isBotRunning = false;
-
-        function setBettingSite() {
-            document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
-        }
+        let bettingSite = "Africa Bet";
+        let riskQueue = [];
 
         function updateClock() {
             let now = new Date();
@@ -158,9 +141,16 @@
         function getRandomSignal() {
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
             let riskOdds = (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2);
-            
             let isRisk = Math.random() > 0.5;
-            return isRisk ? `Risk ${riskOdds}x` : `Target now ${safeOdds}x`;
+
+            if (isRisk) {
+                let riskTime = Math.floor(Math.random() * 4) + 2;
+                riskQueue.push({ riskOdds, riskTime });
+                document.getElementById("nextRisk").innerHTML = `Next Risk in ${riskTime} minutes`;
+                return `Target now ${safeOdds}x`;
+            } else {
+                return `Target now ${safeOdds}x`;
+            }
         }
 
         function showSpinner() {
@@ -173,46 +163,50 @@
             document.getElementById("currentSignal").style.opacity = '1';
         }
 
-        function beepSound() {
-            var beep = new Audio('https://www.soundjay.com/button/beep-07.wav');
-            beep.play();
+        function startCountdown() {
+            let countdown = 10;
+            document.getElementById("countdown").style.display = 'block';
+            let timer = setInterval(() => {
+                document.getElementById("countdown").innerHTML = countdown;
+                countdown--;
+
+                if (countdown < 0) {
+                    clearInterval(timer);
+                    document.getElementById("countdown").style.display = 'none';
+                    let riskOdd = riskQueue.shift();
+                    if (riskOdd) {
+                        document.getElementById("currentSignal").innerHTML = `Risk ${riskOdd.riskOdds}x`;
+                        document.getElementById("nextRisk").innerHTML = "Next Risk: Loading...";
+                    }
+                }
+            }, 1000);
         }
 
         function generateSignal() {
             showSpinner();
-            let spinnerTime = Math.floor(Math.random() * (6000 - 4000) + 4000);  
+            let spinnerTime = Math.floor(Math.random() * (5000 - 3000) + 3000);
 
             setTimeout(() => {
                 hideSpinner();
                 let newSignal = getRandomSignal();
                 document.getElementById("currentSignal").innerHTML = newSignal;
-                beepSound();
                 document.getElementById("currentSignal").style.opacity = '1';
 
-                if (newSignal.includes("Risk")) {
-                    let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
-
-                    if (!pastRisks.includes(newSignal)) {
-                        pastRisks.unshift(newSignal);
-                        if (pastRisks.length > 3) pastRisks.pop();
-                        document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-                    }
+                if (riskQueue.length > 0) {
+                    let riskOdd = riskQueue[0];
+                    setTimeout(() => {
+                        startCountdown();
+                    }, (riskOdd.riskTime * 60 - 10) * 1000);
                 }
+
+                setTimeout(() => {
+                    document.getElementById("currentSignal").style.opacity = '0';
+                }, Math.floor(Math.random() * (18000 - 15000) + 15000));
             }, spinnerTime);
         }
 
-        function startBot() {
-            if (!isBotRunning) {
-                isBotRunning = true;
-                generateSignal();
-            }
-        }
-
-        setBettingSite();
         updateClock();
         setInterval(updateClock, 1000);
-        startBot();
     </script>
 
 </body>
