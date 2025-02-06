@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Purple Bot</title>
+    <title>JetX Purple Bot - </title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -12,6 +12,16 @@
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
+            animation: backgroundTransition 10s ease-in-out infinite;
+        }
+
+        /* Background Transition Effect */
+        @keyframes backgroundTransition {
+            0% { background: #1A1A2E; }
+            25% { background: #16213E; }
+            50% { background: #0F3460; }
+            75% { background: #1A1A2E; }
+            100% { background: #16213E; }
         }
 
         .container {
@@ -21,7 +31,7 @@
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 380px; /* Adjusting the height for better appearance */
+            height: 380px;
         }
 
         h1 {
@@ -114,7 +124,7 @@
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
         <!-- This is the Generate Signal button -->
-        <button class="generate-btn" onclick="generateSignal()" id="generateBtn">Generate Signal Manually</button> <!-- Generate button -->
+        <button class="generate-btn" onclick="generateSignal()" id="generateBtn">Generate Signal</button> <!-- Generate button -->
     </div>
 
     <script>
@@ -138,10 +148,12 @@
 
         // Generate random signal
         function getRandomSignal() {
-            let safeOdds = (Math.random() * (2.00 - 1.,50) + 1.50).toFixed(2);
-            let riskOdds = (Math.random() * (4.00 - 2.20) + 2.20).toFixed(2);
+            let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
+            let riskOdds = (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2); // Risk odds between 2.10x and 4.00x
+            
+
             let isRisk = Math.random() > 0.5;
-            return isRisk ? `Risk ${riskOdds}` : `Target now${safeOdds}`;
+            return isRisk ? `Risk ${riskOdds}x` : `Target now ${safeOdds}x`;
         }
 
         // Show spinner
