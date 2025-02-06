@@ -1,25 +1,48 @@
-// server.js (Node.js Express example)
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Predictor Pro - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="card-inner">
+                <!-- Front of the Card -->
+                <div class="card-front">
+                    <h2>Aviator Predictor Pro</h2>
+                    <form id="loginForm">
+                        <div class="input-group">
+                            <label for="bettingSite">Choose Betting Site</label>
+                            <select id="bettingSite" name="bettingSite" required>
+                                <option value="AfricaBet">AfricaBet</option>
+                                <option value="MWOSBetting">MWOS Betting</option>
+                                <option value="SpinCity">Spin City</option>
+                                <option value="Zanzibet">Zanzibet</option>
+                                <option value="Bet247">Bet247</option>
+                                <option value="1Win">1Win</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="password">Enter Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="login-btn">Login</button>
+                        <p id="errorMessage" class="error-message" style="display: none;">Incorrect password. Please try again.</p>
+                    </form>
+                </div>
 
-app.use(bodyParser.urlencoded({ extended: true }));
+                <!-- Back of the Card (Optional) -->
+                <div class="card-back">
+                    <h3>Welcome Back!</h3>
+                    <p>Enter your credentials to access the Aviator Predictor Pro signals.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-
-    // Example check (you should validate against a database or auth service)
-    if (username === "user" && password === "password") {
-        res.send("Login successful");
-    } else {
-        res.send("Invalid credentials");
-    }
-});
-
-app.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
-});
+    <script src="script.js"></script>
+</body>
+</html>
