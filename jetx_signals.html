@@ -21,6 +21,7 @@
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+            height: 450px;
         }
 
         h1 {
@@ -50,8 +51,13 @@
             border-radius: 8px;
             display: inline-block;
             margin: 10px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+        }
+
+        .countdown {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #FF4500;
+            display: none;
         }
 
         .next-risk {
@@ -60,26 +66,10 @@
             color: #66FF99;
         }
 
-        .last-risks {
+        .past-risks {
             font-size: 16px;
-            margin-top: 10px;
-            color: #FFD700;
-            text-align: left;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-        }
-
-        .generate-btn {
-            background: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            border-radius: 8px;
-            width: 100%;
             margin-top: 15px;
+            color: #B0B0B0;
         }
 
         .spinner {
@@ -87,9 +77,9 @@
             width: 30px;
             height: 30px;
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #0096FF;
+            border-top: 4px solid #9B4DFF;
             border-radius: 50%;
-            animation: spin 1.2s linear infinite;
+            animation: spin 0.8s linear infinite;
             display: none;
             margin: auto;
         }
@@ -98,16 +88,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        .information-box {
-            font-size: 14px;
-            margin-top: 15px;
-            padding: 15px;
-            color: #FFD700;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-        }
     </style>
 </head>
 <body>
@@ -115,29 +95,23 @@
     <h1>JetX Purple Bot</h1>
     <div id="clock"></div>
     <div class="container">
-        <div class="betting-site" id="bettingSite">Betting Site: <span id="siteName">Spin City</span></div>
+        <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
+        <div class="countdown" id="countdown">Risk in 10s</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
         <div id="spinner" class="spinner"></div>
-        <div class="next-risk" id="nextRisk">Next Risk: No risk yet</div>
-        <div class="last-risks" id="lastRisks">
-            <strong>Last Risks:</strong>
-            <ul id="riskList"></ul>
-        </div>
-        <button class="generate-btn" onclick="startAutoSignal()">Start Auto Predictions</button>
-        <div class="information-box">
-            JetX Purple Bot is a next-level prediction tool designed to maximize your wins and minimize your risks.  
-            Built with cutting-edge algorithms and real-time data analysis, this bot provides you with highly accurate  
-            signals that help you cash out at the perfect moment.
-        </div>
+        <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
+        <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
     </div>
 
     <script>
-        let bettingSite = "Spin City";  // Set betting site
-        document.getElementById("siteName").textContent = bettingSite;
+        let pastRisks = [];
+        let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
+        let isBotRunning = false;
+        let isRiskComing = false;
 
-        let riskQueue = [];
-        let lastRisks = [];
-        let autoSignalActive = false;
+        function setBettingSite() {
+            document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
+        }
 
         function updateClock() {
             let now = new Date();
@@ -148,32 +122,35 @@
         }
 
         function getRandomSignal() {
+            let isRisk = Math.random() < 0.30;  // 30% risk odds, 70% safe odds
             let safeOdds = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
             let riskOdds = (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2);
-            let isRisk = Math.random() > 0.5;
 
             if (isRisk) {
-                let riskTime = Math.floor(Math.random() * 3) + 1;
-                riskQueue.push({ riskOdds, riskTime });
-                lastRisks.unshift(`${riskOdds}x`);
-                if (lastRisks.length > 3) {
-                    lastRisks.pop();
-                }
-                updateLastRisks();
-                return `Target now ${safeOdds}x`;
+                isRiskComing = true;
+                startCountdown();
+                return `Risk ${riskOdds}x`;
             } else {
+                isRiskComing = false;
                 return `Target now ${safeOdds}x`;
             }
         }
 
-        function updateLastRisks() {
-            let riskList = document.getElementById("riskList");
-            riskList.innerHTML = "";
-            lastRisks.forEach(risk => {
-                let listItem = document.createElement("li");
-                listItem.textContent = risk;
-                riskList.appendChild(listItem);
-            });
+        function startCountdown() {
+            let countdownElem = document.getElementById("countdown");
+            countdownElem.style.display = "block";
+            let timeLeft = 10;
+
+            let countdownInterval = setInterval(() => {
+                countdownElem.innerHTML = `Risk in ${timeLeft}s`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElem.style.display = "none";
+                    generateSignal();
+                }
+            }, 1000);
         }
 
         function showSpinner() {
@@ -187,5 +164,46 @@
         }
 
         function generateSignal() {
-            showSpinner();
-            let spinnerTime = Math.floor(Math.random() * (5000 - 3000) + 300
+            let newSignal = getRandomSignal();
+
+            if (!isRiskComing) {
+                document.getElementById("currentSignal").innerHTML = newSignal;
+                document.getElementById("currentSignal").style.opacity = '1';
+
+                if (newSignal.includes("Risk")) {
+                    if (!pastRisks.includes(newSignal)) {
+                        pastRisks.unshift(newSignal);
+                        if (pastRisks.length > 3) pastRisks.pop();
+                        document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                    }
+                }
+
+                let spinnerTime = Math.floor(Math.random() * (5000 - 3000) + 3000);  // Spinner for 3-5 seconds
+                let signalTime = Math.floor(Math.random() * (35000 - 30000) + 30000);  // 30-35 seconds for each signal
+
+                setTimeout(() => {
+                    document.getElementById("currentSignal").style.opacity = '0';
+                    showSpinner();
+                    setTimeout(() => {
+                        hideSpinner();
+                        generateSignal();
+                    }, spinnerTime);
+                }, signalTime);
+            }
+        }
+
+        function startBot() {
+            if (!isBotRunning) {
+                isBotRunning = true;
+                generateSignal();
+            }
+        }
+
+        setBettingSite();
+        updateClock();
+        setInterval(updateClock, 1000);
+        startBot();
+    </script>
+
+</body>
+</html>
