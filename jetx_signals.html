@@ -60,16 +60,14 @@
             color: #66FF99;
         }
 
-        .countdown {
-            font-size: 24px;
-            font-weight: bold;
-            color: #FFD700;
+        .last-risks {
+            font-size: 16px;
             margin-top: 10px;
-            display: none;
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
+            color: #FFD700;
+            text-align: left;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
         }
 
         .generate-btn {
@@ -120,8 +118,11 @@
         <div class="betting-site" id="bettingSite">Betting Site: Africa Bet</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
         <div id="spinner" class="spinner"></div>
-        <div class="countdown" id="countdown">10</div>
         <div class="next-risk" id="nextRisk">Next Risk: No risk yet</div>
+        <div class="last-risks" id="lastRisks">
+            <strong>Last Risks:</strong>
+            <ul id="riskList"></ul>
+        </div>
         <button class="generate-btn" onclick="generateSignal()">Generate Signal</button>
         <div class="information-box">
             JetX Purple Bot is a next-level prediction tool designed to maximize your wins and minimize your risks.  
@@ -133,7 +134,7 @@
     <script>
         let bettingSite = "Africa Bet";
         let riskQueue = [];
-        let lastRisk = "No risk yet";
+        let lastRisks = [];
 
         function updateClock() {
             let now = new Date();
@@ -151,12 +152,25 @@
             if (isRisk) {
                 let riskTime = Math.floor(Math.random() * 3) + 1;
                 riskQueue.push({ riskOdds, riskTime });
-                lastRisk = `Next Risk in ${riskTime} minutes`;
-                document.getElementById("nextRisk").innerHTML = lastRisk;
+                lastRisks.unshift(`${riskOdds}x`);
+                if (lastRisks.length > 5) {
+                    lastRisks.pop();
+                }
+                updateLastRisks();
                 return `Target now ${safeOdds}x`;
             } else {
                 return `Target now ${safeOdds}x`;
             }
+        }
+
+        function updateLastRisks() {
+            let riskList = document.getElementById("riskList");
+            riskList.innerHTML = "";
+            lastRisks.forEach(risk => {
+                let listItem = document.createElement("li");
+                listItem.textContent = risk;
+                riskList.appendChild(listItem);
+            });
         }
 
         function showSpinner() {
@@ -169,25 +183,6 @@
             document.getElementById("currentSignal").style.opacity = '1';
         }
 
-        function startCountdown() {
-            let countdown = 10;
-            document.getElementById("countdown").style.display = 'block';
-            let timer = setInterval(() => {
-                document.getElementById("countdown").innerHTML = countdown;
-                countdown--;
-
-                if (countdown < 0) {
-                    clearInterval(timer);
-                    document.getElementById("countdown").style.display = 'none';
-                    let riskOdd = riskQueue.shift();
-                    if (riskOdd) {
-                        document.getElementById("currentSignal").innerHTML = `Risk ${riskOdd.riskOdds}x`;
-                        document.getElementById("nextRisk").innerHTML = lastRisk;
-                    }
-                }
-            }, 1000);
-        }
-
         function generateSignal() {
             showSpinner();
             let spinnerTime = Math.floor(Math.random() * (5000 - 3000) + 3000);
@@ -197,22 +192,6 @@
                 let newSignal = getRandomSignal();
                 document.getElementById("currentSignal").innerHTML = newSignal;
                 document.getElementById("currentSignal").style.opacity = '1';
-                document.getElementById("nextRisk").innerHTML = lastRisk;
-
-                if (riskQueue.length > 0) {
-                    let riskOdd = riskQueue[0];
-                    setTimeout(() => {
-                        startCountdown();
-                    }, (riskOdd.riskTime * 60 - 10) * 1000);
-                }
-
-                setTimeout(() => {
-                    document.getElementById("currentSignal").style.opacity = '0';
-                    showSpinner();
-                    setTimeout(() => {
-                        hideSpinner();
-                    }, Math.floor(Math.random() * (5000 - 3000) + 3000));
-                }, Math.floor(Math.random() * (18000 - 15000) + 15000));
             }, spinnerTime);
         }
 
