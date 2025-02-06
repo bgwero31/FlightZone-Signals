@@ -115,7 +115,7 @@
     <h1>JetX Purple Bot</h1>
     <div id="clock"></div>
     <div class="container">
-        <div class="betting-site" id="bettingSite">Betting Site: Africa Bet</div>
+        <div class="betting-site" id="bettingSite">Betting Site: <span id="siteName">Spin City</span></div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
         <div id="spinner" class="spinner"></div>
         <div class="next-risk" id="nextRisk">Next Risk: No risk yet</div>
@@ -123,7 +123,7 @@
             <strong>Last Risks:</strong>
             <ul id="riskList"></ul>
         </div>
-        <button class="generate-btn" onclick="generateSignal()">Generate Signal</button>
+        <button class="generate-btn" onclick="startAutoSignal()">Start Auto Predictions</button>
         <div class="information-box">
             JetX Purple Bot is a next-level prediction tool designed to maximize your wins and minimize your risks.  
             Built with cutting-edge algorithms and real-time data analysis, this bot provides you with highly accurate  
@@ -132,9 +132,12 @@
     </div>
 
     <script>
-        let bettingSite = "Africa Bet";
+        let bettingSite = "Spin City";  // Set betting site
+        document.getElementById("siteName").textContent = bettingSite;
+
         let riskQueue = [];
         let lastRisks = [];
+        let autoSignalActive = false;
 
         function updateClock() {
             let now = new Date();
@@ -153,7 +156,7 @@
                 let riskTime = Math.floor(Math.random() * 3) + 1;
                 riskQueue.push({ riskOdds, riskTime });
                 lastRisks.unshift(`${riskOdds}x`);
-                if (lastRisks.length > 5) {
+                if (lastRisks.length > 3) {
                     lastRisks.pop();
                 }
                 updateLastRisks();
@@ -185,19 +188,4 @@
 
         function generateSignal() {
             showSpinner();
-            let spinnerTime = Math.floor(Math.random() * (5000 - 3000) + 3000);
-
-            setTimeout(() => {
-                hideSpinner();
-                let newSignal = getRandomSignal();
-                document.getElementById("currentSignal").innerHTML = newSignal;
-                document.getElementById("currentSignal").style.opacity = '1';
-            }, spinnerTime);
-        }
-
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
-
-</body>
-</html>
+            let spinnerTime = Math.floor(Math.random() * (5000 - 3000) + 300
