@@ -1,0 +1,25 @@
+// server.js (Node.js Express example)
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/login', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Example check (you should validate against a database or auth service)
+    if (username === "user" && password === "password") {
+        res.send("Login successful");
+    } else {
+        res.send("Invalid credentials");
+    }
+});
+
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
+});
