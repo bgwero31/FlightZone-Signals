@@ -15,17 +15,26 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #2c3e50, #1a1a2e);
             color: white;
-            overflow-y: auto; /* Page is scrollable */
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
         /* Background Info */
         .background-info {
             width: 100%;
-            padding: 50px 20px;
+            padding: 100px 20px;
             text-align: center;
             background: rgba(0, 0, 0, 0.8);
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
         }
 
         .background-info h1 {
@@ -38,15 +47,19 @@
 
         .background-info p {
             font-size: 18px;
-            max-width: 700px;
+            max-width: 800px;
             margin: auto;
             line-height: 1.6;
             color: #dcdcdc;
         }
 
-        /* Floating Login Card */
+        /* Login Card - Floating */
         .login-container {
-            margin-top: 50px;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -125,27 +138,26 @@
 
         /* Footer */
         .footer {
-            margin-top: 50px;
             padding: 20px;
             text-align: center;
             background: #1a1a2e;
             color: white;
             font-size: 14px;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
     <!-- Background Information -->
     <div class="background-info">
-        <h1> AVIATOR PREDICTOR PRO</h1>
-        <p>🚀 The **most advanced** and **accurate** Aviator predictor in the game!</p>
-        <p>🔥 Our AI-based system analyzes real-time trends with over **90% accuracy** helping you **maximize your winnings** with calculated odds.</p>
-        <p>✅ Trusted by thousands of bettors worldwide, **B.JAY Predictor Pro** provides **real-time, precise signals** for all betting sites in the world
-            .</p>
-        <p>🔹 **AI-Powered Predictions** | 🔹 **Pro-Level Accuracy** | 🔹 **Instant Signals**</p>
+        <h1>B.JAY AVIATOR PREDICTOR PRO</h1>
+        <p>🚀 The <b>most advanced</b> and <b>accurate</b> Aviator predictor in the game!</p>
+        <p>🔥 Our AI-based system analyzes real-time trends with over <b>90% accuracy</b>, helping you <b>maximize your winnings</b> with calculated odds.</p>
+        <p>✅ Trusted by thousands of bettors worldwide, <b>B.JAY Predictor Pro</b> provides <b>real-time, precise signals</b> for all platforms in the world.</p>
+        <p>🔹 <b>AI-Powered Predictions</b> | 🔹 <b>Pro-Level Accuracy</b> | 🔹 <b>Instant Signals</b></p>
     </div>
 
-    <!-- Login Card -->
+    <!-- Floating Login Card -->
     <div class="login-container">
         <div class="login-card">
             <h2>Login to Access Predictions</h2>
