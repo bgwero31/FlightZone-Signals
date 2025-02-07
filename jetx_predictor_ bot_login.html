@@ -3,114 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Predictor Pro Login</title>
+    <title>Login - JetX Predictor Pro</title>
     <style>
         body {
-            background-color: #121212;
-            color: #fff;
             font-family: Arial, sans-serif;
+            background-color: #0f0c29;
+            color: #ffffff;
             text-align: center;
-            padding: 20px;
+            padding: 50px;
+        }
+
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #ff8533;
         }
 
         h1 {
-            color: #00ffcc;
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .login-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-            width: 300px;
-            margin: auto;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 16px;
-        }
-
-        .input-group input:focus {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 18px;
-            background: linear-gradient(45deg, #ff6f61, #f39c12, #8e44ad, #3498db);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.4s ease, transform 0.3s ease-in-out;
-        }
-
-        .submit-btn:hover {
-            transform: scale(1.05);
-            background: linear-gradient(45deg, #f39c12, #e74c3c, #9b59b6, #1abc9c);
-        }
-
-        .error-message {
-            color: #e74c3c;
-            display: none;
-            margin-top: 10px;
+            font-size: 2em;
         }
     </style>
 </head>
 <body>
-    <h1>JetX Predictor Pro</h1>
-    <div class="login-card">
-        <h2>Login to Access Predictions</h2>
-        <form id="loginForm">
-            <div class="input-group">
-                <label for="bettingSite">Select Betting Site</label>
-                <select id="bettingSite" name="bettingSite" required>
-                    <option value="AfricaBet">Africa Bet</option>
-                    <option value="MWOSBetting">MWOS Betting</option>
-                    <option value="SpinCity">Spin City</option>
-                    <option value="Zanzibet">Zanzibet</option>
-                    <option value="Bet247">Bet247</option>
-                    <option value="1Win">1Win</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="password">Enter Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-            <button type="submit" class="submit-btn">Login</button>
-            <p id="errorMessage" class="error-message">Incorrect password. Try again.</p>
-        </form>
-    </div>
+
+    <h1>JetX Predictor Pro Login</h1>
+
+    <form onsubmit="return validateLogin()">
+        <input type="text" id="username" placeholder="Username" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
+        function validateLogin() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
 
-            const password = document.getElementById('password').value;
-            const correctPassword = 'jetx2025'; // Example correct password
-            const signalPage = '/jetx_signals'; // Replace with actual signal page URL
+            // Example credentials (replace with your logic)
+            var validUsername = "user";
+            var validPassword = "password123";
 
-            if (password === correctPassword) {
-                window.location.href = signalPage;
+            if (username === validUsername && password === validPassword) {
+                window.location.href = "jetx_predictor_pro.html";  // Redirect to signal page after successful login
+                return false;  // Prevent form submission
             } else {
-                document.getElementById('errorMessage').style.display = 'block';
+                alert("Invalid credentials. Please try again.");
+                return false;
             }
-        });
+        }
     </script>
+
 </body>
 </html>
