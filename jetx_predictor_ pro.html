@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Predictor Pro</title>
+    <title>JetX Predictor Pro Login</title>
     <style>
         body {
             background-color: #121212;
@@ -12,60 +12,105 @@
             text-align: center;
             padding: 20px;
         }
+
         h1 {
             color: #00ffcc;
+            font-size: 36px;
+            margin-bottom: 20px;
         }
-        .prediction-box {
-            background: #1e1e1e;
-            padding: 15px;
-            margin: 10px auto;
-            width: 80%;
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 20px;
+            border: none;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
         }
-        .target {
-            color: #ffcc00;
+
+        .input-group input:focus {
+            background: rgba(255, 255, 255, 0.3);
         }
-        .time {
-            color: #66ff66;
-        }
-        .loading {
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
             font-size: 18px;
-            color: #ff6347;
+            background: linear-gradient(45deg, #ff6f61, #f39c12, #8e44ad, #3498db);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.4s ease, transform 0.3s ease-in-out;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #f39c12, #e74c3c, #9b59b6, #1abc9c);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            display: none;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-
     <h1>JetX Predictor Pro</h1>
-    <p class="loading">🚀 Predictions Loading...</p>
-
-    <div id="predictions"></div>
+    <div class="login-card">
+        <h2>Login to Access Predictions</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="bettingSite">Select Betting Site</label>
+                <select id="bettingSite" name="bettingSite" required>
+                    <option value="AfricaBet">Africa Bet</option>
+                    <option value="MWOSBetting">MWOS Betting</option>
+                    <option value="SpinCity">Spin City</option>
+                    <option value="Zanzibet">Zanzibet</option>
+                    <option value="Bet247">Bet247</option>
+                    <option value="1Win">1Win</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="password">Enter Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="submit-btn">Login</button>
+            <p id="errorMessage" class="error-message">Incorrect password. Try again.</p>
+        </form>
+    </div>
 
     <script>
-        function generatePredictions() {
-            const times = ["01:45", "01:46", "01:47", "01:48", "01:49"];
-            const targets = ["2.3x", "4.1x", "7.8x", "1.9x", "5.2x"];
-            const output = [];
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
 
-            // Randomly pick predictions for each cycle
-            for (let i = 0; i < times.length; i++) {
-                output.push(`
-                    <div class="prediction-box">
-                        <span class="time">${times[i]}</span> ➜ Target: <span class="target">${targets[i]}</span>
-                    </div>
-                `);
+            const password = document.getElementById('password').value;
+            const correctPassword = 'jetx2025'; // Example correct password
+            const signalPage = '/jetx_signals'; // Replace with actual signal page URL
+
+            if (password === correctPassword) {
+                window.location.href = signalPage;
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
             }
-
-            // Render the predictions
-            document.getElementById("predictions").innerHTML = output.join('');
-            document.querySelector(".loading").style.display = 'none';  // Hide the loading text after rendering
-        }
-
-        // Update predictions every 10 seconds
-        setInterval(generatePredictions, 10000);
-        generatePredictions(); // Initial call to load predictions
+        });
     </script>
-
 </body>
 </html>
