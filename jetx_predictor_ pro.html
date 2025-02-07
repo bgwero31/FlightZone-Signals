@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetX Predictor Pro</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #00ffcc;
+        }
+        .prediction-box {
+            background: #1e1e1e;
+            padding: 15px;
+            margin: 10px auto;
+            width: 80%;
+            border-radius: 8px;
+            font-size: 20px;
+        }
+        .target {
+            color: #ffcc00;
+        }
+        .time {
+            color: #66ff66;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>JetX Predictor Pro</h1>
+    <p>🚀 Next Predictions Loading...</p>
+
+    <div id="predictions"></div>
+
+    <script>
+        function generatePredictions() {
+            const times = ["01:45", "01:46", "01:47"];
+            const targets = ["2.3x", "4.1x", "7.8x"];
+            let output = "";
+
+            for (let i = 0; i < times.length; i++) {
+                output += `
+                    <div class="prediction-box">
+                        <span class="time">${times[i]}</span> ➜ Target: <span class="target">${targets[i]}</span>
+                    </div>
+                `;
+            }
+
+            document.getElementById("predictions").innerHTML = output;
+        }
+
+        setInterval(generatePredictions, 5000);
+        generatePredictions();
+    </script>
+
+</body>
+</html>
