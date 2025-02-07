@@ -15,24 +15,27 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #2c3e50, #1a1a2e);
             color: white;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            padding-bottom: 60px; /* Space for footer */
+            justify-content: center;
         }
 
-        /* Background Info */
-        .background-info {
+        /* Scrollable Background Info */
+        .scroll-container {
             width: 100%;
-            padding: 50px 20px;
+            height: 100vh;
+            overflow-y: auto;
+            padding-bottom: 100px;
             text-align: center;
+        }
+
+        .background-info {
+            padding: 50px 20px;
             background: rgba(0, 0, 0, 0.7);
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
+            color: #dcdcdc;
         }
 
         .background-info h1 {
@@ -51,19 +54,14 @@
             max-width: 800px;
             margin: auto;
             line-height: 1.8;
-            color: #dcdcdc;
         }
 
-        /* Floating Login Card */
+        /* Fixed Login Card */
         .login-container {
-            position: absolute;
-            top: 60%; /* Drop the card lower */
+            position: fixed;
+            top: 50%;
             left: 50%;
-            transform: translate(-50%, -60%);
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            transform: translate(-50%, -50%);
             z-index: 10;
         }
 
@@ -76,7 +74,6 @@
             width: 350px;
             text-align: center;
             transition: transform 0.3s ease-in-out;
-            position: relative;
         }
 
         .login-card:hover {
@@ -141,34 +138,34 @@
             margin-top: 10px;
         }
 
-        /* Footer */
+        /* Fixed Footer */
         .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
             padding: 20px;
             text-align: center;
             background: #1a1a2e;
             color: white;
             font-size: 14px;
-            margin-top: 30px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
             z-index: 1;
         }
     </style>
 </head>
 <body>
-    <!-- Background Information -->
-    <div class="background-info">
-        <h1>AVIATOR PREDICTOR PRO</h1>
-        <p>🚀 The <b>most advanced</b> and <b>accurate</b> Aviator predictor in the game!</p>
-        <p>🔥 Our AI-based system analyzes real-time trends with over <b>90% accuracy</b>, helping you <b>maximize your winnings</b> with calculated odds.</p>
-        <p>✅ Trusted by thousands of bettors worldwide, <b>B.JAY Predictor Pro</b> provides <b>real-time, precise signals</b> for all betting platforms.</p>
-        <p>🔹 <b>AI-Powered Predictions</b> | 🔹 <b>Pro-Level Accuracy</b> | 🔹 <b>Instant Signals</b></p>
-        <br>
-        <br>
+    <!-- Scrollable Background -->
+    <div class="scroll-container">
+        <div class="background-info">
+            <h1>AVIATOR PREDICTOR PRO</h1>
+            <p>🚀 The <b>most advanced</b> and <b>accurate</b> Aviator predictor in the game!</p>
+            <p>🔥 Our AI-based system analyzes real-time trends with over <b>90% accuracy</b>, helping you <b>maximize your winnings</b> with calculated odds.</p>
+            <p>✅ Trusted by thousands of bettors worldwide, <b>B.JAY Predictor Pro</b> provides <b>real-time, precise signals</b> for all betting platforms.</p>
+            <p>🔹 <b>AI-Powered Predictions</b> | 🔹 <b>Pro-Level Accuracy</b> | 🔹 <b>Instant Signals</b></p>
+            <br><br>
+        </div>
     </div>
 
-    <!-- Floating Login Card -->
+    <!-- Fixed Login Card -->
     <div class="login-container">
         <div class="login-card">
             <h2>Login to Access Predictions</h2>
@@ -194,7 +191,7 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Fixed Footer -->
     <div class="footer">
         &copy; 2025 B.JAY FlightZone Signals. All Rights Reserved.
     </div>
