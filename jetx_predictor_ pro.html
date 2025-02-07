@@ -29,34 +29,42 @@
         .time {
             color: #66ff66;
         }
+        .loading {
+            font-size: 18px;
+            color: #ff6347;
+        }
     </style>
 </head>
 <body>
 
     <h1>JetX Predictor Pro</h1>
-    <p>🚀 Next Predictions Loading...</p>
+    <p class="loading">🚀 Predictions Loading...</p>
 
     <div id="predictions"></div>
 
     <script>
         function generatePredictions() {
-            const times = ["01:45", "01:46", "01:47"];
-            const targets = ["2.3x", "4.1x", "7.8x"];
-            let output = "";
+            const times = ["01:45", "01:46", "01:47", "01:48", "01:49"];
+            const targets = ["2.3x", "4.1x", "7.8x", "1.9x", "5.2x"];
+            const output = [];
 
+            // Randomly pick predictions for each cycle
             for (let i = 0; i < times.length; i++) {
-                output += `
+                output.push(`
                     <div class="prediction-box">
                         <span class="time">${times[i]}</span> ➜ Target: <span class="target">${targets[i]}</span>
                     </div>
-                `;
+                `);
             }
 
-            document.getElementById("predictions").innerHTML = output;
+            // Render the predictions
+            document.getElementById("predictions").innerHTML = output.join('');
+            document.querySelector(".loading").style.display = 'none';  // Hide the loading text after rendering
         }
 
-        setInterval(generatePredictions, 5000);
-        generatePredictions();
+        // Update predictions every 10 seconds
+        setInterval(generatePredictions, 10000);
+        generatePredictions(); // Initial call to load predictions
     </script>
 
 </body>
