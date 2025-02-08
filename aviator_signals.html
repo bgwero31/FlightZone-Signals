@@ -3,56 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Purple Bot</title>
+    <title>Aviator Purple Bot - 2030 Vision</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
+            background: url('https://www.example.com/2030-vision-background.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
+            margin: 0;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         .container {
             max-width: 400px;
             margin: auto;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 480px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.6);
+            height: 520px;
+            background: linear-gradient(135deg, #00bcd4, #009688, #004d40);
+            opacity: 0;
+            animation: fadeIn 2s 1.5s forwards;
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 30px;
             text-transform: uppercase;
             margin-bottom: 10px;
             color: #9B4DFF;
+            text-shadow: 0 0 10px #9B4DFF, 0 0 20px #9B4DFF, 0 0 30px #9B4DFF;
+            animation: neonGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            0% {
+                text-shadow: 0 0 10px #9B4DFF, 0 0 20px #9B4DFF, 0 0 30px #9B4DFF;
+            }
+            50% {
+                text-shadow: 0 0 20px #FF00FF, 0 0 30px #FF00FF, 0 0 40px #FF00FF;
+            }
+            100% {
+                text-shadow: 0 0 10px #9B4DFF, 0 0 20px #9B4DFF, 0 0 30px #9B4DFF;
+            }
         }
 
         #clock {
-            font-size: 18px;
+            font-size: 20px;
             margin-bottom: 15px;
             color: #FFD700;
+            font-weight: bold;
+            animation: neonGlow 1.5s ease-in-out infinite alternate;
         }
 
         .betting-site {
             font-size: 18px;
             margin-bottom: 10px;
             color: #FFD700;
+            animation: neonGlow 1.5s ease-in-out infinite alternate;
         }
 
         .signal {
             font-size: 22px;
             font-weight: bold;
-            padding: 10px;
+            padding: 15px;
             background: #ff4d4d;
             border-radius: 8px;
             display: inline-block;
             margin: 10px;
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
+            box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.5);
+            animation: fadeIn 2s 3s forwards;
         }
 
         .next-risk {
@@ -77,6 +108,24 @@
             border-radius: 8px;
             width: 100%;
             margin-top: 15px;
+            transition: background 0.3s ease;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .generate-btn:hover {
+            background: #45a049;
         }
 
         .spinner {
@@ -103,11 +152,21 @@
             display: none;
         }
 
+        .footer {
+            margin-top: 20px;
+            color: #B0B0B0;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #9B4DFF;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
 
-    <h1>JetX Purple Bot</h1>
+    <h1>Aviator Purple Bot - 2030 Vision</h1>
     <div id="clock"></div>
     <div class="container">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
@@ -117,6 +176,11 @@
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
         <button class="generate-btn" onclick="generateSignal()" id="generateBtn">Generate Signal</button>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Aviator Bot - All rights reserved. <br>
+        <a href="https://www.example.com/terms">Terms & Conditions</a> | <a href="https://www.example.com/privacy">Privacy Policy</a></p>
     </div>
 
     <script>
