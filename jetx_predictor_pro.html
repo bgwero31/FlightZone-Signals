@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - JetX Predictor Pro</title>
+    <title>JetX Predictor Pro - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #121212;
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
             padding: 50px;
         }
         h1 {
+            font-family: 'Orbitron', sans-serif;
             color: #00ffcc;
+            text-transform: uppercase;
         }
-        .login-box {
-            background: #1e1e1e;
-            padding: 20px;
-            width: 300px;
+        .mystery-card {
+            background: linear-gradient(135deg, #1e1e1e, #292929);
+            width: 350px;
             margin: auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px #00ffcc;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+        .mystery-card:hover {
+            transform: scale(1.05);
+        }
+        .mystery-header {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #00ffcc;
+            color: #121212;
+            padding: 10px;
             border-radius: 8px;
         }
         input {
@@ -28,6 +47,10 @@
             margin: 10px 0;
             border: none;
             border-radius: 5px;
+            background: #222;
+            color: #fff;
+            text-align: center;
+            font-size: 18px;
         }
         .btn {
             background: #00ffcc;
@@ -36,34 +59,60 @@
             width: 100%;
             border: none;
             border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
+            transition: background 0.3s;
         }
         .btn:hover {
             background: #00cc99;
+        }
+        .links {
+            margin-top: 20px;
+        }
+        .links a {
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+        .rights {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #999;
         }
     </style>
 </head>
 <body>
 
     <h1>JetX Predictor Pro</h1>
-    <div class="login-box">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button class="btn" onclick="login()">Login</button>
+    <p>Unlock the **Most Accurate** JetX Predictions!</p>
+
+    <div class="mystery-card">
+        <div class="mystery-header">Access Granted?</div>
+        <input type="text" id="username" placeholder="🔑 Enter Your Code">
+        <input type="password" id="password" placeholder="🕵️ Secret Key">
+        <button class="btn" onclick="login()">Decrypt</button>
         <p id="error" style="color: red;"></p>
     </div>
+
+    <div class="links">
+        <p>📢 Join Our VIP Communities:</p>
+        <a href="https://t.me/FlightZoneSignals" target="_blank">🚀 Telegram Group</a>
+        <a href="https://wa.me/263774309795" target="_blank">📲 WhatsApp</a>
+    </div>
+
+    <p class="rights">© 2025 B.JAY JetX Predictor Pro. All Rights Reserved.</p>
 
     <script>
         function login() {
             const user = document.getElementById("username").value;
             const pass = document.getElementById("password").value;
 
-            // Dummy username & password (You can replace this with a real authentication system)
             if (user === "admin" && pass === "1234") {
-                window.location.href = "jetx_predictor_pro.html"; // Redirect on successful login
+                window.location.href = "jetx_predictor_pro.html";
             } else {
-                document.getElementById("error").innerText = "Invalid username or password!";
+                document.getElementById("error").innerText = "🔒 Access Denied!";
             }
         }
     </script>
