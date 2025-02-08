@@ -6,65 +6,64 @@
     <title>Login - JetX Predictor Pro</title>
     <style>
         body {
+            background-color: #121212;
+            color: white;
             font-family: Arial, sans-serif;
-            background-color: #0f0c29;
-            color: #ffffff;
             text-align: center;
             padding: 50px;
         }
-
-        input[type="text"], input[type="password"] {
-            padding: 10px;
-            margin: 10px;
-            width: 250px;
-            border: none;
-            border-radius: 5px;
-        }
-
-        button {
-            padding: 12px 25px;
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            background-color: #ff8533;
-        }
-
         h1 {
-            font-size: 2em;
+            color: #00ffcc;
+        }
+        .login-box {
+            background: #1e1e1e;
+            padding: 20px;
+            width: 300px;
+            margin: auto;
+            border-radius: 8px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn {
+            background: #00ffcc;
+            color: black;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #00cc99;
         }
     </style>
 </head>
 <body>
 
-    <h1>JetX Predictor Pro Login</h1>
-
-    <form onsubmit="return validateLogin()">
-        <input type="text" id="username" placeholder="Username" required><br><br>
-        <input type="password" id="password" placeholder="Password" required><br><br>
-        <button type="submit">Login</button>
-    </form>
+    <h1>JetX Predictor Pro</h1>
+    <div class="login-box">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button class="btn" onclick="login()">Login</button>
+        <p id="error" style="color: red;"></p>
+    </div>
 
     <script>
-        function validateLogin() {
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
+        function login() {
+            const user = document.getElementById("username").value;
+            const pass = document.getElementById("password").value;
 
-            // Example credentials (replace with your logic)
-            var validUsername = "user";
-            var validPassword = "password123";
-
-            if (username === validUsername && password === validPassword) {
-                window.location.href = "jetx_predictor_pro.html";  // Redirect to signal page after successful login
-                return false;  // Prevent form submission
+            // Dummy username & password (You can replace this with a real authentication system)
+            if (user === "admin" && pass === "1234") {
+                window.location.href = "jetx_predictor_pro.html"; // Redirect on successful login
             } else {
-                alert("Invalid credentials. Please try again.");
-                return false;
+                document.getElementById("error").innerText = "Invalid username or password!";
             }
         }
     </script>
