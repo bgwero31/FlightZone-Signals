@@ -54,8 +54,17 @@
             color: #00ffcc;
             text-transform: uppercase;
             letter-spacing: 5px;
-            margin-top: 50px;
+            margin-top: 20px;
             animation: slideInLeft 1s ease-out forwards;
+        }
+
+        /* Clock styles */
+        .clock {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #ffcc00;
+            margin-top: 10px;
+            letter-spacing: 3px;
         }
 
         .signal-box {
@@ -67,7 +76,7 @@
             border-radius: 12px;
             box-shadow: 0px 0px 15px #00ffcc;
             display: flex;
-            flex-direction: column; /* Changed to column for top to bottom */
+            flex-direction: column; /* Top to Bottom */
             align-items: center;
             transition: transform 0.3s;
             animation: slideInBox 1s ease-out forwards;
@@ -167,6 +176,9 @@
     <!-- Raindrop effect -->
     <div class="rain" id="rain"></div>
 
+    <!-- Clock -->
+    <div class="clock" id="clock"></div>
+
     <h1>Aviator Master Predictor Pro - CodeX Signals</h1>
     <p>Decrypt the latest signal & place your bet! 🚀</p>
 
@@ -182,6 +194,7 @@
     <script>
         let countdownTimer;
         let timeLeft;
+        let clockTimer;
 
         function getRandomOdds() {
             return (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
@@ -204,19 +217,38 @@
         }
 
         function startCountdown() {
-            document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
-            countdownTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
+            const countdownSequence = [];
+            const sequenceLength = 5;
+            for (let i = 0; i < sequenceLength; i++) {
+                countdownSequence.push(Math.floor(Math.random() * (60 - 10 + 1)) + 10); // Random countdown times between 10 and 60
+            }
+            countdownSequence.push(0); // Add the final zero to end the countdown
 
-                if (timeLeft <= 0) {
+            let index = 0;
+            document.getElementById("countdown-timer").innerText = `Next signal in: ${countdownSequence[index]}s`;
+
+            countdownTimer = setInterval(() => {
+                index++;
+                if (index < countdownSequence.length) {
+                    document.getElementById("countdown-timer").innerText = `Next signal in: ${countdownSequence[index]}s`;
+                } else {
                     clearInterval(countdownTimer);
-                    document.getElementById("encrypted-signal").innerText = "█ █ █ █ █ █";
-                    document.getElementById("decoded-signal").innerText = "";
                     setTimeout(startCountdown, 10000); // Wait 10 seconds before restarting countdown
                 }
             }, 1000);
         }
+
+        // Update clock every second
+        function updateClock() {
+            const currentTime = new Date();
+            const hours = currentTime.getHours().toString().padStart(2, '0');
+            const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+            const seconds = currentTime.getSeconds().toString().padStart(2, '0');
+            document.getElementById("clock").innerText = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Call the update clock function every second
+        setInterval(updateClock, 1000);
 
         // Create raindrop effect
         function generateRain() {
