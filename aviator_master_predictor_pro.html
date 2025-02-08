@@ -7,63 +7,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #121212;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
             color: white;
             font-family: 'Poppins', sans-serif;
-            text-align: left;
-            padding: 50px;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px #00ffcc;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0px 0px 25px #00ffcc;
         }
         h1 {
             font-family: 'Orbitron', sans-serif;
             color: #00ffcc;
             text-transform: uppercase;
+            margin-bottom: 10px;
         }
-        .mystery-card {
-            background: linear-gradient(135deg, #1e1e1e, #292929);
-            width: 100%;
-            max-width: 450px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 15px #00ffcc;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
+        p {
+            font-size: 15px;
+            color: #ddd;
+        }
+        /* Full width vertical layout */
+        .field-group {
             display: flex;
             flex-direction: column;
-            align-items: left;
-        }
-        .mystery-card:hover {
-            transform: scale(1.05);
-        }
-        .mystery-header {
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            background: #00ffcc;
-            color: #121212;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        input, select {
             width: 100%;
-            padding: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        select, input {
+            width: 100%;
+            padding: 12px;
             margin: 10px 0;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             background: #222;
             color: #fff;
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
+        }
+        select {
+            cursor: pointer;
         }
         .btn {
             background: #00ffcc;
             color: black;
-            padding: 10px;
+            padding: 12px;
             width: 100%;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 18px;
             cursor: pointer;
             transition: background 0.3s;
@@ -72,76 +78,69 @@
             background: #00cc99;
         }
         .links {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: left;
+            margin-top: 15px;
         }
         .links a {
             color: #00ffcc;
             text-decoration: none;
             font-weight: bold;
+            display: block;
             margin-top: 5px;
         }
         .rights {
-            margin-top: 40px;
-            font-size: 14px;
+            margin-top: 30px;
+            font-size: 13px;
             color: #999;
         }
     </style>
 </head>
 <body>
 
-    <h1>Aviator Master Predictor Pro</h1>
-    <p>Unlock the <b>Most Accurate</b> JetX Predictions!</p>
+    <div class="container">
+        <h1>Aviator Master Predictor Pro</h1>
+        <p>Unlock the <b>Most Accurate</b> JetX Predictions!</p>
 
-    <div class="mystery-card">
-        <div class="mystery-header">Access the Future 🚀</div>
-        
-        <!-- Betting Site (Dropdown) -->
-        <select id="bettingSite">
-            <option value="" disabled selected>🎰 Select Betting Site</option>
-            <option value="AfricaBet">Africa Bet</option>
-            <option value="MWOS">MWOS Betting</option>
-            <option value="SpinCity">Spin City</option>
-            <option value="Zanzibet">Zanzibet</option>
-            <option value="Bet247">Bet247</option>
-            <option value="1Win">1Win</option>
-        </select>
+        <!-- VERTICAL Layout for Betting Site + Secret Code + Log Key -->
+        <div class="field-group">
+            <select id="bettingSite">
+                <option value="" disabled selected>🎰 Select Betting Site</option>
+                <option value="AfricaBet">Africa Bet</option>
+                <option value="MWOS">MWOS Betting</option>
+                <option value="SpinCity">Spin City</option>
+                <option value="Zanzibet">Zanzibet</option>
+                <option value="Bet247">Bet247</option>
+                <option value="1Win">1Win</option>
+            </select>
 
-        <!-- Secret Code (Input) -->
-        <input type="text" id="username" placeholder="🔑 Enter Secret Code">
+            <input type="text" id="username" placeholder="🔑 Enter Secret Code" value="AVIATOR2025">
 
-        <!-- Log Key (Password Input) -->
-        <input type="password" id="password" placeholder="🕵️ Enter Log Key">
+            <input type="password" id="password" placeholder="🕵️ Enter Log Key" value="FLIGHT-X91">
+        </div>
 
         <button class="btn" onclick="login()">Decrypt</button>
         <p id="error" style="color: red;"></p>
-    </div>
 
-    <div class="links">
-        <p>📢 Join Our VIP Communities:</p>
-        <a href="https://t.me/FlightZoneSignals" target="_blank">🚀 Telegram Group</a>
-        <a href="https://wa.me/263774309795" target="_blank">📲 WhatsApp</a>
-    </div>
+        <div class="links">
+            <p>📢 Join Our VIP Communities:</p>
+            <a href="https://t.me/FlightZoneSignals" target="_blank">🚀 Telegram Group</a>
+            <a href="https://wa.me/263774309795" target="_blank">📲 WhatsApp</a>
+        </div>
 
-    <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
+        <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
+    </div>
 
     <script>
         function login() {
             const site = document.getElementById("bettingSite").value;
             const user = document.getElementById("username").value;
             const pass = document.getElementById("password").value;
+            const error = document.getElementById("error");
 
-            if (!site) {
-                document.getElementById("error").innerText = "⚠️ Select a Betting Site!";
-                return;
-            }
-
-            if (user === "AVIATOR2025" && pass === "FLIGHT-X91") {
-                window.location.href = "aviator_master_predictor_pro_signals.html";
+            if (site === "" || user === "" || pass === "") {
+                error.textContent = "⚠️ All fields are required!";
             } else {
-                document.getElementById("error").innerText = "🔒 Access Denied!";
+                error.textContent = "";
+                alert("✅ Decryption Successful!");
             }
         }
     </script>
