@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Predictor Pro - Login</title>
+    <title>Aviator Predictor Pro - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -28,6 +28,9 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .mystery-card:hover {
             transform: scale(1.05);
@@ -40,9 +43,11 @@
             color: #121212;
             padding: 10px;
             border-radius: 8px;
+            width: 100%;
+            text-align: center;
         }
         input, select {
-            width: 90%;
+            width: 100%;
             padding: 10px;
             margin: 10px 0;
             border: none;
@@ -68,12 +73,14 @@
         }
         .links {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .links a {
             color: #00ffcc;
             text-decoration: none;
             font-weight: bold;
-            display: block;
             margin-top: 5px;
         }
         .rights {
@@ -85,21 +92,27 @@
 </head>
 <body>
 
-    <h1>JetX Predictor Pro</h1>
+    <h1>Aviator Predictor Pro</h1>
     <p>Unlock the <b>Most Accurate</b> JetX Predictions!</p>
 
     <div class="mystery-card">
         <div class="mystery-header">Access the Future 🚀</div>
-        <select id="bettingSite">
-            <option value="" disabled selected>🎰 Select Betting Site</option>
-            <option value="AfricaBet">Africa Bet</option>
-            <option value="MWOS">MWOS Betting</option>
-            <option value="SpinCity">Spin City</option>
-            <option value="Zanzibet">Zanzibet</option>
-            <option value="Bet247">Bet247</option>
-            <option value="1Win">1Win</option>
-        </select>
-        <input type="text" id="username" placeholder="🔑 Enter Your Code">
+        
+        <!-- Horizontal Layout -->
+        <div style="width: 100%; display: flex; justify-content: space-between;">
+            <select id="bettingSite" style="width: 48%;">
+                <option value="" disabled selected>🎰 Select Betting Site</option>
+                <option value="AfricaBet">Africa Bet</option>
+                <option value="MWOS">MWOS Betting</option>
+                <option value="SpinCity">Spin City</option>
+                <option value="Zanzibet">Zanzibet</option>
+                <option value="Bet247">Bet247</option>
+                <option value="1Win">1Win</option>
+            </select>
+
+            <input type="text" id="username" placeholder="🔑 Enter Your Code" style="width: 48%;">
+        </div>
+
         <input type="password" id="password" placeholder="🕵️ Secret Key">
         <button class="btn" onclick="login()">Decrypt</button>
         <p id="error" style="color: red;"></p>
@@ -111,7 +124,7 @@
         <a href="https://wa.me/263774309795" target="_blank">📲 WhatsApp</a>
     </div>
 
-    <p class="rights">© 2025 JetX Predictor Pro. All Rights Reserved.</p>
+    <p class="rights">© 2025 Aviator Predictor Pro. All Rights Reserved.</p>
 
     <script>
         function login() {
@@ -124,8 +137,8 @@
                 return;
             }
 
-            if (user === "JETX-MASTER" && pass === "FLIGHT-X91") {
-                window.location.href = "jetx_predictor_pro_signals.html";
+            if (user === "AVIATOR-MASTER" && pass === "FLIGHT-X91") {
+                window.location.href = "aviator_predictor_pro_signals.html";
             } else {
                 document.getElementById("error").innerText = "🔒 Access Denied!";
             }
