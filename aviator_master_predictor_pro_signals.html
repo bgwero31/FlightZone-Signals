@@ -168,11 +168,11 @@
 
             setTimeout(() => {
                 startCountdown();
-            }, 15000); // 15 seconds waiting time before countdown starts
+            }, 10000); // 10 seconds waiting time before countdown starts
         }
 
         function startCountdown() {
-            countdownTime = Math.floor(Math.random() * (60 - 30 + 1)) + 30;
+            countdownTime = Math.floor(Math.random() * (35 - 20 + 1)) + 35;
             document.getElementById("countdown-timer").innerText = `Next signal in: ${countdownTime}s`;
 
             countdownInterval = setInterval(() => {
@@ -209,7 +209,7 @@
 
                 setTimeout(() => {
                     resetSignal();
-                }, 15000); // 15 seconds waiting time before next countdown
+                }, 10000); // 10 seconds waiting time before next countdown
             }, 2000);
         }
 
