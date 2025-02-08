@@ -55,17 +55,20 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             margin-top: 50px;
-            animation: slideIn 1s ease-out forwards;
+            animation: slideInLeft 1s ease-out forwards;
         }
 
         .signal-box {
             background: linear-gradient(135deg, #121212, #292929);
             padding: 30px;
-            width: 350px;
-            margin: 0 auto;
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
             border-radius: 12px;
             box-shadow: 0px 0px 15px #00ffcc;
-            position: relative;
+            display: flex;
+            flex-direction: column; /* Changed to column for top to bottom */
+            align-items: center;
             transition: transform 0.3s;
             animation: slideInBox 1s ease-out forwards;
         }
@@ -125,25 +128,25 @@
         }
 
         /* Animation effects */
-        @keyframes slideIn {
+        @keyframes slideInLeft {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateX(-100%);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateX(0);
             }
         }
 
         @keyframes slideInBox {
             from {
                 opacity: 0;
-                transform: translateX(-20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateY(0);
             }
         }
 
@@ -177,6 +180,9 @@
     <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
 
     <script>
+        let countdownTimer;
+        let timeLeft;
+
         function getRandomOdds() {
             return (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
         }
@@ -187,25 +193,27 @@
 
         function decryptSignal() {
             document.getElementById("encrypted-signal").innerText = "🔓 Decrypting...";
+            clearInterval(countdownTimer);  // Stop the countdown during decryption
+
             setTimeout(() => {
                 document.getElementById("encrypted-signal").innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
                 document.getElementById("decoded-signal").innerText = "🚀 Signal: " + getRandomOdds();
-                setTimeout(startCountdown, 10000);  // 10s delay before countdown starts
+                timeLeft = 10;  // Reset countdown to 10 seconds
+                startCountdown();  // Restart countdown after decryption
             }, 2000);
         }
 
         function startCountdown() {
-            let timeLeft = getRandomCountdownTime();
             document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
-            let timer = setInterval(() => {
+            countdownTimer = setInterval(() => {
                 timeLeft--;
                 document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
 
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
+                    clearInterval(countdownTimer);
                     document.getElementById("encrypted-signal").innerText = "█ █ █ █ █ █";
                     document.getElementById("decoded-signal").innerText = "";
-                    setTimeout(startCountdown, 10000); // 10s delay before next signal
+                    setTimeout(startCountdown, 10000); // Wait 10 seconds before restarting countdown
                 }
             }, 1000);
         }
@@ -229,6 +237,7 @@
         }
 
         generateRain(); // Generate raindrops on page load
+        timeLeft = getRandomCountdownTime(); // Initialize countdown time
         startCountdown(); // Start countdown immediately
 
     </script>
