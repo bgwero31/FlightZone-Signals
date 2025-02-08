@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Predictor Pro - Login</title>
+    <title>Aviator Master Predictor Pro - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #121212;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
             color: white;
             font-family: 'Poppins', sans-serif;
-            text-align: center;
+            text-align: left;
             padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 400px;
+            background: linear-gradient(135deg, #1e1e1e, #292929);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 20px #00ffcc;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+        .container:hover {
+            transform: scale(1.03);
         }
         h1 {
             font-family: 'Orbitron', sans-serif;
             color: #00ffcc;
             text-transform: uppercase;
-        }
-        .mystery-card {
-            background: linear-gradient(135deg, #1e1e1e, #292929);
-            width: 350px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 15px #00ffcc;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .mystery-card:hover {
-            transform: scale(1.05);
+            text-align: left;
         }
         .mystery-header {
             font-size: 18px;
@@ -43,24 +44,23 @@
             color: #121212;
             padding: 10px;
             border-radius: 8px;
-            width: 100%;
             text-align: center;
         }
         input, select {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 12px;
+            margin: 12px 0;
             border: none;
             border-radius: 5px;
             background: #222;
             color: #fff;
-            text-align: center;
             font-size: 18px;
+            text-align: center;
         }
         .btn {
             background: #00ffcc;
             color: black;
-            padding: 10px;
+            padding: 12px;
             width: 100%;
             border: none;
             border-radius: 5px;
@@ -73,58 +73,55 @@
         }
         .links {
             margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
         }
         .links a {
             color: #00ffcc;
             text-decoration: none;
             font-weight: bold;
+            display: block;
             margin-top: 5px;
         }
         .rights {
             margin-top: 40px;
             font-size: 14px;
             color: #999;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <h1>Aviator Predictor Pro</h1>
-    <p>Unlock the <b>Most Accurate</b> JetX Predictions!</p>
+    <div class="container">
+        <h1>Aviator Master Predictor Pro</h1>
+        <p>Unlock the <b>Most Accurate</b> JetX Predictions!</p>
 
-    <div class="mystery-card">
         <div class="mystery-header">Access the Future 🚀</div>
-        
-        <!-- Horizontal Layout -->
-        <div style="width: 100%; display: flex; justify-content: space-between;">
-            <select id="bettingSite" style="width: 48%;">
-                <option value="" disabled selected>🎰 Select Betting Site</option>
-                <option value="AfricaBet">Africa Bet</option>
-                <option value="MWOS">MWOS Betting</option>
-                <option value="SpinCity">Spin City</option>
-                <option value="Zanzibet">Zanzibet</option>
-                <option value="Bet247">Bet247</option>
-                <option value="1Win">1Win</option>
-            </select>
 
-            <input type="text" id="username" placeholder="🔑 Enter Your Code" style="width: 48%;">
-        </div>
+        <select id="bettingSite">
+            <option value="" disabled selected>🎰 Select Betting Site</option>
+            <option value="AfricaBet">Africa Bet</option>
+            <option value="MWOS">MWOS Betting</option>
+            <option value="SpinCity">Spin City</option>
+            <option value="Zanzibet">Zanzibet</option>
+            <option value="Bet247">Bet247</option>
+            <option value="1Win">1Win</option>
+        </select>
 
-        <input type="password" id="password" placeholder="🕵️ Secret Key">
+        <input type="text" id="username" placeholder="🔑 Secret Code">
+        <input type="password" id="password" placeholder="🕵️ Log Key">
+
         <button class="btn" onclick="login()">Decrypt</button>
         <p id="error" style="color: red;"></p>
-    </div>
 
-    <div class="links">
-        <p>📢 Join Our VIP Communities:</p>
-        <a href="https://t.me/FlightZoneSignals" target="_blank">🚀 Telegram Group</a>
-        <a href="https://wa.me/263774309795" target="_blank">📲 WhatsApp</a>
-    </div>
+        <div class="links">
+            <p>📢 Join Our VIP Communities:</p>
+            <a href="https://t.me/FlightZoneSignals" target="_blank">🚀 Telegram Group</a>
+            <a href="https://wa.me/263774309795" target="_blank">📲 WhatsApp</a>
+        </div>
 
-    <p class="rights">© 2025 Aviator Predictor Pro. All Rights Reserved.</p>
+        <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
+    </div>
 
     <script>
         function login() {
@@ -138,7 +135,7 @@
             }
 
             if (user === "AVIATOR-MASTER" && pass === "FLIGHT-X91") {
-                window.location.href = "aviator_predictor_pro_signals.html";
+                window.location.href = "aviator_master_predictor_pro_signals.html";
             } else {
                 document.getElementById("error").innerText = "🔒 Access Denied!";
             }
