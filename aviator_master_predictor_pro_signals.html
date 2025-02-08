@@ -84,40 +84,46 @@
         <p class="code-text" id="encrypted-signal">█ █ █ █ █ █</p>
         <button class="decrypt-btn" onclick="decryptSignal()">Decrypt</button>
         <p class="decoded-signal" id="decoded-signal"></p>
-        <p class="countdown" id="countdown-timer">Next signal in: 10s</p>
+        <p class="countdown" id="countdown-timer">Next signal in: --s</p>
     </div>
 
     <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
 
     <script>
-        let signals = ["1.50X", "2.20X", "3.00X", "4.10X", "5.50X", "7.20X", "10.00X"];
-        let currentIndex = 0;
+        function getRandomOdds() {
+            return (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
+        }
+
+        function getRandomCountdownTime() {
+            return Math.floor(Math.random() * (60 - 15 + 1)) + 15;
+        }
 
         function decryptSignal() {
             document.getElementById("encrypted-signal").innerText = "🔓 Decrypting...";
             setTimeout(() => {
                 document.getElementById("encrypted-signal").innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
-                document.getElementById("decoded-signal").innerText = "🚀 Signal: " + signals[currentIndex];
-                currentIndex = (currentIndex + 1) % signals.length;
+                document.getElementById("decoded-signal").innerText = "🚀 Signal: " + getRandomOdds();
+                setTimeout(startCountdown, 10000);  // 10s delay before countdown starts
             }, 2000);
         }
 
-        function countdown() {
-            let timeLeft = 10;
+        function startCountdown() {
+            let timeLeft = getRandomCountdownTime();
+            document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
             let timer = setInterval(() => {
-                document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
                 timeLeft--;
+                document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
 
-                if (timeLeft < 0) {
+                if (timeLeft <= 0) {
                     clearInterval(timer);
                     document.getElementById("encrypted-signal").innerText = "█ █ █ █ █ █";
                     document.getElementById("decoded-signal").innerText = "";
-                    countdown();
+                    setTimeout(startCountdown, 10000); // 10s delay before next signal
                 }
             }, 1000);
         }
 
-        countdown();
+        startCountdown();
     </script>
 
 </body>
