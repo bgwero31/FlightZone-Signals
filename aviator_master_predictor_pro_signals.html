@@ -16,6 +16,8 @@
             height: 100vh;
             overflow: hidden;
             position: relative;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
         }
 
         h1 {
@@ -24,6 +26,9 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             margin-top: 20px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: slideFadeIn 1.2s ease-out 0.5s forwards;
         }
 
         .signal-box {
@@ -38,6 +43,9 @@
             flex-direction: column;
             align-items: center;
             position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideFadeIn 1.2s ease-out 1s forwards;
         }
 
         .code-text {
@@ -61,6 +69,9 @@
             border-radius: 5px;
             font-size: 18px;
             cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideFadeIn 1.2s ease-out 1.2s forwards;
         }
 
         .decrypt-btn:hover {
@@ -86,47 +97,43 @@
             color: #999;
         }
 
-        /* Smooth Raindrop Effect */
-        .rain {
+        /* Raindrop effect */
+        .raindrop {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .drop {
-            position: absolute;
-            bottom: 100%;
-            width: 2px;
+            width: 6px;
             height: 15px;
-            background: #00ffcc;
-            opacity: 0.8;
+            background-color: #00ffcc;
+            opacity: 0.7;
+            border-radius: 50%;
             animation: fall linear infinite;
         }
 
         @keyframes fall {
+            from {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
             to {
                 transform: translateY(100vh);
+                opacity: 0;
             }
         }
 
-        /* Futuristic Glitch Transition */
-        .glitch {
-            font-size: 22px;
-            font-weight: bold;
-            color: #ffcc00;
-            margin-top: 20px;
-            animation: glitch 0.3s infinite;
+        /* Futuristic Transition Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        @keyframes glitch {
-            0% { transform: translateX(0); }
-            20% { transform: translateX(-2px); }
-            40% { transform: translateX(2px); }
-            60% { transform: translateX(-2px); }
-            80% { transform: translateX(2px); }
-            100% { transform: translateX(0); }
+        @keyframes slideFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -143,8 +150,6 @@
     </div>
 
     <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
-
-    <div class="rain"></div>
 
     <script>
         let countdownTime;
@@ -176,35 +181,28 @@
         }
 
         function decryptSignal() {
-            let encryptedSignal = document.getElementById("encrypted-signal");
-            let decodedSignal = document.getElementById("decoded-signal");
-
-            encryptedSignal.innerText = "🔓 Decrypting...";
-            encryptedSignal.classList.add("glitch");
-
+            document.getElementById("encrypted-signal").innerText = "🔓 Decrypting...";
             setTimeout(() => {
-                encryptedSignal.classList.remove("glitch");
-                encryptedSignal.innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
-                decodedSignal.innerText = "🚀 Signal: " + (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
+                document.getElementById("encrypted-signal").innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
+                document.getElementById("decoded-signal").innerText = "🚀 Signal: " + (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
             }, 2000);
         }
 
         startCountdown(); // Start the countdown when page loads
 
-        // Create smooth raindrops
-        function createRain() {
-            let rain = document.querySelector(".rain");
+        // Create raindrops
+        function createRaindrops() {
             for (let i = 0; i < 50; i++) {
-                let drop = document.createElement("div");
-                drop.classList.add("drop");
-                drop.style.left = Math.random() * 100 + "vw";
-                drop.style.animationDuration = Math.random() * 2 + 1 + "s"; // Random fall speed
-                drop.style.animationDelay = Math.random() * 2 + "s"; // Random start delay
-                rain.appendChild(drop);
+                let raindrop = document.createElement("div");
+                raindrop.classList.add("raindrop");
+                raindrop.style.left = Math.random() * 100 + "vw";
+                raindrop.style.animationDuration = Math.random() * 2 + 2 + "s"; // Random fall speed
+                raindrop.style.animationDelay = Math.random() * 2 + "s"; // Random start delay
+                document.body.appendChild(raindrop);
             }
         }
 
-        createRain();
+        createRaindrops();
     </script>
 
 </body>
