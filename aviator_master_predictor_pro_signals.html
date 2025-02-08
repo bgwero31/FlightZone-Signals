@@ -11,30 +11,15 @@
             color: white;
             font-family: 'Poppins', sans-serif;
             text-align: center;
-            padding: 0;
-            margin: 0;
             height: 100vh;
             overflow: hidden;
             position: relative;
-            animation: fadeInZoom 1.5s ease-in-out;
-        }
-
-        @keyframes fadeInZoom {
-            0% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
         }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
             color: #00ffcc;
             text-transform: uppercase;
-            letter-spacing: 5px;
             margin-top: 20px;
         }
 
@@ -53,21 +38,15 @@
             margin: 20px auto;
             border-radius: 12px;
             box-shadow: 0px 0px 15px #00ffcc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             position: relative;
-            animation: fadeIn 1.5s ease-in-out;
         }
 
         .code-text {
             font-size: 20px;
             font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px;
             background: #000;
             padding: 10px;
             border-radius: 8px;
-            display: inline-block;
             margin: 10px 0;
             text-shadow: 0px 0px 10px #00ffcc;
         }
@@ -83,8 +62,9 @@
             cursor: pointer;
         }
 
-        .decrypt-btn:hover {
-            background: #00cc99;
+        .decrypt-btn:disabled {
+            background: gray;
+            cursor: not-allowed;
         }
 
         .decoded-signal {
@@ -108,7 +88,7 @@
             color: #999;
         }
 
-        /* New Raindrop Effect */
+        /* Raindrop Effect */
         .rain {
             position: absolute;
             width: 100%;
@@ -121,7 +101,7 @@
             position: absolute;
             bottom: 100%;
             width: 1px;
-            height: 12px;
+            height: 8px;
             background: rgba(0, 255, 204, 0.7);
             animation: fall linear infinite;
             opacity: 0.7;
@@ -130,18 +110,6 @@
         @keyframes fall {
             to {
                 transform: translateY(100vh);
-            }
-        }
-
-        /* Page Transition Effects */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
             }
         }
     </style>
@@ -155,9 +123,9 @@
 
     <div class="signal-box">
         <p class="code-text" id="encrypted-signal">█ █ █ █ █ █</p>
-        <button class="decrypt-btn" onclick="decryptSignal()">Decrypt</button>
+        <button class="decrypt-btn" id="decrypt-btn" onclick="decryptSignal()" disabled>Decrypt</button>
         <p class="decoded-signal" id="decoded-signal"></p>
-        <p class="countdown" id="countdown-timer">Next signal in: --s</p>
+        <p class="countdown" id="countdown-timer">Waiting for next signal...</p>
     </div>
 
     <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
@@ -174,20 +142,24 @@
         }
 
         setInterval(updateClock, 1000);
-        updateClock(); // Initialize immediately
+        updateClock();
 
         let countdownTime;
         let countdownInterval;
 
-        function getRandomCountdown() {
-            return Math.floor(Math.random() * (60 - 30 + 1)) + 30; // Random number between 30-60
+        function startWaitingTime() {
+            document.getElementById("countdown-timer").innerText = "Waiting for next signal...";
+            document.getElementById("decrypt-btn").disabled = true;
+
+            setTimeout(() => {
+                startCountdown();
+            }, 15000);
         }
 
         function startCountdown() {
-            countdownTime = getRandomCountdown();
+            countdownTime = Math.floor(Math.random() * (60 - 30 + 1)) + 30;
             document.getElementById("countdown-timer").innerText = `Next signal in: ${countdownTime}s`;
 
-            clearInterval(countdownInterval);
             countdownInterval = setInterval(() => {
                 countdownTime--;
 
@@ -195,12 +167,8 @@
                     document.getElementById("countdown-timer").innerText = `Next signal in: ${countdownTime}s`;
                 } else {
                     clearInterval(countdownInterval);
-                    document.getElementById("countdown-timer").innerText = "Waiting for new signal...";
-
-                    setTimeout(() => {
-                        resetSignal();
-                        startCountdown();
-                    }, 5000);
+                    document.getElementById("countdown-timer").innerText = "Signal Ready! Press Decrypt";
+                    document.getElementById("decrypt-btn").disabled = false;
                 }
             }, 1000);
         }
@@ -209,6 +177,8 @@
             document.getElementById("encrypted-signal").innerText = "█ █ █ █ █ █";
             document.getElementById("decoded-signal").innerText = "";
             document.getElementById("decoded-signal").style.opacity = "0";
+            document.getElementById("decrypt-btn").disabled = true;
+            startWaitingTime();
         }
 
         function decryptSignal() {
@@ -220,14 +190,17 @@
                 encryptedSignal.innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
                 decodedSignal.innerText = "🚀 Signal: " + (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
                 decodedSignal.style.opacity = "1";
+                document.getElementById("decrypt-btn").disabled = true;
+
+                setTimeout(() => {
+                    resetSignal();
+                }, 5000);
             }, 2000);
         }
 
-        startCountdown();
-
         function createRain() {
             let rain = document.querySelector(".rain");
-            for (let i = 0; i < 80; i++) { // Increased raindrop count for better effect
+            for (let i = 0; i < 80; i++) {
                 let drop = document.createElement("div");
                 drop.classList.add("drop");
                 drop.style.left = Math.random() * 100 + "vw";
@@ -238,6 +211,7 @@
         }
 
         createRain();
+        startWaitingTime();
     </script>
 
 </body>
