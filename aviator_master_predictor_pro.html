@@ -48,6 +48,10 @@
             width: 100%;
             max-width: 500px;
             margin: 0 auto;
+            background: rgba(0, 255, 204, 0.3); /* Futuristic color background */
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px #00ffcc;
         }
         select, input {
             width: 100%;
@@ -92,15 +96,26 @@
             font-size: 13px;
             color: #999;
         }
+        /* Add a futuristic transition effect */
+        .futuristic-background {
+            background: linear-gradient(45deg, #00ffcc, #003366, #ff00cc);
+            background-size: 400% 400%;
+            animation: gradientAnimation 5s ease infinite;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
     </style>
 </head>
-<body>
+<body class="futuristic-background">
 
     <div class="container">
         <h1>Aviator Master Predictor Pro</h1>
         <p>Unlock the <b>Most Accurate</b> JetX Predictions!</p>
 
-        <!-- VERTICAL Layout for Betting Site + Secret Code + Log Key -->
+        <!-- VERTICAL Layout for Betting Site + Secret Code + Log Key inside a futuristic card -->
         <div class="field-group">
             <select id="bettingSite">
                 <option value="" disabled selected>🎰 Select Betting Site</option>
@@ -117,7 +132,7 @@
             <input type="password" id="password" placeholder="🕵️ Enter Log Key" value="FLIGHT-X91">
         </div>
 
-        <button class="btn" onclick="login()">Decrypt</button>
+        <button class="btn" onclick="decryptRedirect()">Decrypt</button>
         <p id="error" style="color: red;"></p>
 
         <div class="links">
@@ -130,7 +145,7 @@
     </div>
 
     <script>
-        function login() {
+        function decryptRedirect() {
             const site = document.getElementById("bettingSite").value;
             const user = document.getElementById("username").value;
             const pass = document.getElementById("password").value;
@@ -140,7 +155,7 @@
                 error.textContent = "⚠️ All fields are required!";
             } else {
                 error.textContent = "";
-                alert("✅ Decryption Successful!");
+                window.location.href = "aviator_master_predictor_pro_signals.html"; // Redirect to the signals page
             }
         }
     </script>
