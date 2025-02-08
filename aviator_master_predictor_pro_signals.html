@@ -7,11 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #121212;
+            background: url('https://images.unsplash.com/photo-1517354443-8e42356db79f?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDkxfHxmdXR1cmlzdGljfGVufDB8fHx8fDE2NzI4MzkzMjY&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed;
+            background-size: cover;
             color: white;
             font-family: 'Poppins', sans-serif;
             text-align: center;
             padding: 20px;
+            height: 100vh;
+            overflow: hidden;
         }
         h1 {
             font-family: 'Orbitron', sans-serif;
@@ -19,7 +22,7 @@
             text-transform: uppercase;
         }
         .signal-box {
-            background: linear-gradient(135deg, #1e1e1e, #292929);
+            background: rgba(0, 0, 0, 0.6);
             padding: 20px;
             width: 350px;
             margin: auto;
@@ -90,6 +93,10 @@
     <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
 
     <script>
+        let countdownTimer;
+        let countdownRunning = false;
+        let timeLeft;
+
         function getRandomOdds() {
             return (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
         }
@@ -100,22 +107,28 @@
 
         function decryptSignal() {
             document.getElementById("encrypted-signal").innerText = "🔓 Decrypting...";
+            clearInterval(countdownTimer);  // Stop the countdown when decrypting
             setTimeout(() => {
                 document.getElementById("encrypted-signal").innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
                 document.getElementById("decoded-signal").innerText = "🚀 Signal: " + getRandomOdds();
-                setTimeout(startCountdown, 10000);  // 10s delay before countdown starts
+                timeLeft = 10;  // Wait 10 seconds before starting countdown again
+                setTimeout(startCountdown, 10000);  // 10s delay before countdown starts again
             }, 2000);
         }
 
         function startCountdown() {
-            let timeLeft = getRandomCountdownTime();
+            if (countdownRunning) return;
+            countdownRunning = true;
+            timeLeft = getRandomCountdownTime();
             document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
-            let timer = setInterval(() => {
+            
+            countdownTimer = setInterval(() => {
                 timeLeft--;
                 document.getElementById("countdown-timer").innerText = `Next signal in: ${timeLeft}s`;
 
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
+                    clearInterval(countdownTimer);
+                    countdownRunning = false;
                     document.getElementById("encrypted-signal").innerText = "█ █ █ █ █ █";
                     document.getElementById("decoded-signal").innerText = "";
                     setTimeout(startCountdown, 10000); // 10s delay before next signal
