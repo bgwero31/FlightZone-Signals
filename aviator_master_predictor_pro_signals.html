@@ -16,8 +16,18 @@
             height: 100vh;
             overflow: hidden;
             position: relative;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-in-out forwards;
+            animation: fadeInZoom 1.5s ease-in-out;
+        }
+
+        @keyframes fadeInZoom {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         h1 {
@@ -26,9 +36,13 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             margin-top: 20px;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: slideFadeIn 1.2s ease-out 0.5s forwards;
+        }
+
+        .clock {
+            font-size: 24px;
+            font-family: 'Orbitron', sans-serif;
+            color: #ffcc00;
+            margin-top: 10px;
         }
 
         .signal-box {
@@ -43,9 +57,7 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideFadeIn 1.2s ease-out 1s forwards;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
         .code-text {
@@ -69,9 +81,6 @@
             border-radius: 5px;
             font-size: 18px;
             cursor: pointer;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideFadeIn 1.2s ease-out 1.2s forwards;
         }
 
         .decrypt-btn:hover {
@@ -83,6 +92,8 @@
             font-weight: bold;
             color: #ffcc00;
             margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .countdown {
@@ -97,38 +108,36 @@
             color: #999;
         }
 
-        /* Raindrop effect */
-        .raindrop {
+        /* New Raindrop Effect */
+        .rain {
             position: absolute;
-            width: 6px;
-            height: 15px;
-            background-color: #00ffcc;
-            opacity: 0.7;
-            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .drop {
+            position: absolute;
+            bottom: 100%;
+            width: 1px;
+            height: 12px;
+            background: rgba(0, 255, 204, 0.7);
             animation: fall linear infinite;
+            opacity: 0.7;
         }
 
         @keyframes fall {
-            from {
-                transform: translateY(-100vh);
-                opacity: 1;
-            }
             to {
                 transform: translateY(100vh);
-                opacity: 0;
             }
         }
 
-        /* Futuristic Transition Animations */
+        /* Page Transition Effects */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
@@ -140,6 +149,8 @@
 <body>
 
     <h1>Aviator Master Predictor Pro - CodeX Signals</h1>
+    <p class="clock" id="clock">--:--:--</p>
+
     <p>Decrypt the latest signal & place your bet! 🚀</p>
 
     <div class="signal-box">
@@ -151,7 +162,20 @@
 
     <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
 
+    <div class="rain"></div>
+
     <script>
+        function updateClock() {
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("clock").innerText = `${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock(); // Initialize immediately
+
         let countdownTime;
         let countdownInterval;
 
@@ -174,35 +198,46 @@
                     document.getElementById("countdown-timer").innerText = "Waiting for new signal...";
 
                     setTimeout(() => {
-                        startCountdown(); // Restart countdown after 10 seconds
-                    }, 10000);
+                        resetSignal();
+                        startCountdown();
+                    }, 5000);
                 }
             }, 1000);
         }
 
+        function resetSignal() {
+            document.getElementById("encrypted-signal").innerText = "█ █ █ █ █ █";
+            document.getElementById("decoded-signal").innerText = "";
+            document.getElementById("decoded-signal").style.opacity = "0";
+        }
+
         function decryptSignal() {
-            document.getElementById("encrypted-signal").innerText = "🔓 Decrypting...";
+            let encryptedSignal = document.getElementById("encrypted-signal");
+            let decodedSignal = document.getElementById("decoded-signal");
+
+            encryptedSignal.innerText = "🔓 Decrypting...";
             setTimeout(() => {
-                document.getElementById("encrypted-signal").innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
-                document.getElementById("decoded-signal").innerText = "🚀 Signal: " + (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
+                encryptedSignal.innerText = "CodeX " + Math.random().toString(36).substring(2, 8).toUpperCase();
+                decodedSignal.innerText = "🚀 Signal: " + (Math.random() * (6.00 - 1.50) + 1.50).toFixed(2) + "X";
+                decodedSignal.style.opacity = "1";
             }, 2000);
         }
 
-        startCountdown(); // Start the countdown when page loads
+        startCountdown();
 
-        // Create raindrops
-        function createRaindrops() {
-            for (let i = 0; i < 50; i++) {
-                let raindrop = document.createElement("div");
-                raindrop.classList.add("raindrop");
-                raindrop.style.left = Math.random() * 100 + "vw";
-                raindrop.style.animationDuration = Math.random() * 2 + 2 + "s"; // Random fall speed
-                raindrop.style.animationDelay = Math.random() * 2 + "s"; // Random start delay
-                document.body.appendChild(raindrop);
+        function createRain() {
+            let rain = document.querySelector(".rain");
+            for (let i = 0; i < 80; i++) { // Increased raindrop count for better effect
+                let drop = document.createElement("div");
+                drop.classList.add("drop");
+                drop.style.left = Math.random() * 100 + "vw";
+                drop.style.animationDuration = Math.random() * 2 + 1 + "s";
+                drop.style.animationDelay = Math.random() * 2 + "s";
+                rain.appendChild(drop);
             }
         }
 
-        createRaindrops();
+        createRain();
     </script>
 
 </body>
