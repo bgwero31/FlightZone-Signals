@@ -3,74 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Predictor Pro</title>
+    <title>Aviator Predictor 2050</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             text-align: center;
-            background: linear-gradient(45deg, #1e1e1e, #2c3e50, #34495e, #121212);
-            background-size: 400% 400%;
-            animation: backgroundAnimation 15s infinite ease-in-out;
+            background: radial-gradient(circle, #0f0f0f, #1b1b1b, #2c3e50);
             color: white;
             padding: 20px;
-        }
-
-        @keyframes backgroundAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            overflow: hidden;
         }
 
         h1 {
-            font-size: 30px;
-            color: #ff6f61;
-            text-shadow: 2px 2px 8px rgba(255, 0, 0, 0.7);
+            font-size: 35px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
+            animation: neonGlow 1.5s infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 10px #0ff, 0 0 30px #0ff; }
+            to { text-shadow: 0 0 20px #00f, 0 0 40px #0ff; }
         }
 
         .prediction-container {
-            background: rgba(34, 34, 34, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px auto;
+            background: rgba(25, 25, 25, 0.95);
+            padding: 25px;
+            border-radius: 15px;
             width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease-in-out;
+            max-width: 450px;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.5s ease-in-out;
         }
 
         .prediction-container:hover {
-            transform: scale(1.05);
+            transform: perspective(1000px) rotateX(0deg) scale(1.05);
         }
 
         .prediction {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
 
-        .blue { background: #3498db; box-shadow: 0px 0px 10px #3498db; }
-        .purple { background: #9b59b6; box-shadow: 0px 0px 10px #9b59b6; }
-        .pink { background: #e74c3c; box-shadow: 0px 0px 10px #e74c3c; }
+        .blue { background: #00ffff; box-shadow: 0px 0px 20px #00ffff; }
+        .purple { background: #a020f0; box-shadow: 0px 0px 20px #a020f0; }
+        .pink { background: #ff007f; box-shadow: 0px 0px 20px #ff007f; }
 
         .clock {
-            font-size: 18px;
-            margin-top: 10px;
+            font-size: 20px;
             font-weight: bold;
-            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
+            text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.7; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
+
+        .glowing-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #00ffff, #00ff99);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            text-shadow: 0 0 5px white;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+        }
+
+        .glowing-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 1);
         }
     </style>
 </head>
 <body>
 
-    <h1>Aviator Predictor Pro 🚀</h1>
+    <h1>Aviator Predictor 2050 🚀</h1>
     <div class="clock" id="clock"></div>
+    
     <div class="prediction-container">
         <p>Next Prediction:</p>
         <div id="prediction" class="prediction blue">Loading...</div>
     </div>
+
+    <button class="glowing-button" onclick="generatePrediction()">Generate New Prediction</button>
 
     <script>
         function generatePrediction() {
@@ -79,7 +109,6 @@
             let odd = (Math.random() * (max - min) + min).toFixed(2);
             let predictionElement = document.getElementById("prediction");
 
-            // Assign color based on odds range
             if (odd < 2) {
                 predictionElement.className = "prediction blue";
             } else if (odd < 6) {
@@ -90,7 +119,6 @@
 
             predictionElement.innerText = `Target: ${odd}x`;
 
-            // Generate next update time randomly between 30-60 seconds
             let nextUpdate = Math.floor(Math.random() * (60 - 30 + 1)) + 30;
             setTimeout(generatePrediction, nextUpdate * 1000);
         }
@@ -103,8 +131,8 @@
             document.getElementById("clock").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
         }
 
-        setInterval(updateClock, 1000);  // Update clock every second
-        generatePrediction();  // First call
+        setInterval(updateClock, 1000);
+        generatePrediction();
     </script>
 
 </body>
