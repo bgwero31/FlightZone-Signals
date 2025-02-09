@@ -111,6 +111,7 @@
                 card.classList.add('time-card');
                 card.textContent = formattedTime;
                 card.setAttribute("data-time", formattedTime);
+                card.setAttribute("data-odds", getRandomLowOdd() + " - " + getRandomBigOdd()); // Store static odds
                 cardContainer.appendChild(card);
             }
 
@@ -125,15 +126,16 @@
                 let cards = document.querySelectorAll('.time-card');
                 cards.forEach(card => {
                     if (card.getAttribute("data-time") === currentTimeStr) {
-                        card.innerHTML = getRandomLowOdd() + " - " + getRandomBigOdd(); // Show odds
+                        card.innerHTML = card.getAttribute("data-odds"); // Show stored odds
                         card.classList.add('glowing');
 
                         setTimeout(() => {
+                            card.innerHTML = card.getAttribute("data-time"); // Remove odds
                             card.classList.remove('glowing');
-                        }, 60000); // Reset glow effect after 60 seconds
+                        }, 60000); // Odds disappear after 60 seconds
                     }
                 });
-            }, 10000); // Check every 10 seconds
+            }, 1000); // Check every second
         }
 
         document.getElementById('getSignalsBtn').addEventListener('click', generateTimeSlots);
