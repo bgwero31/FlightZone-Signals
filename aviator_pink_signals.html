@@ -45,29 +45,30 @@
             margin-top: 30px;
         }
         .time-card {
-            width: 120px;
-            height: 80px;
+            width: 140px;
+            height: 100px;
             background-color: #333;
             color: white;
             border-radius: 10px;
             font-size: 18px;
             margin: 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 10px rgba(255, 102, 178, 0.8);
             transition: all 0.3s ease;
+            padding: 10px;
         }
         .glowing {
             box-shadow: 0 0 25px rgba(255, 102, 178, 1);
             font-weight: bold;
-            font-size: 20px;
         }
         .safe-odd {
-            color: #4CAF50; /* Green for safe odds */
+            color: #4CAF50; /* Green for low odds */
         }
-        .risk-odd {
-            color: #FF6347; /* Red for risk odds */
+        .pink-odd {
+            color: #FF6347; /* Red for pink odds */
         }
         .footer {
             font-size: 14px;
@@ -95,10 +96,12 @@
             document.getElementById('liveClock').textContent = "Live Clock: " + hours + ":" + minutes + ":" + seconds;
         }
 
-        function getRandomOdds() {
-            let oddType = Math.random() > 0.5 ? 'safe' : 'risk';
-            let oddValue = Math.floor(Math.random() * (20 - 10 + 1)) + 10; // Random odds from 10x to 20x
-            return { oddValue: oddValue, oddType: oddType };
+        function getRandomLowOdd() {
+            return Math.floor(Math.random() * (3 - 2 + 1)) + 2; // Random between 2x - 3x
+        }
+
+        function getRandomPinkOdd() {
+            return Math.floor(Math.random() * (12 - 6 + 1)) + 6; // Random between 6x - 12x
         }
 
         function generateTimeSlots() {
@@ -113,8 +116,20 @@
                 
                 let card = document.createElement('div');
                 card.classList.add('time-card');
-                card.textContent = formattedTime;
                 card.setAttribute("data-time", formattedTime);
+
+                let lowOdd = document.createElement('div');
+                lowOdd.textContent = getRandomLowOdd() + 'x';
+                lowOdd.classList.add('safe-odd');
+
+                let pinkOdd = document.createElement('div');
+                pinkOdd.textContent = getRandomPinkOdd() + 'x';
+                pinkOdd.classList.add('pink-odd');
+
+                card.appendChild(document.createTextNode(formattedTime));
+                card.appendChild(lowOdd);
+                card.appendChild(pinkOdd);
+
                 cardContainer.appendChild(card);
             }
 
@@ -129,19 +144,13 @@
                 let cards = document.querySelectorAll('.time-card');
                 cards.forEach(card => {
                     if (card.getAttribute("data-time") === currentTimeStr) {
-                        let odds = getRandomOdds();
-                        card.textContent = odds.oddValue + 'x';
-                        
-                        if (odds.oddType === 'safe') {
-                            card.classList.add('safe-odd');
-                            card.classList.remove('risk-odd');
-                        } else {
-                            card.classList.add('risk-odd');
-                            card.classList.remove('safe-odd');
-                        }
+                        let lowOdd = card.children[1];
+                        let pinkOdd = card.children[2];
+
+                        lowOdd.textContent = getRandomLowOdd() + 'x';
+                        pinkOdd.textContent = getRandomPinkOdd() + 'x';
 
                         card.classList.add('glowing');
-
                         setTimeout(() => {
                             card.classList.remove('glowing');
                         }, 60000); // Reset glow effect after 60 seconds
