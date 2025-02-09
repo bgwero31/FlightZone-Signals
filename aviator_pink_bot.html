@@ -3,33 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pink Aviator Bot </title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Russo+One&display=swap" rel="stylesheet">
+    <title> Aviator Pink Bot </title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
+        /* General Styles */
         body {
-            background: linear-gradient(to right, #ff66b2, #8a4dff);
+            margin: 0;
+            padding: 0;
             font-family: 'Orbitron', sans-serif;
             color: white;
             text-align: center;
-            margin: 0;
-            padding: 0;
-            transition: all 2s ease;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #ff66b2, #8a4dff);
+            overflow: hidden;
         }
+
+        /* RGB Noise Effect */
+        @keyframes rgbNoise {
+            0% { transform: translate(0, 0); opacity: 0.8; }
+            100% { transform: translate(3px, 3px); opacity: 0.7; }
+        }
+
+        .rgb-noise-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://your-link-to-noise-texture.png');
+            background-size: cover;
+            animation: rgbNoise 1s infinite;
+            z-index: -1;
+        }
+
+        /* Card for Login Form */
+        .login-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
         h1 {
-            font-size: 60px;
-            color: #ffffff;
-            font-family: 'Russo One', sans-serif;
-            text-shadow: 0 0 15px #ff66b2, 0 0 30px #ff66b2;
-        }
-        .header {
-            font-size: 20px;
-            margin-bottom: 20px;
+            font-size: 18px;
             color: #ffffff;
             text-shadow: 0 0 10px #ff66b2;
+            margin-bottom: 10px;
         }
+
+        .header {
+            font-size: 13px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px #ff66b2;
+        }
+
         input, button {
             padding: 12px;
-            margin: 10px;
+            margin: 10px 0;
             width: 80%;
             border: none;
             border-radius: 5px;
@@ -37,20 +74,24 @@
             color: white;
             font-size: 18px;
         }
+
         button {
             background-color: #ff66b2;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #8a4dff;
             transform: scale(1.05);
         }
+
         .footer {
             font-size: 14px;
             margin-top: 20px;
             color: #ffffff;
             text-shadow: 0 0 5px #ff66b2;
         }
+
         .info {
             font-size: 18px;
             margin: 20px 0;
@@ -60,23 +101,31 @@
             margin-left: auto;
             margin-right: auto;
         }
+
     </style>
 </head>
 <body>
-    <h1>FlightZone Signals by B.JAY</h1>
-    <div class="header" style="font-size: 10px; color: #ffffffff;">Aviator Pink Bot</div>
-    
-    <input type="text" id="bettingSite" placeholder="Betting Site" required><br>
-    <input type="password" id="password" placeholder="Password" required><br>
-    
-    <div class="info">
-        Unlock exclusive,AI and algorithm-powered predictions tailored to give you the edge in Aviator betting. Join the FlightZone Signals community and elevate your strategy with precision and real-time insights. Your journey to consistent wins starts here.
+
+    <!-- RGB Noise Background -->
+    <div class="rgb-noise-background"></div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+        <h1>FlightZone Signals by B.JAY</h1>
+        <div class="header">Aviator Pink Bot</div>
+
+        <input type="text" id="bettingSite" placeholder="Betting Site" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+
+        <div class="info">
+            Unlock exclusive,AI and algorithm-powered predictions tailored to give you the edge in Aviator betting. Join the FlightZone Signals community and elevate your strategy with precision and real-time insights. Your journey to consistent wins starts here.
+        </div>
+
+        <button onclick="login()">Login</button>
+
+        <div class="footer">All rights reserved by FlightZone Signals 2025</div>
     </div>
-    
-    <button onclick="login()">Login</button>
-    
-    <div class="footer">All rights reserved by FlightZone Signals 2025</div>
-    
+
     <script>
         function login() {
             var bettingSite = document.getElementById('bettingSite').value;
@@ -92,5 +141,6 @@
             }
         }
     </script>
+
 </body>
 </html>
