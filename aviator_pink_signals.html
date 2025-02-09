@@ -40,24 +40,34 @@
             background-color: #8a4dff;
             transform: scale(1.05);
         }
-        .time-buttons {
+        .card-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 30px;
         }
-        .time-btn {
-            padding: 10px;
-            background-color: #8a4dff;
+        .time-card {
+            padding: 20px;
+            background-color: #333;
             color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            margin: 5px;
+            border-radius: 8px;
+            font-size: 24px;
             width: 80%;
+            margin: 10px;
+            box-shadow: 0 0 15px rgba(255, 102, 178, 0.8);
+            transition: all 0.3s ease;
         }
-        .time-btn:hover {
-            background-color: #ff66b2;
+        .time-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 102, 178, 1);
+        }
+        .time-card.glowing {
+            box-shadow: 0 0 25px rgba(255, 102, 178, 1);
+        }
+        .odd-display {
+            font-size: 32px;
+            margin-top: 10px;
+            color: #ff66b2;
         }
         #liveClock {
             font-size: 20px;
@@ -99,7 +109,7 @@
     
     <button id="getSignalsBtn" class="btn" onclick="showSignals()">Get Signals</button>
     
-    <div class="time-buttons" id="timeButtons"></div>
+    <div class="card-container" id="cardContainer"></div>
 
     <div id="info">
         Unlock exclusive, AI-powered predictions tailored to give you the edge in Aviator betting. Join the Pink Aviator Bot community and elevate your strategy with precision and real-time insights. Your journey to consistent wins starts here.
@@ -112,8 +122,7 @@
             var now = new Date();
             var hours = now.getHours().toString().padStart(2, '0');
             var minutes = now.getMinutes().toString().padStart(2, '0');
-            var seconds = now.getSeconds().toString().padStart(2, '0');
-            var timeString = hours + ":" + minutes + ":" + seconds;
+            var timeString = hours + ":" + minutes; // No seconds
             document.getElementById('liveClock').textContent = timeString;
         }
 
@@ -122,41 +131,62 @@
         }
 
         function showSignals() {
-            var timeButtonsContainer = document.getElementById('timeButtons');
-            timeButtonsContainer.innerHTML = ''; // Clear previous buttons
+            var cardContainer = document.getElementById('cardContainer');
+            cardContainer.innerHTML = ''; // Clear previous cards
             
             var currentTime = new Date();
             var startMinute = currentTime.getMinutes();
             
+            // Create 6 time cards
             for (let i = 0; i < 6; i++) {
-                let time = new Date(currentTime.getTime() + (i + 1) * 60000);
-                let button = document.createElement('button');
-                button.classList.add('time-btn');
+                let time = new Date(currentTime.getTime() + (i + 1) * 60000); // Next 6 minutes
+                let card = document.createElement('div');
+                card.classList.add('time-card');
                 let formattedTime = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
-                button.textContent = formattedTime;
-                button.onclick = function () {
-                    showOdd(button, formattedTime);
-                };
-                timeButtonsContainer.appendChild(button);
+                card.textContent = formattedTime;
+                card.setAttribute("data-time", formattedTime);  // Store the time for each card
+                cardContainer.appendChild(card);
             }
+
+            // Start the process to display the odds
+            displayOddsOnTime();
         }
 
-        function showOdd(button, time) {
-            let odd = randomizeOdds();
-            let oddText = document.createElement('span');
-            oddText.textContent = odd + 'x';
-            oddText.style.fontSize = '20px';
-            button.appendChild(oddText);
+        function displayOddsOnTime() {
+            var currentTime = new Date();
+            var currentMinutes = currentTime.getMinutes();
+            
+            // Set an interval to check the time every 10 seconds
+            var checkTimeInterval = setInterval(function() {
+                var now = new Date();
+                var currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+                
+                // Loop through all time cards and display the odds when their time comes
+                var cards = document.querySelectorAll('.time-card');
+                cards.forEach(function(card) {
+                    var cardTime = card.getAttribute("data-time");
 
-            // Remove the odd after 60 seconds
-            setTimeout(function() {
-                oddText.remove();
-            }, 60000); // 60 seconds
+                    // Check if the current time matches the card time
+                    if (cardTime === currentTimeStr) {
+                        var odd = randomizeOdds();
+                        var oddDisplay = document.createElement('div');
+                        oddDisplay.classList.add('odd-display');
+                        oddDisplay.textContent = odd + 'x';
+                        card.appendChild(oddDisplay);
+                        card.classList.add('glowing'); // Add glowing effect
+
+                        // After 60 seconds, remove the odd and stop the glowing effect
+                        setTimeout(function() {
+                            oddDisplay.remove();
+                            card.classList.remove('glowing');
+                        }, 60000); // 60 seconds
+                    }
+                });
+            }, 10000); // Check every 10 seconds for a match
         }
 
         // Update live clock every second
         setInterval(updateClock, 1000);
-
     </script>
 </body>
 </html>
