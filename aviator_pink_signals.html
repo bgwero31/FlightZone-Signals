@@ -7,12 +7,12 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: url('https://www.transparenttextures.com/patterns/raindrops.png') repeat, #121212;
+            background: url('https://wallpaperaccess.com/full/39631.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #fff;
             text-align: center;
             margin: 0;
             padding: 0;
-            overflow: hidden;
         }
         h1 {
             color: #ff66b2;
@@ -20,8 +20,8 @@
             margin-top: 20px;
             text-shadow: 0 0 10px #ff66b2;
         }
-        #liveClock {
-            font-size: 20px;
+        #clock {
+            font-size: 24px;
             margin: 20px 0;
         }
         .btn {
@@ -45,30 +45,23 @@
             margin-top: 30px;
         }
         .time-card {
-            width: 140px;
-            height: 100px;
+            width: 80px;
+            height: 50px;
             background-color: #333;
             color: white;
-            border-radius: 10px;
-            font-size: 18px;
-            margin: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 5px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 10px rgba(255, 102, 178, 0.8);
             transition: all 0.3s ease;
-            padding: 10px;
         }
         .glowing {
             box-shadow: 0 0 25px rgba(255, 102, 178, 1);
             font-weight: bold;
-        }
-        .safe-odd {
-            color: #4CAF50; /* Green for low odds */
-        }
-        .pink-odd {
-            color: #FF6347; /* Red for pink odds */
+            font-size: 18px;
         }
         .footer {
             font-size: 14px;
@@ -79,7 +72,7 @@
 <body>
     <h1>Pink Aviator Bot</h1>
     
-    <div id="liveClock"></div>
+    <div id="clock"></div>
     
     <button id="getSignalsBtn" class="btn">Get Signals</button>
     
@@ -93,15 +86,15 @@
             var hours = now.getHours().toString().padStart(2, '0');
             var minutes = now.getMinutes().toString().padStart(2, '0');
             var seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('liveClock').textContent = "Live Clock: " + hours + ":" + minutes + ":" + seconds;
+            document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
         }
 
         function getRandomLowOdd() {
-            return Math.floor(Math.random() * (3 - 2 + 1)) + 2; // Random between 2x - 3x
+            return (Math.floor(Math.random() * 2) + 2) + 'x'; // 2x or 3x
         }
 
-        function getRandomPinkOdd() {
-            return Math.floor(Math.random() * (12 - 6 + 1)) + 6; // Random between 6x - 12x
+        function getRandomBigOdd() {
+            return (Math.floor(Math.random() * 7) + 6) + 'x'; // 6x to 12x
         }
 
         function generateTimeSlots() {
@@ -116,20 +109,8 @@
                 
                 let card = document.createElement('div');
                 card.classList.add('time-card');
+                card.textContent = formattedTime;
                 card.setAttribute("data-time", formattedTime);
-
-                let lowOdd = document.createElement('div');
-                lowOdd.textContent = getRandomLowOdd() + 'x';
-                lowOdd.classList.add('safe-odd');
-
-                let pinkOdd = document.createElement('div');
-                pinkOdd.textContent = getRandomPinkOdd() + 'x';
-                pinkOdd.classList.add('pink-odd');
-
-                card.appendChild(document.createTextNode(formattedTime));
-                card.appendChild(lowOdd);
-                card.appendChild(pinkOdd);
-
                 cardContainer.appendChild(card);
             }
 
@@ -144,13 +125,9 @@
                 let cards = document.querySelectorAll('.time-card');
                 cards.forEach(card => {
                     if (card.getAttribute("data-time") === currentTimeStr) {
-                        let lowOdd = card.children[1];
-                        let pinkOdd = card.children[2];
-
-                        lowOdd.textContent = getRandomLowOdd() + 'x';
-                        pinkOdd.textContent = getRandomPinkOdd() + 'x';
-
+                        card.innerHTML = getRandomLowOdd() + " - " + getRandomBigOdd(); // Show odds
                         card.classList.add('glowing');
+
                         setTimeout(() => {
                             card.classList.remove('glowing');
                         }, 60000); // Reset glow effect after 60 seconds
