@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Aviator Pink Bot </title>
+    <title> Aviator Pink Bot Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         /* General Styles */
@@ -17,44 +17,40 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to right, #ff66b2, #8a4dff);
+            background: url('https://your-link-to-clouds-smoke-background.jpg') no-repeat center center fixed;
+            background-size: cover;
             overflow: hidden;
         }
 
-        /* RGB Noise Effect */
-        @keyframes rgbNoise {
-            0% { transform: translate(0, 0); opacity: 0.8; }
-            100% { transform: translate(3px, 3px); opacity: 0.7; }
-        }
-
-        .rgb-noise-background {
+        /* Cloud/Smoke Effect Background */
+        .clouds-background {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://your-link-to-noise-texture.png');
+            background: url('https://your-link-to-clouds-smoke-effect.jpg') no-repeat center center fixed;
             background-size: cover;
-            animation: rgbNoise 1s infinite;
             z-index: -1;
         }
 
-        /* Card for Login Form */
+        /* Login Card */
         .login-card {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
             max-width: 400px;
             width: 100%;
             text-align: center;
         }
 
         h1 {
-            font-size: 18px;
+            font-size: 32px;
             color: #ffffff;
-            text-shadow: 0 0 10px #ff66b2;
-            margin-bottom: 10px;
+            text-shadow: 0 0 15px #ff66b2, 0 0 30px #ff66b2;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .header {
@@ -93,7 +89,7 @@
         }
 
         .info {
-            font-size: 18px;
+            font-size: 12px;
             margin: 20px 0;
             color: #ffffff;
             text-shadow: 0 0 10px #ff66b2;
@@ -106,22 +102,22 @@
 </head>
 <body>
 
-    <!-- RGB Noise Background -->
-    <div class="rgb-noise-background"></div>
+    <!-- Cloud/Smoke Background -->
+    <div class="clouds-background"></div>
 
     <!-- Login Card -->
     <div class="login-card">
-        <h1>FlightZone Signals by B.JAY</h1>
-        <div class="header">Aviator Pink Bot</div>
+        <h1>Aviator Pink Bot</h1>
+        <div class="header">FlightZone Signals by B.JAY</div>
 
         <input type="text" id="bettingSite" placeholder="Betting Site" required><br>
         <input type="password" id="password" placeholder="Password" required><br>
 
+        <button onclick="login()">Login</button>
+
         <div class="info">
             Unlock exclusive,AI and algorithm-powered predictions tailored to give you the edge in Aviator betting. Join the FlightZone Signals community and elevate your strategy with precision and real-time insights. Your journey to consistent wins starts here.
         </div>
-
-        <button onclick="login()">Login</button>
 
         <div class="footer">All rights reserved by FlightZone Signals 2025</div>
     </div>
