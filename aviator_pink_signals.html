@@ -3,110 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pink Bot</title>
+    <title>Pink Aviator Bot</title>
     <style>
         body {
-            background: url('your-futuristic-background.jpg') no-repeat center center/cover;
-            color: white;
             font-family: 'Arial', sans-serif;
+            background: url('https://www.transparenttextures.com/patterns/raindrops.png') repeat, #121212;
+            color: #fff;
             text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
-        .container {
-            margin-top: 50px;
+        h1 {
+            color: #ff66b2;
+            font-size: 50px;
+            margin-top: 20px;
+            text-shadow: 0 0 10px #ff66b2;
         }
-        .title {
-            font-size: 22px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        #liveClock {
+            font-size: 20px;
+            margin: 20px 0;
         }
-        .clock {
-            font-size: 30px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .get-signal {
-            background: pink;
-            color: black;
-            padding: 10px 20px;
-            font-size: 16px;
+        .btn {
+            padding: 12px;
+            background-color: #ff66b2;
+            color: white;
             border: none;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .signals {
-            display: none;
-            margin-top: 20px;
-        }
-        .signal-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            margin: 5px auto;
-            width: 200px;
+            border-radius: 5px;
             font-size: 18px;
-            font-weight: bold;
+            cursor: pointer;
+            width: 80%;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #8a4dff;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .time-card {
+            width: 120px;
+            height: 80px;
+            background-color: #333;
+            color: white;
             border-radius: 10px;
+            font-size: 18px;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(255, 102, 178, 0.8);
+            transition: all 0.3s ease;
         }
-        .active {
-            animation: glow 1s infinite alternate;
+        .glowing {
+            box-shadow: 0 0 25px rgba(255, 102, 178, 1);
+            font-weight: bold;
+            font-size: 20px;
         }
-        @keyframes glow {
-            from { background: rgba(255, 105, 180, 0.4); }
-            to { background: rgba(255, 255, 255, 0.6); }
+        .safe-odd {
+            color: #4CAF50; /* Green for safe odds */
+        }
+        .risk-odd {
+            color: #FF6347; /* Red for risk odds */
+        }
+        .footer {
+            font-size: 14px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">Pink Aviator Bot</div>
-        <div id="clock" class="clock"></div>
-        <button class="get-signal" onclick="generateSignals()">Get Signals</button>
-        <div id="signals" class="signals"></div>
-    </div>
+    <h1>Pink Aviator Bot</h1>
+    
+    <div id="liveClock"></div>
+    
+    <button id="getSignalsBtn" class="btn">Get Signals</button>
+    
+    <div class="card-container" id="cardContainer"></div>
+
+    <div class="footer">All rights reserved by Pink Aviator Bot 2025</div>
 
     <script>
         function updateClock() {
-            const now = new Date();
-            const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('clock').innerText = time;
+            var now = new Date();
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('liveClock').textContent = "Live Clock: " + hours + ":" + minutes + ":" + seconds;
         }
-        setInterval(updateClock, 1000);
-        updateClock();
 
-        function generateSignals() {
-            const signalsDiv = document.getElementById("signals");
-            signalsDiv.innerHTML = "";
-            signalsDiv.style.display = "block";
+        function getRandomOdds() {
+            let oddType = Math.random() > 0.5 ? 'safe' : 'risk';
+            let oddValue = Math.floor(Math.random() * (20 - 10 + 1)) + 10; // Random odds from 10x to 20x
+            return { oddValue: oddValue, oddType: oddType };
+        }
 
-            let now = new Date();
-            let times = [];
+        function generateTimeSlots() {
+            var cardContainer = document.getElementById('cardContainer');
+            cardContainer.innerHTML = ''; // Clear previous cards
+            
+            var currentTime = new Date();
+            
             for (let i = 0; i < 6; i++) {
-                now.setMinutes(now.getMinutes() + 2);
-                let time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-                let safeOdd = "3x";
-                let riskOdd = Math.floor(Math.random() * (20 - 10 + 1)) + 10 + "x";
-
-                times.push({ time, safeOdd, riskOdd });
+                let futureTime = new Date(currentTime.getTime() + (i + 1) * 120000); // 2-minute gap
+                let formattedTime = futureTime.getHours().toString().padStart(2, '0') + ":" + futureTime.getMinutes().toString().padStart(2, '0');
+                
+                let card = document.createElement('div');
+                card.classList.add('time-card');
+                card.textContent = formattedTime;
+                card.setAttribute("data-time", formattedTime);
+                cardContainer.appendChild(card);
             }
 
-            times.forEach(({ time, safeOdd, riskOdd }) => {
-                let card = document.createElement("div");
-                card.className = "signal-card";
-                card.innerHTML = time;
-                signalsDiv.appendChild(card);
-
-                setInterval(() => {
-                    let currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-                    if (currentTime === time) {
-                        card.classList.add("active");
-                        card.innerHTML = `${safeOdd} <br> Risk: ${riskOdd}`;
-                    } else {
-                        card.classList.remove("active");
-                        card.innerHTML = time;
-                    }
-                }, 1000);
-            });
+            checkTimeAndUpdateOdds();
         }
+
+        function checkTimeAndUpdateOdds() {
+            setInterval(() => {
+                let now = new Date();
+                let currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+                
+                let cards = document.querySelectorAll('.time-card');
+                cards.forEach(card => {
+                    if (card.getAttribute("data-time") === currentTimeStr) {
+                        let odds = getRandomOdds();
+                        card.textContent = odds.oddValue + 'x';
+                        
+                        if (odds.oddType === 'safe') {
+                            card.classList.add('safe-odd');
+                            card.classList.remove('risk-odd');
+                        } else {
+                            card.classList.add('risk-odd');
+                            card.classList.remove('safe-odd');
+                        }
+
+                        card.classList.add('glowing');
+
+                        setTimeout(() => {
+                            card.classList.remove('glowing');
+                        }, 60000); // Reset glow effect after 60 seconds
+                    }
+                });
+            }, 10000); // Check every 10 seconds
+        }
+
+        document.getElementById('getSignalsBtn').addEventListener('click', generateTimeSlots);
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
