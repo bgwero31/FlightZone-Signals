@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pink Aviator Bot Login</title>
+    <title>Pink Aviator Bot</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to right, #ff00ff, #8000ff);
+            background: linear-gradient(to right, #ff66b2, #8a4dff);
             font-family: 'Orbitron', sans-serif;
             color: white;
             text-align: center;
@@ -16,8 +16,14 @@
         }
         h1 {
             font-size: 50px;
-            color: #ff00ff;
-            text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+            color: #ff66b2;
+            text-shadow: 0 0 15px #ff66b2, 0 0 30px #ff66b2;
+        }
+        .header {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ff66b2;
+            text-shadow: 0 0 10px #ff66b2;
         }
         input, button {
             padding: 12px;
@@ -30,30 +36,40 @@
             font-size: 18px;
         }
         button {
-            background-color: #ff00ff;
+            background-color: #ff66b2;
             cursor: pointer;
         }
         button:hover {
-            background-color: #8000ff;
+            background-color: #8a4dff;
             transform: scale(1.05);
+        }
+        .footer {
+            font-size: 14px;
+            margin-top: 20px;
+            color: #ff66b2;
         }
     </style>
 </head>
 <body>
-    <h1>Login to Pink Aviator Bot</h1>
-    <input type="text" id="username" placeholder="Username" required><br>
+    <h1>FlightZone Signals by B.JAY</h1>
+    <div class="header">Aviator Pink Bot</div>
+    
+    <input type="text" id="bettingSite" placeholder="Betting Site" required><br>
     <input type="password" id="password" placeholder="Password" required><br>
     <button onclick="login()">Login</button>
     
+    <div class="footer">All rights reserved by FlightZone Signals</div>
+    
     <script>
         function login() {
-            var username = document.getElementById('username').value;
+            var bettingSite = document.getElementById('bettingSite').value;
             var password = document.getElementById('password').value;
 
             // Check if the password matches "pinkaviator2025"
             if (password === "pinkaviator2025") {
                 alert("Login Successful!");
-                // Redirect or perform further action here
+                // Redirect to the aviator_pink_signals.html page
+                window.location.href = 'aviator_pink_signals.html'; // Updated to the new signal page name
             } else {
                 alert("Incorrect password!");
             }
