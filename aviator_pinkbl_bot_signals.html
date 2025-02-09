@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink Aviator Bot Predictions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #101010;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .prediction {
+            font-size: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+        .footer {
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pink Aviator Bot Predictions</h1>
+
+    <div id="predictions">
+        <!-- Predictions will appear here -->
+    </div>
+
+    <div class="footer">All rights reserved by Pink Aviator Bot 2025</div>
+
+    <script>
+        // Simulating the prediction update every minute
+        function fetchPrediction() {
+            let predictions = [
+                "Time: 10:05:30 - Low Risk Prediction: 3.50x",
+                "Time: 10:06:00 - Medium Risk Prediction: 8.20x",
+                "Time: 10:06:30 - High Risk Prediction: 15.75x"
+            ];
+
+            let prediction = predictions[Math.floor(Math.random() * predictions.length)];
+            let predictionDiv = document.createElement("div");
+            predictionDiv.className = "prediction";
+            predictionDiv.innerText = prediction;
+            document.getElementById("predictions").appendChild(predictionDiv);
+        }
+
+        // Set an interval to fetch predictions every 60 seconds
+        setInterval(fetchPrediction, 60000);
+    </script>
+
+</body>
+</html>
