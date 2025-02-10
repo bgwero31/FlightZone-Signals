@@ -122,7 +122,7 @@
     <div id="clock">Loading Time...</div>
 
     <!-- Country Selection Section -->
-    <div class="password-section">
+    <div class="password-section" id="password-section">
         <label for="country">Select Country:</label>
         <select id="country" onchange="changeBackground()">
             <option value="kenya">Kenya</option>
@@ -215,8 +215,8 @@
             if (password === 'bjay#') {  // Updated password
                 alert('Login Successful!');
                 isLoggedIn = true;
-                document.querySelector('.password-section').style.display = 'none';
-                document.querySelector('#predictions').style.display = 'block';
+                document.getElementById('password-section').style.display = 'none'; // Hide the login form
+                document.getElementById('predictions').style.display = 'block'; // Show the predictions section
             } else {
                 alert('Incorrect password. Please try again.');
             }
@@ -244,4 +244,35 @@
                     let seconds = Math.floor(Math.random() * 60);
 
                     let targetMultiplier = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);
-                    let
+                    let riskMultiplier = (Math.random() * (4.00 - 2.50) + 2.50).toFixed(2);
+                    output += `<div class="prediction">${currentHour}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} - ${targetMultiplier}x <span class="risk">${riskMultiplier}x</span></div>`;
+                }
+                output += "</div>";
+            });
+
+            document.getElementById("signals").innerHTML = output;
+        }
+
+        function getBettingSitesForCountry() {
+            const country = document.getElementById("country").value;
+            let sites = [];
+
+            if (country === "kenya") {
+                sites = ["Kenya Bet", "SportPesa", "Betin"];
+            } else if (country === "ghana") {
+                sites = ["Betway GH", "Sportybet GH"];
+            } else if (country === "southAfrica") {
+                sites = ["Hollywoodbets", "Bet.co.za"];
+            } else if (country === "zambia") {
+                sites = ["ZambianBet", "BetKing Zambia"];
+            } else if (country === "usa") {
+                sites = ["DraftKings", "FanDuel"];
+            } else if (country === "zimbabwe") {
+                sites = ["EasiBet", "BetWay ZW"];
+            }
+
+            return sites;
+        }
+    </script>
+</body>
+</html>
