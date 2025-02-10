@@ -32,7 +32,7 @@
             font-weight: bold;
         }
         .play-now {
-            display: none;
+            display: block;
             font-size: 20px;
             font-weight: bold;
             color: white;
@@ -237,42 +237,7 @@
             let currentHour = now.getHours();
 
             bettingSites.forEach(site => {
-                output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;
+                output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now">Play Now!</div>`;
 
                 for (let i = 0; i < 10; i++) {
-                    let minutes = (startMinutes + i) % 60;
-                    let seconds = Math.floor(Math.random() * 60);
-
-                    let targetMultiplier = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);
-                    let riskMultiplier = (Math.random() * (4.00 - 2.50) + 2.50).toFixed(2);
-                    output += `<div class="prediction">${currentHour}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} - ${targetMultiplier}x <span class="risk">${riskMultiplier}x</span></div>`;
-                }
-                output += "</div>";
-            });
-
-            document.getElementById("signals").innerHTML = output;
-        }
-
-        function getBettingSitesForCountry() {
-            const country = document.getElementById("country").value;
-            let sites = [];
-
-            if (country === "kenya") {
-                sites = ["Kenya Bet", "SportPesa", "Betin"];
-            } else if (country === "ghana") {
-                sites = ["Betway GH", "Sportybet GH"];
-            } else if (country === "southAfrica") {
-                sites = ["Hollywoodbets", "Bet.co.za"];
-            } else if (country === "zambia") {
-                sites = ["ZambianBet", "BetKing Zambia"];
-            } else if (country === "usa") {
-                sites = ["DraftKings", "FanDuel"];
-            } else if (country === "zimbabwe") {
-                sites = ["EasiBet", "BetWay ZW"];
-            }
-
-            return sites;
-        }
-    </script>
-</body>
-</html>
+                    let minutes = (startMinutes + i) % 60
