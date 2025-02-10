@@ -10,7 +10,6 @@
             text-align: center;  
             background: #3498db;  
             color: black;  
-            overflow: hidden;  
         }  
         h1 {  
             background: rgba(255, 204, 0, 0.8);  
@@ -66,7 +65,7 @@
             background: rgba(255, 255, 255, 0.2);  
             border-radius: 8px;  
         }  
-        .select-country {  
+        .select-game, .select-country {  
             margin: 15px;  
             padding: 10px;  
             background: rgba(255, 255, 255, 0.2);  
@@ -92,62 +91,86 @@
         .contact-links a:hover {  
             background: #005bb5;  
         }  
-
-        /* Raindrop effect */
-        .raindrop {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            width: 2px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            animation: drop 1s infinite;
-        }
-        @keyframes drop {
+        /* Raindrop effect for signal page */
+        @keyframes raindrops {
             0% {
-                top: -10px;
-                transform: translateX(-50%) scaleY(1);
+                opacity: 0.3;
+                transform: translateY(-5px);
             }
             50% {
-                top: 90vh;
-                transform: translateX(-50%) scaleY(1.3);
+                opacity: 0.6;
+                transform: translateY(0);
             }
             100% {
-                top: 100vh;
-                transform: translateX(-50%) scaleY(0);
+                opacity: 0.3;
+                transform: translateY(5px);
             }
+        }
+        .raindrop-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://example.com/futuristic-background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+            animation: raindrops 0.5s ease-in-out infinite;
         }
     </style>  
 </head>  
 <body>  
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>  
     <div id="clock">Loading Time...</div>  
-  
+
+    <div class="select-country">  
+        <label for="country">Select Country:</label>  
+        <select id="country">  
+            <option value="Kenya">Kenya</option>  
+            <option value="Zimbabwe">Zimbabwe</option>  
+            <option value="South Africa">South Africa</option>  
+            <option value="USA">USA</option>  
+            <option value="Nigeria">Nigeria</option>  
+        </select>  
+    </div>  
+
     <div class="password-section">  
         <label for="password">Enter Password:</label>  
         <input type="password" id="password" placeholder="Password" />  
         <br /><br />  
         <button onclick="login()">Login</button>  
     </div>  
-  
+
     <div id="predictions" style="display:none;">  
+        <div class="select-game">  
+            <label for="game">Select Game:</label>  
+            <select id="game">  
+                <option value="aviator">Aviator</option>  
+                <option value="jetx">JetX</option>  
+            </select>  
+            <br /><br />  
+            <button onclick="generatePredictions()">Generate Signals</button>  
+        </div>  
+
         <div id="signals"></div>  
     </div>  
-  
+
     <div class="contact-links">  
         <p>Join our community on:</p>  
         <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>  
         <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>  
     </div>  
-  
+
+    <div class="raindrop-effect"></div>
+
     <script>  
         let isLoggedIn = false;  
         let countryBettingSites = {  
-            Kenya: ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"],  
-            Nigeria: ["Bet9ja", "1XBet", "Betway", "NairaBet"],  
+            Kenya: ["Moz Betting", "SpinFeed", "Bet247", "PremierBet"],  
+            Zimbabwe: ["AfricaBet", "SpinCity", "Mwos Betting", "Bet247", "PremierBet"],  
             "South Africa": ["HollywoodBets", "SportPesa", "Betway", "Supabets"],  
-            Zimbabwe: ["MWOS Betting", "Betway", "Africa Bet", "SpinFeed", "PremierBet", "Bet247"],  
-            USA: ["Bet365", "FanDuel", "DraftKings"]  
+            USA: ["DraftKings", "FanDuel", "BetMGM", "Caesars Sportsbook"],  
+            Nigeria: ["Bet9ja", "1XBet", "Betway", "NairaBet"]  
         };  
 
         function updateClock() {  
@@ -160,12 +183,11 @@
         function login() {  
             const password = document.getElementById('password').value;  
 
-            if (password === 'bjay#2025') {  
+            if (password === 'bjay2025#') {  
                 alert('Login Successful!');  
                 isLoggedIn = true;  
                 document.querySelector('.password-section').style.display = 'none';  
                 document.querySelector('#predictions').style.display = 'block';  
-                addRaindropEffect();  // Add raindrop effect on page load
             } else {  
                 alert('Incorrect password. Please try again.');  
             }  
@@ -177,7 +199,8 @@
                 return;  
             }  
 
-            const country = "Kenya";  // Default country Kenya for signals
+            const selectedGame = document.getElementById('game').value;  
+            const country = document.getElementById('country').value;  
             const bettingSites = countryBettingSites[country];  
             let output = "";  
 
@@ -197,7 +220,7 @@
 
                     let showRisk = Math.random() > 0.5;  
 
-                    let riskLabel = "Risk";  // Example for aviator game  
+                    let riskLabel = selectedGame === "aviator" ? "Risk" : "Steady Climb";  
 
                     output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">${riskLabel} ${riskMultiplier}x</span>` : ''}</p>`;  
                 }  
@@ -209,7 +232,7 @@
         }  
 
         function triggerPlayNow() {  
-            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];  
+            const bettingSites = ["Moz Betting", "SpinFeed", "Bet247", "PremierBet", "AfricaBet", "SpinCity", "Mwos Betting"];  
 
             bettingSites.forEach(site => {  
                 setTimeout(() => {  
@@ -222,17 +245,7 @@
                     }, 10000);  
                 }, Math.random() * 84000);  
             });  
-        }
-
-        function addRaindropEffect() {
-            for (let i = 0; i < 50; i++) {
-                let drop = document.createElement('div');
-                drop.classList.add('raindrop');
-                drop.style.left = Math.random() * 100 + 'vw';
-                document.body.appendChild(drop);
-                setTimeout(() => drop.remove(), 1000); // Remove drop after animation ends
-            }
-        }
+        }  
     </script>  
 
 </body>  
