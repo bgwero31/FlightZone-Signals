@@ -158,4 +158,68 @@
                 bgElement.style.background = "url('ghana-background.jpg') no-repeat center center fixed";
             } else if (country === "southAfrica") {
                 document.body.style.background = "#008C45"; // South Africa color
-                bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed15
+                bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed15bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed";
+            } else if (country === "zambia") {
+                document.body.style.background = "#FF0000"; // Zambia color
+                bgElement.style.background = "url('zambia-background.jpg') no-repeat center center fixed";
+            } else if (country === "usa") {
+                document.body.style.background = "#B22234"; // USA color
+                bgElement.style.background = "url('usa-background.jpg') no-repeat center center fixed";
+            } else if (country === "zimbabwe") {
+                document.body.style.background = "#D21034"; // Zimbabwe color
+                bgElement.style.background = "url('zimbabwe-background.jpg') no-repeat center center fixed";
+            } else {
+                document.body.style.background = "#FFFFFF"; // Default background
+                bgElement.style.background = "none";
+            }
+        }
+
+        function login() {
+            const password = document.getElementById("password").value;
+            const correctPassword = "bjay#";
+            if (password === correctPassword) {
+                isLoggedIn = true;
+                document.getElementById("password-section").style.display = "none";
+                document.getElementById("predictions").style.display = "block";
+            } else {
+                alert("Incorrect password. Please try again.");
+            }
+        }
+
+        function generatePredictions() {
+            if (!isLoggedIn) {
+                alert("Please log in first.");
+                return;
+            }
+            const game = document.getElementById("game").value;
+            const signalsDiv = document.getElementById("signals");
+            signalsDiv.innerHTML = ""; // Clear previous signals
+
+            const predictions = {
+                aviator: [
+                    { time: "12:15 PM", prediction: "Win", risk: "High" },
+                    { time: "12:30 PM", prediction: "Loss", risk: "Low" },
+                    { time: "12:45 PM", prediction: "Win", risk: "Medium" },
+                ],
+                jetx: [
+                    { time: "12:20 PM", prediction: "Win", risk: "Medium" },
+                    { time: "12:35 PM", prediction: "Loss", risk: "High" },
+                    { time: "12:50 PM", prediction: "Win", risk: "Low" },
+                ],
+            };
+
+            const selectedPredictions = predictions[game] || [];
+            selectedPredictions.forEach(signal => {
+                const signalDiv = document.createElement("div");
+                signalDiv.classList.add("prediction");
+                signalDiv.innerHTML = `
+                    <strong>Time:</strong> ${signal.time} <br>
+                    <strong>Prediction:</strong> ${signal.prediction} <br>
+                    <strong>Risk:</strong> <span class="risk">${signal.risk}</span>
+                `;
+                signalsDiv.appendChild(signalDiv);
+            });
+        }
+    </script>
+</body>
+</html>
