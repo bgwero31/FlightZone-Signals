@@ -212,7 +212,7 @@
         function login() {
             const password = document.getElementById('password').value;
 
-            if (password === 'bjay2025#') {
+            if (password === 'bjay#') {  // Updated password
                 alert('Login Successful!');
                 isLoggedIn = true;
                 document.querySelector('.password-section').style.display = 'none';
@@ -244,8 +244,4 @@
                     let seconds = Math.floor(Math.random() * 60);
 
                     let targetMultiplier = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);
-                    let riskMultiplier = (Math.random() * (3.00 - 2.01) + 2.50).toFixed(2);
-
-                    let showRisk = Math.random() > 0.5;
-
-                    let riskLabel = selectedGame === "aviator" ? "Risk" : "
+                    let
