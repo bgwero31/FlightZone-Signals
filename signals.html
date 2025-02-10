@@ -8,8 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: #3498db;
             color: black;
+            transition: background 0.5s ease;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -91,12 +91,37 @@
         .contact-links a:hover {
             background: #005bb5;
         }
+        /* Futuristic Background Effects */
+        .futuristic-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: background 1s ease;
+        }
+        /* Raindrop Effect */
+        .rain-effect {
+            background-image: url('https://www.transparenttextures.com/patterns/raindrops.png');
+            background-size: cover;
+            animation: rainAnimation 0.5s infinite linear;
+        }
+        @keyframes rainAnimation {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 0 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
     <div id="clock">Loading Time...</div>
 
+    <!-- Country Selection Section -->
     <div class="password-section">
         <label for="country">Select Country:</label>
         <select id="country" onchange="changeBackground()">
@@ -105,6 +130,7 @@
             <option value="southAfrica">South Africa</option>
             <option value="zambia">Zambia</option>
             <option value="usa">USA</option>
+            <option value="zimbabwe">Zimbabwe</option> <!-- Added Zimbabwe -->
         </select>
         <br /><br />
         <label for="password">Enter Password:</label>
@@ -113,6 +139,7 @@
         <button onclick="login()">Login</button>
     </div>
 
+    <!-- Predictions Section -->
     <div id="predictions" style="display:none;">
         <div class="select-game">
             <label for="game">Select Game:</label>
@@ -126,11 +153,15 @@
         <div id="signals"></div>
     </div>
 
+    <!-- Contact Links Section -->
     <div class="contact-links">
         <p>Join our community on:</p>
         <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>
         <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
     </div>
+
+    <!-- Futuristic Background -->
+    <div id="futuristic-background" class="futuristic-background"></div>
 
     <script>
         let isLoggedIn = false;
@@ -144,16 +175,37 @@
 
         function changeBackground() {
             const country = document.getElementById("country").value;
+            let bgElement = document.getElementById("futuristic-background");
+
             if (country === "kenya") {
                 document.body.style.background = "#008000"; // Kenya color
+                bgElement.style.background = "url('kenya-background.jpg') no-repeat center center fixed"; // Example of Kenya background
+                bgElement.classList.remove("rain-effect");
             } else if (country === "ghana") {
                 document.body.style.background = "#FFD700"; // Ghana color
+                bgElement.style.background = "url('ghana-background.jpg') no-repeat center center fixed"; // Example of Ghana background
+                bgElement.classList.remove("rain-effect");
             } else if (country === "southAfrica") {
                 document.body.style.background = "#008C45"; // South Africa color
+                bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed"; // Example of South Africa background
+                bgElement.classList.remove("rain-effect");
             } else if (country === "zambia") {
                 document.body.style.background = "#FF7F00"; // Zambia color
+                bgElement.style.background = "url('zambia-background.jpg') no-repeat center center fixed"; // Example of Zambia background
+                bgElement.classList.remove("rain-effect");
             } else if (country === "usa") {
                 document.body.style.background = "#3C3B6E"; // USA color
+                bgElement.style.background = "url('usa-background.jpg') no-repeat center center fixed"; // Example of USA background
+                bgElement.classList.remove("rain-effect");
+            } else if (country === "zimbabwe") {
+                document.body.style.background = "#FFD700"; // Zimbabwe color
+                bgElement.style.background = "url('zimbabwe-background.jpg') no-repeat center center fixed"; // Example of Zimbabwe background
+                bgElement.classList.remove("rain-effect");
+            }
+
+            // Add rain effect to any country if needed (example for all countries)
+            if (country === "ghana" || country === "kenya") {
+                bgElement.classList.add("rain-effect");
             }
         }
 
@@ -177,7 +229,7 @@
             }
 
             const selectedGame = document.getElementById('game').value;
-            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
+            const bettingSites = getBettingSitesForCountry();
             let output = "";
 
             const now = new Date();
@@ -196,33 +248,4 @@
 
                     let showRisk = Math.random() > 0.5;
 
-                    let riskLabel = selectedGame === "aviator" ? "Risk" : "Steady Climb";
-
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">${riskLabel} ${riskMultiplier}x</span>` : ''}</p>`;
-                }
-                output += "</div>";
-            });
-
-            document.getElementById('signals').innerHTML = output;
-            triggerPlayNow();
-        }
-
-        function triggerPlayNow() {
-            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
-
-            bettingSites.forEach(site => {
-                setTimeout(() => {
-                    const playNow = document.getElementById(`play-now-${site}`);
-                    playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;
-                    playNow.style.display = "block";
-
-                    setTimeout(() => {
-                        playNow.style.display = "none";
-                    }, 15000);
-                }, Math.random() * 84000);
-            });
-        }
-    </script>
-
-</body>
-</html>
+                    let riskLabel = selectedGame === "aviator" ? "Risk" : "
