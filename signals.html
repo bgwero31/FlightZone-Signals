@@ -22,6 +22,7 @@
             padding: 20px;
             margin: 15px;
             border-radius: 8px;
+            position: relative;
         }
         .prediction {
             font-size: 18px;
@@ -32,14 +33,16 @@
             font-weight: bold;
         }
         .play-now {
-            display: block;
             font-size: 20px;
             font-weight: bold;
             color: white;
             background: red;
             padding: 10px;
             border-radius: 5px;
-            margin-top: 10px;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
         }
         #clock {
             font-size: 24px;
@@ -117,6 +120,7 @@
 
     <!-- Predictions Section -->
     <div id="predictions" style="display:none;">
+        <div id="site-section"></div> <!-- Dynamic betting sites will appear here -->
         <div class="select-game">
             <label for="game">Select Game:</label>
             <select id="game">
@@ -152,26 +156,58 @@
 
             if (country === "kenya") {
                 document.body.style.background = "#008000"; // Kenya color
-                bgElement.style.background = "url('kenya-background.jpg') no-repeat center center fixed";
             } else if (country === "ghana") {
                 document.body.style.background = "#FFD700"; // Ghana color
-                bgElement.style.background = "url('ghana-background.jpg') no-repeat center center fixed";
             } else if (country === "southAfrica") {
                 document.body.style.background = "#008C45"; // South Africa color
-                bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed15bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed";
             } else if (country === "zambia") {
                 document.body.style.background = "#FF0000"; // Zambia color
-                bgElement.style.background = "url('zambia-background.jpg') no-repeat center center fixed";
             } else if (country === "usa") {
                 document.body.style.background = "#B22234"; // USA color
-                bgElement.style.background = "url('usa-background.jpg') no-repeat center center fixed";
             } else if (country === "zimbabwe") {
                 document.body.style.background = "#D21034"; // Zimbabwe color
-                bgElement.style.background = "url('zimbabwe-background.jpg') no-repeat center center fixed";
             } else {
                 document.body.style.background = "#FFFFFF"; // Default background
-                bgElement.style.background = "none";
             }
+
+            loadBettingSites(country);
+        }
+
+        function loadBettingSites(country) {
+            const siteSection = document.getElementById("site-section");
+            let bettingSites = [];
+
+            if (country === "kenya") {
+                bettingSites = ["Bet254", "Sportpesa", "Betika"];
+            } else if (country === "ghana") {
+                bettingSites = ["Betway Ghana", "Melbet Ghana", "1xBet Ghana"];
+            } else if (country === "southAfrica") {
+                bettingSites = ["Bet.co.za", "Playabets", "Hollywoodbets"];
+            } else if (country === "zambia") {
+                bettingSites = ["Betway Zambia", "1xBet Zambia", "Sportsbet Zambia"];
+            } else if (country === "usa") {
+                bettingSites = ["DraftKings", "FanDuel", "BetMGM"];
+            } else if (country === "zimbabwe") {
+                bettingSites = ["Afribet", "Unibet Zimbabwe", "Bet365 Zimbabwe"];
+            }
+
+            siteSection.innerHTML = '';
+            bettingSites.forEach(site => {
+                const siteDiv = document.createElement("div");
+                siteDiv.classList.add("site-section");
+
+                // Simulating prediction odds
+                const predictionOdds = (Math.random() * 10).toFixed(2);
+                const shouldDisplayPlayNow = parseFloat(predictionOdds) >= 7; // Display "Play Now" if odds are >= 7
+
+                siteDiv.innerHTML = `
+                    <h3>${site}</h3>
+                    ${shouldDisplayPlayNow ? '<div class="play-now">Play Now</div>' : ''}
+                    <div class="prediction">Prediction Odds: ${predictionOdds}x</div>
+                    <div class="prediction">Risk: High</div>
+                `;
+                siteSection.appendChild(siteDiv);
+            });
         }
 
         function login() {
@@ -181,44 +217,15 @@
                 isLoggedIn = true;
                 document.getElementById("password-section").style.display = "none";
                 document.getElementById("predictions").style.display = "block";
+                loadBettingSites(document.getElementById("country").value);
             } else {
                 alert("Incorrect password. Please try again.");
             }
         }
 
         function generatePredictions() {
-            if (!isLoggedIn) {
-                alert("Please log in first.");
-                return;
-            }
-            const game = document.getElementById("game").value;
-            const signalsDiv = document.getElementById("signals");
-            signalsDiv.innerHTML = ""; // Clear previous signals
-
-            const predictions = {
-                aviator: [
-                    { time: "12:15 PM", prediction: "Win", risk: "High" },
-                    { time: "12:30 PM", prediction: "Loss", risk: "Low" },
-                    { time: "12:45 PM", prediction: "Win", risk: "Medium" },
-                ],
-                jetx: [
-                    { time: "12:20 PM", prediction: "Win", risk: "Medium" },
-                    { time: "12:35 PM", prediction: "Loss", risk: "High" },
-                    { time: "12:50 PM", prediction: "Win", risk: "Low" },
-                ],
-            };
-
-            const selectedPredictions = predictions[game] || [];
-            selectedPredictions.forEach(signal => {
-                const signalDiv = document.createElement("div");
-                signalDiv.classList.add("prediction");
-                signalDiv.innerHTML = `
-                    <strong>Time:</strong> ${signal.time} <br>
-                    <strong>Prediction:</strong> ${signal.prediction} <br>
-                    <strong>Risk:</strong> <span class="risk">${signal.risk}</span>
-                `;
-                signalsDiv.appendChild(signalDiv);
-            });
+            // Placeholder for generating game signals
+            document.getElementById("signals").innerHTML = `<p>Generating predictions for selected game...</p>`;
         }
     </script>
 </body>
