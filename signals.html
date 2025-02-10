@@ -8,8 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: #3498db;
             color: black;
+            transition: background 0.5s ease;
         }
         h1 {
             background: rgba(255, 204, 0, 0.8);
@@ -59,6 +59,12 @@
         button:hover {
             background: #ff6600;
         }
+        .country-selection {
+            margin: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
         .password-section {
             margin: 15px;
             padding: 10px;
@@ -93,18 +99,31 @@
         }
     </style>
 </head>
-<body>
+<body id="body">
 
     <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
     <div id="clock">Loading Time...</div>
-    
+
+    <div class="country-selection">
+        <label for="country">Select Your Country:</label>
+        <select id="country" onchange="changeBackground()">
+            <option value="kenya">Kenya</option>
+            <option value="southAfrica">South Africa</option>
+            <option value="zimbabwe">Zimbabwe</option>
+            <option value="ghana">Ghana</option>
+            <option value="zambia">Zambia</option>
+            <option value="usa">USA</option>
+        </select>
+        <br /><br />
+    </div>
+
     <div class="password-section">
         <label for="password">Enter Password:</label>
         <input type="password" id="password" placeholder="Password" />
         <br /><br />
         <button onclick="login()">Login</button>
     </div>
-    
+
     <div id="predictions" style="display:none;">
         <div class="select-game">
             <label for="game">Select Game:</label>
@@ -134,6 +153,32 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        function changeBackground() {
+            const country = document.getElementById('country').value;
+            const body = document.getElementById('body');
+
+            // Change background based on the country selected
+            if (country === 'kenya') {
+                body.style.background = "url('kenya_background.jpg') no-repeat center center fixed";
+                body.style.backgroundSize = "cover";
+            } else if (country === 'southAfrica') {
+                body.style.background = "url('southAfrica_background.jpg') no-repeat center center fixed";
+                body.style.backgroundSize = "cover";
+            } else if (country === 'zimbabwe') {
+                body.style.background = "url('zimbabwe_background.jpg') no-repeat center center fixed";
+                body.style.backgroundSize = "cover";
+            } else if (country === 'ghana') {
+                body.style.background = "url('ghana_background.jpg') no-repeat center center fixed";
+                body.style.backgroundSize = "cover";
+            } else if (country === 'zambia') {
+                body.style.background = "url('zambia_background.jpg') no-repeat center center fixed";
+                body.style.backgroundSize = "cover";
+            } else if (country === 'usa') {
+                body.style.background = "url('usa_background.jpg') no-repeat center center fixed";
+                body.style.backgroundSize = "cover";
+            }
+        }
+
         function login() {
             const password = document.getElementById('password').value;
 
@@ -154,14 +199,24 @@
             }
 
             const selectedGame = document.getElementById('game').value;
-            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
-            let output = "";
+            const bettingSites = {
+                kenya: ["SportyBet", "Bet254", "Betika"],
+                southAfrica: ["Hollywood Bets", "Betway"],
+                zimbabwe: ["Africa Bet", "MWOS Betting"],
+                ghana: ["Betway", "Melbet", "22Bet"],
+                zambia: ["Betway", "1xBet", "22Bet"],
+                usa: ["DraftKings", "FanDuel", "BetMGM"]
+            };
 
+            const country = document.getElementById('country').value;
+            const selectedSites = bettingSites[country];
+
+            let output = "";
             const now = new Date();
             let startMinutes = now.getMinutes();
             let currentHour = now.getHours();
 
-            bettingSites.forEach(site => {
+            selectedSites.forEach(site => {
                 output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;
 
                 for (let i = 0; i < 10; i++) {
@@ -185,21 +240,6 @@
         }
 
         function triggerPlayNow() {
-            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];
+            const bettingSites = ["SportyBet", "Bet254", "Betika", "Hollywood Bets", "Betway", "Africa Bet", "MWOS Betting", "Melbet", "22Bet", "1xBet", "DraftKings", "FanDuel", "BetMGM"];
 
-            bettingSites.forEach(site => {
-                setTimeout(() => {
-                    const playNow = document.getElementById(`play-now-${site}`);
-                    playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;
-                    playNow.style.display = "block";
-
-                    setTimeout(() => {
-                        playNow.style.display = "none";
-                    }, 15000);
-                }, Math.random() * 84000);
-            });
-        }
-    </script>
-
-</body>
-</html>
+            betting
