@@ -62,7 +62,7 @@
         .password-section {
             margin: 15px;
             padding: 10px;
-            background: rgba(255, 255, 255, 0.8); /* Added color back */
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
         }
         .select-game {
@@ -91,30 +91,6 @@
         .contact-links a:hover {
             background: #005bb5;
         }
-        /* Futuristic Background Effects */
-        .futuristic-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            transition: background 1s ease;
-        }
-        /* Raindrop Effect */
-        .rain-effect {
-            background-image: url('https://www.transparenttextures.com/patterns/raindrops.png');
-            background-size: cover;
-            animation: rainAnimation 0.5s infinite linear;
-        }
-        @keyframes rainAnimation {
-            from {
-                background-position: 0 0;
-            }
-            to {
-                background-position: 0 100%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -130,13 +106,13 @@
             <option value="southAfrica">South Africa</option>
             <option value="zambia">Zambia</option>
             <option value="usa">USA</option>
-            <option value="zimbabwe">Zimbabwe</option> <!-- Added Zimbabwe -->
+            <option value="zimbabwe">Zimbabwe</option>
         </select>
         <br /><br />
         <label for="password">Enter Password:</label>
         <input type="password" id="password" placeholder="Password" />
         <br /><br />
-        <button onclick="login()">Login</button>
+        <button type="button" onclick="login()">Login</button>
     </div>
 
     <!-- Predictions Section -->
@@ -160,9 +136,6 @@
         <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
     </div>
 
-    <!-- Futuristic Background -->
-    <div id="futuristic-background" class="futuristic-background"></div>
-
     <script>
         let isLoggedIn = false;
 
@@ -179,65 +152,10 @@
 
             if (country === "kenya") {
                 document.body.style.background = "#008000"; // Kenya color
-                bgElement.style.background = "url('kenya-background.jpg') no-repeat center center fixed"; // Example of Kenya background
-                bgElement.classList.remove("rain-effect");
+                bgElement.style.background = "url('kenya-background.jpg') no-repeat center center fixed";
             } else if (country === "ghana") {
                 document.body.style.background = "#FFD700"; // Ghana color
-                bgElement.style.background = "url('ghana-background.jpg') no-repeat center center fixed"; // Example of Ghana background
-                bgElement.classList.remove("rain-effect");
+                bgElement.style.background = "url('ghana-background.jpg') no-repeat center center fixed";
             } else if (country === "southAfrica") {
                 document.body.style.background = "#008C45"; // South Africa color
-                bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed"; // Example of South Africa background
-                bgElement.classList.remove("rain-effect");
-            } else if (country === "zambia") {
-                document.body.style.background = "#FF7F00"; // Zambia color
-                bgElement.style.background = "url('zambia-background.jpg') no-repeat center center fixed"; // Example of Zambia background
-                bgElement.classList.remove("rain-effect");
-            } else if (country === "usa") {
-                document.body.style.background = "#3C3B6E"; // USA color
-                bgElement.style.background = "url('usa-background.jpg') no-repeat center center fixed"; // Example of USA background
-                bgElement.classList.remove("rain-effect");
-            } else if (country === "zimbabwe") {
-                document.body.style.background = "#FFD700"; // Zimbabwe color
-                bgElement.style.background = "url('zimbabwe-background.jpg') no-repeat center center fixed"; // Example of Zimbabwe background
-                bgElement.classList.remove("rain-effect");
-            }
-
-            // Add rain effect to any country if needed (example for all countries)
-            if (country === "ghana" || country === "kenya") {
-                bgElement.classList.add("rain-effect");
-            }
-        }
-
-        function login() {
-            const password = document.getElementById('password').value;
-
-            if (password === 'bjay#') {  // Updated password
-                alert('Login Successful!');
-                isLoggedIn = true;
-                document.getElementById('password-section').style.display = 'none'; // Hide the login form
-                document.getElementById('predictions').style.display = 'block'; // Show the predictions section
-            } else {
-                alert('Incorrect password. Please try again.');
-            }
-        }
-
-        function generatePredictions() {
-            if (!isLoggedIn) {
-                alert("Please log in first.");
-                return;
-            }
-
-            const selectedGame = document.getElementById('game').value;
-            const bettingSites = getBettingSitesForCountry();
-            let output = "";
-
-            const now = new Date();
-            let startMinutes = now.getMinutes();
-            let currentHour = now.getHours();
-
-            bettingSites.forEach(site => {
-                output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now">Play Now!</div>`;
-
-                for (let i = 0; i < 10; i++) {
-                    let minutes = (startMinutes + i) % 60
+                bgElement.style.background = "url('southafrica-background.jpg') no-repeat center center fixed15
