@@ -1,4 +1,5 @@
-<!DOCTYPE html>  <html lang="en">  
+<!DOCTYPE html>  
+<html lang="en">  
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
@@ -64,7 +65,7 @@
             background: rgba(255, 255, 255, 0.2);  
             border-radius: 8px;  
         }  
-        .select-game {  
+        .select-game, .select-country {  
             margin: 15px;  
             padding: 10px;  
             background: rgba(255, 255, 255, 0.2);  
@@ -92,111 +93,134 @@
         }  
     </style>  
 </head>  
-<body>  <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>  
-<div id="clock">Loading Time...</div>  
+<body>  
+    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>  
+    <div id="clock">Loading Time...</div>  
   
-<div class="password-section">  
-    <label for="password">Enter Password:</label>  
-    <input type="password" id="password" placeholder="Password" />  
-    <br /><br />  
-    <button onclick="login()">Login</button>  
-</div>  
-  
-<div id="predictions" style="display:none;">  
-    <div class="select-game">  
-        <label for="game">Select Game:</label>  
-        <select id="game">  
-            <option value="aviator">Aviator</option>  
-            <option value="jetx">JetX</option>  
-        </select>  
+    <div class="password-section">  
+        <label for="password">Enter Password:</label>  
+        <input type="password" id="password" placeholder="Password" />  
         <br /><br />  
-        <button onclick="generatePredictions()">Generate Signals</button>  
+        <button onclick="login()">Login</button>  
     </div>  
-    <div id="signals"></div>  
-</div>  
+  
+    <div id="predictions" style="display:none;">  
+        <div class="select-country">  
+            <label for="country">Select Country:</label>  
+            <select id="country" onchange="updateBettingSites()">  
+                <option value="Kenya">Kenya</option>  
+                <option value="Nigeria">Nigeria</option>  
+                <option value="South Africa">South Africa</option>  
+            </select>  
+        </div>  
 
-<div class="contact-links">  
-    <p>Join our community on:</p>  
-    <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>  
-    <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>  
-</div>  
+        <div class="select-game">  
+            <label for="game">Select Game:</label>  
+            <select id="game">  
+                <option value="aviator">Aviator</option>  
+                <option value="jetx">JetX</option>  
+            </select>  
+            <br /><br />  
+            <button onclick="generatePredictions()">Generate Signals</button>  
+        </div>  
 
-<script>  
-    let isLoggedIn = false;  
+        <div id="signals"></div>  
+    </div>  
 
-    function updateClock() {  
-        const now = new Date();  
-        document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });  
-    }  
-    setInterval(updateClock, 1000);  
-    updateClock();  
+    <div class="contact-links">  
+        <p>Join our community on:</p>  
+        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>  
+        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>  
+    </div>  
+  
+    <script>  
+        let isLoggedIn = false;  
+        let countryBettingSites = {  
+            Kenya: ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"],  
+            Nigeria: ["Bet9ja", "1XBet", "Betway", "NairaBet"],  
+            "South Africa": ["HollywoodBets", "SportPesa", "Betway", "Supabets"]  
+        };  
 
-    function login() {  
-        const password = document.getElementById('password').value;  
-
-        if (password === 'bjay2025#') {  
-            alert('Login Successful!');  
-            isLoggedIn = true;  
-            document.querySelector('.password-section').style.display = 'none';  
-            document.querySelector('#predictions').style.display = 'block';  
-        } else {  
-            alert('Incorrect password. Please try again.');  
+        function updateClock() {  
+            const now = new Date();  
+            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });  
         }  
-    }  
+        setInterval(updateClock, 1000);  
+        updateClock();  
 
-    function generatePredictions() {  
-        if (!isLoggedIn) {  
-            alert("Please log in first.");  
-            return;  
-        }  
+        function login() {  
+            const password = document.getElementById('password').value;  
 
-        const selectedGame = document.getElementById('game').value;  
-        const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];  
-        let output = "";  
-
-        const now = new Date();  
-        let startMinutes = now.getMinutes();  
-        let currentHour = now.getHours();  
-
-        bettingSites.forEach(site => {  
-            output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;  
-
-            for (let i = 0; i < 10; i++) {  
-                let minutes = (startMinutes + i) % 60;  
-                let seconds = Math.floor(Math.random() * 60);  
-
-                let targetMultiplier = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);  
-                let riskMultiplier = (Math.random() * (3.00 - 2.01) + 2.50).toFixed(2);  
-
-                let showRisk = Math.random() > 0.5;  
-
-                let riskLabel = selectedGame === "aviator" ? "Risk" : "Steady Climb";  
-
-                output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">${riskLabel} ${riskMultiplier}x</span>` : ''}</p>`;  
+            if (password === 'bjay2025#') {  
+                alert('Login Successful!');  
+                isLoggedIn = true;  
+                document.querySelector('.password-section').style.display = 'none';  
+                document.querySelector('#predictions').style.display = 'block';  
+            } else {  
+                alert('Incorrect password. Please try again.');  
             }  
-            output += "</div>";  
-        });  
+        }  
 
-        document.getElementById('signals').innerHTML = output;  
-        triggerPlayNow();  
-    }  
+        function updateBettingSites() {  
+            const country = document.getElementById("country").value;  
+            const bettingSites = countryBettingSites[country];  
+            document.getElementById('signals').innerHTML = "";  // Clear predictions when changing country  
+        }
 
-    function triggerPlayNow() {  
-        const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];  
+        function generatePredictions() {  
+            if (!isLoggedIn) {  
+                alert("Please log in first.");  
+                return;  
+            }  
 
-        bettingSites.forEach(site => {  
-            setTimeout(() => {  
-                const playNow = document.getElementById(`play-now-${site}`);  
-                playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;  
-                playNow.style.display = "block";  
+            const selectedGame = document.getElementById('game').value;  
+            const country = document.getElementById('country').value;  
+            const bettingSites = countryBettingSites[country];  
+            let output = "";  
 
+            const now = new Date();  
+            let startMinutes = now.getMinutes();  
+            let currentHour = now.getHours();  
+
+            bettingSites.forEach(site => {  
+                output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;  
+
+                for (let i = 0; i < 10; i++) {  
+                    let minutes = (startMinutes + i) % 60;  
+                    let seconds = Math.floor(Math.random() * 60);  
+
+                    let targetMultiplier = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);  
+                    let riskMultiplier = (Math.random() * (3.00 - 2.01) + 2.50).toFixed(2);  
+
+                    let showRisk = Math.random() > 0.5;  
+
+                    let riskLabel = selectedGame === "aviator" ? "Risk" : "Steady Climb";  
+
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">${riskLabel} ${riskMultiplier}x</span>` : ''}</p>`;  
+                }  
+                output += "</div>";  
+            });  
+
+            document.getElementById('signals').innerHTML = output;  
+            triggerPlayNow();  
+        }  
+
+        function triggerPlayNow() {  
+            const bettingSites = ["Africa Bet", "MWOS Betting", "Spin City", "1Win", "Bet247", "Premier Bet"];  
+
+            bettingSites.forEach(site => {  
                 setTimeout(() => {  
-                    playNow.style.display = "none";  
-                }, 15000);  
-            }, Math.random() * 84000);  
-        });  
-    }  
-</script>
+                    const playNow = document.getElementById(`play-now-${site}`);  
+                    playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;  
+                    playNow.style.display = "block";  
+
+                    setTimeout(() => {  
+                        playNow.style.display = "none";  
+                    }, 10000);  
+                }, Math.random() * 84000);  
+            });  
+        }  
+    </script>  
 
 </body>  
 </html>
