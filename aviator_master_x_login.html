@@ -20,6 +20,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            overflow-y: scroll;
         }
 
         @keyframes gradientAnimation {
@@ -41,7 +42,7 @@
         }
 
         .login-container {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.5); /* Adjust transparency for the glass effect */
             border-radius: 15px;
             padding: 40px;
             max-width: 450px;
@@ -49,6 +50,7 @@
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
             z-index: 1;
             position: relative;
+            backdrop-filter: blur(10px); /* Glass-like effect */
         }
 
         h2 {
@@ -67,7 +69,7 @@
             border-radius: 10px;
             border: none;
             font-size: 18px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2); /* Adjust transparency */
             color: white;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
