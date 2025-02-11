@@ -16,6 +16,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
 
         .login-container {
@@ -69,6 +70,23 @@
             font-size: 14px;
             display: none;
         }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #ff6600;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -77,19 +95,29 @@
         <h2>AVIATOR MASTER X</h2>
         <form id="loginForm" onsubmit="return login()">
             <input type="password" id="password" placeholder="Password" required><br>
+            <input type="text" id="bettingSite" placeholder="Enter Your Betting Site" required><br>
             <button type="submit">Login</button>
         </form>
         <p id="loginError">Incorrect password. Please try again.</p>
     </div>
 
+    <div class="footer">
+        <p>&copy; 2025 <strong>Baron Gwero</strong>. All Rights Reserved.</p>
+        <p>For more info, visit <a href="https://github.com/BaronGwero" target="_blank">GitHub</a>.</p>
+    </div>
+
     <script>
         function login() {
             const password = document.getElementById("password").value;
+            const bettingSite = document.getElementById("bettingSite").value;
 
             // Simple password check
             const correctPassword = "masterx2025"; // Password is "masterx2025"
 
             if (password === correctPassword) {
+                // Optionally, save the betting site info to use later
+                console.log("Betting site:", bettingSite);
+                
                 // Redirect to the signals page after password is correct
                 window.location.href = "aviator_master_x_signals.html";
             } else {
