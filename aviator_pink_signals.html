@@ -115,18 +115,19 @@
     function generateTimeSlots() {
       var cardContainer = document.getElementById('cardContainer');
       cardContainer.innerHTML = ''; // Clear previous cards
-      
+
       var currentTime = new Date();
-      
+
       for (let i = 0; i < 6; i++) {
         let futureTime = new Date(currentTime.getTime() + (i + 1) * 120000); // 2-minute gap
         let formattedTime = futureTime.getHours().toString().padStart(2, '0') + ":" + futureTime.getMinutes().toString().padStart(2, '0');
-        
+
         let card = document.createElement('div');
         card.classList.add('time-card');
         card.textContent = formattedTime;
         card.setAttribute("data-time", formattedTime);
         card.setAttribute("data-odds", getRandomLowOdd() + " - " + getRandomBigOdd()); // Store static odds
+        card.setAttribute("data-visible", "false"); // Track visibility of odds
         cardContainer.appendChild(card);
       }
 
@@ -137,22 +138,28 @@
       setInterval(() => {
         let now = new Date();
         let currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-        
+
         let cards = document.querySelectorAll('.time-card');
         cards.forEach(card => {
           if (card.getAttribute("data-time") === currentTimeStr) {
-            card.innerHTML = card.getAttribute("data-odds"); // Show stored odds
-            card.classList.add('glowing');
-            
-            // Play the beep sound (reset time and play)
-            var beepSound = document.getElementById('beepSound');
-            beepSound.currentTime = 0;
-            beepSound.play();
+            // Make sure odds are visible for 60 seconds
+            if (card.getAttribute("data-visible") === "false") {
+              card.innerHTML = card.getAttribute("data-odds"); // Show stored odds
+              card.classList.add('glowing');
+              card.setAttribute("data-visible", "true"); // Set visibility to true
+              
+              // Play the beep sound (reset time and play)
+              var beepSound = document.getElementById('beepSound');
+              beepSound.currentTime = 0;
+              beepSound.play();
+            }
 
+            // Keep the odds displayed for the whole minute
             setTimeout(() => {
               card.innerHTML = card.getAttribute("data-time"); // Remove odds
               card.classList.remove('glowing');
-            }, 10000); // Display odds for 10 seconds
+              card.setAttribute("data-visible", "false"); // Reset visibility to false
+            }, 60000); // Keep for 60 seconds
           }
         });
       }, 1000); // Check every second
