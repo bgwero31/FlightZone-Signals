@@ -14,85 +14,96 @@
 
         body {
             font-family: 'Lato', sans-serif;
-            background: #1a1a1a;
+            background: #121212;
+            color: white;
             height: 100vh;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            background-image: url('https://images.unsplash.com/photo-1521747116042-b6f02d8c4339?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDg2MXwwfDF8c2VhY2h8MXx8Zm9yZXN0fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080');
-            background-position: center;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-
-        .content-container {
-            width: 80%;
-            max-width: 1000px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 20px;
-            padding: 30px;
             position: relative;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
 
-        .scrollable-card {
-            color: white;
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-
-        .scrollable-card h3 {
-            font-family: 'Roboto', sans-serif;
-            font-size: 3em;
-            color: #ff9900;
-            margin-bottom: 20px;
-        }
-
-        .scrollable-card p {
-            font-family: 'Lato', sans-serif;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-
-        .login-container {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 25px;
-            border-radius: 10px;
+        /* Background Content (Scrollable) */
+        .background-content {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            margin-top: 20px;
+            height: 100%;
+            overflow-y: auto;
+            padding: 100px 20px;
+            background-image: url('https://images.unsplash.com/photo-1521747116042-b6f02d8c4339?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDg2MXwwfDF8c2VhY2h8MXx8Zm9yZXN0fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080');
+            background-size: cover;
+            background-position: center;
+            filter: blur(3px) brightness(0.4);
+            z-index: -1;
+        }
+
+        .info-content {
+            width: 60%;
+            margin: auto;
+            font-size: 1.2em;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-content h3 {
+            font-size: 2.5em;
+            color: #ff9900;
+            text-align: center;
+        }
+
+        .info-content p {
+            color: #ddd;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Static Login Card */
+        .login-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 165, 0, 0.5);
+            z-index: 2;
         }
 
         h2 {
             font-family: 'Roboto', sans-serif;
-            font-size: 2.2em;
+            font-size: 2em;
             color: #00ffcc;
             margin-bottom: 20px;
-            text-align: center;
         }
 
         input {
             width: 100%;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 10px;
-            border: 1px solid #444;
-            font-size: 18px;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
             background-color: #222;
             color: white;
         }
 
         button {
-            padding: 15px 25px;
+            padding: 12px;
             background-color: #ff6600;
             color: black;
             border: none;
-            border-radius: 10px;
-            font-size: 20px;
+            border-radius: 8px;
+            font-size: 18px;
             cursor: pointer;
             width: 100%;
-            transition: background-color 0.3s ease;
+            transition: 0.3s;
         }
 
         button:hover {
@@ -104,14 +115,17 @@
             margin-top: 15px;
             font-size: 14px;
             display: none;
-            text-align: center;
         }
 
+        /* Footer */
         .footer {
-            margin-top: 50px;
-            font-size: 14px;
-            color: #00ffcc;
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
             text-align: center;
+            color: #00ffcc;
+            font-size: 14px;
+            z-index: 2;
         }
 
         .footer a {
@@ -127,29 +141,29 @@
 </head>
 <body>
 
-    <div class="content-container">
-        <!-- Static Content Card -->
-        <div class="scrollable-card">
-            <h3>FlightZone</h3>
-            <p>Welcome to FlightZone, the ultimate place for mastering Aviator predictions. Discover powerful real-time signals designed to elevate your betting experience and ensure you're always ahead of the game!</p>
-            <p>Our AI-powered predictions are based on complex algorithms and years of betting expertise. Whether you're a seasoned player or a beginner, our platform helps you catch the perfect odds to maximize your chances.</p>
-            <p>Join us and transform your betting strategy! Sign in now to access exclusive predictions and start winning big!</p>
-            <p>Our platform also supports multiple betting sites, giving you access to predictions across various platforms in real-time. Get started now!</p>
-        </div>
+    <!-- Background with Scrollable Content -->
+    <div class="background-content"></div>
 
-        <!-- Login Form -->
-        <div class="login-container">
-            <h2>AVIATOR MASTER X</h2>
-            <form id="loginForm" onsubmit="return login()">
-                <input type="password" id="password" placeholder="Enter your password" required><br>
-                <input type="text" id="bettingSite" placeholder="Enter Your Betting Site" required><br>
-                <button type="submit">Login</button>
-            </form>
-            <p id="loginError">Incorrect password. Please try again.</p>
-        </div>
-
+    <div class="info-content">
+        <h3>Welcome to FlightZone</h3>
+        <p>The ultimate place for mastering Aviator predictions. Discover powerful real-time signals designed to elevate your betting experience!</p>
+        <p>Our AI-powered predictions are based on complex algorithms and betting expertise, ensuring you always have an edge.</p>
+        <p>Join us and transform your betting strategy! Sign in now to access exclusive predictions and start winning big!</p>
+        <p>We support multiple betting sites, giving you access to predictions across various platforms in real time.</p>
     </div>
 
+    <!-- Fixed Static Card (Login) -->
+    <div class="login-container">
+        <h2>AVIATOR MASTER X</h2>
+        <form id="loginForm" onsubmit="return login()">
+            <input type="password" id="password" placeholder="Enter your password" required><br>
+            <input type="text" id="bettingSite" placeholder="Enter Your Betting Site" required><br>
+            <button type="submit">Login</button>
+        </form>
+        <p id="loginError">Incorrect password. Please try again.</p>
+    </div>
+
+    <!-- Footer -->
     <div class="footer">
         <p>&copy; 2025 <strong>FlightZoneSignals</strong>. All Rights Reserved.</p>
         <p>For more info, visit <a href="B.JAY" target="_blank">B JAY</a>.</p>
@@ -165,17 +179,13 @@
             const correctPassword = "masterx2025"; // Password is "masterx2025"
 
             if (password === correctPassword) {
-                // Optionally, save the betting site info to use later
                 console.log("Betting site:", bettingSite);
-                
-                // Redirect to the signals page after password is correct
                 window.location.href = "aviator_master_x_signals.html";
             } else {
-                // Show error if password is incorrect
                 document.getElementById("loginError").style.display = "block";
             }
 
-            return false; // Prevent the form from submitting the normal way
+            return false; // Prevent normal form submission
         }
     </script>
 
