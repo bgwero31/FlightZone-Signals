@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,16 +67,11 @@
             font-size: 14px;
             margin-top: 20px;
         }
-        .info-section {
+        .info {
             font-size: 16px;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-        }
-        .info-section h2 {
-            font-size: 22px;
-            color: #ff66b2;
+            color: #fff;
+            margin-top: 20px;
+            padding: 0 20px;
         }
     </style>
 </head>
@@ -87,21 +81,18 @@
     <div id="clock"></div>
     
     <button id="getSignalsBtn" class="btn">Get Signals</button>
-
-    <!-- Added predictions above the information section -->
+    
     <div class="card-container" id="cardContainer"></div>
 
-    <!-- Information section with reduced font size -->
-    <div class="info-section">
-        <h2>Welcome to the Pink Signal Bot</h2>
-        <p><strong>Welcome to the Pink Signal Bot - Your Ultimate Aviator Prediction Tool!</strong></p>
-        <p>Get the most accurate <strong>Pink signals</strong> (high-risk, high-reward) for Aviator and increase your chances of making big wins. Our bot uses advanced algorithms to provide real-time predictions, so you're always ahead of the game! Whether you're looking for <strong>10x multipliers</strong> or higher, <strong>Pink signals</strong> are designed to help you unlock massive payouts.</p>
+    <div class="info">
+        <h3>Welcome to the Pink Signal Bot</h3>
+        <p>Welcome to the Pink Signal Bot - Your Ultimate Aviator Prediction Tool!</p>
+        <p>Get the most accurate Pink signals (high-risk, high-reward) for Aviator and increase your chances of making big wins. Our bot uses advanced algorithms to provide real-time predictions, so you're always ahead of the game! Whether you're looking for 10x multipliers or higher, Pink signals are designed to help you unlock massive payouts.</p>
     </div>
 
     <div class="footer">All rights reserved by Pink Aviator Bot 2025</div>
 
-    <!-- Bip sound element -->
-    <audio id="bipSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
     <script>
         function updateClock() {
@@ -151,21 +142,26 @@
                     if (card.getAttribute("data-time") === currentTimeStr) {
                         card.innerHTML = card.getAttribute("data-odds"); // Show stored odds
                         card.classList.add('glowing');
-
-                        // Play the bip sound
-                        document.getElementById('bipSound').play();
+                        
+                        // Play beep sound when odds appear
+                        var beepSound = document.getElementById('beepSound');
+                        beepSound.currentTime = 0; // Rewind to start
+                        beepSound.play();
 
                         setTimeout(() => {
                             card.innerHTML = card.getAttribute("data-time"); // Remove odds
                             card.classList.remove('glowing');
-                        }, 60000); // Odds disappear after 60 seconds
+                        }, 10000); // Display odds for 60 seconds
                     }
                 });
             }, 1000); // Check every second
         }
 
-        document.getElementById('getSignalsBtn').addEventListener('click', generateTimeSlots);
-        setInterval(updateClock, 1000);
+        document.getElementById('getSignalsBtn').addEventListener('click', () => {
+            generateTimeSlots();
+        });
+
+        setInterval(updateClock, 1000); // Update clock every second
     </script>
 </body>
 </html>
