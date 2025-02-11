@@ -75,7 +75,7 @@
     }
   </style>
 </head>
-<body>
+<body onload="playGlitchSound()">
   <h1>Pink Aviator Bot</h1>
   
   <div id="clock"></div>
@@ -92,81 +92,31 @@
 
   <div class="footer">All rights reserved by Pink Aviator Bot 2025</div>
 
-  <!-- Glitch Sound Effect -->
-  <audio id="glitchSound" src="https://assets.mixkit.co/active_storage/sfx/1775/1775-preview.mp3" preload="auto"></audio>
+  <!-- Glitch Sound on Login -->
+  <audio id="glitchSound" src="https://assets.mixkit.co/active_storage/sfx/1792/1792-preview.mp3" preload="auto"></audio>
+
+  <!-- Sci-Fi Confirmation Sound Effect (when odd is triggered) -->
+  <audio id="triggerSound" src="https://assets.mixkit.co/active_storage/sfx/4397/4397-preview.mp3" preload="auto"></audio>
 
   <script>
+    function playGlitchSound() {
+      document.getElementById("glitchSound").play();
+    }
+
+    function triggerOddSound() {
+      document.getElementById("triggerSound").play();
+    }
+
     function updateClock() {
       var now = new Date();
       var hours = now.getHours().toString().padStart(2, '0');
       var minutes = now.getMinutes().toString().padStart(2, '0');
       var seconds = now.getSeconds().toString().padStart(2, '0');
-      document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
+      document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+      setTimeout(updateClock, 1000);
     }
 
-    function getRandomLowOdd() {
-      return (Math.floor(Math.random() * 2) + 2) + 'x'; // 2x or 3x
-    }
-
-    function getRandomBigOdd() {
-      return (Math.floor(Math.random() * 7) + 6) + 'x'; // 6x to 12x
-    }
-
-    function generateTimeSlots() {
-      var cardContainer = document.getElementById('cardContainer');
-      cardContainer.innerHTML = ''; // Clear previous cards
-      
-      var currentTime = new Date();
-      
-      for (let i = 0; i < 6; i++) {
-        let futureTime = new Date(currentTime.getTime() + (i + 1) * 120000); // 2-minute gap
-        let formattedTime = futureTime.getHours().toString().padStart(2, '0') + ":" + futureTime.getMinutes().toString().padStart(2, '0');
-        
-        let card = document.createElement('div');
-        card.classList.add('time-card');
-        card.textContent = formattedTime;
-        card.setAttribute("data-time", formattedTime);
-        card.setAttribute("data-odds", getRandomLowOdd() + " - " + getRandomBigOdd()); // Store static odds
-        cardContainer.appendChild(card);
-      }
-
-      checkTimeAndUpdateOdds();
-    }
-
-    function checkTimeAndUpdateOdds() {
-      setInterval(() => {
-        let now = new Date();
-        let currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-        
-        let cards = document.querySelectorAll('.time-card');
-        cards.forEach(card => {
-          if (card.getAttribute("data-time") === currentTimeStr) {
-            card.innerHTML = card.getAttribute("data-odds"); // Show stored odds
-            card.classList.add('glowing');
-            
-            // Play the glitch sound
-            var glitchSound = document.getElementById('glitchSound');
-            glitchSound.currentTime = 0;
-            glitchSound.play();
-
-            setTimeout(() => {
-              card.innerHTML = card.getAttribute("data-time"); // Remove odds
-              card.classList.remove('glowing');
-            }, 60000); // Display odds for 60 seconds
-          }
-        });
-      }, 1000); // Check every second
-    }
-
-    document.getElementById('getSignalsBtn').addEventListener('click', function() {
-      // Ensure the glitch sound plays on click as well (user interaction)
-      var glitchSound = document.getElementById('glitchSound');
-      glitchSound.currentTime = 0;
-      glitchSound.play();
-      generateTimeSlots();
-    });
-
-    setInterval(updateClock, 1000);
+    updateClock();
   </script>
 </body>
 </html>
