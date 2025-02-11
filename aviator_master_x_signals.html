@@ -7,89 +7,56 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: url('your-background-image.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: #0f0c29; /* Original background */
             color: #ffffff;
             text-align: center;
             margin: 0;
             padding: 0;
-            overflow: hidden;
-        }
-
-        /* Animated Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .particle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-10px); opacity: 0; }
-            100% { transform: translateY(100vh); opacity: 1; }
-        }
-
-        .container {
-            margin-top: 50px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            z-index: 2;
         }
 
-        h1 {
+        .login-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        h2 {
+            font-family: 'Bebas Neue', sans-serif;
             font-size: 2.5em;
             color: #ff6600;
             text-transform: uppercase;
-        }
-
-        .clock {
-            font-size: 1.5em;
-            font-weight: bold;
             margin-bottom: 20px;
         }
 
-        .signals-section {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            margin: 20px auto;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
         input {
-            width: 80%;
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
             margin: 10px 0;
             border-radius: 8px;
             border: none;
             font-size: 16px;
             background-color: rgba(255, 255, 255, 0.1);
             color: #fff;
-            text-align: center;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
 
         button {
-            padding: 10px 20px;
+            padding: 12px 20px;
             background-color: #ff6600;
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
+            width: 100%;
             transition: background-color 0.3s ease;
         }
 
@@ -97,157 +64,131 @@
             background-color: #ff8533;
         }
 
-        #response, #countdown {
-            font-size: 18px;
-            margin-top: 20px;
-        }
-
-        #finalOdd {
-            font-size: 24px;
-            font-weight: bold;
-            color: yellow;
+        #loginError {
+            color: red;
+            margin-top: 15px;
+            font-size: 14px;
             display: none;
         }
 
-        .extra-info {
-            margin-top: 30px;
-            font-size: 16px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        /* Raindrop effect */
+        .raindrop {
+            position: absolute;
+            width: 5px;
+            height: 10px;
+            background-color: white;
+            animation: fall 2s infinite;
         }
 
-        .alert-box {
-            position: fixed;
+        @keyframes fall {
+            from {
+                top: -10px;
+            }
+            to {
+                top: 100%;
+            }
+        }
+
+        /* Alerts for random messages */
+        .alert {
+            position: absolute;
             top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 0, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            display: none;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .footer {
-            margin-top: 40px;
-            font-size: 16px;
+            width: 100%;
             color: #ff6600;
+            font-size: 20px;
+            padding: 10px;
+            display: none;
         }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
+        
+        /* Add some info between card and footer */
+        .info-section {
+            margin: 30px 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Animated Particles -->
-    <div class="particles" id="particles"></div>
-
-    <div class="container">
-        <h1>AVIATOR MASTER X</h1>
-        <div class="clock" id="clock"></div>
-
-        <div class="signals-section">
-            <input type="number" id="oddInput" placeholder="Enter your odd (e.g., 2.50)">
-            <button onclick="checkOdd()">Submit</button>
-            <p id="response"></p>
-            <p id="countdown"></p>
-            <p id="finalOdd"></p>
-        </div>
-
-        <div class="extra-info">
-            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
-        </div>
-
-        <div class="alert-box" id="alertBox"></div>
-
-        <div class="footer">
-            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B JAY on WhatsApp ALL RIGHTS RESERVED...</a>
-        </div>
+    <div class="login-container">
+        <h2>AVIATOR MASTER X</h2>
+        <form id="loginForm" onsubmit="return login()">
+            <input type="password" id="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+        <p id="loginError">Incorrect password. Please try again.</p>
     </div>
 
+    <div class="info-section">
+        <p>Welcome to Aviator Master X. Follow the signals to increase your chances of winning.</p>
+    </div>
+
+    <div class="alert" id="alertMessage"></div>
+
+    <div id="raindrops"></div>
+
     <script>
-        function updateClock() {
-            const now = new Date();
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            document.getElementById("clock").innerText = `🕒 ${hours}:${minutes}:${seconds}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+        // Password verification logic
+        function login() {
+            const password = document.getElementById("password").value;
+            const correctPassword = "masterx2025"; // Password to login
 
-        function showAlert(message) {
-            const alertBox = document.getElementById("alertBox");
-            alertBox.innerText = message;
-            alertBox.style.display = "block";
+            if (password === correctPassword) {
+                window.location.href = "aviator_master_x_signals.html"; // Redirect after success
+            } else {
+                document.getElementById("loginError").style.display = "block"; // Show error message
+            }
+            return false;
+        }
+
+        // Function to create raindrops
+        function createRaindrops() {
+            const numRaindrops = 50; // Number of raindrops
+            const raindropContainer = document.getElementById('raindrops');
+
+            for (let i = 0; i < numRaindrops; i++) {
+                const raindrop = document.createElement('div');
+                raindrop.classList.add('raindrop');
+                raindrop.style.left = `${Math.random() * 100}%`; // Randomize left position
+                raindrop.style.animationDuration = `${Math.random() * 2 + 3}s`; // Randomize fall speed
+                raindropContainer.appendChild(raindrop);
+            }
+        }
+
+        // Function to show random tips for the players
+        function showRandomTip() {
+            const tips = [
+                "Tip: Play on high-risk moments for big wins.",
+                "Reminder: Keep your bet sizes reasonable to minimize losses.",
+                "Tip: Timing is key! Wait for a calm moment before placing a bet.",
+                "Don't rush! Patience often pays off when betting.",
+                "Risky moments can lead to high rewards, but play carefully."
+                "WITHDRAW your money after 8-10 wins,and start again with your normal stake"
+            ];
+
+            const randomIndex = Math.floor(Math.random() * tips.length);
+            const alertMessage = document.getElementById('alertMessage');
+            alertMessage.textContent = tips[randomIndex];
+            alertMessage.style.display = 'block';
+
+            // Hide the alert after 10 seconds
             setTimeout(() => {
-                alertBox.style.display = "none";
-            }, 5000);
+                alertMessage.style.display = 'none';
+            }, 10000);
         }
 
-        function checkOdd() {
-            const userOdd = parseFloat(document.getElementById("oddInput").value);
-            const response = document.getElementById("response");
-            const countdown = document.getElementById("countdown");
-            const finalOddDisplay = document.getElementById("finalOdd");
+        // Randomly trigger alerts
+        setInterval(showRandomTip, Math.random() * 200000 + 10000); // Trigger every 2-5 minutes
 
-            if (isNaN(userOdd) || userOdd < 1.00) {
-                showAlert("⚠️ Please enter a valid odd!");
-                return;
-            }
+        // Initialize raindrop effect
+        createRaindrops();
 
-            const waitSeconds = Math.floor(Math.random() * (120 - 90 + 1) + 90);
-            response.innerHTML = `✅ Your odd (${userOdd}x) is coming soon. Stay ready!`;
-            countdown.innerHTML = `⏳ Countdown: ${waitSeconds} sec`;
-
-            let timeLeft = waitSeconds;
-            const timer = setInterval(() => {
-                timeLeft--;
-                countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    countdown.innerHTML = "🎉 Get Ready!";
-
-                    const finalOdd = (userOdd >= 10.00) 
-                        ? (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2) 
-                        : (Math.random() * (9.99 - 1.00) + 1.00).toFixed(2);
-
-                    finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
-                    finalOddDisplay.style.display = "block";
-
-                    setTimeout(() => {
-                        response.innerHTML = "";
-                        countdown.innerHTML = "";
-                        finalOddDisplay.style.display = "none";
-                        document.getElementById("oddInput").value = "";
-                    }, 12000);
-                }
-            }, 1000);
-        }
-
-        function createParticles() {
-            const particlesContainer = document.getElementById("particles");
-            for (let i = 0; i < 50; i++) {
-                let particle = document.createElement("div");
-                particle.classList.add("particle");
-                particle.style.left = Math.random() * 100 + "vw";
-                particle.style.animationDuration = Math.random() * 3 + 2 + "s";
-                particlesContainer.appendChild(particle);
-            }
-        }
-        createParticles();
     </script>
+    
+    <footer>
+        <p>Contact B.JAY via WhatsApp: <a href="https://wa.me/263774309795" style="color: #ff6600;">+263774309795</a></p>
+    </footer>
 
 </body>
 </html>
