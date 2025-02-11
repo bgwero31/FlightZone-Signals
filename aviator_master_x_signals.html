@@ -7,12 +7,39 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #0f0c29;
+            background: url('your-background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #ffffff;
             text-align: center;
             margin: 0;
             padding: 0;
             overflow: hidden;
+        }
+
+        /* Animated Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10px); opacity: 0; }
+            100% { transform: translateY(100vh); opacity: 1; }
         }
 
         .container {
@@ -91,6 +118,20 @@
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
         }
 
+        .alert-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            display: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
         .footer {
             margin-top: 40px;
             font-size: 16px;
@@ -106,6 +147,9 @@
 </head>
 <body>
 
+    <!-- Animated Particles -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
         <h1>AVIATOR MASTER X</h1>
         <div class="clock" id="clock"></div>
@@ -119,11 +163,13 @@
         </div>
 
         <div class="extra-info">
-             Always play wisely! Some hours are better than others. Be patient and follow the signals!
+            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
         </div>
 
+        <div class="alert-box" id="alertBox"></div>
+
         <div class="footer">
-            📞 <a href=ALL RIGHTS RESERVED"https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp</a>
+            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B JAY on WhatsApp ALL RIGHTS RESERVED...</a>
         </div>
     </div>
 
@@ -140,6 +186,15 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        function showAlert(message) {
+            const alertBox = document.getElementById("alertBox");
+            alertBox.innerText = message;
+            alertBox.style.display = "block";
+            setTimeout(() => {
+                alertBox.style.display = "none";
+            }, 5000);
+        }
+
         function checkOdd() {
             const userOdd = parseFloat(document.getElementById("oddInput").value);
             const response = document.getElementById("response");
@@ -147,14 +202,7 @@
             const finalOddDisplay = document.getElementById("finalOdd");
 
             if (isNaN(userOdd) || userOdd < 1.00) {
-                alert("⚠️ Please enter a valid odd!");
-                return;
-            }
-
-            const badHour = Math.random() < 0.25;
-            if (badHour) {
-                const waitTime = [30, 60, 120][Math.floor(Math.random() * 3)];
-                alert(`🚨 Too many blues! Best time to play again: after ${waitTime} mins.`);
+                showAlert("⚠️ Please enter a valid odd!");
                 return;
             }
 
@@ -169,39 +217,36 @@
 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
-                    countdown.innerHTML = " Get Ready!";
+                    countdown.innerHTML = "🎉 Get Ready!";
 
-                    let finalOdd;
-                    if (userOdd >= 1.00 && userOdd <= 1.99) {
-                        finalOdd = (Math.random() * (1.99 - 1.00) + 1.00).toFixed(2);
-                    } else if (userOdd >= 2.00 && userOdd <= 9.99) {
-                        finalOdd = (Math.random() * (9.99 - 2.00) + 2.00).toFixed(2);
-                    } else if (userOdd >= 10.00) {
-                        finalOdd = (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2);
-                    }
+                    const finalOdd = (userOdd >= 10.00) 
+                        ? (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2) 
+                        : (Math.random() * (9.99 - 1.00) + 1.00).toFixed(2);
 
-                    let flickerCount = 0;
+                    finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
                     finalOddDisplay.style.display = "block";
-                    const flickerInterval = setInterval(() => {
-                        finalOddDisplay.innerHTML = flickerCount % 2 === 0 ? "" : `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
-                        flickerCount++;
 
-                        if (flickerCount === 6) {
-                            clearInterval(flickerInterval);
-                            finalOddDisplay.innerHTML = ` PLAY NOW! Your odd: ${finalOdd}x`;
-
-                            setTimeout(() => {
-                                response.innerHTML = "";
-                                countdown.innerHTML = "";
-                                finalOddDisplay.innerHTML = "";
-                                document.getElementById("oddInput").value = "";
-                                response.innerHTML = "👉 Please enter your odd";
-                            }, 12000);
-                        }
-                    }, 500);
+                    setTimeout(() => {
+                        response.innerHTML = "";
+                        countdown.innerHTML = "";
+                        finalOddDisplay.style.display = "none";
+                        document.getElementById("oddInput").value = "";
+                    }, 12000);
                 }
             }, 1000);
         }
+
+        function createParticles() {
+            const particlesContainer = document.getElementById("particles");
+            for (let i = 0; i < 50; i++) {
+                let particle = document.createElement("div");
+                particle.classList.add("particle");
+                particle.style.left = Math.random() * 100 + "vw";
+                particle.style.animationDuration = Math.random() * 3 + 2 + "s";
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
     </script>
 
 </body>
