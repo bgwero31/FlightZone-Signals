@@ -6,20 +6,23 @@
     <title>AVIATOR MASTER X</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             font-family: 'Poppins', sans-serif;
-            color: white;
+            overflow: hidden;
             height: 100vh;
-            background: linear-gradient(to right, #00ffcc, #003366, #ff00cc);
-            background-size: 400% 400%;
-            animation: gradientAnimation 5s ease infinite;
-            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
+            background: linear-gradient(135deg, #ff5c33, #9900cc, #003366);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            overflow-x: hidden;
         }
 
         @keyframes gradientAnimation {
@@ -37,45 +40,45 @@
             background: url('https://your-futuristic-image-url.com') no-repeat center center fixed;
             background-size: cover;
             z-index: -1;
-            overflow-y: scroll;
         }
 
-        .info-box {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
-            margin-bottom: 30px;
+        .scrollable-card {
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.8); /* Transparent background */
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.8);
             position: relative;
             z-index: 1;
-            width: 80%;
-            text-align: center;
-            margin-top: 20px;
+            margin-top: 100px;
         }
 
-        .info-box h3 {
+        .scrollable-card h3 {
             font-family: 'Orbitron', sans-serif;
-            color: #ff6600;
-            font-size: 1.5em;
+            color: #ffcc00;
+            font-size: 2.5em;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
-        .info-box p {
-            font-size: 1.1em;
+        .scrollable-card p {
+            font-size: 1.2em;
             color: #ddd;
-            line-height: 1.6;
+            line-height: 1.8;
+            margin-bottom: 20px;
         }
 
         .login-container {
-            background: rgba(0, 0, 0, 0.6); /* Transparent card */
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.8);
             padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
             max-width: 400px;
             width: 100%;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
             z-index: 1;
-            position: relative;
             margin-top: 30px;
         }
 
@@ -98,12 +101,12 @@
             font-size: 18px;
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
         }
 
         button {
             padding: 15px 25px;
-            background-color: #00ffcc;
+            background-color: #ff6600;
             color: black;
             border: none;
             border-radius: 10px;
@@ -114,7 +117,7 @@
         }
 
         button:hover {
-            background-color: #00cc99;
+            background-color: #ff3300;
         }
 
         #loginError {
@@ -148,6 +151,14 @@
 
     <div class="background-image"></div>
 
+    <div class="scrollable-card">
+        <h3>FlightZone</h3>
+        <p>Welcome to FlightZone, the ultimate place for mastering Aviator predictions. Discover powerful real-time signals designed to elevate your betting experience and ensure you're always ahead of the game!</p>
+        <p>Our AI-powered predictions are based on complex algorithms and years of betting expertise. Whether you're a seasoned player or a beginner, our platform helps you catch the perfect odds to maximize your chances.</p>
+        <p>Join us and transform your betting strategy! Sign in now to access exclusive predictions and start winning big!</p>
+        <p>Our platform also supports multiple betting sites, giving you access to predictions across various platforms in real-time. Get started now!</p>
+    </div>
+
     <div class="login-container">
         <h2>AVIATOR MASTER X</h2>
         <form id="loginForm" onsubmit="return login()">
@@ -156,11 +167,6 @@
             <button type="submit">Login</button>
         </form>
         <p id="loginError">Incorrect password. Please try again.</p>
-    </div>
-
-    <div class="info-box">
-        <h3>FlightZone</h3>
-        <p>Welcome to FlightZone, the leading platform for accurate Aviator predictions. Unlock the power of real-time signals and take your betting game to the next level!</p>
     </div>
 
     <div class="footer">
