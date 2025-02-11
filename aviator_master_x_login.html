@@ -130,11 +130,11 @@
     <div class="login-container">
         <h2>AVIATOR MASTER X</h2>
         <form id="loginForm" onsubmit="return login()">
-            <input type="text" id="bettingSite" placeholder="Betting Site" required><br>
+            <input type="text" id="bettingSite" placeholder="Enter your Betting Site" required><br>
             <input type="password" id="password" placeholder="Password" required><br>
             <button type="submit">Login</button>
         </form>
-        <p id="loginError">Incorrect betting site or password. Please try again.</p>
+        <p id="loginError">Incorrect password. Please try again.</p>
         
         <!-- Accuracy Info -->
         <p id="accuracy-info">FlightZone by B.JAY offers real-time, highly accurate signals for maximum betting success.</p>
@@ -147,23 +147,21 @@
 
     <script>
         function login() {
-            const bettingSite = document.getElementById("bettingSite").value;
             const password = document.getElementById("password").value;
+            const bettingSite = document.getElementById("bettingSite").value;
 
-            // Debugging output
-            console.log("Betting Site:", bettingSite); 
-            console.log("Password:", password); 
+            // Simple password check
+            const correctPassword = "masterx2025"; // replace with your desired password
 
-            // Hardcoded credentials for now (replace with real logic later)
-            if (bettingSite === "FlightZone" && password === "masterx2025") {
-                // Redirect to the main bot page
-                window.location.replace("aviator_master_x_signals.html"); // Use replace for redirect
-                return false;
+            if (masterx2025 === correctPassword) {
+                // Redirect to the next page after password is correct
+                window.location.href = "aviator_master_x_signals.html?bettingSite=" + bettingSite;
             } else {
-                // Show login error message
+                // Show error if password is incorrect
                 document.getElementById("loginError").style.display = "block";
-                return false;
             }
+
+            return false; // Prevent the form from submitting the normal way
         }
     </script>
 
