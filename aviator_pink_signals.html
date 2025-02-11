@@ -80,7 +80,7 @@
   
   <div id="clock"></div>
   
-  <button id="getSignalsBtn" class="btn">Get Signals</button>
+  <button id="getSignalsBtn" class="btn" onclick="getOdds()">Get Signals</button>
   
   <div class="card-container" id="cardContainer"></div>
 
@@ -99,14 +99,17 @@
   <audio id="triggerSound" src="https://assets.mixkit.co/active_storage/sfx/4397/4397-preview.mp3" preload="auto"></audio>
 
   <script>
+    // Play the glitch sound when the page is loaded (bot opens)
     function playGlitchSound() {
       document.getElementById("glitchSound").play();
     }
 
+    // Play the Sci-Fi confirmation sound when the odd is triggered
     function triggerOddSound() {
       document.getElementById("triggerSound").play();
     }
 
+    // Update clock to show current time
     function updateClock() {
       var now = new Date();
       var hours = now.getHours().toString().padStart(2, '0');
@@ -117,6 +120,36 @@
     }
 
     updateClock();
+
+    // Function to generate odds
+    function getOdds() {
+      const odds = [
+        { target: "1.20x", risk: "2.50x" },
+        { target: "1.50x", risk: "4.00x" },
+        { target: "2.00x", risk: "5.50x" },
+        { target: "3.00x", risk: "6.00x" },
+        { target: "5.00x", risk: "8.00x" },
+        { target: "10.00x", risk: "20.00x" }
+      ];
+
+      // Get a random odd from the list
+      const randomOdd = odds[Math.floor(Math.random() * odds.length)];
+
+      // Display the odd on the page
+      displayOdd(randomOdd.target, randomOdd.risk);
+      // Play confirmation sound for odd
+      triggerOddSound();
+    }
+
+    // Function to display the odd on the page
+    function displayOdd(target, risk) {
+      const cardContainer = document.getElementById('cardContainer');
+      const card = document.createElement('div');
+      card.classList.add('time-card');
+      card.classList.add('glowing');
+      card.innerHTML = `Target: ${target}<br>Risk: ${risk}`;
+      cardContainer.appendChild(card);
+    }
   </script>
 </body>
 </html>
