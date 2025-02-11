@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVIATOR MASTER X</title>
+    <title>AVIATOR MASTER X - Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +22,6 @@
         }
 
         h1 {
-            font-family: 'Bebas Neue', sans-serif;
             font-size: 2.5em;
             color: #ff6600;
             text-transform: uppercase;
@@ -42,15 +41,6 @@
             width: 80%;
             max-width: 600px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .signal {
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 18px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
 
         input {
@@ -85,6 +75,22 @@
             margin-top: 20px;
         }
 
+        #finalOdd {
+            font-size: 24px;
+            font-weight: bold;
+            color: yellow;
+            display: none;
+        }
+
+        .extra-info {
+            margin-top: 30px;
+            font-size: 16px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
         .footer {
             margin-top: 40px;
             font-size: 16px;
@@ -96,40 +102,12 @@
             text-decoration: none;
             font-weight: bold;
         }
-
-        /* Animated Background (Falling glowing dots) */
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .dot {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            from { transform: translateY(-10px); opacity: 1; }
-            to { transform: translateY(100vh); opacity: 0; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="background-animation"></div>
-
     <div class="container">
-        <h1>AVIATOR MASTER X</h1>
+        <h1>AVIATOR MASTER X - Ask for Your Odd</h1>
         <div class="clock" id="clock"></div>
 
         <div class="signals-section">
@@ -137,10 +115,15 @@
             <button onclick="checkOdd()">Submit</button>
             <p id="response"></p>
             <p id="countdown"></p>
+            <p id="finalOdd"></p>
+        </div>
+
+        <div class="extra-info">
+            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
         </div>
 
         <div class="footer">
-            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp</a> ALL RIGHTS RESERVED...
+            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp</a>
         </div>
     </div>
 
@@ -161,23 +144,22 @@
             const userOdd = parseFloat(document.getElementById("oddInput").value);
             const response = document.getElementById("response");
             const countdown = document.getElementById("countdown");
+            const finalOddDisplay = document.getElementById("finalOdd");
 
             if (isNaN(userOdd) || userOdd < 1.00) {
-                response.innerHTML = "⚠️ Please enter a valid odd!";
-                countdown.innerHTML = "";
+                alert("⚠️ Please enter a valid odd!");
                 return;
             }
 
             const badHour = Math.random() < 0.25;
             if (badHour) {
                 const waitTime = [30, 60, 120][Math.floor(Math.random() * 3)];
-                response.innerHTML = `🚨 Too many blues! Best time to play again: after ${waitTime} mins.`;
-                countdown.innerHTML = "";
+                alert(`🚨 Too many blues! Best time to play again: after ${waitTime} mins.`);
                 return;
             }
 
-            const waitSeconds = Math.floor(Math.random() * (110 - 90 + 1) + 90);
-            response.innerHTML = `✅ Your odd (${userOdd}x) is coming in a few minutes. Stay ready!`;
+            const waitSeconds = Math.floor(Math.random() * (120 - 90 + 1) + 90);
+            response.innerHTML = `✅ Your odd (${userOdd}x) is coming soon. Stay ready!`;
             countdown.innerHTML = `⏳ Countdown: ${waitSeconds} sec`;
 
             let timeLeft = waitSeconds;
@@ -187,42 +169,39 @@
 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
+                    countdown.innerHTML = "🎉 Get Ready!";
+
                     let finalOdd;
                     if (userOdd >= 1.00 && userOdd <= 1.99) {
                         finalOdd = (Math.random() * (1.99 - 1.00) + 1.00).toFixed(2);
-                    } else if (userOdd >= 2.00 && userOdd <= 6.00) {
-                        finalOdd = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2);
+                    } else if (userOdd >= 2.00 && userOdd <= 9.99) {
+                        finalOdd = (Math.random() * (9.99 - 2.00) + 2.00).toFixed(2);
                     } else if (userOdd >= 10.00) {
                         finalOdd = (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2);
                     }
 
-                    response.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
-                    countdown.innerHTML = "";
+                    let flickerCount = 0;
+                    finalOddDisplay.style.display = "block";
+                    const flickerInterval = setInterval(() => {
+                        finalOddDisplay.innerHTML = flickerCount % 2 === 0 ? "" : `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
+                        flickerCount++;
 
-                    setTimeout(() => {
-                        response.innerHTML = "";
-                        countdown.innerHTML = "";
-                        document.getElementById("oddInput").value = "";
-                        response.innerHTML = "👉 Please enter your odd";
-                    }, 12000);
+                        if (flickerCount === 6) {
+                            clearInterval(flickerInterval);
+                            finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
+
+                            setTimeout(() => {
+                                response.innerHTML = "";
+                                countdown.innerHTML = "";
+                                finalOddDisplay.innerHTML = "";
+                                document.getElementById("oddInput").value = "";
+                                response.innerHTML = "👉 Please enter your odd";
+                            }, 12000);
+                        }
+                    }, 500);
                 }
             }, 1000);
         }
-
-        function createDots() {
-            const numDots = 30;
-            const container = document.querySelector(".background-animation");
-
-            for (let i = 0; i < numDots; i++) {
-                let dot = document.createElement("div");
-                dot.classList.add("dot");
-                dot.style.left = Math.random() * 100 + "vw";
-                dot.style.animationDuration = Math.random() * 5 + 3 + "s";
-                dot.style.animationDelay = Math.random() * 2 + "s";
-                container.appendChild(dot);
-            }
-        }
-        createDots();
     </script>
 
 </body>
