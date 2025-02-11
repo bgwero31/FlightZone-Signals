@@ -85,6 +85,18 @@
             margin-top: 20px;
         }
 
+        .footer {
+            margin-top: 40px;
+            font-size: 16px;
+            color: #ff6600;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
         /* Animated Background (Falling glowing dots) */
         .background-animation {
             position: fixed;
@@ -117,7 +129,7 @@
     <div class="background-animation"></div>
 
     <div class="container">
-        <h1>AVIATOR MASTER X - Ask for Your Odd</h1>
+        <h1>AVIATOR MASTER X</h1>
         <div class="clock" id="clock"></div>
 
         <div class="signals-section">
@@ -125,6 +137,10 @@
             <button onclick="checkOdd()">Submit</button>
             <p id="response"></p>
             <p id="countdown"></p>
+        </div>
+
+        <div class="footer">
+            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp</a> ALL RIGHTS RESERVED...
         </div>
     </div>
 
@@ -152,47 +168,47 @@
                 return;
             }
 
-            // Determine if it's a bad hour (random 1/4 chance)
             const badHour = Math.random() < 0.25;
             if (badHour) {
                 const waitTime = [30, 60, 120][Math.floor(Math.random() * 3)];
-                response.innerHTML = `🚨 Too many blues! Stop playing now. Best time to play again: after ${waitTime} mins.`;
+                response.innerHTML = `🚨 Too many blues! Best time to play again: after ${waitTime} mins.`;
                 countdown.innerHTML = "";
                 return;
             }
 
-            // Determine when the odd is coming (random time: 1 - 5 mins)
-            const waitMinutes = Math.floor(Math.random() * 5) + 1;
-            response.innerHTML = `✅ Your odd (${userOdd}x) is coming in ${waitMinutes} minutes. Stay ready!`;
+            const waitSeconds = Math.floor(Math.random() * (7200 - 90 + 1) + 90);
+            response.innerHTML = `✅ Your odd (${userOdd}x) is coming in a few minutes. Stay ready!`;
+            countdown.innerHTML = `⏳ Countdown: ${waitSeconds} sec`;
 
-            // Countdown timer
-            let timeLeft = waitMinutes * 60;
-            countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;
-
+            let timeLeft = waitSeconds;
             const timer = setInterval(() => {
                 timeLeft--;
                 countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;
 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
-
-                    // Generate random odd in the requested range
                     let finalOdd;
                     if (userOdd >= 1.00 && userOdd <= 1.99) {
                         finalOdd = (Math.random() * (1.99 - 1.00) + 1.00).toFixed(2);
-                    } else if (userOdd >= 2.00 && userOdd <= 9.99) {
-                        finalOdd = (Math.random() * (9.99 - 2.00) + 2.00).toFixed(2);
+                    } else if (userOdd >= 2.00 && userOdd <= 6.00) {
+                        finalOdd = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2);
                     } else if (userOdd >= 10.00) {
                         finalOdd = (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2);
                     }
 
                     response.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
                     countdown.innerHTML = "";
+
+                    setTimeout(() => {
+                        response.innerHTML = "";
+                        countdown.innerHTML = "";
+                        document.getElementById("oddInput").value = "";
+                        response.innerHTML = "👉 Please enter your odd";
+                    }, 12000);
                 }
             }, 1000);
         }
 
-        // Create falling dots animation
         function createDots() {
             const numDots = 30;
             const container = document.querySelector(".background-animation");
