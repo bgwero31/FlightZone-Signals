@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVIATOR MASTER X - Signals</title>
+    <title>AVIATOR MASTER X</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -107,7 +107,7 @@
 <body>
 
     <div class="container">
-        <h1>AVIATOR MASTER X - Ask for Your Odd</h1>
+        <h1>AVIATOR MASTER X</h1>
         <div class="clock" id="clock"></div>
 
         <div class="signals-section">
@@ -119,7 +119,7 @@
         </div>
 
         <div class="extra-info">
-            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
+             Always play wisely! Some hours are better than others. Be patient and follow the signals!
         </div>
 
         <div class="footer">
@@ -169,7 +169,7 @@
 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
-                    countdown.innerHTML = "🎉 Get Ready!";
+                    countdown.innerHTML = " Get Ready!";
 
                     let finalOdd;
                     if (userOdd >= 1.00 && userOdd <= 1.99) {
@@ -188,7 +188,7 @@
 
                         if (flickerCount === 6) {
                             clearInterval(flickerInterval);
-                            finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
+                            finalOddDisplay.innerHTML = ` PLAY NOW! Your odd: ${finalOdd}x`;
 
                             setTimeout(() => {
                                 response.innerHTML = "";
