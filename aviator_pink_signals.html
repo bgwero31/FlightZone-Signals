@@ -92,8 +92,8 @@
 
   <div class="footer">All rights reserved by Pink Aviator Bot 2025</div>
 
-  <!-- Updated audio element using sci-fi ping sound -->
-  <audio id="beepSound" src="https://actions.google.com/sounds/v1/scifi/metal_ping.ogg" preload="auto"></audio>
+  <!-- Glitch Sound Effect -->
+  <audio id="glitchSound" src="https://assets.mixkit.co/active_storage/sfx/1775/1775-preview.mp3" preload="auto"></audio>
 
   <script>
     function updateClock() {
@@ -144,25 +144,25 @@
             card.innerHTML = card.getAttribute("data-odds"); // Show stored odds
             card.classList.add('glowing');
             
-            // Play the beep sound (reset time and play)
-            var beepSound = document.getElementById('beepSound');
-            beepSound.currentTime = 0;
-            beepSound.play();
+            // Play the glitch sound
+            var glitchSound = document.getElementById('glitchSound');
+            glitchSound.currentTime = 0;
+            glitchSound.play();
 
             setTimeout(() => {
               card.innerHTML = card.getAttribute("data-time"); // Remove odds
               card.classList.remove('glowing');
-            }, 60000); // Display odds for 10 seconds
+            }, 60000); // Display odds for 60 seconds
           }
         });
       }, 1000); // Check every second
     }
 
     document.getElementById('getSignalsBtn').addEventListener('click', function() {
-      // Ensure the beep plays on click as well (user interaction)
-      var beepSound = document.getElementById('beepSound');
-      beepSound.currentTime = 0;
-      beepSound.play();
+      // Ensure the glitch sound plays on click as well (user interaction)
+      var glitchSound = document.getElementById('glitchSound');
+      glitchSound.currentTime = 0;
+      glitchSound.play();
       generateTimeSlots();
     });
 
