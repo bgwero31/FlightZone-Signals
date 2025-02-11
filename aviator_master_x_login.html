@@ -7,19 +7,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63);
-            background-size: 400% 400%;
-            animation: gradientAnimation 5s ease infinite;
-            color: #ffffff;
             margin: 0;
             padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            height: 100vh;
+            background: linear-gradient(to right, #00ffcc, #003366, #ff00cc);
+            background-size: 400% 400%;
+            animation: gradientAnimation 5s ease infinite;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            text-align: center;
-            overflow: hidden;
+            flex-direction: column;
         }
 
         @keyframes gradientAnimation {
@@ -28,18 +28,27 @@
             100% { background-position: 0% 50%; }
         }
 
-        .login-container {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.8);
-            transition: transform 0.3s ease-in-out;
+            height: 100%;
+            background: url('https://your-futuristic-image-url.com') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+            overflow-y: scroll;
         }
 
-        .login-container:hover {
-            transform: scale(1.05);
+        .login-container {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
+            z-index: 1;
+            position: relative;
         }
 
         h2 {
@@ -48,34 +57,28 @@
             color: #00ffcc;
             text-transform: uppercase;
             margin-bottom: 20px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
         }
 
         input {
             width: 100%;
             padding: 15px;
-            margin: 12px 0;
-            border-radius: 8px;
+            margin: 15px 0;
+            border-radius: 10px;
             border: none;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            font-size: 16px;
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            text-align: center;
-        }
-
-        input:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+            font-size: 18px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
 
         button {
-            padding: 15px 20px;
+            padding: 15px 25px;
             background-color: #00ffcc;
             color: black;
             border: none;
-            border-radius: 8px;
-            font-size: 18px;
+            border-radius: 10px;
+            font-size: 20px;
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s ease;
@@ -93,9 +96,9 @@
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 50px;
             font-size: 14px;
-            color: #ffffff;
+            color: #00ffcc;
             text-align: center;
         }
 
@@ -108,14 +111,44 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff6600;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            font-size: 1.1em;
+            color: #ddd;
+            line-height: 1.6;
+        }
+
     </style>
 </head>
 <body>
 
+    <div class="background-image"></div>
+
+    <div class="info-box">
+        <h3>FlightZone</h3>
+        <p>Welcome to FlightZone, the leading platform for accurate Aviator predictions. Unlock the power of real-time signals and take your betting game to the next level!</p>
+    </div>
+
     <div class="login-container">
         <h2>AVIATOR MASTER X</h2>
         <form id="loginForm" onsubmit="return login()">
-            <input type="password" id="password" placeholder="Password" required><br>
+            <input type="password" id="password" placeholder="Enter your password" required><br>
             <input type="text" id="bettingSite" placeholder="Enter Your Betting Site" required><br>
             <button type="submit">Login</button>
         </form>
@@ -123,8 +156,9 @@
     </div>
 
     <div class="footer">
-        <p>&copy; 2025 <strong>FlightZone Signals by B JAY</strong>. All Rights Reserved.</p>
-        <p>For more info, visit <a href="https://github.com/BaronGwero" target="_blank">GitHub</a>.</p>
+        <p>&copy; 2025 <strong>FlightZoneSignals</strong>. All Rights Reserved.</p>
+        <p>For more info, visit <a href="B.JAYI" target="_blank">GitHub</a>.</p>
+        <p>Powered by <strong>AVIATOR MASTER X Bot</strong></p>
     </div>
 
     <script>
