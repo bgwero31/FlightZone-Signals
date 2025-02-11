@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVIATOR MASTER X </title>
+    <title>AVIATOR MASTER X</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: url('your-background-image.jpg') no-repeat center center fixed;
+            background: url('https://www.example.com/your-background-image.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             text-align: center;
             margin: 0;
             padding: 0;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Animated Particles */
-        .particles {
+        /* Raindrop Animation */
+        .raindrops {
             position: fixed;
             top: 0;
             left: 0;
@@ -27,19 +28,18 @@
             z-index: 0;
         }
 
-        .particle {
+        .raindrop {
             position: absolute;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: fall linear infinite;
+            width: 2px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.6);
+            opacity: 0;
+            animation: fall 0.5s linear infinite;
         }
 
         @keyframes fall {
-            0% { transform: translateY(-10px); opacity: 0; }
-            100% { transform: translateY(100vh); opacity: 1; }
+            0% { transform: translateY(-10px); opacity: 0.5; }
+            100% { transform: translateY(100vh); opacity: 0; }
         }
 
         .container {
@@ -136,6 +136,7 @@
             margin-top: 40px;
             font-size: 16px;
             color: #ff6600;
+            z-index: 3;
         }
 
         .footer a {
@@ -143,12 +144,13 @@
             text-decoration: none;
             font-weight: bold;
         }
+
     </style>
 </head>
 <body>
 
-    <!-- Animated Particles -->
-    <div class="particles" id="particles"></div>
+    <!-- Raindrop Animation -->
+    <div class="raindrops" id="raindrops"></div>
 
     <div class="container">
         <h1>AVIATOR MASTER X </h1>
@@ -163,13 +165,13 @@
         </div>
 
         <div class="extra-info">
-             Always play wisely! Some hours are better than others. Be patient and follow the signals!
+            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
         </div>
 
         <div class="alert-box" id="alertBox"></div>
 
         <div class="footer">
-            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp..ALL RIGHTS RESRVE...</a>
+            📞 <a href="https://wa.me/263774309795" target="_blank">Contact Baron Gwero on WhatsApp</a>
         </div>
     </div>
 
@@ -223,7 +225,7 @@
                         ? (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2) 
                         : (Math.random() * (6.00 - 1.00) + 1.00).toFixed(2);
 
-                    finalOddDisplay.innerHTML = `PLAY NOW! Your odd: ${finalOdd}x`;
+                    finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
                     finalOddDisplay.style.display = "block";
 
                     setTimeout(() => {
@@ -236,17 +238,17 @@
             }, 1000);
         }
 
-        function createParticles() {
-            const particlesContainer = document.getElementById("particles");
-            for (let i = 0; i < 50; i++) {
-                let particle = document.createElement("div");
-                particle.classList.add("particle");
-                particle.style.left = Math.random() * 100 + "vw";
-                particle.style.animationDuration = Math.random() * 3 + 2 + "s";
-                particlesContainer.appendChild(particle);
+        function createRaindrops() {
+            const raindropsContainer = document.getElementById("raindrops");
+            for (let i = 0; i < 100; i++) {
+                let raindrop = document.createElement("div");
+                raindrop.classList.add("raindrop");
+                raindrop.style.left = Math.random() * 100 + "vw";
+                raindrop.style.animationDuration = Math.random() * 1.5 + 1 + "s";
+                raindropsContainer.appendChild(raindrop);
             }
         }
-        createParticles();
+        createRaindrops();
     </script>
 
 </body>
