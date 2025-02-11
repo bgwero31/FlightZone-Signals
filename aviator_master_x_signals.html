@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVIATOR MASTER X</title>
+    <title>AVIATOR MASTER X </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,6 +17,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            flex-direction: column; /* Updated to stack elements vertically */
         }
 
         .login-container {
@@ -107,6 +108,18 @@
             padding: 15px;
             border-radius: 10px;
         }
+
+        /* Footer */
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -164,7 +177,6 @@
                 "Tip: Timing is key! Wait for a calm moment before placing a bet.",
                 "Don't rush! Patience often pays off when betting.",
                 "Risky moments can lead to high rewards, but play carefully."
-                "WITHDRAW your money after 8-10 wins,and start again with your normal stake"
             ];
 
             const randomIndex = Math.floor(Math.random() * tips.length);
@@ -172,14 +184,14 @@
             alertMessage.textContent = tips[randomIndex];
             alertMessage.style.display = 'block';
 
-            // Hide the alert after 10 seconds
+            // Hide the alert after 5 seconds
             setTimeout(() => {
                 alertMessage.style.display = 'none';
-            }, 10000);
+            }, 5000);
         }
 
         // Randomly trigger alerts
-        setInterval(showRandomTip, Math.random() * 200000 + 10000); // Trigger every 2-5 minutes
+        setInterval(showRandomTip, Math.random() * 200000 + 500000); // Trigger every 2-5 minutes
 
         // Initialize raindrop effect
         createRaindrops();
