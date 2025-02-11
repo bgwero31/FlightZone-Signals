@@ -20,7 +20,6 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            overflow-y: scroll;
         }
 
         @keyframes gradientAnimation {
@@ -41,25 +40,53 @@
             overflow-y: scroll;
         }
 
+        .info-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+            width: 80%;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff6600;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            font-size: 1.1em;
+            color: #ddd;
+            line-height: 1.6;
+        }
+
         .login-container {
-            background: rgba(0, 0, 0, 0.5); /* Adjust transparency for the glass effect */
+            background: rgba(0, 0, 0, 0.6); /* Transparent card */
             border-radius: 15px;
-            padding: 40px;
-            max-width: 450px;
+            padding: 25px;
+            max-width: 400px;
             width: 100%;
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
             z-index: 1;
             position: relative;
-            backdrop-filter: blur(10px); /* Glass-like effect */
+            margin-top: 30px;
         }
 
         h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3em;
+            font-size: 2.5em;
             color: #00ffcc;
             text-transform: uppercase;
             margin-bottom: 20px;
             letter-spacing: 2px;
+            text-align: center;
         }
 
         input {
@@ -69,7 +96,7 @@
             border-radius: 10px;
             border: none;
             font-size: 18px;
-            background-color: rgba(255, 255, 255, 0.2); /* Adjust transparency */
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
@@ -95,6 +122,7 @@
             margin-top: 15px;
             font-size: 14px;
             display: none;
+            text-align: center;
         }
 
         .footer {
@@ -114,38 +142,11 @@
             text-decoration: underline;
         }
 
-        .info-box {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
-            margin-bottom: 30px;
-        }
-
-        .info-box h3 {
-            font-family: 'Orbitron', sans-serif;
-            color: #ff6600;
-            font-size: 1.5em;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .info-box p {
-            font-size: 1.1em;
-            color: #ddd;
-            line-height: 1.6;
-        }
-
     </style>
 </head>
 <body>
 
     <div class="background-image"></div>
-
-    <div class="info-box">
-        <h3>FlightZone</h3>
-        <p>Welcome to FlightZone, the leading platform for accurate Aviator predictions. Unlock the power of real-time signals and take your betting game to the next level!</p>
-    </div>
 
     <div class="login-container">
         <h2>AVIATOR MASTER X</h2>
@@ -155,6 +156,11 @@
             <button type="submit">Login</button>
         </form>
         <p id="loginError">Incorrect password. Please try again.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>FlightZone</h3>
+        <p>Welcome to FlightZone, the leading platform for accurate Aviator predictions. Unlock the power of real-time signals and take your betting game to the next level!</p>
     </div>
 
     <div class="footer">
