@@ -150,11 +150,17 @@
             const bettingSite = document.getElementById("bettingSite").value;
             const password = document.getElementById("password").value;
 
+            // Debugging output
+            console.log("Betting Site:", bettingSite); 
+            console.log("Password:", password); 
+
             // Hardcoded credentials for now (replace with real logic later)
             if (bettingSite === "FlightZone" && password === "masterx2025") {
-                window.location.href = "aviator_master_x_signals.html"; // Redirect to the main bot page
+                // Redirect to the main bot page
+                window.location.replace("aviator_master_x_signals.html"); // Use replace for redirect
                 return false;
             } else {
+                // Show login error message
                 document.getElementById("loginError").style.display = "block";
                 return false;
             }
