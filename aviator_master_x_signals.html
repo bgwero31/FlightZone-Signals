@@ -1,1 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVIATOR MASTER X </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f0c29;
+            color: #ffffff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
 
+        .container {
+            margin-top: 50px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #ff6600;
+            text-transform: uppercase;
+        }
+
+        .clock {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .signals-section {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff8533;
+        }
+
+        #response, #countdown {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        #finalOdd {
+            font-size: 24px;
+            font-weight: bold;
+            color: yellow;
+            display: none;
+        }
+
+        .extra-info {
+            margin-top: 30px;
+            font-size: 16px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 16px;
+            color: #ff6600;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>AVIATOR MASTER X </h1>
+        <div class="clock" id="clock"></div>
+
+        <div class="signals-section">
+            <input type="number" id="oddInput" placeholder="Enter your odd (e.g., 2.50)">
+            <button onclick="checkOdd()">Submit</button>
+            <p id="response"></p>
+            <p id="countdown"></p>
+            <p id="finalOdd"></p>
+        </div>
+
+        <div class="extra-info">
+            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
+        </div>
+
+        <div class="footer">
+            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp,ALL RIGHTS RESERVED...</a>
+        </div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            document.getElementById("clock").innerText = `🕒 ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function checkOdd() {
+            const userOdd = parseFloat(document.getElementById("oddInput").value);
+            const response = document.getElementById("response");
+            const countdown = document.getElementById("countdown");
+            const finalOddDisplay = document.getElementById("finalOdd");
+
+            if (isNaN(userOdd) || userOdd < 1.00) {
+                alert("⚠️ Please enter a valid odd!");
+                return;
+            }
+
+            const badHour = Math.random() < 0.25;
+            if (badHour) {
+                const waitTime = [30, 60, 120][Math.floor(Math.random() * 3)];
+                alert(`🚨 Too many blues! Best time to play again: after ${waitTime} mins.`);
+                return;
+            }
+
+            const waitSeconds = Math.floor(Math.random() * (120 - 90 + 1) + 90);
+            response.innerHTML = `✅ Your odd (${userOdd}x) is coming soon. Stay ready!`;
+            countdown.innerHTML = `⏳ Countdown: ${waitSeconds} sec`;
+
+            let timeLeft = waitSeconds;
+            const timer = setInterval(() => {
+                timeLeft--;
+                countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    countdown.innerHTML = "🎉 Get Ready!";
+
+                    let finalOdd;
+                    if (userOdd >= 1.00 && userOdd <= 1.99) {
+                        finalOdd = (Math.random() * (1.99 - 1.00) + 1.00).toFixed(2);
+                    } else if (userOdd >= 2.00 && userOdd <= 6.00) {
+                        finalOdd = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2);
+                    } else if (userOdd >= 10.00) {
+                        finalOdd = (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2);
+                    }
+
+                    let flickerCount = 0;
+                    finalOddDisplay.style.display = "block";
+                    const flickerInterval = setInterval(() => {
+                        finalOddDisplay.innerHTML = flickerCount % 2 === 0 ? "" : `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
+                        flickerCount++;
+
+                        if (flickerCount === 6) {
+                            clearInterval(flickerInterval);
+                            finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
+
+                            setTimeout(() => {
+                                response.innerHTML = "";
+                                countdown.innerHTML = "";
+                                finalOddDisplay.innerHTML = "";
+                                document.getElementById("oddInput").value = "";
+                                response.innerHTML = "👉 Please enter your odd";
+                            }, 12000);
+                        }
+                    }, 500);
+                }
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
