@@ -118,7 +118,7 @@
 
     <p class="rights">© 2025 Aviator Master Predictor Pro. All Rights Reserved.</p>
 
-    <audio id="beep-sound">
+    <audio id="appliance-ready-beep">
         <source src="https://actions.google.com/sounds/v1/alarms/beep_two_tone.ogg" type="audio/ogg">
     </audio>
 
@@ -160,8 +160,8 @@
                     document.getElementById("countdown-timer").innerText = "Signal Ready! Press Decrypt";
                     document.getElementById("decrypt-btn").disabled = false;
 
-                    // Play beep sound when countdown reaches 0
-                    document.getElementById("beep-sound").play();
+                    // Play appliance ready beep sound when countdown reaches 0
+                    document.getElementById("appliance-ready-beep").play();
                 }
             }, 1000);
         }
