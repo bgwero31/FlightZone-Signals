@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Prediction - 2030 Vision</title>
+    <title>Aviator Purple Bot</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -116,7 +116,7 @@
 </head>
 <body>
 
-    <h1>Aviator Prediction - 2030 Vision</h1>
+    <h1>Aviator PURPLE Bot</h1>
     <div id="clock"></div>
     <div class="container animated-card">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
@@ -125,7 +125,7 @@
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
         <button class="generate-button" id="generateSignalBtn">Generate Signals</button>
-        <div class="footer-info">All rights reserved. 2030 Vision</div>
+        <div class="footer-info">All rights FLIGHTZONE SIGNALS...</div>
     </div>
 
     <script>
@@ -177,26 +177,33 @@
             let randomTime = Math.floor(Math.random() * (50000 - 30000) + 30000); 
 
             setTimeout(() => {
-                if (isRisk) {
-                    startCountdown(() => {
-                        document.getElementById("currentSignal").innerHTML = newSignal;
-                    });
-                } else {
-                    document.getElementById("currentSignal").innerHTML = newSignal;
-                }
+                let signalElement = document.getElementById("currentSignal");
+                signalElement.style.opacity = 0;
 
-                if (isRisk) {
-                    let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
-
-                    if (!pastRisks.includes(newSignal)) {
-                        pastRisks.unshift(newSignal);
-                        if (pastRisks.length > 3) pastRisks.pop();
-                        document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                setTimeout(() => {
+                    if (isRisk) {
+                        startCountdown(() => {
+                            signalElement.innerHTML = newSignal;
+                            signalElement.style.opacity = 1;
+                        });
+                    } else {
+                        signalElement.innerHTML = newSignal;
+                        signalElement.style.opacity = 1;
                     }
-                }
 
-                setTimeout(generateSignal, randomTime);
+                    if (isRisk) {
+                        let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+                        document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+
+                        if (!pastRisks.includes(newSignal)) {
+                            pastRisks.unshift(newSignal);
+                            if (pastRisks.length > 3) pastRisks.pop();
+                            document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                        }
+                    }
+
+                    setTimeout(generateSignal, randomTime);
+                }, 500);
             }, randomTime);
         }
 
