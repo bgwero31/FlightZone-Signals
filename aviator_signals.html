@@ -7,132 +7,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
+            background: url('https://wallpapercave.com/wp/wp11841574.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             text-align: center;
-            padding: 10px;
-            margin: 0;
+            padding: 20px;
+            overflow: hidden;
         }
 
         .container {
-            max-width: 300px;
+            max-width: 380px;
             margin: auto;
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 70vh;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+            height: auto;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
         h1 {
-            font-size: 20px;
+            font-size: 22px;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: #9B4DFF;
             letter-spacing: 1px;
         }
 
         #clock {
-            font-size: 16px;
+            font-size: 18px;
+            margin-bottom: 15px;
             color: #FFD700;
             font-weight: bold;
         }
 
-        .betting-site {
-            font-size: 14px;
-            color: #FFD700;
-            margin-bottom: 8px;
+        .betting-site, .signal, .countdown, .next-risk, .past-risks {
+            font-size: 18px;
+            display: none;
+            margin-top: 12px;
         }
 
         .signal {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: bold;
-            padding: 8px;
+            padding: 12px;
             background: #ff4d4d;
-            border-radius: 5px;
-            margin-top: 10px;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .countdown {
-            font-size: 16px;
-            color: #ff0000;
-            font-weight: bold;
-            display: none;
-            margin-top: 8px;
-        }
-
-        .next-risk {
-            font-size: 14px;
-            color: #66FF99;
-            margin-top: 6px;
-        }
-
-        .past-risks {
-            font-size: 12px;
-            color: #B0B0B0;
-            margin-top: 6px;
+            border-radius: 8px;
         }
 
         .footer-info {
-            font-size: 12px;
+            font-size: 14px;
             color: #B0B0B0;
             margin-top: 15px;
+            font-style: italic;
         }
 
         .generate-button {
             background-color: #9B4DFF;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 15px;
         }
 
         .generate-button:hover {
             background-color: #7f39c2;
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        .animated-card {
-            animation: fadeIn 1s ease-in-out;
-        }
-
     </style>
 </head>
 <body>
 
-    <h1>Aviator Prediction - 2025 FLIGHTZONE SIGNALS</h1>
+    <h1>Aviator PURPLE Bot</h1>
     <div id="clock"></div>
-    <div class="container animated-card">
+    <div class="container">
+        <button class="generate-button" id="generateSignalBtn">Generate Signals</button>
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
         <div class="countdown" id="countdown">Risk in 10...</div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
-        <button class="generate-button" id="generateSignalBtn">Generate Signals</button>
+        <div class="footer-info">2025 FLIGHTZONE SIGNALS. ALL RIGHTS RESERVED.</div>
     </div>
-
-    <div class="footer-info">2025 FLIGHTZONE SIGNALS. ALL RIGHTS RESERVED.</div>
 
     <script>
         let pastRisks = [];
         let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
         let isBotRunning = false;
-
-        function setBettingSite() {
-            document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
-        }
 
         function updateClock() {
             let now = new Date();
@@ -147,13 +115,8 @@
             let odds = isRisk
                 ? (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2)
                 : (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
-
-            let now = new Date();
-            let hours = now.getHours().toString().padStart(2, '0');
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            let seconds = now.getSeconds().toString().padStart(2, '0');
-
-            return isRisk ? `Risk Now ${odds}x at ${hours}:${minutes}:${seconds}` : 'Play Now ${odds}x at ${hours}:${minutes}:${seconds}`;
+            
+            return isRisk ? `Risk Now ${odds}x` : `Target Now ${odds}x`;
         }
 
         function startCountdown(callback) {
@@ -176,42 +139,44 @@
         function generateSignal() {
             let newSignal = getRandomSignal();
             let isRisk = newSignal.includes("Risk");
-            let randomTime = Math.floor(Math.random() * (50000 - 30000) + 30000);
+            let randomTime = isRisk 
+                ? Math.floor(Math.random() * (180000 - 90000) + 90000)  // 1:30 min to 3 min
+                : Math.floor(Math.random() * (40000 - 20000) + 20000); // 20-40 sec
 
             setTimeout(() => {
-                let signalElement = document.getElementById("currentSignal");
-                signalElement.style.opacity = 0;
+                if (isRisk) {
+                    startCountdown(() => {
+                        document.getElementById("currentSignal").innerHTML = newSignal;
+                    });
+                } else {
+                    document.getElementById("currentSignal").innerHTML = newSignal;
+                }
 
-                setTimeout(() => {
-                    if (isRisk) {
-                        startCountdown(() => {
-                            signalElement.innerHTML = newSignal;
-                            signalElement.style.opacity = 1;
-                        });
-                    } else {
-                        signalElement.innerHTML = newSignal;
-                        signalElement.style.opacity = 1;
+                if (isRisk) {
+                    let nextRiskTime = Math.floor(Math.random() * (3 - 1.5 + 1)) + 1.5;
+                    document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+
+                    if (!pastRisks.includes(newSignal)) {
+                        pastRisks.unshift(newSignal);
+                        if (pastRisks.length > 3) pastRisks.pop();
+                        document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
                     }
+                }
 
-                    if (isRisk) {
-                        let nextRiskTime = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
-                        document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
-
-                        if (!pastRisks.includes(newSignal)) {
-                            pastRisks.unshift(newSignal);
-                            if (pastRisks.length > 3) pastRisks.pop();
-                            document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-                        }
-                    }
-
-                    setTimeout(generateSignal, randomTime);
-                }, 500);
+                setTimeout(generateSignal, randomTime);
             }, randomTime);
         }
 
         function startBot() {
             if (!isBotRunning) {
                 isBotRunning = true;
+
+                document.getElementById("bettingSite").style.display = 'block';
+                document.getElementById("currentSignal").style.display = 'block';
+                document.getElementById("countdown").style.display = 'block';
+                document.getElementById("nextRisk").style.display = 'block';
+                document.getElementById("pastRisks").style.display = 'block';
+
                 generateSignal();
             }
         }
@@ -222,7 +187,6 @@
             }
         });
 
-        setBettingSite();
         updateClock();
         setInterval(updateClock, 1000);
 
