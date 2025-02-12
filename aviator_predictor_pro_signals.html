@@ -111,7 +111,7 @@
     <div class="prediction-container">
         <p>Next Prediction:</p>
         <div id="prediction" class="prediction blue">Waiting...</div>
-        <div id="spinner" class="spinner">Calculating next prediction...</div>
+        <div id="spinner" class="spinner">waiting for next signal...</div>
     </div>
 
     <button class="glowing-button" onclick="startPredictions()">Generate Signal</button>
@@ -123,13 +123,15 @@
             if (!running) {
                 running = true;
                 document.getElementById("spinner").style.display = "block";
-                setTimeout(generatePrediction, 3000); // Spinner for 3s before first prediction
+                setTimeout(generatePrediction, 3
+                           i
+                           8000); // Spinner for 8s before first prediction
             }
         }
 
         function generatePrediction() {
-            let min = 1.50;
-            let max = 5.00;
+            let min = 1.20;
+            let max = 3.00;
             let odd = (Math.random() * (max - min) + min).toFixed(2);
             let predictionElement = document.getElementById("prediction");
             let spinnerElement = document.getElementById("spinner");
@@ -153,8 +155,8 @@
                 predictionElement.style.display = "none";
                 spinnerElement.style.display = "block";
 
-                // Random time for spinner (40s to 70s)
-                let nextTime = Math.floor(Math.random() * (70 - 40 + 1)) + 40;
+                // Random time for spinner (30s to 65s)
+                let nextTime = Math.floor(Math.random() * (65 - 30 + 1)) + 30;
 
                 setTimeout(generatePrediction, nextTime * 1000);
             }, 13000);
