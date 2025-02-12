@@ -14,19 +14,16 @@
             padding: 20px;
             overflow: hidden;
         }
-
         h1 {
             font-size: 35px;
             color: #0ff;
             text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
             animation: neonGlow 1.5s infinite alternate;
         }
-
         @keyframes neonGlow {
             from { text-shadow: 0 0 10px #0ff, 0 0 30px #0ff; }
             to { text-shadow: 0 0 20px #00f, 0 0 40px #0ff; }
         }
-
         .prediction-container {
             background: rgba(25, 25, 25, 0.95);
             padding: 25px;
@@ -35,39 +32,30 @@
             max-width: 450px;
             margin: 20px auto;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-            transform: perspective(1000px) rotateX(5deg);
-            transition: transform 0.5s ease-in-out;
         }
-
-        .prediction-container:hover {
-            transform: perspective(1000px) rotateX(0deg) scale(1.05);
-        }
-
         .prediction {
             font-size: 26px;
             font-weight: bold;
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            display: none; /* Initially hidden */
         }
-
         .blue { background: #00ffff; box-shadow: 0px 0px 20px #00ffff; }
         .purple { background: #a020f0; box-shadow: 0px 0px 20px #a020f0; }
-        .pink { background: #ff007f; box-shadow: 0px 0px 20px #ff007f; }
-
-        .clock {
-            font-size: 20px;
-            font-weight: bold;
-            text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);
-            animation: pulse 1.5s infinite alternate;
+        .spinner {
+            display: none;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid #00ffff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
         }
-
-        @keyframes pulse {
-            from { opacity: 0.7; transform: scale(1); }
-            to { opacity: 1; transform: scale(1.05); }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
         .glowing-button {
             display: inline-block;
             background: linear-gradient(45deg, #00ffff, #00ff99);
@@ -82,99 +70,68 @@
             cursor: pointer;
             transition: transform 0.3s ease-in-out, box-shadow 0.3s;
         }
-
         .glowing-button:hover {
             transform: scale(1.1);
             box-shadow: 0 0 30px rgba(0, 255, 255, 1);
         }
-
-        .spinner {
-            border: 6px solid rgba(255, 255, 255, 0.3);
-            border-top: 6px solid #00ffff;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            display: none;
-            margin: 10px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .footer {
-            margin-top: 30px;
+            margin-top: 20px;
             font-size: 14px;
-            color: #aaa;
+            text-align: center;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
     <h1>Aviator Predictor Pro</h1>
-    <div class="clock" id="clock"></div>
-
+    
     <div class="prediction-container">
         <p>Next Prediction:</p>
-        <div id="prediction" class="prediction blue">Loading...</div>
+        <div id="prediction" class="prediction"></div>
         <div id="spinner" class="spinner"></div>
     </div>
 
-    <button class="glowing-button" onclick="generatePrediction()">Generate New Prediction</button>
+    <button class="glowing-button" onclick="startPredictions()">Generate Signal</button>
+
+    <div class="footer">
+        ALL RIGHTS RESERVED.. FLIGHTZONE SIGNALS 2025
+    </div>
 
     <script>
+        let started = false;
+
+        function startPredictions() {
+            if (!started) {
+                started = true;
+                generatePrediction();
+            }
+        }
+
         function generatePrediction() {
+            let min = 1.50;
+            let max = 5.00;
+            let odd = (Math.random() * (max - min) + min).toFixed(2);
             let predictionElement = document.getElementById("prediction");
             let spinnerElement = document.getElementById("spinner");
 
-            // Show the spinner and hide the prediction
-            predictionElement.style.display = "none";
-            spinnerElement.style.display = "block";
+            // Assign color based on odd
+            if (odd < 2.50) {
+                predictionElement.className = "prediction blue";
+            } else {
+                predictionElement.className = "prediction purple";
+            }
 
+            predictionElement.innerText = `Target Now: ${odd}x`;
+            predictionElement.style.display = "block"; // Show prediction
+            spinnerElement.style.display = "none"; // Hide spinner
+
+            // Hide prediction after 12 seconds and show spinner
             setTimeout(() => {
-                let min = 1.50;
-                let max = 5.00;
-                let odd = (Math.random() * (max - min) + min).toFixed(2);
-
-                if (odd < 2) {
-                    predictionElement.className = "prediction blue";
-                } else if (odd < 4) {
-                    predictionElement.className = "prediction purple";
-                } else {
-                    predictionElement.className = "prediction pink";
-                }
-
-                predictionElement.innerText = `TARGET NOW: ${odd}x`;
-
-                // Show prediction, hide spinner
-                spinnerElement.style.display = "none";
-                predictionElement.style.display = "block";
-
-                // Hide prediction after 12 seconds and show spinner
-                setTimeout(() => {
-                    predictionElement.style.display = "none";
-                    spinnerElement.style.display = "block";
-
-                    // Generate new prediction after random delay
-                    let nextUpdate = Math.floor(Math.random() * (60 - 30 + 1)) + 30;
-                    setTimeout(generatePrediction, nextUpdate * 1000);
-                }, 12000);
-            }, 2000); // Delay before showing new target
+                predictionElement.style.display = "none"; // Hide odd
+                spinnerElement.style.display = "block"; // Show spinner
+                setTimeout(generatePrediction, 5000); // Wait 5 seconds before generating the next odd
+            }, 12000);
         }
-
-        function updateClock() {
-            let now = new Date();
-            let hours = now.getHours().toString().padStart(2, '0');
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            let seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById("clock").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
-        }
-
-        setInterval(updateClock, 1000);
-        generatePrediction();
     </script>
-
-    <div class="footer">ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025.</div>
 </body>
 </html>
