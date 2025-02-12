@@ -89,6 +89,7 @@
         <p>Next Prediction:</p>
         <div id="prediction" class="prediction"></div>
         <div id="spinner" class="spinner"></div>
+        <p id="waitingMessage" style="display: none;">Waiting for Next Prediction...</p>
     </div>
 
     <button class="glowing-button" onclick="startPredictions()">Generate Signal</button>
@@ -103,7 +104,9 @@
         function startPredictions() {
             if (!started) {
                 started = true;
-                generatePrediction();
+                document.getElementById("spinner").style.display = "block";
+                document.getElementById("waitingMessage").style.display = "block";
+                setTimeout(generatePrediction, 8000); // First calculation takes 8 seconds
             }
         }
 
@@ -113,6 +116,7 @@
             let odd = (Math.random() * (max - min) + min).toFixed(2);
             let predictionElement = document.getElementById("prediction");
             let spinnerElement = document.getElementById("spinner");
+            let waitingMessage = document.getElementById("waitingMessage");
 
             // Assign color based on odd
             if (odd < 2.50) {
@@ -124,13 +128,18 @@
             predictionElement.innerText = `Target Now: ${odd}x`;
             predictionElement.style.display = "block"; // Show prediction
             spinnerElement.style.display = "none"; // Hide spinner
+            waitingMessage.style.display = "none"; // Hide waiting message
 
-            // Hide prediction after 12 seconds and show spinner
+            // Hide prediction after 13 seconds and show spinner
             setTimeout(() => {
                 predictionElement.style.display = "none"; // Hide odd
                 spinnerElement.style.display = "block"; // Show spinner
-                setTimeout(generatePrediction, 5000); // Wait 5 seconds before generating the next odd
-            }, 12000);
+                waitingMessage.style.display = "block"; // Show waiting message
+
+                // Randomize next prediction interval between 1.20 and 1.50 minutes
+                let nextInterval = Math.random() * (90000 - 72000) + 72000; // Between 72,000ms (1.2min) and 90,000ms (1.5min)
+                setTimeout(generatePrediction, nextInterval);
+            }, 13000);
         }
     </script>
 </body>
