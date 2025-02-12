@@ -23,7 +23,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
-            height: auto;
+            height: 500px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -44,10 +44,10 @@
             font-weight: bold;
         }
 
-        .betting-site, .signal, .countdown, .next-risk, .past-risks {
+        .betting-site {
             font-size: 18px;
-            display: none;
-            margin-top: 12px;
+            margin-bottom: 12px;
+            color: #FFD700;
         }
 
         .signal {
@@ -56,6 +56,29 @@
             padding: 12px;
             background: #ff4d4d;
             border-radius: 8px;
+            margin-top: 15px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .countdown {
+            font-size: 20px;
+            color: #ff0000;
+            font-weight: bold;
+            display: none;
+            margin-top: 12px;
+        }
+
+        .next-risk {
+            font-size: 18px;
+            margin-top: 12px;
+            color: #66FF99;
+        }
+
+        .past-risks {
+            font-size: 16px;
+            margin-top: 12px;
+            color: #B0B0B0;
         }
 
         .footer-info {
@@ -81,19 +104,27 @@
             background-color: #7f39c2;
         }
 
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .animated-card {
+            animation: fadeIn 1s ease-in-out;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Aviator PURPLE Bot</h1>
+    <h1>Aviator PURPLE Bot- 2025 FlightZone</h1>
     <div id="clock"></div>
-    <div class="container">
-        <button class="generate-button" id="generateSignalBtn">Generate Signals</button>
+    <div class="container animated-card">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
         <div class="countdown" id="countdown">Risk in 10...</div>
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
+        <button class="generate-button" id="generateSignalBtn">Generate Signals</button>
         <div class="footer-info">2025 FLIGHTZONE SIGNALS. ALL RIGHTS RESERVED.</div>
     </div>
 
@@ -101,6 +132,10 @@
         let pastRisks = [];
         let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
         let isBotRunning = false;
+
+        function setBettingSite() {
+            document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
+        }
 
         function updateClock() {
             let now = new Date();
@@ -116,7 +151,7 @@
                 ? (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2)
                 : (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
             
-            return isRisk ? `Risk Now ${odds}x` : `Target Now ${odds}x`;
+            return isRisk ? `Risk Now${odds}x` : `Target Now ${odds}x`;
         }
 
         function startCountdown(callback) {
@@ -170,13 +205,6 @@
         function startBot() {
             if (!isBotRunning) {
                 isBotRunning = true;
-
-                document.getElementById("bettingSite").style.display = 'block';
-                document.getElementById("currentSignal").style.display = 'block';
-                document.getElementById("countdown").style.display = 'block';
-                document.getElementById("nextRisk").style.display = 'block';
-                document.getElementById("pastRisks").style.display = 'block';
-
                 generateSignal();
             }
         }
@@ -187,6 +215,7 @@
             }
         });
 
+        setBettingSite();
         updateClock();
         setInterval(updateClock, 1000);
 
