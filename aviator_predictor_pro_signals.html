@@ -36,6 +36,12 @@
             max-width: 450px;
             margin: 20px auto;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .prediction-container:hover {
+            transform: perspective(1000px) rotateX(0deg) scale(1.05);
         }
 
         .prediction {
@@ -43,6 +49,7 @@
             font-weight: bold;
             padding: 15px;
             border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
 
@@ -54,9 +61,16 @@
             font-size: 20px;
             font-weight: bold;
             text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.7; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.05); }
         }
 
         .glowing-button {
+            display: inline-block;
             background: linear-gradient(45deg, #00ffff, #00ff99);
             padding: 12px 20px;
             border-radius: 8px;
@@ -67,6 +81,7 @@
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
             border: none;
             cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
         }
 
         .glowing-button:hover {
@@ -74,28 +89,19 @@
             box-shadow: 0 0 30px rgba(0, 255, 255, 1);
         }
 
-        /* Spinner Style */
-        .spinner-container {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 6px solid rgba(0, 255, 255, 0.3);
-            border-top-color: #00ffff;
-            border-radius: 50%;
+            display: none;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffcc00;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
         }
-
     </style>
 </head>
 <body>
@@ -105,9 +111,7 @@
     <div class="prediction-container">
         <p>Next Prediction:</p>
         <div id="prediction" class="prediction blue">Waiting...</div>
-        <div class="spinner-container" id="spinner-container">
-            <div class="spinner"></div>
-        </div>
+        <div id="spinner" class="spinner">Calculating next prediction...</div>
     </div>
 
     <button class="glowing-button" onclick="startPredictions()">Generate Signal</button>
@@ -118,17 +122,17 @@
         function startPredictions() {
             if (!running) {
                 running = true;
-                document.getElementById("spinner-container").style.display = "flex";
-                setTimeout(generatePrediction, 8000);
+                document.getElementById("spinner").style.display = "block";
+                setTimeout(generatePrediction, 3000); // Spinner for 3s before first prediction
             }
         }
 
-        function generatePrediction() 
+        function generatePrediction() {
             let min = 1.50;
             let max = 5.00;
             let odd = (Math.random() * (max - min) + min).toFixed(2);
             let predictionElement = document.getElementById("prediction");
-            let spinnerElement = document.getElementById("spinner-container");
+            let spinnerElement = document.getElementById("spinner");
 
             // Set odd color
             if (odd < 2) {
@@ -147,7 +151,7 @@
             // Hide prediction after 13 seconds and show spinner
             setTimeout(() => {
                 predictionElement.style.display = "none";
-                spinnerElement.style.display = "flex";
+                spinnerElement.style.display = "block";
 
                 // Random time for spinner (40s to 70s)
                 let nextTime = Math.floor(Math.random() * (70 - 40 + 1)) + 40;
