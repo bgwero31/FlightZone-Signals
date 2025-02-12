@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVIATOR MASTER X</title>
+    <title>AVIATOR MASTER X </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -70,7 +70,7 @@
             background-color: #ff8533;
         }
 
-        #response, #countdown {
+        #response, #countdown, #finalOdd {
             font-size: 18px;
             margin-top: 20px;
         }
@@ -82,6 +82,21 @@
             display: none;
         }
 
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ff6600;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .extra-info {
             margin-top: 30px;
             font-size: 16px;
@@ -89,21 +104,6 @@
             background: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-        }
-
-        .alert-card {
-            position: fixed;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 0, 0, 0.9);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            font-size: 16px;
-            display: none;
-            z-index: 100;
         }
 
         .footer {
@@ -122,7 +122,7 @@
 <body>
 
     <div class="container">
-        <h1>AVIATOR MASTER X</h1>
+        <h1>AVIATOR MASTER X </h1>
         <div class="clock" id="clock"></div>
 
         <div class="signals-section">
@@ -136,8 +136,6 @@
         <div class="extra-info">
             🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
         </div>
-
-        <div class="alert-card" id="alertCard"></div>
 
         <div class="footer">
             📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp, ALL RIGHTS RESERVED...</a>
@@ -157,16 +155,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        function showAlert(message) {
-            const alertCard = document.getElementById("alertCard");
-            alertCard.innerText = message;
-            alertCard.style.display = "block";
-
-            setTimeout(() => {
-                alertCard.style.display = "none";
-            }, 5000);
-        }
-
         function checkOdd() {
             const userOdd = parseFloat(document.getElementById("oddInput").value);
             const response = document.getElementById("response");
@@ -174,14 +162,14 @@
             const finalOddDisplay = document.getElementById("finalOdd");
 
             if (isNaN(userOdd) || userOdd < 1.00) {
-                showAlert("⚠️ Please enter a valid odd!");
+                alert("⚠️ Please enter a valid odd!");
                 return;
             }
 
             const badHour = Math.random() < 0.25;
             if (badHour) {
                 const waitTime = [30, 60, 120][Math.floor(Math.random() * 3)];
-                showAlert(`🚨 Too many blues! Best time to play after ${waitTime} mins.`);
+                alert(`🚨 Too many blues! Best time to play again: after ${waitTime} mins.`);
                 return;
             }
 
@@ -190,27 +178,68 @@
             countdown.innerHTML = `⏳ Countdown: ${waitSeconds} sec`;
 
             let timeLeft = waitSeconds;
-            const timer = setInterval(() => {
-                timeLeft--;
-                countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;
 
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    countdown.innerHTML = "🎉 Get Ready!";
+            if (userOdd >= 10) {  // For odds above 10x, show spinner
+                document.getElementById("countdown").innerHTML = "";
+                const spinner = document.createElement('div');
+                spinner.classList.add('spinner');
+                countdown.appendChild(spinner);
 
-                    let finalOdd;
-                    if (userOdd >= 10.00) {
-                        finalOdd = (Math.random() * (15.00 - 10.00) + 10.00).toFixed(2);
-                        response.innerHTML = " PLAY NOW! 2x";
-                        countdown.innerHTML = `⚠️ RISK: ${finalOdd}x`;
-                    } else {
-                        finalOdd = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2);
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft <= 10) {
+                        countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;  // Show countdown when 10 seconds left
                     }
 
-                    finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
-                    finalOddDisplay.style.display = "block";
-                }
-            }, 1000);
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        countdown.innerHTML = "🎉 Get Ready!";
+
+                        let finalOdd = (Math.random() * (15.00 - 10.00) + 10.00).toFixed(2);  // Risk odd generation between 10x and 15x
+                        finalOddDisplay.style.display = "block";
+                        finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
+
+                        setTimeout(() => {
+                            response.innerHTML = "";
+                            countdown.innerHTML = "";
+                            finalOddDisplay.innerHTML = "";
+                            document.getElementById("oddInput").value = "";
+                            response.innerHTML = "👉 Please enter your odd";
+                        }, 12000);
+                    }
+                }, 1000);
+            } else {  // Logic for low odds (1.00x - 6.00x)
+                response.innerHTML = `✅ Your odd (${userOdd}x) is coming soon. Stay ready!`;
+                countdown.innerHTML = `⏳ Countdown: ${waitSeconds} sec`;
+
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        countdown.innerHTML = "🎉 Get Ready!";
+
+                        let finalOdd;
+                        if (userOdd >= 1.00 && userOdd <= 1.99) {
+                            finalOdd = (Math.random() * (1.99 - 1.00) + 1.00).toFixed(2);
+                        } else if (userOdd >= 2.00 && userOdd <= 6.00) {
+                            finalOdd = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2);
+                        }
+
+                        finalOddDisplay.style.display = "block";
+                        finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
+
+                        setTimeout(() => {
+                            response.innerHTML = "";
+                            countdown.innerHTML = "";
+                            finalOddDisplay.innerHTML = "";
+                            document.getElementById("oddInput").value = "";
+                            response.innerHTML = "👉 Please enter your odd";
+                        }, 12000);
+                    }
+                }, 1000);
+            }
         }
     </script>
 
