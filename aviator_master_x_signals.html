@@ -16,7 +16,7 @@
             overflow: hidden;
         }
 
-        /* Thin Raindrops Effect */
+        /* Animated Raindrops */
         .raindrops {
             position: fixed;
             top: 0;
@@ -27,17 +27,18 @@
             z-index: 0;
         }
 
-        .raindrop {
+        .drop {
             position: absolute;
             width: 2px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.2);
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0.7;
             animation: fall linear infinite;
         }
 
         @keyframes fall {
-            from { transform: translateY(-100px); opacity: 0.8; }
-            to { transform: translateY(100vh); opacity: 0; }
+            0% { transform: translateY(-10px); opacity: 0; }
+            100% { transform: translateY(100vh); opacity: 1; }
         }
 
         .container {
@@ -48,7 +49,7 @@
 
         h1 {
             font-size: 2.5em;
-            color: #ff0000;
+            color: #ff6600;
             text-transform: uppercase;
         }
 
@@ -65,7 +66,7 @@
             border-radius: 10px;
             width: 80%;
             max-width: 600px;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         input {
@@ -82,7 +83,7 @@
 
         button {
             padding: 10px 20px;
-            background-color: #ff0000;
+            background-color: #ff6600;
             color: white;
             border: none;
             border-radius: 8px;
@@ -92,7 +93,7 @@
         }
 
         button:hover {
-            background-color: #ff3333;
+            background-color: #ff8533;
         }
 
         #response, #countdown {
@@ -116,6 +117,20 @@
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
         }
 
+        .tip-box {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 128, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            display: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
         .footer {
             margin-top: 40px;
             font-size: 16px;
@@ -127,29 +142,15 @@
             text-decoration: none;
             font-weight: bold;
         }
-
-        .random-tip {
-            position: fixed;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            display: none;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
     </style>
 </head>
 <body>
 
-    <!-- Thin Raindrops Effect -->
+    <!-- Animated Raindrops -->
     <div class="raindrops" id="raindrops"></div>
 
     <div class="container">
-        <h1>AVIATOR MASTER X</h1>
+        <h1>AVIATOR MASTER X - Ask for Your Odd</h1>
         <div class="clock" id="clock"></div>
 
         <div class="signals-section">
@@ -161,13 +162,13 @@
         </div>
 
         <div class="extra-info">
-            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!
+            🚀 Play smart! Some hours are better than others. Follow the signals for success!
         </div>
 
-        <div class="random-tip" id="randomTip"></div>
+        <div class="tip-box" id="tipBox"></div>
 
         <div class="footer">
-            📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp.2025 ALL RIGHTS RESERVED</a>
+            📞 <a href="https://wa.me/263774309795" target="_blank">Contact Baron Gwero on WhatsApp</a>
         </div>
     </div>
 
@@ -182,12 +183,12 @@
         function checkOdd() {
             const userOdd = parseFloat(document.getElementById("oddInput").value);
             if (isNaN(userOdd) || userOdd < 1.00) {
-                showTip("⚠️ Please enter a valid odd!");
+                showTip("⚠️ Enter a valid odd!");
                 return;
             }
 
             const waitSeconds = Math.floor(Math.random() * (120 - 90 + 1) + 90);
-            document.getElementById("response").innerHTML = `✅ Your odd (${userOdd}x) is coming soon. Stay ready!`;
+            document.getElementById("response").innerHTML = `✅ Your odd (${userOdd}x) is coming!`;
             document.getElementById("countdown").innerHTML = `⏳ Countdown: ${waitSeconds} sec`;
 
             let timeLeft = waitSeconds;
@@ -198,7 +199,10 @@
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     document.getElementById("countdown").innerHTML = "🎉 Get Ready!";
-                    const finalOdd = (Math.random() * (10.00 - 1.00) + 1.00).toFixed(2);
+                    const finalOdd = (userOdd >= 10.00) 
+                        ? (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2) 
+                        : (Math.random() * (9.99 - 1.00) + 1.00).toFixed(2);
+
                     document.getElementById("finalOdd").innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;
                     document.getElementById("finalOdd").style.display = "block";
 
@@ -211,21 +215,22 @@
         }
 
         function showTip(message) {
-            const tipBox = document.getElementById("randomTip");
+            const tipBox = document.getElementById("tipBox");
             tipBox.innerText = message;
             tipBox.style.display = "block";
             setTimeout(() => {
                 tipBox.style.display = "none";
-            }, 5000);
+            }, 6000);
         }
 
         function createRaindrops() {
-            for (let i = 0; i < 50; i++) {
+            const container = document.getElementById("raindrops");
+            for (let i = 0; i < 80; i++) {
                 let drop = document.createElement("div");
-                drop.classList.add("raindrop");
+                drop.classList.add("drop");
                 drop.style.left = Math.random() * 100 + "vw";
                 drop.style.animationDuration = Math.random() * 3 + 2 + "s";
-                document.getElementById("raindrops").appendChild(drop);
+                container.appendChild(drop);
             }
         }
         createRaindrops();
