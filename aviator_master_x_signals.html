@@ -80,30 +80,6 @@
             display: none;  
         }  
 
-        .spinner {  
-            display: none;  
-            margin: 20px auto;  
-            border: 6px solid rgba(255, 255, 255, 0.3);  
-            border-top: 6px solid #ff6600;  
-            border-radius: 50%;  
-            width: 50px;  
-            height: 50px;  
-            animation: spin 1s linear infinite;  
-        }  
-
-        @keyframes spin {  
-            0% { transform: rotate(0deg); }  
-            100% { transform: rotate(360deg); }  
-        }  
-
-        .extra-info {  
-            margin-top: 30px;  
-            font-size: 16px;  
-            padding: 15px;  
-            background: rgba(0, 0, 0, 0.7);  
-            border-radius: 10px;  
-        }  
-
         .footer {  
             margin-top: 40px;  
             font-size: 16px;  
@@ -125,20 +101,19 @@
         <div class="signals-section">  
             <input type="number" id="oddInput" placeholder="Enter your odd (e.g., 2.50)">  
             <button onclick="checkOdd()">Submit</button>  
-            <div class="spinner" id="spinner"></div>  
             <p id="response"></p>  
             <p id="countdown"></p>  
             <p id="finalOdd"></p>  
-        </div>  
-
-        <div class="extra-info">  
-            🚀 Always play wisely! Some hours are better than others. Be patient and follow the signals!  
         </div>  
 
         <div class="footer">  
             📞 <a href="https://wa.me/263774309795" target="_blank">Contact B.JAY on WhatsApp, ALL RIGHTS RESERVED...</a>  
         </div>  
     </div>  
+
+    <audio id="beepSound">
+        <source src="https://www.google.com/logos/fnbx/animal_sounds/microwave.mp3" type="audio/mp3">
+    </audio>
 
     <script>  
         function updateClock() {  
@@ -158,45 +133,57 @@
             const response = document.getElementById("response");  
             const countdown = document.getElementById("countdown");  
             const finalOddDisplay = document.getElementById("finalOdd");  
-            const spinner = document.getElementById("spinner");  
+            const beepSound = document.getElementById("beepSound");  
 
             if (isNaN(userOdd) || userOdd < 1.00) {  
                 alert("⚠️ Please enter a valid odd!");  
                 return;  
             }  
 
-            if (userOdd >= 10.00) {  
-                response.innerHTML = "🔄 Calculating the best time for your pink odd...";  
-                spinner.style.display = "block";  
+            const waitSeconds = Math.floor(Math.random() * (120 - 90 + 1) + 90);  
+            response.innerHTML = `✅ Your odd (${userOdd}x) is coming soon. Stay ready!`;  
+            countdown.innerHTML = `⏳ Countdown: ${waitSeconds} sec`;  
 
-                setTimeout(() => {  
-                    spinner.style.display = "none";  
-                    response.innerHTML = "⏳ Countdown: 10 sec";  
+            let timeLeft = waitSeconds;  
+            const timer = setInterval(() => {  
+                timeLeft--;  
+                countdown.innerHTML = `⏳ Countdown: ${timeLeft} sec`;  
 
-                    let timeLeft = 10;  
-                    const timer = setInterval(() => {  
-                        timeLeft--;  
-                        response.innerHTML = `⏳ Countdown: ${timeLeft} sec`;  
+                if (timeLeft <= 0) {  
+                    clearInterval(timer);  
+                    countdown.innerHTML = "🎉 Get Ready!";  
+                    beepSound.play();  
 
-                        if (timeLeft <= 0) {  
-                            clearInterval(timer);  
-                            response.innerHTML = "🔥 PLAY NOW 2x";  
-                            
+                    let finalOdd;  
+                    if (userOdd >= 1.00 && userOdd <= 1.99) {  
+                        finalOdd = (Math.random() * (1.99 - 1.00) + 1.00).toFixed(2);  
+                    } else if (userOdd >= 2.00 && userOdd <= 6.00) {  
+                        finalOdd = (Math.random() * (6.00 - 2.00) + 2.00).toFixed(2);  
+                    } else if (userOdd >= 10.00) {  
+                        finalOdd = (Math.random() * (13.00 - 10.00) + 10.00).toFixed(2);  
+                    }  
+
+                    let flickerCount = 0;  
+                    finalOddDisplay.style.display = "block";  
+                    const flickerInterval = setInterval(() => {  
+                        finalOddDisplay.innerHTML = flickerCount % 2 === 0 ? "" : `🔥 PLAY NOW! Your odd: ${finalOdd}x`;  
+                        flickerCount++;  
+
+                        if (flickerCount === 6) {  
+                            clearInterval(flickerInterval);  
+                            finalOddDisplay.innerHTML = `🔥 PLAY NOW! Your odd: ${finalOdd}x`;  
+
                             setTimeout(() => {  
-                                const finalOdd = (Math.random() * (15.00 - 10.00) + 10.00).toFixed(2);  
-                                finalOddDisplay.style.display = "block";  
-                                finalOddDisplay.innerHTML = `🔥 RISK: ${finalOdd}x`;  
-
-                                setTimeout(() => {  
-                                    response.innerHTML = "";  
-                                    finalOddDisplay.style.display = "none";  
-                                    document.getElementById("oddInput").value = "";  
-                                }, 12000);  
-                            }, 2000);  
+                                response.innerHTML = "";  
+                                countdown.innerHTML = "";  
+                                finalOddDisplay.innerHTML = "";  
+                                document.getElementById("oddInput").value = "";  
+                                response.innerHTML = "👉 Please enter your odd";  
+                            }, 12000);  
                         }  
-                    }, 1000);  
-                }, 90000);  
-            }  
+                    }, 500);  
+                }  
+            }, 1000);  
         }  
     </script>  
 </body>  
