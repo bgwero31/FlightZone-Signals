@@ -16,20 +16,20 @@
         }
 
         .container {
-            max-width: 400px;
+            max-width: 300px;
             margin: auto;
             background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 10px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            height: 90vh;
+            height: 70vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
         h1 {
-            font-size: 22px;
+            font-size: 20px;
             text-transform: uppercase;
             margin-bottom: 5px;
             color: #9B4DFF;
@@ -37,45 +37,45 @@
         }
 
         #clock {
-            font-size: 18px;
+            font-size: 16px;
             color: #FFD700;
             font-weight: bold;
         }
 
         .betting-site {
-            font-size: 16px;
+            font-size: 14px;
             color: #FFD700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .signal {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            padding: 10px;
+            padding: 8px;
             background: #ff4d4d;
-            border-radius: 6px;
+            border-radius: 5px;
             margin-top: 10px;
             transition: opacity 0.5s ease-in-out;
         }
 
         .countdown {
-            font-size: 18px;
+            font-size: 16px;
             color: #ff0000;
             font-weight: bold;
             display: none;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .next-risk {
-            font-size: 16px;
+            font-size: 14px;
             color: #66FF99;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .past-risks {
-            font-size: 14px;
+            font-size: 12px;
             color: #B0B0B0;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .footer-info {
@@ -88,9 +88,9 @@
             background-color: #9B4DFF;
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 10px 15px;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
@@ -112,7 +112,7 @@
 </head>
 <body>
 
-    <h1>Aviator Purple bot</h1>
+    <h1>Aviator Prediction - 2025 FLIGHTZONE SIGNALS</h1>
     <div id="clock"></div>
     <div class="container animated-card">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
@@ -121,8 +121,9 @@
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
         <button class="generate-button" id="generateSignalBtn">Generate Signals</button>
-        <div class="footer-info">All rights reserved.</div>
     </div>
+
+    <div class="footer-info">2025 FLIGHTZONE SIGNALS. ALL RIGHTS RESERVED.</div>
 
     <script>
         let pastRisks = [];
@@ -146,8 +147,13 @@
             let odds = isRisk
                 ? (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2)
                 : (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
-            
-            return isRisk ? `Risk ${odds}x` : `Target now ${odds}x`;
+
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+
+            return isRisk ? `Risk Now ${odds}x at ${hours}:${minutes}:${seconds}` : 'Play Now ${odds}x at ${hours}:${minutes}:${seconds}`;
         }
 
         function startCountdown(callback) {
