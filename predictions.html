@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX Martingale Predictions</title>
 
-    <!-- Use Firebase v8 (Older, but works with script tags) -->
+    <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
@@ -23,47 +23,34 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCdpPzUtYItwaekcEdxhLr8Wjf351-4gW8",
             authDomain: "jetx-martingale-bot.firebaseapp.com",
+            databaseURL: "https://jetx-martingale-bot-default-rtdb.firebaseio.com",
             projectId: "jetx-martingale-bot",
-            storageBucket: "jetx-martingale-bot.firebasestorage.app",
+            storageBucket: "jetx-martingale-bot.appspot.com",
             messagingSenderId: "515112087772",
-            appId: "1:515112087772:web:6607c7341d5aad230b8419",
-            databaseURL: "https://jetx-martingale-bot-default-rtdb.firebaseio.com"
+            appId: "1:515112087772:web:6607c7341d5aad230b8419"
         };
 
-        // Initialize Firebase
+        // Initialize Firebase (v8 syntax)
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Function to send a prediction
-        function sendPrediction() {
-            database.ref("predictions").set({
-                latestPrediction: "2.5x Expected Soon"
-            }).then(() => {
-                console.log("Prediction updated successfully!");
-            }).catch((error) => {
-                console.error("Error updating prediction:", error);
-            });
-        }
-
         // Function to fetch predictions from Firebase
         function fetchPredictions() {
-            const predictionsRef = database.ref("predictions");
+            const predictionsRef = database.ref("predictions/latestPrediction");
 
             predictionsRef.on("value", (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.latestPrediction) {
-                    document.getElementById("predictions").innerHTML = `<div class="prediction-card">${data.latestPrediction}</div>`;
+                const prediction = snapshot.val();
+                if (prediction) {
+                    document.getElementById("predictions").innerHTML = `<div class="prediction-card">${prediction}</div>`;
                 } else {
                     document.getElementById("predictions").innerHTML = `<div class="prediction-card">No Predictions Yet</div>`;
                 }
             });
         }
 
-        // Call function to fetch predictions
+        // Fetch predictions when the page loads
         fetchPredictions();
 
-        // Uncomment this to send a new prediction manually
-        // sendPrediction();
     </script>
 
 </body>
