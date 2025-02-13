@@ -1,175 +1,183 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviator Predictor Pro</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');body {
-        font-family: 'Orbitron', sans-serif;
-        text-align: center;
-        background: radial-gradient(circle, #000428, #004e92);
-        color: white;
-        padding: 20px;
-        overflow: hidden;
-    }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-    h1 {
-        font-size: 35px;
-        color: #0ff;
-        text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
-        animation: neonGlow 1.5s infinite alternate;
-    }
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            background: radial-gradient(circle, #000428, #004e92);
+            color: white;
+            padding: 20px;
+            overflow: hidden;
+        }
 
-    @keyframes neonGlow {
-        from { text-shadow: 0 0 10px #0ff, 0 0 30px #0ff; }
-        to { text-shadow: 0 0 20px #00f, 0 0 40px #0ff; }
-    }
+        h1 {
+            font-size: 35px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
+            animation: neonGlow 1.5s infinite alternate;
+        }
 
-    .prediction-container {
-        background: rgba(25, 25, 25, 0.95);
-        padding: 25px;
-        border-radius: 15px;
-        width: 90%;
-        max-width: 450px;
-        margin: 20px auto;
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        transform: perspective(1000px) rotateX(5deg);
-        transition: transform 0.5s ease-in-out;
-    }
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 10px #0ff, 0 0 30px #0ff; }
+            to { text-shadow: 0 0 20px #00f, 0 0 40px #0ff; }
+        }
 
-    .prediction-container:hover {
-        transform: perspective(1000px) rotateX(0deg) scale(1.05);
-    }
+        .prediction-container {
+            background: rgba(25, 25, 25, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.5s ease-in-out;
+        }
 
-    .prediction {
-        font-size: 26px;
-        font-weight: bold;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    }
+        .prediction-container:hover {
+            transform: perspective(1000px) rotateX(0deg) scale(1.05);
+        }
 
-    .blue { background: #00ffff; box-shadow: 0px 0px 20px #00ffff; }
-    .purple { background: #a020f0; box-shadow: 0px 0px 20px #a020f0; }
-    .pink { background: #ff007f; box-shadow: 0px 0px 20px #ff007f; }
+        .prediction {
+            font-size: 26px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            display: none;
+        }
 
-    .clock {
-        font-size: 20px;
-        font-weight: bold;
-        text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);
-        animation: pulse 1.5s infinite alternate;
-    }
+        .blue { background: #00ffff; box-shadow: 0px 0px 20px #00ffff; }
+        .purple { background: #a020f0; box-shadow: 0px 0px 20px #a020f0; }
+        .pink { background: #ff007f; box-shadow: 0px 0px 20px #ff007f; }
 
-    @keyframes pulse {
-        from { opacity: 0.7; transform: scale(1); }
-        to { opacity: 1; transform: scale(1.05); }
-    }
+        .clock {
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);
+            animation: pulse 1.5s infinite alternate;
+        }
 
-    .glowing-button {
-        display: inline-block;
-        background: linear-gradient(45deg, #00ffff, #00ff99);
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 18px;
-        font-weight: bold;
-        color: black;
-        text-shadow: 0 0 5px white;
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
-        border: none;
-        cursor: pointer;
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s;
-    }
+        @keyframes pulse {
+            from { opacity: 0.7; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
 
-    .glowing-button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 30px rgba(0, 255, 255, 1);
-    }
+        .glowing-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #00ffff, #00ff99);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            text-shadow: 0 0 5px white;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+        }
 
-    .spinner {
-        display: none;
-        font-size: 20px;
-        font-weight: bold;
-        color: #ffcc00;
-        animation: spin 1s linear infinite;
-    }
+        .glowing-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 1);
+        }
 
-    @keyframes spin {
-        0% { opacity: 0.7; }
-        50% { opacity: 1; }
-        100% { opacity: 0.7; }
-    }
-</style>
+        /* Spinner Animation */
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
 
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
 </head>
 <body>
     <h1>Aviator Predictor Pro</h1>
-    <div class="clock" id="clock"></div><div class="prediction-container">
-    <p>Next Prediction:</p>
-    <div id="prediction" class="prediction blue">Waiting...</div>
-    <div id="spinner" class="spinner">Calculating Next Prediction...</div>
-</div>
+    <div class="clock" id="clock"></div>
 
-<button class="glowing-button" onclick="startPredictions()">Generate Signal</button>
+    <div class="prediction-container">
+        <p>Next Prediction:</p>
+        <div id="prediction" class="prediction">Waiting...</div>
+        <div id="spinner" class="spinner"></div>
+    </div>
 
-<script>
-    let running = false;
+    <button class="glowing-button" onclick="startPredictions()">Generate Signal</button>
 
-    function startPredictions() {
-        if (!running) {
-            running = true;
-            document.getElementById("spinner").style.display = "block";
-            setTimeout(generatePrediction, 3000); // Spinner for 3s before first prediction
-        }
-    }
+    <script>
+        let running = false;
 
-    function generatePrediction() {
-        let min = 1.50;
-        let max = 5.00;
-        let odd = (Math.random() * (max - min) + min).toFixed(2);
-        let predictionElement = document.getElementById("prediction");
-        let spinnerElement = document.getElementById("spinner");
-
-        // Set odd color
-        if (odd < 2) {
-            predictionElement.className = "prediction blue";
-        } else if (odd < 4) {
-            predictionElement.className = "prediction purple";
-        } else {
-            predictionElement.className = "prediction pink";
+        function startPredictions() {
+            if (!running) {
+                running = true;
+                document.getElementById("spinner").style.display = "block";
+                setTimeout(generatePrediction, 8000); // Spinner for 8s before first prediction
+            }
         }
 
-        // Show the prediction
-        predictionElement.innerText = `Target Now: ${odd}x`;
-        predictionElement.style.display = "block";
-        spinnerElement.style.display = "none";
+        function generatePrediction() {
+            let min = 1.50;
+            let max = 3.50;
+            let odd = (Math.random() * (max - min) + min).toFixed(2);
+            let predictionElement = document.getElementById("prediction");
+            let spinnerElement = document.getElementById("spinner");
 
-        // Hide prediction after 13 seconds and show spinner
-        setTimeout(() => {
-            predictionElement.style.display = "none";
-            spinnerElement.style.display = "block";
+            // Set odd color
+            if (odd < 2) {
+                predictionElement.className = "prediction blue";
+            } else if (odd < 4) {
+                predictionElement.className = "prediction purple";
+            } else {
+                predictionElement.className = "prediction pink";
+            }
 
-            // Random time for spinner (40s to 70s)
-            let nextTime = Math.floor(Math.random() * (70 - 40 + 1)) + 40;
+            // Show the prediction
+            predictionElement.innerText = `Target Now: ${odd}x`;
+            predictionElement.style.display = "block";
+            spinnerElement.style.display = "none";
 
-            setTimeout(generatePrediction, nextTime * 1000);
-        }, 13000);
-    }
+            // Hide prediction after 13 seconds and show spinner
+            setTimeout(() => {
+                predictionElement.style.display = "none";
+                spinnerElement.style.display = "block";
 
-    function updateClock() {
-        let now = new Date();
-        let hours = now.getHours().toString().padStart(2, '0');
-        let minutes = now.getMinutes().toString().padStart(2, '0');
-        let seconds = now.getSeconds().toString().padStart(2, '0');
-        document.getElementById("clock").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
-    }
+                // Random time for spinner (40s to 70s)
+                let nextTime = Math.floor(Math.random() * (70 - 40 + 1)) + 40;
 
-    setInterval(updateClock, 1000);
-</script>
+                setTimeout(generatePrediction, nextTime * 1000);
+            }, 13000);
+        }
 
-<footer>
-    <p>ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025</p>
-</footer>
+        function updateClock() {
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("clock").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
+        }
 
+        setInterval(updateClock, 1000);
+    </script>
+
+    <footer>
+        <p>ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025</p>
+    </footer>
 </body>
-</html> 
+</html>
