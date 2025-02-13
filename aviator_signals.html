@@ -53,6 +53,7 @@
             background: #ff4d4d;
             border-radius: 5px;
             margin-top: 10px;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .countdown {
@@ -134,8 +135,7 @@
     </div>
 
     <div class="info-box">
-     The PURPLE Bot is designed for high-accuracy predictions, targeting precise odds with real-time updates. It analyzes patterns to detect profitable risks, ensuring a high success rate. With optimized calculations, it identifies low and high multipliers at the right moments, making it a reliable tool for maximizing your winnings.
- 
+        The PURPLE Bot is designed for high-accuracy predictions, targeting precise odds with real-time updates. It analyzes patterns to detect profitable risks, ensuring a high success rate. With optimized calculations, it identifies low and high multipliers at the right moments, making it a reliable tool for maximizing your winnings.
     </div>
 
     <div class="footer-info">2025 FLIGHTZONE SIGNALS. ALL RIGHTS RESERVED.</div>
@@ -144,6 +144,7 @@
         let pastRisks = [];
         let bettingSite = localStorage.getItem("bettingSite") || "Unknown";
         let isBotRunning = false;
+        let countdownTimer = null;
 
         function setBettingSite() {
             document.getElementById("bettingSite").innerHTML = `Betting Site: ${bettingSite}`;
@@ -163,7 +164,7 @@
                 ? (Math.random() * (4.00 - 2.10) + 2.10).toFixed(2)
                 : (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);
 
-            return isRisk ? `Risk Now ${odds}x` : `Target Now ${odds}x`;
+            return { text: isRisk ? `Risk Now ${odds}x` : `Target Now ${odds}x`, isRisk };
         }
 
         function startCountdown(callback) {
@@ -172,11 +173,11 @@
             countdownElement.style.display = 'block';
             countdownElement.innerHTML = `Risk in ${count}...`;
             
-            let interval = setInterval(() => {
+            countdownTimer = setInterval(() => {
                 count--;
                 countdownElement.innerHTML = `Risk in ${count}...`;
                 if (count <= 0) {
-                    clearInterval(interval);
+                    clearInterval(countdownTimer);
                     countdownElement.style.display = 'none';
                     callback();
                 }
@@ -184,32 +185,35 @@
         }
 
         function generateSignal() {
-            let newSignal = getRandomSignal();
-            let isRisk = newSignal.includes("Risk");
-            let randomTime = Math.floor(Math.random() * (30000 - 20000) + 20000);
+            let { text, isRisk } = getRandomSignal();
+            let signalElement = document.getElementById("currentSignal");
+
+            signalElement.innerHTML = text;
+            signalElement.style.opacity = 1;
 
             setTimeout(() => {
-                let signalElement = document.getElementById("currentSignal");
                 signalElement.style.opacity = 0;
+            }, 10000);
 
+            if (isRisk) {
                 setTimeout(() => {
-                    signalElement.innerHTML = newSignal;
-                    signalElement.style.opacity = 1;
+                    startCountdown(() => {
+                        signalElement.innerHTML = text;
+                        signalElement.style.opacity = 1;
+                    });
+                }, 10000);
 
-                    if (isRisk) {
-                        let nextRiskTime = Math.floor(Math.random() * (3 - 2 + 1)) + 2;
-                        document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+                if (!pastRisks.includes(text)) {
+                    pastRisks.unshift(text);
+                    if (pastRisks.length > 3) pastRisks.pop();
+                    document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
+                }
 
-                        if (!pastRisks.includes(newSignal)) {
-                            pastRisks.unshift(newSignal);
-                            if (pastRisks.length > 3) pastRisks.pop();
-                            document.getElementById("pastRisks").innerHTML = `Past Risks: ${pastRisks.join(" | ")}`;
-                        }
-                    }
+                let nextRiskTime = Math.floor(Math.random() * (3 - 2 + 1)) + 2;
+                document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
+            }
 
-                    generateSignal();
-                }, 500);
-            }, randomTime);
+            setTimeout(generateSignal, Math.floor(Math.random() * (30000 - 20000) + 20000)); 
         }
 
         function startBot() {
