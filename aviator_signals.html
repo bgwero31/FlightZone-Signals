@@ -7,30 +7,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #1A1A2E, #342FAE, #9B4DFF);
+            background: linear-gradient(135deg, #1A1A2E, #4B0082, #800080);
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             text-align: center;
-            padding: 10px;
             margin: 0;
-            transition: background 1s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         .container {
-            max-width: 250px;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
-            height: 50vh;
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            align-items: center;
+            padding: 15px;
         }
 
         h1 {
-            font-size: 18px;
+            font-size: 20px;
             text-transform: uppercase;
             margin-bottom: 5px;
             color: #9B4DFF;
@@ -38,60 +35,72 @@
         }
 
         #clock {
-            font-size: 15px;
+            font-size: 16px;
             color: #FFD700;
             font-weight: bold;
         }
 
         .betting-site {
-            font-size: 13px;
+            font-size: 14px;
             color: #FFD700;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .signal {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            padding: 6px;
+            padding: 8px;
             background: #ff4d4d;
             border-radius: 5px;
-            margin-top: 8px;
-            transition: opacity 0.5s ease-in-out;
+            margin-top: 10px;
         }
 
         .countdown {
-            font-size: 14px;
+            font-size: 16px;
             color: #ff0000;
             font-weight: bold;
             display: none;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         .next-risk {
-            font-size: 13px;
+            font-size: 14px;
             color: #66FF99;
-            margin-top: 5px;
+            margin-top: 6px;
         }
 
         .past-risks {
-            font-size: 11px;
+            font-size: 12px;
             color: #B0B0B0;
-            margin-top: 5px;
+            margin-top: 6px;
+        }
+
+        .info-box {
+            font-size: 14px;
+            color: #FFD700;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 90%;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .footer-info {
-            font-size: 11px;
+            font-size: 12px;
             color: #B0B0B0;
-            margin-top: 12px;
+            padding: 10px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
 
         .generate-button {
             background-color: #9B4DFF;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
@@ -100,29 +109,13 @@
             background-color: #7f39c2;
         }
 
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #9B4DFF;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            animation: spin 2s linear infinite;
-            display: none;
-            margin: 8px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .animated-card {
+            animation: fadeIn 1s ease-in-out;
         }
 
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
-        }
-
-        .animated-card {
-            animation: fadeIn 1s ease-in-out;
         }
     </style>
 </head>
@@ -130,6 +123,7 @@
 
     <h1>Aviator PURPLE Bot</h1>
     <div id="clock"></div>
+
     <div class="container animated-card">
         <div class="betting-site" id="bettingSite">Betting Site: Loading...</div>
         <div class="signal" id="currentSignal">Waiting for signal...</div>
@@ -137,7 +131,13 @@
         <div class="next-risk" id="nextRisk">Next Risk: Loading...</div>
         <div class="past-risks" id="pastRisks">Past Risks: Loading...</div>
         <button class="generate-button" id="generateSignalBtn">Generate Signals</button>
-        <div class="spinner" id="spinner"></div>
+    </div>
+
+    <div class="info-box">
+        🎯 **How It Works:**  
+        - Risks appear **every 2-3 minutes**  
+        - Low odds appear **every 20-30 seconds**  
+        - **Past Risks** are recorded for reference  
     </div>
 
     <div class="footer-info">2025 FLIGHTZONE SIGNALS. ALL RIGHTS RESERVED.</div>
@@ -188,7 +188,7 @@
         function generateSignal() {
             let newSignal = getRandomSignal();
             let isRisk = newSignal.includes("Risk");
-            let randomTime = Math.floor(Math.random() * (30000 - 20000) + 20000); // 20-30 seconds for low odds
+            let randomTime = Math.floor(Math.random() * (30000 - 20000) + 20000);
 
             setTimeout(() => {
                 let signalElement = document.getElementById("currentSignal");
@@ -198,17 +198,8 @@
                     signalElement.innerHTML = newSignal;
                     signalElement.style.opacity = 1;
 
-                    setTimeout(() => {
-                        document.getElementById("spinner").style.display = 'block';
-
-                        setTimeout(() => {
-                            document.getElementById("spinner").style.display = 'none';
-                            generateSignal();
-                        }, Math.floor(Math.random() * (20000 - 10000) + 10000)); // 10-20 sec before next signal
-                    }, Math.floor(Math.random() * (12000 - 10000) + 10000)); // 10-12 sec before showing next spinner
-
                     if (isRisk) {
-                        let nextRiskTime = Math.floor(Math.random() * (3 - 2 + 1)) + 2; // 2-3 minutes
+                        let nextRiskTime = Math.floor(Math.random() * (3 - 2 + 1)) + 2;
                         document.getElementById("nextRisk").innerHTML = `Next Risk in ${nextRiskTime} minutes`;
 
                         if (!pastRisks.includes(newSignal)) {
@@ -218,6 +209,7 @@
                         }
                     }
 
+                    generateSignal();
                 }, 500);
             }, randomTime);
         }
