@@ -4,190 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Predictions - JetX Martingale Bot</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-        
-        /* Insane animated background transition */
-        @keyframes crazyBackground {
-            0% { background: linear-gradient(45deg, #ff00ff, #ff3366, #ff6699, #ff9933); }
-            25% { background: linear-gradient(45deg, #00c6ff, #0099ff, #33ccff, #ff66ff); }
-            50% { background: linear-gradient(45deg, #ff6600, #ff33cc, #ff0066, #ff99cc); }
-            75% { background: linear-gradient(45deg, #00ff99, #00ffcc, #ff0066, #9900ff); }
-            100% { background: linear-gradient(45deg, #ff6699, #ff3366, #ff9933, #ff00ff); }
-        }
 
-        /* Crazy flashing card animation */
-        @keyframes flashEffect {
-            0% { background-color: rgba(255, 255, 255, 0.1); box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.7); }
-            50% { background-color: rgba(255, 255, 255, 0.5); box-shadow: 0px 0px 40px rgba(255, 255, 255, 1); }
-            100% { background-color: rgba(255, 255, 255, 0.1); box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.7); }
-        }
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 
-        /* Crazy glowing pulse effect for the button */
-        @keyframes pulseEffect {
-            0% { transform: scale(1); box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); }
-            50% { transform: scale(1.1); box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.9); }
-            100% { transform: scale(1); box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); }
-        }
-
-        body {
-            font-family: 'Orbitron', sans-serif;
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            animation: crazyBackground 4s infinite alternate; /* Crazy background animation */
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .clock {
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .countdown {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: red;
-            margin-bottom: 20px;
-        }
-
-        .prediction-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            font-size: 1.5em;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
-            transition: background 0.3s ease-in-out;
-            animation: flashEffect 1s infinite alternate; /* Flashing card animation */
-        }
-
-        .button {
-            background-color: #ff3366;
-            color: white;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-            transition: background 0.3s;
-            display: block;
-            margin: 20px auto;
-            animation: pulseEffect 2s infinite; /* Pulse animation for button */
-        }
-
-        .button:hover {
-            background-color: #ff6699;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="clock" id="clock">00:00:00</div>
-        
-        <h1> JetX Martingale Predictions </h1>
-
-        <div class="countdown" id="countdown">02:00</div>
-
+        <h1>JetX Martingale Predictions</h1>
         <div id="predictions">
             <div class="prediction-card">Waiting for Predictions...</div>
         </div>
-
-        <button class="button" onclick="startNewCountdown()">Start Countdown</button>
-        <button class="back-button" onclick="goBack()">⬅ Back</button>
     </div>
 
     <script>
-        let countdownTime = 120; // First countdown starts at 2:00
-        let predictionCard = document.getElementById('predictions');
-        let countdownDisplay = document.getElementById('countdown');
-        let countdownInterval;
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdpPzUtYItwaekcEdxhLr8Wjf351-4gW8",
+            authDomain: "jetx-martingale-bot.firebaseapp.com",
+            projectId: "jetx-martingale-bot",
+            storageBucket: "jetx-martingale-bot.firebasestorage.app",
+            messagingSenderId: "515112087772",
+            appId: "1:515112087772:web:6607c7341d5aad230b8419"
+        };
 
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('clock').textContent = timeString;
-        }
-        setInterval(updateClock, 1000);
-        
-        function startCountdown() {
-            countdownInterval = setInterval(() => {
-                const minutes = Math.floor(countdownTime / 60);
-                const seconds = countdownTime % 60;
-                countdownDisplay.textContent = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                countdownTime--;
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-                if (countdownTime === 10) {
-                    generatePredictions(); // Show prediction at 10 seconds
+        // Function to fetch predictions from Firebase
+        function fetchPredictions() {
+            const predictionsRef = database.ref("predictions");
+
+            predictionsRef.on("value", (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    document.getElementById("predictions").innerHTML = `<div class="prediction-card">${data.latestPrediction}</div>`;
                 }
-
-                if (countdownTime <= 0) {
-                    clearInterval(countdownInterval);
-                    setTimeout(() => {
-                        // Alternate countdowns between 2:00 and 1:50 randomly
-                        countdownTime = Math.random() < 0.5 ? 120 : 110;
-                        predictionCard.innerHTML = '<div class="prediction-card">Waiting for Predictions...</div>';
-                        startCountdown();
-                    }, 10000); // Wait 10 seconds before restarting
-                }
-            }, 1000);
+            });
         }
 
-        function startNewCountdown() {
-            clearInterval(countdownInterval);
-            countdownTime = Math.random() < 0.5 ? 120 : 110;
-            predictionCard.innerHTML = '<div class="prediction-card">Waiting for Predictions...</div>';
-            startCountdown();
-        }
-
-        function generatePredictions() {
-            const predictions = [
-                '2.00x ✅',
-                '2.50x ✅',
-                '3.00x ✅',
-            ];
-
-            // Clear existing predictions
-            predictionCard.innerHTML = '';
-
-            // Create new prediction card
-            const card = document.createElement('div');
-            card.className = 'prediction-card'; // Flashing effect already added in CSS
-            const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
-            card.textContent = randomPrediction;
-            predictionCard.appendChild(card);
-        }
-
-        function goBack() {
-            window.location.href = 'index.html';
-        }
-
-        // Start countdown when page loads
-        startCountdown();
+        // Call function to fetch predictions
+        fetchPredictions();
     </script>
 
 </body>
