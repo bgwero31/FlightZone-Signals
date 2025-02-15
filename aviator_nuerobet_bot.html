@@ -147,12 +147,16 @@
 
         // Google Sign-in logic
         document.getElementById('googleLogin').addEventListener('click', () => {
+            console.log("Button clicked!"); // Log for debugging
+
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider)
                 .then(result => {
+                    console.log("Login successful"); // Log for successful login
                     window.location.href = "dashboard.html"; // Redirect after login
                 })
                 .catch(error => {
+                    console.log("Error during login:", error.message); // Log error messages
                     alert(error.message);
                 });
         });
