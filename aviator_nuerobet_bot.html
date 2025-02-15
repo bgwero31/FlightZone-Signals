@@ -28,6 +28,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -43,31 +44,63 @@
         // Initialize Firebase app and analytics
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-        const auth = getAuth(); // Get authentication instance
+        const auth = getAuth();
+        const messaging = getMessaging(app);
 
-        // Set up Google Authentication provider
+        // Google Authentication
         const provider = new GoogleAuthProvider();
         
-        // Sign-in function using redirect
         const signInWithGoogle = () => {
             signInWithRedirect(auth, provider);
         };
 
-        // Check for the result of the redirect
         getRedirectResult(auth)
             .then((result) => {
                 if (result) {
                     const user = result.user;
-                    console.log(user); // Display user info in the console
-                    window.location.href = "dashboard.html"; // Redirect to your dashboard page
+                    console.log("User logged in:", user);
+                    window.location.href = "dashboard.html";
                 }
             })
             .catch((error) => {
-                console.error("Error during sign-in:", error.message); // Handle any sign-in errors
+                console.error("Error during sign-in:", error.message);
             });
 
-        // Attach event listener to the sign-in button
         document.getElementById("googleLogin").addEventListener("click", signInWithGoogle);
+
+        // Firebase Cloud Messaging (FCM) Setup
+        getToken(messaging, { vapidKey: "BK2hLTxKHzk9UiT-LFULv8wf3CDekMSIFS8qYA3QGej2x4Somo1PKF-aljGDCjaUDSEPUWNEe9vgBeqJeUEmpoY" })
+            .then((currentToken) => {
+                if (currentToken) {
+                    console.log("FCM Token:", currentToken);
+                } else {
+                    console.log("No registration token available.");
+                }
+            })
+            .catch((err) => {
+                console.log("An error occurred while retrieving token:", err);
+            });
+
+        // Handle foreground notifications
+        onMessage(messaging, (payload) => {
+            console.log("Message received:", payload);
+            alert(payload.notification.title + "\n" + payload.notification.body);
+        });
+
     </script>
+
+    <!-- Firebase Cloud Messaging Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                .then((registration) => {
+                    console.log("Service Worker registered:", registration);
+                })
+                .catch((error) => {
+                    console.error("Service Worker registration failed:", error);
+                });
+        }
+    </script>
+
 </body>
 </html>
