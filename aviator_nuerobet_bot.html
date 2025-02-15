@@ -43,21 +43,6 @@
             color: #00ff99;
         }
 
-        p {
-            font-size: 24px;
-            margin-bottom: 50px;
-            font-weight: bold;
-            color: #00ff99;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: glow 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 15px #00ff99; }
-            100% { text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99, 0 0 30px #00ff99; }
-        }
-
         button {
             padding: 20px 40px;
             background: linear-gradient(45deg, #ff6600, #ffcc00);
@@ -76,84 +61,17 @@
             transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         }
-
-        footer {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            font-size: 14px;
-            color: gray;
-            animation: slideUp 1.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            0% { transform: translateY(100%); }
-            100% { transform: translateY(0); }
-        }
-
-        .robotic {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            color: #00ff99;
-            letter-spacing: 1px;
-            animation: typewriter 3s steps(40) 1s forwards, blink 0.75s step-end infinite;
-        }
-
-        @keyframes typewriter {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <h1>NeuroBet</h1>
-        <p>AI-Driven Betting Evolution</p>
-        <button id="googleLogin">Sign in with Google</button>
-        <div class="robotic">
-            Connecting to Neural Network...
-        </div>
+        <button id="navigateButton">Proceed to Dashboard</button>
     </div>
 
-    <footer>
-        <p>Powered by NeuroBet | The Future of Betting</p>
-    </footer>
-
-    <!-- Load NebSpot SDK -->
-    <script src="https://cdn.nebspot.com/js/2.5.0/nebspot-app.js"></script>
-    <script src="https://cdn.nebspot.com/js/2.5.0/nebspot-auth.js"></script>
-
     <script>
-        // Your NapSpot configuration
-        const nebspotConfig = {
-            apiKey: "YOUR_NAPSPOT_API_KEY",
-            authDomain: "your-app.napspot.com",
-            projectId: "your-project-id",
-            storageBucket: "your-storage-bucket",
-            messagingSenderId: "your-messaging-id",
-            appId: "your-app-id"
-        };
-
-        // Initialize NebSpot
-        const app = napspot.initializeApp(napspotConfig);
-        const auth = napspot.auth();
-        const provider = new napspot.auth.GoogleAuthProvider();
-
-        // Google Sign-in
-        document.getElementById("googleLogin").addEventListener("click", () => {
-            auth.signInWithPopup(provider)
-                .then(result => {
-                    console.log("User signed in:", result.user);
-                    window.location.href = "dashboard.html"; // Redirect after login
-                })
-                .catch(error => {
-                    console.error("Sign-in error:", error.message);
-                    alert("Login failed: " + error.message);
-                });
+        document.getElementById("navigateButton").addEventListener("click", function() {
+            window.location.href = "dashboard.html"; // Redirect to dashboard
         });
     </script>
 </body>
