@@ -6,12 +6,19 @@
     <title>Aviator NeuroBet - Login</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #111, #222);
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #0f0f0f, #1a1a1a);
             color: white;
             text-align: center;
             margin: 0;
             padding: 0;
+            animation: backgroundAnimation 3s ease infinite;
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
+            50% { background: linear-gradient(45deg, #1a1a1a, #333); }
+            100% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
         }
 
         .login-container {
@@ -20,33 +27,54 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         h1 {
-            font-size: 48px;
+            font-size: 60px;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            letter-spacing: 4px;
+            color: #00ff99;
         }
 
         p {
-            font-size: 20px;
+            font-size: 24px;
             margin-bottom: 50px;
             font-weight: bold;
+            color: #00ff99;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 15px #00ff99; }
+            100% { text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99, 0 0 30px #00ff99; }
         }
 
         button {
-            padding: 15px 30px;
-            background: gold;
+            padding: 20px 40px;
+            background: linear-gradient(45deg, #ff6600, #ffcc00);
             border: none;
             color: black;
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: bold;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s ease;
+            border-radius: 10px;
+            transition: background 0.4s ease, transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         button:hover {
-            background: orange;
+            background: linear-gradient(45deg, #ffcc00, #ff6600);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         }
 
         footer {
@@ -55,18 +83,44 @@
             width: 100%;
             font-size: 14px;
             color: gray;
+            animation: slideUp 1.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(0); }
+        }
+
+        .robotic {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            color: #00ff99;
+            letter-spacing: 1px;
+            animation: typewriter 3s steps(40) 1s forwards, blink 0.75s step-end infinite;
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h1>Welcome to NeuroBet</h1>
-        <p>Next-Level AI Predictions for Champions</p>
+        <h1>NeuroBet</h1>
+        <p>AI-Driven Betting Evolution</p>
         <button id="googleLogin">Sign in with Google</button>
+        <div class="robotic">
+            Connecting to Neural Network...
+        </div>
     </div>
 
     <footer>
-        <p>Powered by NeuroBet | Future of Betting</p>
+        <p>Powered by NeuroBet | The Future of Betting</p>
     </footer>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
