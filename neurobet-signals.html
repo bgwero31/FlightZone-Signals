@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroBet Signals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
 
+        .header {
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 40px;
+            text-transform: uppercase;
+            color: gold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .signal-container {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signal-card {
+            background-color: #222;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .signal-card h2 {
+            font-size: 24px;
+            color: #ff5c33;
+        }
+
+        .signal-card p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .signal-card .target {
+            color: #1a73e8;
+            font-weight: bold;
+        }
+
+        .signal-card .time {
+            color: #ffeb3b;
+        }
+
+        .signal-card .risk {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NeuroBet Signals</h1>
+    </div>
+
+    <div class="signal-container">
+        <div class="signal-card">
+            <h2>Signal #1: Spin City</h2>
+            <p><span class="target">Target: 2.50x</span></p>
+            <p><span class="time">Time: 10:15 AM</span></p>
+            <p><span class="risk">Risk: 4x</span></p>
+        </div>
+
+        <div class="signal-card">
+            <h2>Signal #2: MWOS Betting</h2>
+            <p><span class="target">Target: 1.85x</span></p>
+            <p><span class="time">Time: 10:20 AM</span></p>
+            <p><span class="risk">Risk: 3x</span></p>
+        </div>
+
+        <div class="signal-card">
+            <h2>Signal #3: Zanzibet</h2>
+            <p><span class="target">Target: 4.10x</span></p>
+            <p><span class="time">Time: 10:25 AM</span></p>
+            <p><span class="risk">Risk: 5x</span></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Powered by NeuroBet | Best Betting Signals</p>
+    </footer>
+
+    <!-- The Audio Element for Robotic Sound -->
+    <audio id="roboticSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    
+    <!-- Script to play sound on page load -->
+    <script>
+        window.onload = function() {
+            // Play the sound
+            var sound = document.getElementById('roboticSound');
+            sound.play();
+        };
+    </script>
+</body>
+</html>
