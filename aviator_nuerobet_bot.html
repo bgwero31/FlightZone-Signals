@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviator NeuroBet</title>
     <style>
-        /* Your styles here */
+        /* Include your existing styles here */
     </style>
 </head>
 <body>
@@ -22,15 +22,13 @@
         <p>Powered by NeuroBet | The Future of Betting</p>
     </footer>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDKs -->
     <script type="module">
-        // Import necessary functions from Firebase SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js";
 
-        // Firebase configuration
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDW5ntQiR9cF-qZ9vOGY49P6hTOUhTPxdc",
             authDomain: "neurobet-ai.firebaseapp.com",
@@ -41,66 +39,35 @@
             measurementId: "G-RPZZ9MPQTJ"
         };
 
-        // Initialize Firebase app and analytics
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth();
-        const messaging = getMessaging(app);
-
-        // Google Authentication
         const provider = new GoogleAuthProvider();
-        
-        const signInWithGoogle = () => {
-            signInWithRedirect(auth, provider);
-        };
 
+        // Google Sign-In logic
+        document.getElementById("googleLogin").addEventListener("click", () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("User signed in:", result.user);
+                    window.location.href = "dashboard.html"; // Redirect to the dashboard
+                })
+                .catch((error) => {
+                    console.error("Sign-in error:", error.message);
+                });
+        });
+
+        // Handle redirect after login (if needed)
         getRedirectResult(auth)
             .then((result) => {
-                if (result) {
-                    const user = result.user;
-                    console.log("User logged in:", user);
-                    window.location.href = "dashboard.html";
+                if (result.user) {
+                    console.log("Redirected User:", result.user);
+                    window.location.href = "dashboard.html"; // Redirect after login
                 }
             })
             .catch((error) => {
-                console.error("Error during sign-in:", error.message);
+                console.error("Redirect sign-in error:", error.message);
             });
-
-        document.getElementById("googleLogin").addEventListener("click", signInWithGoogle);
-
-        // Firebase Cloud Messaging (FCM) Setup
-        getToken(messaging, { vapidKey: "BK2hLTxKHzk9UiT-LFULv8wf3CDekMSIFS8qYA3QGej2x4Somo1PKF-aljGDCjaUDSEPUWNEe9vgBeqJeUEmpoY" })
-            .then((currentToken) => {
-                if (currentToken) {
-                    console.log("FCM Token:", currentToken);
-                } else {
-                    console.log("No registration token available.");
-                }
-            })
-            .catch((err) => {
-                console.log("An error occurred while retrieving token:", err);
-            });
-
-        // Handle foreground notifications
-        onMessage(messaging, (payload) => {
-            console.log("Message received:", payload);
-            alert(payload.notification.title + "\n" + payload.notification.body);
-        });
-
     </script>
-
-    <!-- Firebase Cloud Messaging Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/firebase-messaging-sw.js')
-                .then((registration) => {
-                    console.log("Service Worker registered:", registration);
-                })
-                .catch((error) => {
-                    console.error("Service Worker registration failed:", error);
-                });
-        }
-    </script>
-
 </body>
 </html>
