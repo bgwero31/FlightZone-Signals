@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator NeuroBet</title>
+    <script type="module" src="firebase.js"></script>
+</head>
+<body>
+    <h1>Welcome to the Neurobet by B.JAY</h1>
+    
+    <!-- Button to go to the signal page -->
+    <button id="signalPageLink">Go to Signal Page</button>
+
+    <!-- Logout button -->
+    <button id="logout">Logout</button>
+
+    <script type="module">
+        import { auth } from './firebase.js';
+        import { onAuthStateChanged, signOut } from "firebase/auth";
+
+        // Check if user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "index.html"; // Redirect to login if not logged in
+            }
+        });
+
+        // Logout function
+        document.getElementById('logout').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = "index.html"; // Redirect to login page after logout
+            });
+        });
+
+        // Link to the signal page
+        document.getElementById('signalPageLink').addEventListener('click', () => {
+            window.location.href = "neurobet-signals.html"; // Link to the signal page
+        });
+    </script>
+</body>
+</html>
