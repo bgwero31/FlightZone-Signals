@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator NeuroBet</title>
+    <title>Aviator NeuroBet - Login</title>
     <style>
-        /* Include your existing styles here */
+        /* Your existing CSS styles */
     </style>
 </head>
 <body>
@@ -22,11 +22,10 @@
         <p>Powered by NeuroBet | The Future of Betting</p>
     </footer>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase Authentication -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // Firebase Configuration
         const firebaseConfig = {
@@ -41,32 +40,24 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth();
         const provider = new GoogleAuthProvider();
 
-        // Google Sign-In logic
+        // Google Sign-In using Redirect (fixes popup issues)
         document.getElementById("googleLogin").addEventListener("click", () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    console.log("User signed in:", result.user);
-                    window.location.href = "dashboard.html"; // Redirect to the dashboard
-                })
-                .catch((error) => {
-                    console.error("Sign-in error:", error.message);
-                });
+            signInWithRedirect(auth, provider);
         });
 
-        // Handle redirect after login (if needed)
+        // Handle login result after redirect
         getRedirectResult(auth)
             .then((result) => {
                 if (result.user) {
-                    console.log("Redirected User:", result.user);
+                    console.log("User signed in:", result.user);
                     window.location.href = "dashboard.html"; // Redirect after login
                 }
             })
             .catch((error) => {
-                console.error("Redirect sign-in error:", error.message);
+                console.error("Sign-in error:", error.message);
             });
     </script>
 </body>
