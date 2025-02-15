@@ -26,7 +26,7 @@
     <script type="module">
         // Import necessary functions from Firebase SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
 
         // Firebase configuration
@@ -48,18 +48,23 @@
         // Set up Google Authentication provider
         const provider = new GoogleAuthProvider();
         
-        // Sign-in function
-        const signInWithGoogle = async () => {
-            try {
-                // Sign in with popup
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                console.log(user); // Display user info in the console
-                window.location.href = "dashboard.html"; // Redirect to your dashboard page
-            } catch (error) {
-                console.error("Error during sign-in:", error.message); // Handle any sign-in errors
-            }
+        // Sign-in function using redirect
+        const signInWithGoogle = () => {
+            signInWithRedirect(auth, provider);
         };
+
+        // Check for the result of the redirect
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result) {
+                    const user = result.user;
+                    console.log(user); // Display user info in the console
+                    window.location.href = "dashboard.html"; // Redirect to your dashboard page
+                }
+            })
+            .catch((error) => {
+                console.error("Error during sign-in:", error.message); // Handle any sign-in errors
+            });
 
         // Attach event listener to the sign-in button
         document.getElementById("googleLogin").addEventListener("click", signInWithGoogle);
