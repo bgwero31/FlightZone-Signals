@@ -123,20 +123,26 @@
         <p>Powered by NeuroBet | The Future of Betting</p>
     </footer>
 
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+
     <script>
+        // Your Firebase configuration
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDW5ntQiR9cF-qZ9vOGY49P6hTOUhTPxdc",
+            authDomain: "neurobet-ai.firebaseapp.com",
+            projectId: "neurobet-ai",
+            storageBucket: "neurobet-ai.firebasestorage.app",
+            messagingSenderId: "793175611155",
+            appId: "1:793175611155:web:10d91cb8d4fca30f6eece6",
+            measurementId: "G-RPZZ9MPQTJ"
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        const app = firebase.initializeApp(firebaseConfig);
+        const analytics = firebase.analytics();
         const auth = firebase.auth();
 
         // Google Sign-in logic
