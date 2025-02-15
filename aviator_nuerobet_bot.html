@@ -5,108 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviator NeuroBet</title>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(45deg, #0f0f0f, #1a1a1a);
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            animation: backgroundAnimation 3s ease infinite;
-        }
-
-        @keyframes backgroundAnimation {
-            0% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-            50% { background: linear-gradient(45deg, #1a1a1a, #333); }
-            100% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-        }
-
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            animation: fadeIn 2s ease-out;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        h1 {
-            font-size: 60px;
-            margin-bottom: 20px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-            letter-spacing: 4px;
-            color: #00ff99;
-        }
-
-        p {
-            font-size: 24px;
-            margin-bottom: 50px;
-            font-weight: bold;
-            color: #00ff99;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: glow 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 15px #00ff99; }
-            100% { text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99, 0 0 30px #00ff99; }
-        }
-
-        button {
-            padding: 20px 40px;
-            background: linear-gradient(45deg, #ff6600, #ffcc00);
-            border: none;
-            color: black;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: background 0.4s ease, transform 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        button:hover {
-            background: linear-gradient(45deg, #ffcc00, #ff6600);
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        footer {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            font-size: 14px;
-            color: gray;
-            animation: slideUp 1.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            0% { transform: translateY(100%); }
-            100% { transform: translateY(0); }
-        }
-
-        .robotic {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            color: #00ff99;
-            letter-spacing: 1px;
-            animation: typewriter 3s steps(40) 1s forwards, blink 0.75s step-end infinite;
-        }
-
-        @keyframes typewriter {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
+        /* Your styles here */
     </style>
 </head>
 <body>
@@ -124,12 +23,13 @@
     </footer>
 
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+    <script type="module">
+        // Import necessary functions from Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
 
-    <script>
-        // Your Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDW5ntQiR9cF-qZ9vOGY49P6hTOUhTPxdc",
             authDomain: "neurobet-ai.firebaseapp.com",
@@ -140,26 +40,29 @@
             measurementId: "G-RPZZ9MPQTJ"
         };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const analytics = firebase.analytics();
-        const auth = firebase.auth();
+        // Initialize Firebase app and analytics
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(); // Get authentication instance
 
-        // Google Sign-in logic
-        document.getElementById('googleLogin').addEventListener('click', () => {
-            console.log("Button clicked!"); // Log for debugging
+        // Set up Google Authentication provider
+        const provider = new GoogleAuthProvider();
+        
+        // Sign-in function
+        const signInWithGoogle = async () => {
+            try {
+                // Sign in with popup
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                console.log(user); // Display user info in the console
+                window.location.href = "dashboard.html"; // Redirect to your dashboard page
+            } catch (error) {
+                console.error("Error during sign-in:", error.message); // Handle any sign-in errors
+            }
+        };
 
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then(result => {
-                    console.log("Login successful"); // Log for successful login
-                    window.location.href = "dashboard.html"; // Redirect after login
-                })
-                .catch(error => {
-                    console.log("Error during login:", error.message); // Log error messages
-                    alert(error.message);
-                });
-        });
+        // Attach event listener to the sign-in button
+        document.getElementById("googleLogin").addEventListener("click", signInWithGoogle);
     </script>
 </body>
 </html>
