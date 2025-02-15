@@ -3,9 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator NeuroBet - Login</title>
+    <title>Aviator NeuroBet</title>
     <style>
-        /* Your existing CSS styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #0f0f0f, #1a1a1a);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            animation: backgroundAnimation 3s ease infinite;
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
+            50% { background: linear-gradient(45deg, #1a1a1a, #333); }
+            100% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            letter-spacing: 4px;
+            color: #00ff99;
+        }
+
+        p {
+            font-size: 24px;
+            margin-bottom: 50px;
+            font-weight: bold;
+            color: #00ff99;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99, 0 0 15px #00ff99; }
+            100% { text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99, 0 0 30px #00ff99; }
+        }
+
+        button {
+            padding: 20px 40px;
+            background: linear-gradient(45deg, #ff6600, #ffcc00);
+            border: none;
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background 0.4s ease, transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #ffcc00, #ff6600);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            font-size: 14px;
+            color: gray;
+            animation: slideUp 1.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(0); }
+        }
+
+        .robotic {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            color: #00ff99;
+            letter-spacing: 1px;
+            animation: typewriter 3s steps(40) 1s forwards, blink 0.75s step-end infinite;
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
     </style>
 </head>
 <body>
@@ -22,43 +123,38 @@
         <p>Powered by NeuroBet | The Future of Betting</p>
     </footer>
 
-    <!-- Firebase Authentication -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    <!-- Load NebSpot SDK -->
+    <script src="https://cdn.nebspot.com/js/2.5.0/nebspot-app.js"></script>
+    <script src="https://cdn.nebspot.com/js/2.5.0/nebspot-auth.js"></script>
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDW5ntQiR9cF-qZ9vOGY49P6hTOUhTPxdc",
-            authDomain: "neurobet-ai.firebaseapp.com",
-            projectId: "neurobet-ai",
-            storageBucket: "neurobet-ai.firebasestorage.app",
-            messagingSenderId: "793175611155",
-            appId: "1:793175611155:web:10d91cb8d4fca30f6eece6",
-            measurementId: "G-RPZZ9MPQTJ"
+    <script>
+        // Your NapSpot configuration
+        const nebspotConfig = {
+            apiKey: "YOUR_NAPSPOT_API_KEY",
+            authDomain: "your-app.napspot.com",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-id",
+            appId: "your-app-id"
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth();
-        const provider = new GoogleAuthProvider();
+        // Initialize NebSpot
+        const app = napspot.initializeApp(napspotConfig);
+        const auth = napspot.auth();
+        const provider = new napspot.auth.GoogleAuthProvider();
 
-        // Google Sign-In using Redirect (fixes popup issues)
+        // Google Sign-in
         document.getElementById("googleLogin").addEventListener("click", () => {
-            signInWithRedirect(auth, provider);
-        });
-
-        // Handle login result after redirect
-        getRedirectResult(auth)
-            .then((result) => {
-                if (result.user) {
+            auth.signInWithPopup(provider)
+                .then(result => {
                     console.log("User signed in:", result.user);
                     window.location.href = "dashboard.html"; // Redirect after login
-                }
-            })
-            .catch((error) => {
-                console.error("Sign-in error:", error.message);
-            });
+                })
+                .catch(error => {
+                    console.error("Sign-in error:", error.message);
+                    alert("Login failed: " + error.message);
+                });
+        });
     </script>
 </body>
 </html>
