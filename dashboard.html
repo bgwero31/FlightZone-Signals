@@ -1,140 +1,140 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Dashboard</title>
-    <script type="module" src="firebase.js"></script>
+    <title>NeuroBet Signals</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(45deg, #0f0f0f, #1a1a1a);
+            font-family: Arial, sans-serif;
+            background: #111;
             color: white;
-            text-align: center;
             margin: 0;
             padding: 0;
-            animation: backgroundAnimation 3s ease infinite;
-        }@keyframes backgroundAnimation {
-        0% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-        50% { background: linear-gradient(45deg, #1a1a1a, #333); }
-        100% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-    }
+        }
 
-    .dashboard-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        animation: fadeIn 2s ease-out;
-    }
+        .header {
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
 
-    @keyframes fadeIn {
-        0% { opacity: 0; }
-        100% { opacity: 1; }
-    }
+        .header h1 {
+            font-size: 40px;
+            text-transform: uppercase;
+            color: gold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
 
-    h1 {
-        font-size: 60px;
-        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-        color: #00ff99;
-        animation: glow 1.5s ease-in-out infinite alternate;
-    }
+        .signal-container {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-    @keyframes glow {
-        0% { text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99, 0 0 30px #00ff99; }
-        100% { text-shadow: 0 0 15px #00ff99, 0 0 30px #00ff99, 0 0 40px #00ff99; }
-    }
+        .signal-card {
+            background-color: #222;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        }
 
-    .button-container {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        margin-top: 40px;
-    }
+        .signal-card h2 {
+            font-size: 24px;
+            color: #ff5c33;
+        }
 
-    button {
-        padding: 20px 40px;
-        font-size: 22px;
-        font-weight: bold;
-        color: black;
-        border: none;
-        cursor: pointer;
-        border-radius: 10px;
-        transition: background 0.4s ease, transform 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
+        .signal-card p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
 
-    #signalPageLink {
-        background: linear-gradient(45deg, #0077ff, #00ccff);
-    }
+        .signal-card .target {
+            color: #1a73e8;
+            font-weight: bold;
+        }
 
-    #signalPageLink:hover {
-        background: linear-gradient(45deg, #00ccff, #0077ff);
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-    }
+        .signal-card .time {
+            color: #ffeb3b;
+        }
 
-    #logout {
-        background: linear-gradient(45deg, #ff6600, #ffcc00);
-    }
+        .signal-card .risk {
+            color: #f44336;
+            font-weight: bold;
+        }
 
-    #logout:hover {
-        background: linear-gradient(45deg, #ffcc00, #ff6600);
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-    }
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: gray;
+        }
 
-    footer {
-        position: absolute;
-        bottom: 10px;
-        width: 100%;
-        font-size: 14px;
-        color: gray;
-        animation: slideUp 1.5s ease-out;
-    }
-
-    @keyframes slideUp {
-        0% { transform: translateY(100%); }
-        100% { transform: translateY(0); }
-    }
-</style>
-
+        .back-button {
+            background: gold;
+            color: black;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <h1>Welcome to NeuroBet Dashboard</h1><div class="button-container">
-        <button id="signalPageLink">Go to Signal Page</button>
-        <button id="logout">Logout</button>
+    <div class="header">
+        <h1>NeuroBet Signals</h1>
     </div>
-</div>
 
-<footer>
-    <p>Powered by NeuroBet | AI-Driven Betting Evolution</p>
-</footer>
+    <div class="signal-container">
+        <div class="signal-card">
+            <h2>Signal #1: Spin City</h2>
+            <p><span class="target">Target: 2.50x</span></p>
+            <p><span class="time">Time: 10:15 AM</span></p>
+            <p><span class="risk">Risk: 4x</span></p>
+        </div>
 
-<script type="module">
-    import { auth } from './firebase.js';
-    import { onAuthStateChanged, signOut } from "firebase/auth";
+        <div class="signal-card">
+            <h2>Signal #2: MWOS Betting</h2>
+            <p><span class="target">Target: 1.85x</span></p>
+            <p><span class="time">Time: 10:20 AM</span></p>
+            <p><span class="risk">Risk: 3x</span></p>
+        </div>
 
-    // Check if user is logged in
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            window.location.href = "index.html"; // Redirect to login if not logged in
-        }
-    });
+        <div class="signal-card">
+            <h2>Signal #3: Zanzibet</h2>
+            <p><span class="target">Target: 4.10x</span></p>
+            <p><span class="time">Time: 10:25 AM</span></p>
+            <p><span class="risk">Risk: 5x</span></p>
+        </div>
+    </div>
 
-    // Logout function
-    document.getElementById('logout').addEventListener('click', () => {
-        signOut(auth).then(() => {
-            window.location.href = "index.html"; // Redirect to login page after logout
-        });
-    });
+    <div style="text-align: center;">
+        <button class="back-button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+    </div>
 
-    // Link to the signal page
-    document.getElementById('signalPageLink').addEventListener('click', () => {
-        window.location.href = "neurobet_signals.html"; // Link to the signal page
-    });
-</script>
+    <footer>
+        <p>Powered by NeuroBet | Best Betting Signals</p>
+    </footer>
 
+    <!-- The Audio Element for Robotic Sound -->
+    <audio id="roboticSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    
+    <!-- Script to play sound on page load -->
+    <script>
+        window.onload = function() {
+            // Play the sound
+            var sound = document.getElementById('roboticSound');
+            sound.play();
+        };
+    </script>
 </body>
 </html>
