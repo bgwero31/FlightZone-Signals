@@ -5,50 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviator NeuroBet</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(45deg, #0f0f0f, #1a1a1a);
+            font-family: 'Orbitron', sans-serif;
+            background: url('https://source.unsplash.com/1600x900/?futuristic,robot') no-repeat center center/cover;
             color: white;
             text-align: center;
             margin: 0;
             padding: 0;
-            animation: backgroundAnimation 3s ease infinite;
-        }
-
-        @keyframes backgroundAnimation {
-            0% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-            50% { background: linear-gradient(45deg, #1a1a1a, #333); }
-            100% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-        }
-
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            width: 350px;
+            text-align: center;
             animation: fadeIn 2s ease-out;
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         h1 {
-            font-size: 60px;
+            font-size: 40px;
             margin-bottom: 20px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-            letter-spacing: 4px;
             color: #00ff99;
+            text-shadow: 3px 3px 10px rgba(0, 255, 153, 0.5);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         button {
-            padding: 20px 40px;
+            width: 100%;
+            padding: 15px;
             background: linear-gradient(45deg, #ff6600, #ffcc00);
             border: none;
             color: black;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 10px;
@@ -58,21 +89,45 @@
 
         button:hover {
             background: linear-gradient(45deg, #ffcc00, #ff6600);
-            transform: scale(1.1);
+            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>NeuroBet</h1>
-        <button id="navigateButton">Proceed to Dashboard</button>
+
+    <div class="overlay"></div>
+
+    <div class="login-card">
+        <h1>NeuroBet AI</h1>
+        <p>Enter your details to access advanced betting predictions powered by AI.</p>
+        
+        <select id="bettingSite">
+            <option value="">Select Betting Site</option>
+            <option value="Africa Bet">Africa Bet</option>
+            <option value="MWOS Betting">MWOS Betting</option>
+            <option value="Spin City">Spin City</option>
+            <option value="Zanzibet">Zanzibet</option>
+            <option value="Bet247">Bet247</option>
+        </select>
+
+        <input type="password" id="password" placeholder="Enter your password">
+        
+        <button id="loginButton">Proceed</button>
     </div>
 
     <script>
-        document.getElementById("navigateButton").addEventListener("click", function() {
-            window.location.href = "dashboard.html"; // Redirect to dashboard
+        document.getElementById("loginButton").addEventListener("click", function() {
+            const bettingSite = document.getElementById("bettingSite").value;
+            const password = document.getElementById("password").value;
+
+            if (bettingSite === "" || password === "") {
+                alert("Please select a betting site and enter your password.");
+            } else {
+                window.location.href = "dashboard.html"; // Redirect after validation
+            }
         });
     </script>
+
 </body>
 </html>
