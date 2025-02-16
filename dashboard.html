@@ -1,143 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Dashboard</title>
-    <script type="module" src="firebase.js"></script>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(45deg, #0f0f0f, #1a1a1a);
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            animation: backgroundAnimation 3s ease infinite;
+<script type="module">
+    import { auth } from './firebase.js';
+    import { onAuthStateChanged, signOut } from "firebase/auth";
+
+    // Check if user is logged in
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "index.html"; // Redirect to login if not logged in
         }
+    });
 
-        @keyframes backgroundAnimation {
-            0% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-            50% { background: linear-gradient(45deg, #1a1a1a, #333); }
-            100% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
-        }
-
-        .dashboard-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            animation: fadeIn 2s ease-out;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        h1 {
-            font-size: 60px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-            color: #00ff99;
-            animation: glow 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99, 0 0 30px #00ff99; }
-            100% { text-shadow: 0 0 15px #00ff99, 0 0 30px #00ff99, 0 0 40px #00ff99; }
-        }
-
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        button {
-            padding: 20px 40px;
-            font-size: 22px;
-            font-weight: bold;
-            color: black;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: background 0.4s ease, transform 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        #signalPageLink {
-            background: linear-gradient(45deg, #0077ff, #00ccff);
-        }
-
-        #signalPageLink:hover {
-            background: linear-gradient(45deg, #00ccff, #0077ff);
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        #logout {
-            background: linear-gradient(45deg, #ff6600, #ffcc00);
-        }
-
-        #logout:hover {
-            background: linear-gradient(45deg, #ffcc00, #ff6600);
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        footer {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            font-size: 14px;
-            color: gray;
-            animation: slideUp 1.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            0% { transform: translateY(100%); }
-            100% { transform: translateY(0); }
-        }
-    </style>
-</head>
-<body>
-    <div class="dashboard-container">
-        <h1>Welcome to NeuroBet Dashboard</h1>
-        
-        <div class="button-container">
-            <button id="signalPageLink">Go to Signal Page</button>
-            <button id="logout">Logout</button>
-        </div>
-    </div>
-
-    <footer>
-        <p>Powered by NeuroBet | AI-Driven Betting Evolution</p>
-    </footer>
-
-    <script type="module">
-        import { auth } from './firebase.js';
-        import { onAuthStateChanged, signOut } from "firebase/auth";
-
-        // Check if user is logged in
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = "index.html"; // Redirect to login if not logged in
-            }
+    // Logout function
+    document.getElementById('logout').addEventListener('click', () => {
+        signOut(auth).then(() => {
+            window.location.href = "index.html"; // Redirect to login page after logout
         });
+    });
 
-        // Logout function
-        document.getElementById('logout').addEventListener('click', () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html"; // Redirect to login page after logout
-            });
-        });
-
-        // Link to the signal page
-        document.getElementById('signalPageLink').addEventListener('click', () => {
-            window.location.href = "neurobet-signals.html"; // Link to the signal page
-        });
-    </script>
-</body>
-</html>
+    // Corrected link to the NeuroBet signals page
+    document.getElementById('signalPageLink').addEventListener('click', () => {
+        window.location.href = "neurobet_signals.html"; // Redirects correctly
+    });
+</script>
