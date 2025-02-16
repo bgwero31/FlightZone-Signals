@@ -3,138 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Signals</title>
+    <title>Aviator Predictor</title>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #111;
             color: white;
-            margin: 0;
-            padding: 0;
-        }
-
-        .header {
-            background-color: #333;
-            padding: 20px;
             text-align: center;
-        }
-
-        .header h1 {
-            font-size: 40px;
-            text-transform: uppercase;
-            color: gold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        .signal-container {
-            margin-top: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .signal-card {
-            background-color: #222;
-            margin-bottom: 15px;
             padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
         }
-
-        .signal-card h2 {
-            font-size: 24px;
-            color: #ff5c33;
-        }
-
-        .signal-card p {
-            font-size: 20px;
-            margin: 10px 0;
-        }
-
-        .signal-card .target {
-            color: #1a73e8;
-            font-weight: bold;
-        }
-
-        .signal-card .time {
-            color: #ffeb3b;
-        }
-
-        .signal-card .risk {
-            color: #f44336;
-            font-weight: bold;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            font-size: 14px;
-            color: gray;
-        }
-
-        .back-button {
-            background: gold;
-            color: black;
-            padding: 10px 20px;
+        input, button {
+            margin: 10px;
+            padding: 10px;
             font-size: 18px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
+        }
+        .prediction-box {
+            background: #222;
+            padding: 20px;
             margin-top: 20px;
+            border-radius: 10px;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>NeuroBet Signals</h1>
-    </div>
 
-    <div class="signal-container">
-        <div class="signal-card">
-            <h2>Signal #1: Spin City</h2>
-            <p><span class="target">Target: 2.50x</span></p>
-            <p><span class="time">Time: 10:15 AM</span></p>
-            <p><span class="risk">Risk: 4x</span></p>
-        </div>
-
-        <div class="signal-card">
-            <h2>Signal #2: MWOS Betting</h2>
-            <p><span class="target">Target: 1.85x</span></p>
-            <p><span class="time">Time: 10:20 AM</span></p>
-            <p><span class="risk">Risk: 3x</span></p>
-        </div>
-
-        <div class="signal-card">
-            <h2>Signal #3: Zanzibet</h2>
-            <p><span class="target">Target: 4.10x</span></p>
-            <p><span class="time">Time: 10:25 AM</span></p>
-            <p><span class="risk">Risk: 5x</span></p>
-        </div>
-    </div>
-
-    <div style="text-align: center;">
-        <button class="back-button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
-    </div>
-
-    <footer>
-        <p>Powered by NeuroBet | Best Betting Signals</p>
-    </footer>
-
-    <!-- The Audio Element for Robotic Sound -->
-    <audio id="roboticSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    <h1>Aviator Predictor</h1>
     
-    <!-- Script to play sound on page load -->
+    <p>Enter the last 5 crash points:</p>
+    <input type="text" id="crashInput" placeholder="e.g. 1.20, 2.30, 10.00, 4.00, 1.50">
+    <button onclick="submitData()">Submit</button>
+
+    <div class="prediction-box" id="predictionBox">
+        <h2>Prediction</h2>
+        <p id="predictionText">Waiting for analysis...</p>
+    </div>
+
     <script>
-        window.onload = function() {
-            // Play the sound
-            var sound = document.getElementById('roboticSound');
-            sound.play();
+        // 🔥 Firebase Configuration (Replace with your actual Firebase config)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
+
+        // 🔥 Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function submitData() {
+            let input = document.getElementById("crashInput").value.trim();
+            if (input === "") {
+                alert("Please enter crash points.");
+                return;
+            }
+
+            let crashes = input.split(",").map(num => parseFloat(num.trim()));
+
+            if (crashes.length < 5) {
+                alert("Enter at least 5 crash values.");
+                return;
+            }
+
+            // Save to Firebase
+            let ref = database.ref("gameData");
+            ref.push({ crashes: crashes, timestamp: Date.now() });
+
+            // Clear input
+            document.getElementById("crashInput").value = "";
+            alert("Data submitted! Now analyzing trends...");
+        }
+
+        // 🔄 Listen for Predictions from Firebase
+        database.ref("predictions").on("value", (snapshot) => {
+            let data = snapshot.val();
+            if (data) {
+                let latestKey = Object.keys(data).pop();
+                document.getElementById("predictionText").innerText = data[latestKey].message;
+                document.getElementById("predictionBox").style.display = "block";
+            }
+        });
     </script>
+
 </body>
 </html>
