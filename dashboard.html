@@ -3,189 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Predictor</title>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
+    <title>AVIATOR NEUROBET</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #111;
             color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            padding: 20px;
             text-align: center;
-            padding: 20px;
         }
-        input, button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 18px;
+
+        .header h1 {
+            font-size: 40px;
+            text-transform: uppercase;
+            color: gold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
-        .prediction-box {
-            background: #222;
+
+        .signal-container {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signal-card {
+            background-color: #222;
+            margin-bottom: 15px;
             padding: 20px;
-            margin-top: 20px;
             border-radius: 10px;
-            display: none;
-            transition: background 0.5s;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
         }
-        .popup {
+
+        .signal-card h2 {
+            font-size: 24px;
+            color: #ff5c33;
+        }
+
+        .signal-card p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .signal-card .target {
+            color: #1a73e8;
+            font-weight: bold;
+        }
+
+        .signal-card .time {
+            color: #ffeb3b;
+        }
+
+        .signal-card .risk {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        footer {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #ff9800;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        .icon {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 50px;
-            animation: fadeOut 3s forwards;
-        }
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: gray;
         }
     </style>
 </head>
 <body>
-
-    <h1>Aviator Predictor</h1>
-    
-    <p>Enter the last 5 crash points:</p>
-    <input type="text" id="crashInput" placeholder="e.g. 1.20, 2.30, 10.00, 4.00, 1.50">
-    <button onclick="submitData()">Submit</button>
-
-    <div class="prediction-box" id="predictionBox">
-        <h2>Prediction</h2>
-        <p id="predictionText">Waiting for analysis...</p>
+    <div class="header">
+        <h1>NeuroBet Signals</h1>
     </div>
 
-    <script type="module">
-        // 🔥 Firebase Configuration (Updated)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    <div class="signal-container" id="signalContainer">
+        <!-- Predictions will be loaded here -->
+    </div>
 
+    <footer>
+        <p>Powered by NeuroBet | Best Betting Signals</p>
+    </footer>
+
+    <!-- The Audio Element for Robotic Sound -->
+    <audio id="roboticSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    
+    <script>
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
             authDomain: "aviator-nuerobet.firebaseapp.com",
             databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
             projectId: "aviator-nuerobet",
-            storageBucket: "aviator-nuerobet.appspot.com",
+            storageBucket: "aviator-nuerobet.firebasestorage.app",
             messagingSenderId: "88811829830",
             appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
             measurementId: "G-PNRB5LQTB6"
         };
 
-        // 🔥 Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
 
-        function submitData() {
-            let input = document.getElementById("crashInput").value.trim();
-            if (input === "") {
-                alert("Please enter crash points.");
-                return;
-            }
+        const predictionsRef = database.ref('predictions');
 
-            let crashes = input.split(",").map(num => parseFloat(num.trim()));
-
-            if (crashes.length < 5) {
-                alert("Enter at least 5 crash values.");
-                return;
-            }
-
-            // Save to Firebase
-            push(ref(database, "gameData"), {
-                crashes: crashes,
-                timestamp: Date.now()
-            });
-
-            // Clear input
-            document.getElementById("crashInput").value = "";
-            alert("Data submitted! Now analyzing trends...");
-            generateRandomPrediction();
-        }
-
-        // 🔥 Generate Random Prediction
-        function generateRandomPrediction() {
-            const predictions = ["Bet high", "Bet low", "Risk it", "Play safe"];
-            const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
-
-            // Push random prediction to Firebase
-            push(ref(database, "predictions"), {
-                message: randomPrediction,
-                timestamp: Date.now()
-            });
-        }
-
-        // 🔄 Listen for Predictions from Firebase
-        onValue(ref(database, "predictions"), (snapshot) => {
-            let data = snapshot.val();
-            if (data) {
-                let latestKey = Object.keys(data).pop();
-                let predictionMessage = data[latestKey].message;
-
-                document.getElementById("predictionText").innerText = predictionMessage;
-                document.getElementById("predictionBox").style.display = "block";
-
-                // Additional UI effects
-                flashPredictionBox("#ff9800");
-                triggerVibration();
-                showPopup("New Prediction: " + predictionMessage);
-                speakPrediction(predictionMessage);
-                showIcon(predictionMessage.includes("high") ? "high" : "low");
-            }
+        // Fetch predictions and display them
+        predictionsRef.on('child_added', function(snapshot) {
+            const prediction = snapshot.val();
+            const signalCard = document.createElement('div');
+            signalCard.classList.add('signal-card');
+            
+            signalCard.innerHTML = `
+                <h2>Signal: ${prediction.target}</h2>
+                <p><span class="target">Target: ${prediction.target}</span></p>
+                <p><span class="time">Time: ${prediction.time}</span></p>
+                <p><span class="risk">Risk: ${prediction.risk}</span></p>
+            `;
+            
+            document.getElementById('signalContainer').appendChild(signalCard);
         });
 
-        // 🔥 Flashing Background
-        function flashPredictionBox(color) {
-            let box = document.getElementById("predictionBox");
-            box.style.background = color;
-            setTimeout(() => {
-                box.style.background = "#222"; // Reset to default
-            }, 1000);
-        }
-
-        // 🔥 Vibration Alert
-        function triggerVibration() {
-            if ("vibrate" in navigator) {
-                navigator.vibrate([200, 100, 200]); // Vibrates twice
-            }
-        }
-
-        // 🔥 Pop-up Notification
-        function showPopup(message) {
-            let popup = document.createElement("div");
-            popup.innerText = message;
-            popup.className = "popup";
-            document.body.appendChild(popup);
-            setTimeout(() => {
-                popup.remove();
-            }, 4000);
-        }
-
-        // 🔥 Text-to-Speech Alert
-        function speakPrediction(text) {
-            let speech = new SpeechSynthesisUtterance(text);
-            speech.lang = "en-US";
-            speech.rate = 1;
-            window.speechSynthesis.speak(speech);
-        }
-
-        // 🔥 Animated Icons
-        function showIcon(type) {
-            let icon = document.createElement("div");
-            icon.innerHTML = type === "high" ? "🔥" : "✅";
-            icon.className = "icon";
-            document.body.appendChild(icon);
-            setTimeout(() => {
-                icon.remove();
-            }, 3000);
-        }
-
+        // Play the sound
+        window.onload = function() {
+            var sound = document.getElementById('roboticSound');
+            sound.play();
+        };
     </script>
 </body>
 </html>
