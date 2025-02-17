@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Predictor</title>
+    <title>Aviator NUEROBET</title>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
     <style>
@@ -25,6 +25,28 @@
             margin-top: 20px;
             border-radius: 10px;
             display: none;
+            transition: background 0.5s;
+        }
+        .popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff9800;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 50px;
+            animation: fadeOut 3s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
         }
     </style>
 </head>
@@ -80,15 +102,71 @@
             alert("Data submitted! Now analyzing trends...");
         }
 
+        // 🔥 Flashing Background
+        function flashPredictionBox(color) {
+            let box = document.getElementById("predictionBox");
+            box.style.background = color;
+            setTimeout(() => {
+                box.style.background = "#222"; // Reset to default
+            }, 1000);
+        }
+
+        // 🔥 Vibration Alert
+        function triggerVibration() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate([200, 100, 200]); // Vibrates twice
+            }
+        }
+
+        // 🔥 Pop-up Notification
+        function showPopup(message) {
+            let popup = document.createElement("div");
+            popup.innerText = message;
+            popup.className = "popup";
+            document.body.appendChild(popup);
+            setTimeout(() => {
+                popup.remove();
+            }, 4000);
+        }
+
+        // 🔥 Text-to-Speech Alert
+        function speakPrediction(text) {
+            let speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "en-US";
+            speech.rate = 1;
+            window.speechSynthesis.speak(speech);
+        }
+
+        // 🔥 Animated Icons
+        function showIcon(type) {
+            let icon = document.createElement("div");
+            icon.innerHTML = type === "high" ? "🔥" : "✅";
+            icon.className = "icon";
+            document.body.appendChild(icon);
+            setTimeout(() => {
+                icon.remove();
+            }, 3000);
+        }
+
         // 🔄 Listen for Predictions from Firebase
         database.ref("predictions").on("value", (snapshot) => {
             let data = snapshot.val();
             if (data) {
                 let latestKey = Object.keys(data).pop();
-                document.getElementById("predictionText").innerText = data[latestKey].message;
+                let predictionMessage = data[latestKey].message;
+
+                document.getElementById("predictionText").innerText = predictionMessage;
                 document.getElementById("predictionBox").style.display = "block";
+
+                // 🚀 APPLY ALL INDICATORS 🚀
+                flashPredictionBox("red"); // Flash red for big odds
+                triggerVibration(); // Vibrate for big odds
+                showPopup(predictionMessage); // Show popup
+                speakPrediction(predictionMessage); // Speak prediction
+                showIcon("high"); // Show fire icon for risky bets
             }
         });
+
     </script>
 
 </body>
