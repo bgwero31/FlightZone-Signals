@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator NUEROBET</title>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
+    <title>Aviator Predictor</title>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,7 +52,7 @@
 </head>
 <body>
 
-    <h1>Aviator NUEROBET</h1>
+    <h1>Aviator Predictor</h1>
     
     <p>Enter the last 5 crash points:</p>
     <input type="text" id="crashInput" placeholder="e.g. 1.20, 2.30, 10.00, 4.00, 1.50">
@@ -63,21 +63,25 @@
         <p id="predictionText">Waiting for analysis...</p>
     </div>
 
-    <script>
-        // 🔥 Firebase Configuration (Replace with your actual Firebase config)
+    <script type="module">
+        // 🔥 Firebase Configuration (Updated)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-            projectId: "YOUR_PROJECT",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
+            authDomain: "aviator-nuerobet.firebaseapp.com",
+            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
+            projectId: "aviator-nuerobet",
+            storageBucket: "aviator-nuerobet.appspot.com",
+            messagingSenderId: "88811829830",
+            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
+            measurementId: "G-PNRB5LQTB6"
         };
 
         // 🔥 Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
 
         function submitData() {
             let input = document.getElementById("crashInput").value.trim();
@@ -94,13 +98,47 @@
             }
 
             // Save to Firebase
-            let ref = database.ref("gameData");
-            ref.push({ crashes: crashes, timestamp: Date.now() });
+            push(ref(database, "gameData"), {
+                crashes: crashes,
+                timestamp: Date.now()
+            });
 
             // Clear input
             document.getElementById("crashInput").value = "";
             alert("Data submitted! Now analyzing trends...");
+            generateRandomPrediction();
         }
+
+        // 🔥 Generate Random Prediction
+        function generateRandomPrediction() {
+            const predictions = ["Bet high", "Bet low", "Risk it", "Play safe"];
+            const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+
+            // Push random prediction to Firebase
+            push(ref(database, "predictions"), {
+                message: randomPrediction,
+                timestamp: Date.now()
+            });
+        }
+
+        // 🔄 Listen for Predictions from Firebase
+        onValue(ref(database, "predictions"), (snapshot) => {
+            let data = snapshot.val();
+            if (data) {
+                let latestKey = Object.keys(data).pop();
+                let predictionMessage = data[latestKey].message;
+
+                document.getElementById("predictionText").innerText = predictionMessage;
+                document.getElementById("predictionBox").style.display = "block";
+
+                // Additional UI effects
+                flashPredictionBox("#ff9800");
+                triggerVibration();
+                showPopup("New Prediction: " + predictionMessage);
+                speakPrediction(predictionMessage);
+                showIcon(predictionMessage.includes("high") ? "high" : "low");
+            }
+        });
 
         // 🔥 Flashing Background
         function flashPredictionBox(color) {
@@ -148,26 +186,6 @@
             }, 3000);
         }
 
-        // 🔄 Listen for Predictions from Firebase
-        database.ref("predictions").on("value", (snapshot) => {
-            let data = snapshot.val();
-            if (data) {
-                let latestKey = Object.keys(data).pop();
-                let predictionMessage = data[latestKey].message;
-
-                document.getElementById("predictionText").innerText = predictionMessage;
-                document.getElementById("predictionBox").style.display = "block";
-
-                // 🚀 APPLY ALL INDICATORS 🚀
-                flashPredictionBox("red"); // Flash red for big odds
-                triggerVibration(); // Vibrate for big odds
-                showPopup(predictionMessage); // Show popup
-                speakPrediction(predictionMessage); // Speak prediction
-                showIcon("high"); // Show fire icon for risky bets
-            }
-        });
-
     </script>
-
 </body>
 </html>
