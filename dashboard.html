@@ -87,13 +87,6 @@
             font-size: 14px;
             color: gray;
         }
-
-        /* Add the loading spinner */
-        .loading {
-            color: #ffeb3b;
-            font-size: 18px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -133,7 +126,7 @@
         const predictionsRef = ref(database, "predictions");
 
         // Function to generate random predictions based on specified odds and times
-        function generateRandomPrediction(odds) {
+        function generateRandomPrediction() {
             const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
             const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
             const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
@@ -157,8 +150,8 @@
         }
 
         // Function to add prediction to Firebase
-        function addPredictionToFirebase(odds) {
-            const prediction = generateRandomPrediction(odds);
+        function addPredictionToFirebase() {
+            const prediction = generateRandomPrediction();
             const newPredictionRef = push(predictionsRef);
             set(newPredictionRef, prediction);
         }
@@ -172,44 +165,37 @@
         // Function to display a prediction
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
-            const card = document.createElement("div");
-            card.classList.add("signal-card", prediction.colorClass);
 
-            card.innerHTML = `
-                <h2>Signal: ${prediction.site}</h2>
-                <p><span class="target">Target: ${prediction.target}x</span></p>
-                <p><span class="time">Time: ${prediction.time}</span></p>
-                <p><span class="risk">Risk: ${prediction.risk}x</span></p>
-            `;
+            // Create the signal card element
+            const signalCard = document.createElement("div");
+            signalCard.classList.add("signal-card", prediction.colorClass);
 
-            container.prepend(card); // Add new predictions to the top
+            // Add site
+            const siteElement = document.createElement("h2");
+            siteElement.textContent = prediction.site;
+            signalCard.appendChild(siteElement);
+
+            // Add target
+            const targetElement = document.createElement("p");
+            targetElement.innerHTML = `Target: <span class="target">${prediction.target}x</span>`;
+            signalCard.appendChild(targetElement);
+
+            // Add time
+            const timeElement = document.createElement("p");
+            timeElement.innerHTML = `Time: <span class="time">${prediction.time}</span>`;
+            signalCard.appendChild(timeElement);
+
+            // Add risk
+            const riskElement = document.createElement("p");
+            riskElement.innerHTML = `Risk: <span class="risk">${prediction.risk}x</span>`;
+            signalCard.appendChild(riskElement);
+
+            // Append to container
+            container.appendChild(signalCard);
         }
 
-        // Function to handle the submission of odds
-        function handleSubmit() {
-            const oddsInput = document.getElementById("oddsInput").value.split(",");
-            if (oddsInput.length === 5) {
-                // Show loading message
-                const loadingMessage = document.createElement("div");
-                loadingMessage.classList.add("loading");
-                loadingMessage.innerText = "Generating predictions...";
-                document.getElementById("signalContainer").appendChild(loadingMessage);
-
-                // Add predictions based on the odds
-                addPredictionToFirebase(oddsInput);
-                
-                // Hide the loading message after a delay
-                setTimeout(() => {
-                    loadingMessage.remove();
-                }, 1000);
-            }
-        }
+        // Call the function to add a prediction every few seconds (example: every 5 seconds)
+        setInterval(addPredictionToFirebase, 5000); // Adjust as needed
     </script>
-
-    <!-- Input Form for Odds -->
-    <div style="text-align: center; margin-top: 30px;">
-        <input type="text" id="oddsInput" placeholder="Enter 5 crash odds separated by commas (e.g. 1.50,2.00,1.80,3.20,2.50)">
-        <button onclick="handleSubmit()">Submit Odds</button>
-    </div>
 </body>
 </html>
