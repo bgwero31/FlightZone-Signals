@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Signals</title>
+    <title> AVIATOR NeuroBet Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,7 +15,6 @@
             color: white;
         }
 
-        /* Futuristic Animation for Background */
         @keyframes gradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -152,12 +151,12 @@
 </head>
 <body>
     <div class="header">
-        <h1>Aviator NEUROBET </h1>
+        <h1>AVIATOR NeuroBet Signals</h1>
     </div>
 
     <div class="main-container">
         <div class="form-container">
-            <h2>Enter Your Last 5 Crashing Odds</h2>
+            <h2>Enter Your Last 5 Actual Crash Odds</h2>
             <form id="userInputForm">
                 <input type="number" id="odds1" placeholder="Enter last odd" required>
                 <input type="number" id="odds2" placeholder="Enter last odd" required>
@@ -257,28 +256,9 @@
                 `;
 
                 signalContainer.prepend(signalCard);  // Adds prediction above
-            }, 5000); // Update every 5 seconds for example
+            }, 10000); // Update every 10 seconds (more accurate)
         }
 
-        // Example function to generate random predictions
+        // Example function to generate random predictions within a realistic range
         function generatePrediction() {
-            const targets = ["1.20", "2.50", "3.00", "5.00", "10.00"];
-            const risks = ["High Risk", "Medium Risk", "Low Risk"];
-
-            const target = targets[Math.floor(Math.random() * targets.length)];
-            const risk = risks[Math.floor(Math.random() * risks.length)];
-
-            return { target, risk };
-        }
-
-        // Real-time Clock
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById("clock").textContent = `Current Time: ${timeString}`;
-        }
-
-        setInterval(updateClock, 1000);  // Update clock every second
-    </script>
-</body>
-</html>
+            const targets = (Math.random() < 0.5)
