@@ -55,7 +55,6 @@
         }
 
         .signal-card .target {
-            color: #1a73e8;
             font-weight: bold;
         }
 
@@ -66,6 +65,18 @@
         .signal-card .risk {
             color: #f44336;
             font-weight: bold;
+        }
+
+        .blue .target {
+            color: #1a73e8;
+        }
+
+        .purple .target {
+            color: #9c27b0;
+        }
+
+        .pink .target {
+            color: #e91e63;
         }
 
         footer {
@@ -114,18 +125,27 @@
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Function to generate random predictions
+        // Function to generate random predictions based on specified odds and times
         function generateRandomPrediction() {
             const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
             const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
             const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
             const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
+            // Randomly assign a color category based on the target value
+            let colorClass = "blue";
+            if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
+                colorClass = "purple";
+            } else if (parseFloat(target) >= 10.0) {
+                colorClass = "pink";
+            }
+
             return {
                 site: sites[Math.floor(Math.random() * sites.length)],
                 target,
                 time,
-                risk
+                risk,
+                colorClass
             };
         }
 
@@ -146,7 +166,7 @@
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
             const card = document.createElement("div");
-            card.classList.add("signal-card");
+            card.classList.add("signal-card", prediction.colorClass);
 
             card.innerHTML = `
                 <h2>Signal: ${prediction.site}</h2>
