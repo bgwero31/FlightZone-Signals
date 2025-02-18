@@ -7,16 +7,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #111;
-            color: white;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
             margin: 0;
             padding: 0;
+            color: white;
+        }
+
+        /* Futuristic Animation for Background */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .header {
-            background-color: #333;
+            background-color: rgba(0, 0, 0, 0.5);
             padding: 20px;
             text-align: center;
+            border-bottom: 2px solid #ff5c33;
         }
 
         .header h1 {
@@ -26,8 +36,45 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
 
+        /* Main Container */
+        .main-container {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        /* Form for User Input */
+        .form-container {
+            margin-bottom: 30px;
+        }
+
+        .form-container input,
+        .form-container select {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #222;
+            color: #fff;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff5c33;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #ff3b1f;
+        }
+
+        /* Signal Cards */
         .signal-container {
-            margin-top: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -35,13 +82,18 @@
         }
 
         .signal-card {
-            background-color: #222;
+            background-color: rgba(0, 0, 0, 0.7);
             margin-bottom: 15px;
             padding: 20px;
             border-radius: 10px;
             width: 80%;
             max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .signal-card:hover {
+            transform: scale(1.05);
         }
 
         .signal-card h2 {
@@ -67,6 +119,7 @@
             font-weight: bold;
         }
 
+        /* Color Classes for Different Odds */
         .blue .target {
             color: #1a73e8;
         }
@@ -94,8 +147,26 @@
         <h1>NeuroBet Signals</h1>
     </div>
 
-    <div class="signal-container" id="signalContainer">
-        <!-- Predictions will be added here -->
+    <div class="main-container">
+        <div class="form-container">
+            <h2>Enter Your Last 5 Crashing Odds</h2>
+            <form id="userInputForm">
+                <input type="number" id="odds1" placeholder="Enter last odd" required>
+                <input type="number" id="odds2" placeholder="Enter last odd" required>
+                <input type="number" id="odds3" placeholder="Enter last odd" required>
+                <input type="number" id="odds4" placeholder="Enter last odd" required>
+                <input type="number" id="odds5" placeholder="Enter last odd" required>
+                <select id="bettingSiteSelect">
+                    <option value="Moz">Moz</option>
+                    <option value="Africa Bet">Africa Bet</option>
+                </select>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="signal-container" id="signalContainer">
+            <!-- Predictions will be dynamically added here -->
+        </div>
     </div>
 
     <footer>
@@ -125,67 +196,68 @@
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Function to generate random predictions based on specified odds and times
-        function generateRandomPrediction() {
-            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
-            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
-            const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
-            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        // Handle user input and generate prediction
+        document.getElementById("userInputForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-            // Randomly assign a color category based on the target value
-            let colorClass = "blue";
-            if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
-                colorClass = "purple";
-            } else if (parseFloat(target) >= 10.0) {
-                colorClass = "pink";
-            }
+            const odds = [
+                document.getElementById("odds1").value,
+                document.getElementById("odds2").value,
+                document.getElementById("odds3").value,
+                document.getElementById("odds4").value,
+                document.getElementById("odds5").value
+            ];
 
-            return {
-                site: sites[Math.floor(Math.random() * sites.length)],
-                target,
-                time,
-                risk,
-                colorClass
+            const selectedSite = document.getElementById("bettingSiteSelect").value;
+
+            const prediction = {
+                site: selectedSite,
+                odds: odds,
+                target: (Math.random() * (5 - 1.2) + 1.2).toFixed(2), // Random between 1.2x - 5x
+                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                risk: (Math.random() * (6 - 3) + 3).toFixed(0), // Random between 3x - 6x
+                colorClass: "blue" // This can be adjusted based on odds
             };
-        }
 
-        // Function to add prediction to Firebase
-        function addPredictionToFirebase() {
-            const prediction = generateRandomPrediction();
+            // Push the prediction to Firebase
             const newPredictionRef = push(predictionsRef);
             set(newPredictionRef, prediction);
-        }
+        });
 
-        // Listen for new predictions and display them
+        // Display predictions
         onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
             displayPrediction(prediction);
         });
 
-        // Function to display a prediction
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
 
-            // Create the signal card element
+            // Create signal card element
             const signalCard = document.createElement("div");
             signalCard.classList.add("signal-card", prediction.colorClass);
 
-            // Add site
+            // Add Site
             const siteElement = document.createElement("h2");
             siteElement.textContent = prediction.site;
             signalCard.appendChild(siteElement);
 
-            // Add target
+            // Add Odds
+            const oddsElement = document.createElement("p");
+            oddsElement.textContent = `Last Odds: ${prediction.odds.join(", ")}`;
+            signalCard.appendChild(oddsElement);
+
+            // Add Target
             const targetElement = document.createElement("p");
             targetElement.innerHTML = `Target: <span class="target">${prediction.target}x</span>`;
             signalCard.appendChild(targetElement);
 
-            // Add time
+            // Add Time
             const timeElement = document.createElement("p");
             timeElement.innerHTML = `Time: <span class="time">${prediction.time}</span>`;
             signalCard.appendChild(timeElement);
 
-            // Add risk
+            // Add Risk
             const riskElement = document.createElement("p");
             riskElement.innerHTML = `Risk: <span class="risk">${prediction.risk}x</span>`;
             signalCard.appendChild(riskElement);
@@ -193,9 +265,6 @@
             // Append to container
             container.appendChild(signalCard);
         }
-
-        // Call the function to add a prediction every few seconds (example: every 5 seconds)
-        setInterval(addPredictionToFirebase, 5000); // Adjust as needed
     </script>
 </body>
 </html>
