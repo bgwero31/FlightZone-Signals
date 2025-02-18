@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVIATOR NEUROBET</title>
+    <title>NeuroBet Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,60 +84,82 @@
     </div>
 
     <div class="signal-container" id="signalContainer">
-        <!-- Predictions will be loaded here -->
+        <!-- Predictions will be added here -->
     </div>
 
     <footer>
         <p>Powered by NeuroBet | Best Betting Signals</p>
     </footer>
 
-    <!-- The Audio Element for Robotic Sound -->
-    <audio id="roboticSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-    
-    <script>
-        // Firebase configuration
+    <!-- Firebase Configuration -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+        // Your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
             authDomain: "aviator-nuerobet.firebaseapp.com",
             databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
             projectId: "aviator-nuerobet",
-            storageBucket: "aviator-nuerobet.firebasestorage.app",
+            storageBucket: "aviator-nuerobet.appspot.com",
             messagingSenderId: "88811829830",
             appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
             measurementId: "G-PNRB5LQTB6"
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database(app);
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const predictionsRef = ref(database, "predictions");
 
-        const predictionsRef = database.ref('predictions');
+        // Function to generate random predictions
+        function generateRandomPrediction() {
+            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
+            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
+            const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
+            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-        // Fetch predictions and display them
-        predictionsRef.on('child_added', function(snapshot) {
+            return {
+                site: sites[Math.floor(Math.random() * sites.length)],
+                target,
+                time,
+                risk
+            };
+        }
+
+        // Function to add prediction to Firebase
+        function addPredictionToFirebase() {
+            const prediction = generateRandomPrediction();
+            const newPredictionRef = push(predictionsRef);
+            set(newPredictionRef, prediction);
+        }
+
+        // Listen for new predictions and display them
+        onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
-            const signalCard = document.createElement('div');
-            signalCard.classList.add('signal-card');
-            
-            signalCard.innerHTML = `
-                <h2>Signal: ${prediction.target}</h2>
-                <p><span class="target">Target: ${prediction.target}</span></p>
-                <p><span class="time">Time: ${prediction.time}</span></p>
-                <p><span class="risk">Risk: ${prediction.risk}</span></p>
-            `;
-            
-            document.getElementById('signalContainer').appendChild(signalCard);
+            displayPrediction(prediction);
         });
 
-        // Play the sound
-        window.onload = function() {
-            var sound = document.getElementById('roboticSound');
-            sound.play();
-        };
+        // Function to display a prediction
+        function displayPrediction(prediction) {
+            const container = document.getElementById("signalContainer");
+            const card = document.createElement("div");
+            card.classList.add("signal-card");
+
+            card.innerHTML = `
+                <h2>Signal: ${prediction.site}</h2>
+                <p><span class="target">Target: ${prediction.target}x</span></p>
+                <p><span class="time">Time: ${prediction.time}</span></p>
+                <p><span class="risk">Risk: ${prediction.risk}x</span></p>
+            `;
+
+            container.prepend(card);
+        }
+
+        // Automatically generate predictions every 30 seconds
+        setInterval(addPredictionToFirebase, 30000);
     </script>
 </body>
 </html>
