@@ -79,6 +79,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            margin-top: 30px;
         }
 
         .signal-card {
@@ -132,6 +133,13 @@
             color: #e91e63;
         }
 
+        /* Real-time Clock */
+        .clock {
+            font-size: 20px;
+            color: #ffeb3b;
+            margin-top: 20px;
+        }
+
         footer {
             position: fixed;
             bottom: 10px;
@@ -164,9 +172,13 @@
             </form>
         </div>
 
+        <div id="submittedInfo"></div>
+
         <div class="signal-container" id="signalContainer">
             <!-- Predictions will be dynamically added here -->
         </div>
+
+        <div class="clock" id="clock"></div>
     </div>
 
     <footer>
@@ -200,71 +212,73 @@
         document.getElementById("userInputForm").addEventListener("submit", function(event) {
             event.preventDefault();
 
-            const odds = [
-                document.getElementById("odds1").value,
-                document.getElementById("odds2").value,
-                document.getElementById("odds3").value,
-                document.getElementById("odds4").value,
-                document.getElementById("odds5").value
-            ];
+            const odds1 = document.getElementById("odds1").value;
+            const odds2 = document.getElementById("odds2").value;
+            const odds3 = document.getElementById("odds3").value;
+            const odds4 = document.getElementById("odds4").value;
+            const odds5 = document.getElementById("odds5").value;
+            const bettingSite = document.getElementById("bettingSiteSelect").value;
 
-            const selectedSite = document.getElementById("bettingSiteSelect").value;
+            // Display submitted information
+            document.getElementById("submittedInfo").innerHTML = `
+                <h3>Submitted Information</h3>
+                <p><strong>Odds:</strong> ${odds1}, ${odds2}, ${odds3}, ${odds4}, ${odds5}</p>
+                <p><strong>Betting Site:</strong> ${bettingSite}</p>
+            `;
 
-            const prediction = {
-                site: selectedSite,
-                odds: odds,
-                target: (Math.random() * (5 - 1.2) + 1.2).toFixed(2), // Random between 1.2x - 5x
-                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
-                risk: (Math.random() * (6 - 3) + 3).toFixed(0), // Random between 3x - 6x
-                colorClass: "blue" // This can be adjusted based on odds
-            };
+            // Start generating predictions after submission
+            startGeneratingPredictions();
 
-            // Push the prediction to Firebase
+            // Save data to Firebase
             const newPredictionRef = push(predictionsRef);
-            set(newPredictionRef, prediction);
+            set(newPredictionRef, {
+                odds1,
+                odds2,
+                odds3,
+                odds4,
+                odds5,
+                bettingSite
+            });
         });
 
-        // Display predictions
-        onChildAdded(predictionsRef, (snapshot) => {
-            const prediction = snapshot.val();
-            displayPrediction(prediction);
-        });
+        // Function to generate signals automatically
+        function startGeneratingPredictions() {
+            setInterval(function() {
+                const prediction = generatePrediction();
+                const signalContainer = document.getElementById("signalContainer");
+                const signalCard = document.createElement("div");
+                signalCard.classList.add("signal-card");
 
-        function displayPrediction(prediction) {
-            const container = document.getElementById("signalContainer");
+                signalCard.innerHTML = `
+                    <h2>Prediction</h2>
+                    <p><span class="target">${prediction.target}</span></p>
+                    <p class="time">Time: ${new Date().toLocaleTimeString()}</p>
+                    <p class="risk">${prediction.risk}</p>
+                `;
 
-            // Create signal card element
-            const signalCard = document.createElement("div");
-            signalCard.classList.add("signal-card", prediction.colorClass);
-
-            // Add Site
-            const siteElement = document.createElement("h2");
-            siteElement.textContent = prediction.site;
-            signalCard.appendChild(siteElement);
-
-            // Add Odds
-            const oddsElement = document.createElement("p");
-            oddsElement.textContent = `Last Odds: ${prediction.odds.join(", ")}`;
-            signalCard.appendChild(oddsElement);
-
-            // Add Target
-            const targetElement = document.createElement("p");
-            targetElement.innerHTML = `Target: <span class="target">${prediction.target}x</span>`;
-            signalCard.appendChild(targetElement);
-
-            // Add Time
-            const timeElement = document.createElement("p");
-            timeElement.innerHTML = `Time: <span class="time">${prediction.time}</span>`;
-            signalCard.appendChild(timeElement);
-
-            // Add Risk
-            const riskElement = document.createElement("p");
-            riskElement.innerHTML = `Risk: <span class="risk">${prediction.risk}x</span>`;
-            signalCard.appendChild(riskElement);
-
-            // Append to container
-            container.appendChild(signalCard);
+                signalContainer.prepend(signalCard);  // Adds prediction above
+            }, 5000); // Update every 5 seconds for example
         }
+
+        // Example function to generate random predictions
+        function generatePrediction() {
+            const targets = ["1.20", "2.50", "3.00", "5.00", "10.00"];
+            const risks = ["High Risk", "Medium Risk", "Low Risk"];
+
+            const target = targets[Math.floor(Math.random() * targets.length)];
+            const risk = risks[Math.floor(Math.random() * risks.length)];
+
+            return { target, risk };
+        }
+
+        // Real-time Clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById("clock").textContent = `Current Time: ${timeString}`;
+        }
+
+        setInterval(updateClock, 1000);  // Update clock every second
     </script>
 </body>
 </html>
