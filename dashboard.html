@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Signals</title>
+    <title> Aviator NeuroBet Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,20 +30,20 @@
 
         .header h1 {
             font-size: 40px;
-            text-transform: uppercase;
             color: gold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
 
-        /* Main Container */
-        .main-container {
-            margin-top: 50px;
+        #current-time {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #ffeb3b;
             text-align: center;
         }
 
-        /* Form for User Input */
-        .form-container {
-            margin-bottom: 30px;
+        .main-container {
+            text-align: center;
+            padding: 20px;
         }
 
         .form-container input,
@@ -65,119 +65,69 @@
             background-color: #ff5c33;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        .form-container button:hover {
-            background-color: #ff3b1f;
+        #confirmation {
+            font-size: 18px;
+            color: #1a73e8;
+            margin-top: 10px;
+            display: none;
         }
 
-        /* Signal Cards */
         .signal-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         .signal-card {
             background-color: rgba(0, 0, 0, 0.7);
-            margin-bottom: 15px;
+            margin-top: 15px;
             padding: 20px;
             border-radius: 10px;
             width: 80%;
             max-width: 600px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-            transition: transform 0.3s ease;
+            text-align: left;
         }
 
-        .signal-card:hover {
-            transform: scale(1.05);
-        }
-
-        .signal-card h2 {
-            font-size: 24px;
-            color: #ff5c33;
-        }
-
-        .signal-card p {
-            font-size: 20px;
-            margin: 10px 0;
-        }
-
-        .signal-card .target {
-            font-weight: bold;
-        }
-
-        .signal-card .time {
-            color: #ffeb3b;
-        }
-
-        .signal-card .risk {
-            color: #f44336;
-            font-weight: bold;
-        }
-
-        /* Color Classes for Different Odds */
-        .blue .target {
-            color: #1a73e8;
-        }
-
-        .purple .target {
-            color: #9c27b0;
-        }
-
-        .pink .target {
-            color: #e91e63;
-        }
-
-        /* Real-time Clock */
-        .clock {
-            font-size: 20px;
-            color: #ffeb3b;
-            margin-top: 20px;
-        }
+        .blue .target { color: #1a73e8; }
+        .purple .target { color: #9c27b0; }
+        .pink .target { color: #e91e63; }
 
         footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
             text-align: center;
             font-size: 14px;
             color: gray;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>NeuroBet Signals</h1>
+        <div id="current-time"></div>
     </div>
 
     <div class="main-container">
         <div class="form-container">
-            <h2>Enter Your Last 5 Actual Crash Odds</h2>
+            <h2>Enter Your Last 5 Crash Game Odds</h2>
             <form id="userInputForm">
-                <input type="number" id="odds1" placeholder="Enter last odd" required>
-                <input type="number" id="odds2" placeholder="Enter last odd" required>
-                <input type="number" id="odds3" placeholder="Enter last odd" required>
-                <input type="number" id="odds4" placeholder="Enter last odd" required>
-                <input type="number" id="odds5" placeholder="Enter last odd" required>
+                <input type="text" id="odds1" placeholder="Enter last odd" required>
+                <input type="text" id="odds2" placeholder="Enter last odd" required>
+                <input type="text" id="odds3" placeholder="Enter last odd" required>
+                <input type="text" id="odds4" placeholder="Enter last odd" required>
+                <input type="text" id="odds5" placeholder="Enter last odd" required>
                 <select id="bettingSiteSelect">
                     <option value="Moz">Moz</option>
                     <option value="Africa Bet">Africa Bet</option>
                 </select>
                 <button type="submit">Submit</button>
             </form>
+            <p id="confirmation">Processing your data and generating signals...</p>
         </div>
-
-        <div id="submittedInfo"></div>
 
         <div class="signal-container" id="signalContainer">
-            <!-- Predictions will be dynamically added here -->
+            <!-- Predictions will be added here -->
         </div>
-
-        <div class="clock" id="clock"></div>
     </div>
 
     <footer>
@@ -186,11 +136,9 @@
 
     <!-- Firebase Configuration -->
     <script type="module">
-        // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        // Your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
             authDomain: "aviator-nuerobet.firebaseapp.com",
@@ -202,63 +150,65 @@
             measurementId: "G-PNRB5LQTB6"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Handle user input and generate prediction
+        function updateTime() {
+            const now = new Date();
+            document.getElementById("current-time").textContent = now.toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
         document.getElementById("userInputForm").addEventListener("submit", function(event) {
             event.preventDefault();
 
-            const odds1 = document.getElementById("odds1").value;
-            const odds2 = document.getElementById("odds2").value;
-            const odds3 = document.getElementById("odds3").value;
-            const odds4 = document.getElementById("odds4").value;
-            const odds5 = document.getElementById("odds5").value;
-            const bettingSite = document.getElementById("bettingSiteSelect").value;
+            document.getElementById("confirmation").style.display = "block";
 
-            // Display submitted information
-            document.getElementById("submittedInfo").innerHTML = `
-                <h3>Submitted Information</h3>
-                <p><strong>Odds:</strong> ${odds1}, ${odds2}, ${odds3}, ${odds4}, ${odds5}</p>
-                <p><strong>Betting Site:</strong> ${bettingSite}</p>
-            `;
+            const odds = [
+                document.getElementById("odds1").value,
+                document.getElementById("odds2").value,
+                document.getElementById("odds3").value,
+                document.getElementById("odds4").value,
+                document.getElementById("odds5").value
+            ];
 
-            // Start generating predictions after submission
-            startGeneratingPredictions();
+            const selectedSite = document.getElementById("bettingSiteSelect").value;
 
-            // Save data to Firebase
+            const prediction = {
+                site: selectedSite,
+                odds: odds,
+                target: (Math.random() * (2.30 - 1.40) + 1.40).toFixed(2),
+                time: new Date().toLocaleTimeString(),
+                risk: (Math.random() * (6 - 3) + 3).toFixed(0),
+                colorClass: "blue"
+            };
+
             const newPredictionRef = push(predictionsRef);
-            set(newPredictionRef, {
-                odds1,
-                odds2,
-                odds3,
-                odds4,
-                odds5,
-                bettingSite
-            });
+            set(newPredictionRef, prediction);
         });
 
-        // Function to generate signals automatically
-        function startGeneratingPredictions() {
-            setInterval(function() {
-                const prediction = generatePrediction();
-                const signalContainer = document.getElementById("signalContainer");
-                const signalCard = document.createElement("div");
-                signalCard.classList.add("signal-card");
+        onChildAdded(predictionsRef, (snapshot) => {
+            const prediction = snapshot.val();
+            displayPrediction(prediction);
+        });
 
-                signalCard.innerHTML = `
-                    <h2>Prediction</h2>
-                    <p><span class="target">${prediction.target}</span></p>
-                    <p class="time">Time: ${new Date().toLocaleTimeString()}</p>
-                    <p class="risk">${prediction.risk}</p>
-                `;
+        function displayPrediction(prediction) {
+            const container = document.getElementById("signalContainer");
+            const signalCard = document.createElement("div");
+            signalCard.classList.add("signal-card", prediction.colorClass);
 
-                signalContainer.prepend(signalCard);  // Adds prediction above
-            }, 10000); // Update every 10 seconds (more accurate)
+            signalCard.innerHTML = `
+                <h2>${prediction.site}</h2>
+                <p>Past Odds: ${prediction.odds.join(", ")}</p>
+                <p>Target: <span class="target">${prediction.target}x</span></p>
+                <p>Time: <span class="time">${prediction.time}</span></p>
+                <p>Risk: <span class="risk">${prediction.risk}x</span></p>
+            `;
+
+            container.appendChild(signalCard);
         }
-
-        // Example function to generate random predictions within a realistic range
-        function generatePrediction() {
-            const targets = (Math.random() < 0.5)
+    </script>
+</body>
+</html>
