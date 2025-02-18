@@ -3,177 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator NeuroBet </title>
+    <title>Live Aviator Predictor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            margin: 0;
-            padding: 0;
+            text-align: center;
+            background-color: #222;
             color: white;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .header {
-            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
             padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid #ff5c33;
         }
-
-        .header h1 {
-            font-size: 40px;
-            color: gold;
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
         }
-
         #current-time {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        #past-odds {
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 5px;
+            margin: 5px;
+            width: 50px;
+            text-align: center;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #spinner {
+            width: 120px;
+            height: 120px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #ffcc00;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #odds-container {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid #fff;
+            padding-top: 10px;
+        }
+        .odd {
             font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #ffeb3b;
-            text-align: center;
-        }
-
-        .main-container {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .signal-container {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column-reverse; /* Newest odds appear on top */
-            align-items: center;
-        }
-
-        .signal-card {
-            background-color: rgba(0, 0, 0, 0.7);
-            margin-top: 15px;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-            text-align: left;
-        }
-
-        .blue .target { color: #1a73e8; }
-        .purple .target { color: #9c27b0; }
-        .pink .target { color: #e91e63; }
-
-        footer {
-            text-align: center;
-            font-size: 14px;
-            color: gray;
-            margin-top: 20px;
+            margin: 5px 0;
+            padding: 5px;
+            background: #333;
+            border-radius: 5px;
+            width: 200px;
+            margin: auto;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Aviator NeuroBet </h1>
-        <div id="current-time"></div>
+    <h1>Aviator Predictor</h1>
+    <div id="current-time">Loading time...</div>
+    
+    <div id="past-odds">
+        <input type="text" id="odd1" placeholder="1.00">
+        <input type="text" id="odd2" placeholder="3.00">
+        <input type="text" id="odd3" placeholder="2.00">
+        <input type="text" id="odd4" placeholder="4.00">
+        <input type="text" id="odd5" placeholder="5.00">
+        <button onclick="startPrediction()">Submit</button>
     </div>
 
-    <div class="main-container">
-        <div class="signal-container" id="signalContainer">
-            <!-- Predictions will be added here -->
-        </div>
-    </div>
+    <div id="spinner"></div>
+    <div id="odds-container"></div>
 
-    <footer>
-        <p>Powered by FlightZone Signals NeuroBet | Best Betting Signals</p>
-    </footer>
+    <audio id="beep-sound">
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+    </audio>
 
-    <!-- Firebase Configuration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
-            authDomain: "aviator-nuerobet.firebaseapp.com",
-            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
-            projectId: "aviator-nuerobet",
-            storageBucket: "aviator-nuerobet.appspot.com",
-            messagingSenderId: "88811829830",
-            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
-            measurementId: "G-PNRB5LQTB6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const predictionsRef = ref(database, "predictions");
-
+    <script>
         function updateTime() {
-            const now = new Date();
-            document.getElementById("current-time").textContent = now.toLocaleTimeString();
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("current-time").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
         }
         setInterval(updateTime, 1000);
-        updateTime();
 
-        function generatePrediction() {
-            const sites = ["Moz", "Africa Bet"];
-            const selectedSite = sites[Math.floor(Math.random() * sites.length)];
+        let oddsList = [];
 
-            const odds = [
-                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
-                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
-                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
-                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
-                (Math.random() * (5 - 1.50) + 1.50).toFixed(2)
+        function startPrediction() {
+            let pastOdds = [
+                document.getElementById("odd1").value,
+                document.getElementById("odd2").value,
+                document.getElementById("odd3").value,
+                document.getElementById("odd4").value,
+                document.getElementById("odd5").value
             ];
-
-            const target = (Math.random() * (2.30 - 1.40) + 1.40).toFixed(2);
-            const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
-
-            let colorClass = "blue";
-            if (target >= 2.00) colorClass = "purple";
-            if (target >= 10.00) colorClass = "pink";
-
-            const prediction = {
-                site: selectedSite,
-                odds: odds,
-                target: target,
-                time: new Date().toLocaleTimeString(),
-                risk: risk,
-                colorClass: colorClass
-            };
-
-            const newPredictionRef = push(predictionsRef);
-            set(newPredictionRef, prediction);
+            if (pastOdds.some(odd => odd === "")) {
+                alert("Please enter all past odds.");
+                return;
+            }
+            document.getElementById("past-odds").style.display = "none";
+            generateOdds();
+            setInterval(generateOdds, 15000);
         }
 
-        onChildAdded(predictionsRef, (snapshot) => {
-            const prediction = snapshot.val();
-            displayPrediction(prediction);
-        });
+        function generateOdds() {
+            let minLow = 1.40, maxLow = 2.30;
+            let minHigh = 3.00, maxHigh = 10.00;
+            let newOdd = (Math.random() < 0.7)
+                ? (Math.random() * (maxLow - minLow) + minLow).toFixed(2)
+                : (Math.random() * (maxHigh - minHigh) + minHigh).toFixed(2);
 
-        function displayPrediction(prediction) {
-            const container = document.getElementById("signalContainer");
-            const signalCard = document.createElement("div");
-            signalCard.classList.add("signal-card", prediction.colorClass);
+            let now = new Date();
+            now.setMinutes(now.getMinutes() + Math.floor(Math.random() * 3) + 1);
+            let futureTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
 
-            signalCard.innerHTML = `
-                <h2>${prediction.site}</h2>
-                <p>Past Odds: ${prediction.odds.join(", ")}</p>
-                <p>Target: <span class="target">${prediction.target}x</span></p>
-                <p>Time: <span class="time">${prediction.time}</span></p>
-                <p>Risk: <span class="risk">${prediction.risk}x</span></p>
-            `;
+            let beep = document.getElementById("beep-sound");
+            beep.play();
 
-            container.insertBefore(signalCard, container.firstChild);
+            let oddsContainer = document.getElementById("odds-container");
+            let newOddElement = document.createElement("div");
+            newOddElement.className = "odd";
+            newOddElement.innerText = `${futureTime} - ${newOdd}x`;
+            
+            oddsContainer.prepend(newOddElement);
+
+            if (oddsList.length >= 10) {
+                oddsContainer.removeChild(oddsContainer.lastChild);
+            }
         }
-
-        // Auto-generate predictions every 30 seconds
-        setInterval(generatePrediction, 30000);
     </script>
 </body>
 </html>
