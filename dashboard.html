@@ -42,6 +42,13 @@
             border: none;
             cursor: pointer;
         }
+        .status-message {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: cyan;
+            text-align: center;
+        }
         .signal-container {
             margin-top: 30px;
             display: flex;
@@ -92,7 +99,6 @@
         <h1>NeuroBet Signals</h1>
     </div>
 
-    <!-- Input Form for Last 5 Crash Odds -->
     <div class="input-container">
         <h2>Enter Last 5 Crash Odds</h2>
         <input type="text" id="odd1" placeholder="1.23">
@@ -102,23 +108,21 @@
         <input type="text" id="odd5" placeholder="3.45">
         <br>
         <button onclick="submitOdds()">Submit</button>
+        <p class="status-message" id="statusMessage"></p>
     </div>
 
     <div class="signal-container" id="signalContainer">
-        <!-- Predictions will be added here -->
+        <p class="status-message" id="predictionStatus">Waiting for input...</p>
     </div>
 
     <footer>
         <p>Powered by NeuroBet | Best Betting Signals</p>
     </footer>
 
-    <!-- Firebase Configuration & JavaScript -->
     <script type="module">
-        // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
             authDomain: "aviator-nuerobet.firebaseapp.com",
@@ -130,12 +134,10 @@
             measurementId: "G-PNRB5LQTB6"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Function to Submit Last 5 Odds
         function submitOdds() {
             const odds = [
                 parseFloat(document.getElementById("odd1").value),
@@ -150,26 +152,25 @@
                 return;
             }
 
-            // Push odds to Firebase
+            document.getElementById("statusMessage").innerText = "Submitting odds...";
+            
             const oddsRef = push(ref(database, "last5odds"));
-            set(oddsRef, { odds });
-
-            alert("Odds submitted! AI will analyze and generate predictions.");
+            set(oddsRef, { odds }).then(() => {
+                document.getElementById("statusMessage").innerText = "Odds submitted! AI is analyzing...";
+            });
         }
 
-        // Function to Generate Accurate Predictions
         function generateAccuratePrediction() {
-            // Fetch last 5 crash odds from Firebase
             const oddsRef = ref(database, "last5odds");
             onChildAdded(oddsRef, (snapshot) => {
                 const last5odds = snapshot.val().odds;
 
-                // AI Prediction Model (Basic Analysis)
+                document.getElementById("predictionStatus").innerText = "Generating predictions...";
+
                 const avg = last5odds.reduce((sum, num) => sum + num, 0) / 5;
-                const nextPrediction = (avg * 1.1).toFixed(2); // Adjusted based on last 5 rounds
+                const nextPrediction = (avg * 1.1).toFixed(2);
                 const risk = (nextPrediction * 0.8).toFixed(2);
 
-                // Create Prediction Object
                 const prediction = {
                     site: ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"][Math.floor(Math.random() * 5)],
                     target: nextPrediction,
@@ -177,19 +178,18 @@
                     risk: risk
                 };
 
-                // Push Prediction to Firebase
                 const newPredictionRef = push(predictionsRef);
-                set(newPredictionRef, prediction);
+                set(newPredictionRef, prediction).then(() => {
+                    document.getElementById("predictionStatus").innerText = "New prediction generated!";
+                });
             });
         }
 
-        // Listen for New Predictions & Display
         onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
             displayPrediction(prediction);
         });
 
-        // Function to Display Prediction
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
             const card = document.createElement("div");
@@ -205,7 +205,6 @@
             container.prepend(card);
         }
 
-        // Update Predictions Every 30 Seconds
         setInterval(generateAccuratePrediction, 30000);
     </script>
 </body>
