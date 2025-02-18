@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Aviator NeuroBet Signals</title>
+    <title>Aviator NeuroBet </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,36 +46,11 @@
             padding: 20px;
         }
 
-        .form-container input,
-        .form-container select {
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            background-color: #222;
-            color: #fff;
-        }
-
-        .form-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            background-color: #ff5c33;
-            color: white;
-            cursor: pointer;
-        }
-
-        #confirmation {
-            font-size: 18px;
-            color: #1a73e8;
-            margin-top: 10px;
-            display: none;
-        }
-
         .signal-container {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column-reverse; /* Newest odds appear on top */
+            align-items: center;
         }
 
         .signal-card {
@@ -103,35 +78,18 @@
 </head>
 <body>
     <div class="header">
-        <h1>NeuroBet Signals</h1>
+        <h1>Aviator NeuroBet </h1>
         <div id="current-time"></div>
     </div>
 
     <div class="main-container">
-        <div class="form-container">
-            <h2>Enter Your Last 5 Crash Game Odds</h2>
-            <form id="userInputForm">
-                <input type="text" id="odds1" placeholder="Enter last odd" required>
-                <input type="text" id="odds2" placeholder="Enter last odd" required>
-                <input type="text" id="odds3" placeholder="Enter last odd" required>
-                <input type="text" id="odds4" placeholder="Enter last odd" required>
-                <input type="text" id="odds5" placeholder="Enter last odd" required>
-                <select id="bettingSiteSelect">
-                    <option value="Moz">Moz</option>
-                    <option value="Africa Bet">Africa Bet</option>
-                </select>
-                <button type="submit">Submit</button>
-            </form>
-            <p id="confirmation">Processing your data and generating signals...</p>
-        </div>
-
         <div class="signal-container" id="signalContainer">
             <!-- Predictions will be added here -->
         </div>
     </div>
 
     <footer>
-        <p>Powered by NeuroBet | Best Betting Signals</p>
+        <p>Powered by FlightZone Signals NeuroBet | Best Betting Signals</p>
     </footer>
 
     <!-- Firebase Configuration -->
@@ -161,33 +119,37 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        document.getElementById("userInputForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            document.getElementById("confirmation").style.display = "block";
+        function generatePrediction() {
+            const sites = ["Moz", "Africa Bet"];
+            const selectedSite = sites[Math.floor(Math.random() * sites.length)];
 
             const odds = [
-                document.getElementById("odds1").value,
-                document.getElementById("odds2").value,
-                document.getElementById("odds3").value,
-                document.getElementById("odds4").value,
-                document.getElementById("odds5").value
+                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
+                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
+                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
+                (Math.random() * (5 - 1.50) + 1.50).toFixed(2),
+                (Math.random() * (5 - 1.50) + 1.50).toFixed(2)
             ];
 
-            const selectedSite = document.getElementById("bettingSiteSelect").value;
+            const target = (Math.random() * (2.30 - 1.40) + 1.40).toFixed(2);
+            const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
+
+            let colorClass = "blue";
+            if (target >= 2.00) colorClass = "purple";
+            if (target >= 10.00) colorClass = "pink";
 
             const prediction = {
                 site: selectedSite,
                 odds: odds,
-                target: (Math.random() * (2.30 - 1.40) + 1.40).toFixed(2),
+                target: target,
                 time: new Date().toLocaleTimeString(),
-                risk: (Math.random() * (6 - 3) + 3).toFixed(0),
-                colorClass: "blue"
+                risk: risk,
+                colorClass: colorClass
             };
 
             const newPredictionRef = push(predictionsRef);
             set(newPredictionRef, prediction);
-        });
+        }
 
         onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
@@ -207,8 +169,11 @@
                 <p>Risk: <span class="risk">${prediction.risk}x</span></p>
             `;
 
-            container.appendChild(signalCard);
+            container.insertBefore(signalCard, container.firstChild);
         }
+
+        // Auto-generate predictions every 30 seconds
+        setInterval(generatePrediction, 30000);
     </script>
 </body>
 </html>
