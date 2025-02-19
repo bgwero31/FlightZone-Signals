@@ -62,7 +62,7 @@
             border-radius: 10px;
             width: 60%;
             margin: 0 auto;
-            display: none;
+            display: block;
         }
 
         .blue .target { color: #1a73e8; }
@@ -77,7 +77,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>AVIATOR NeuroBET</h1>
+        <h1>NeuroBet Signals</h1>
         <div id="current-time"></div>
     </div>
 
@@ -98,8 +98,6 @@
     <footer>
         <p>Powered by NeuroBet | Best Betting Signals</p>
     </footer>
-
-    <audio id="beep" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
     <!-- Firebase -->
     <script type="module">
@@ -129,10 +127,7 @@
 
         function startGenerating() {
             document.getElementById("status-message").textContent = "Submitting past odds...";
-            setTimeout(() => {
-                generatePrediction();
-                document.getElementById("status-message").textContent = "Generating new predictions...";
-            }, 2000);
+            generatePrediction();
         }
 
         function generatePrediction() {
@@ -151,7 +146,7 @@
             const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
 
             const now = new Date();
-            now.setSeconds(now.getSeconds() + 10);  // Prediction 10s ahead
+            now.setSeconds(now.getSeconds() + 10);
             const futureTime = now.toLocaleTimeString();
 
             let colorClass = "blue";
@@ -178,7 +173,9 @@
 
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
-            container.innerHTML = ""; // Remove previous prediction
+            
+            // Ensure the predictions update properly
+            container.innerHTML = "";
 
             const signalCard = document.createElement("div");
             signalCard.classList.add("signal-card", prediction.colorClass);
@@ -189,13 +186,8 @@
                 <p>Time: <span class="time">${prediction.time}</span></p>
                 <p>Risk: <span class="risk">${prediction.risk}x</span></p>
             `;
-            container.appendChild(signalCard);
-            signalCard.style.display = "block";
 
-            // Play beep when prediction time is reached
-            setTimeout(() => {
-                document.getElementById("beep").play();
-            }, 10000); // Beep after 10 seconds
+            container.appendChild(signalCard);
         }
     </script>
 </body>
