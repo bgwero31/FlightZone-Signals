@@ -63,35 +63,44 @@
         <p class="alert-box" id="alertMessage"></p>
     </div>
 
-    <script>
+    <!-- Firebase Configuration -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
+            authDomain: "aviator-nuerobet.firebaseapp.com",
+            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
+            projectId: "aviator-nuerobet",
+            storageBucket: "aviator-nuerobet.appspot.com",
+            messagingSenderId: "88811829830",
+            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
+            measurementId: "G-PNRB5LQTB6"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const predictionsRef = ref(database, "predictions");
+
         // Retrieve the betting site from local storage
         const bettingSite = localStorage.getItem("bettingSite");
         document.getElementById("bettingSiteDisplay").textContent = bettingSite ? bettingSite : "Unknown";
 
-        function generateRandomOdds() {
-            const oddsArray = [1.40, 1.50, 1.80, 2.00, 2.50, 3.00, 4.20, 5.00, 6.50, 10.00, 15.00, 20.00]; // Randomized multipliers
-            return oddsArray[Math.floor(Math.random() * oddsArray.length)];
-        }
+        // Listen for predictions from Firebase
+        onValue(predictionsRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                const keys = Object.keys(data);
+                const latestKey = keys[keys.length - 1]; // Get the latest prediction
+                const latestPrediction = data[latestKey];
 
-        function getFutureTime() {
-            let now = new Date();
-            now.setSeconds(now.getSeconds() + 3); // Set time 3 seconds ahead
-            return now.toLocaleTimeString();
-        }
-
-        function updateSignal() {
-            document.getElementById("statusMessage").textContent = "Analyzing odds...";
-
-            setTimeout(() => {
-                document.getElementById("statusMessage").textContent = "Generating new odds...";
-            }, 3000);
-
-            setTimeout(() => {
-                const newSignal = generateRandomOdds();
                 document.getElementById("statusMessage").textContent = "Signal Ready!";
-                document.getElementById("signalOutput").textContent = "Next Odd (" + getFutureTime() + "): " + newSignal + "x";
+                document.getElementById("signalOutput").textContent = `Next Odd (${latestPrediction.time}): ${latestPrediction.target}x`;
 
-                // Clear alert box
                 let alertBox = document.getElementById("alertMessage");
                 alertBox.style.display = "none";
 
@@ -99,25 +108,19 @@
                 let beep = new Audio('beep.mp3');
                 beep.play();
 
-                // Serious alert if high odd (10x and above)
-                if (newSignal >= 10) {
-                    alertBox.textContent = "⚠️ HIGH ODD ALERT: " + newSignal + "x is coming!";
+                // Alert if high odd (10x and above)
+                if (parseFloat(latestPrediction.target) >= 10) {
+                    alertBox.textContent = `⚠️ HIGH ODD ALERT: ${latestPrediction.target}x is coming!`;
                     alertBox.style.display = "block";
                     alertBox.style.color = "red";
 
-                    // Play an alert sound
                     let alertSound = new Audio('alert.mp3');
                     alertSound.play();
                 }
-
-                // Schedule next update at a random interval (24-33 seconds)
-                let nextInterval = Math.floor(Math.random() * (33000 - 24000) + 24000);
-                setTimeout(updateSignal, nextInterval);
-            }, 5000);
-        }
-
-        // Start updating signals
-        setTimeout(updateSignal, 3000);
+            } else {
+                document.getElementById("statusMessage").textContent = "Waiting for new signals...";
+            }
+        });
     </script>
 </body>
 </html>
