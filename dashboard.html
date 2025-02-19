@@ -8,88 +8,61 @@
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            margin: 0;
-            padding: 0;
             color: white;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            text-align: center;
         }
 
         .header {
             background-color: rgba(0, 0, 0, 0.5);
             padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid #ff5c33;
         }
 
         .header h1 {
-            font-size: 40px;
             color: gold;
         }
 
         #current-time {
             font-size: 18px;
             font-weight: bold;
-            margin-top: 10px;
             color: #ffeb3b;
-            text-align: center;
         }
 
         .input-container {
-            text-align: center;
             padding: 15px;
         }
 
         input {
             width: 60px;
             padding: 8px;
-            margin: 5px;
             text-align: center;
             font-size: 16px;
-            border: none;
-            border-radius: 5px;
             background-color: #333;
             color: white;
+            border: none;
+            border-radius: 5px;
         }
 
         button {
             background-color: #ff5c33;
             color: white;
-            border: none;
             padding: 10px 20px;
             font-size: 16px;
+            border: none;
             cursor: pointer;
             border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        .main-container {
-            text-align: center;
-            padding: 20px;
         }
 
         .signal-container {
             margin-top: 20px;
-            display: flex;
-            flex-direction: column-reverse;
-            align-items: center;
         }
 
         .signal-card {
             background-color: rgba(0, 0, 0, 0.7);
-            margin-top: 15px;
             padding: 20px;
             border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-            text-align: left;
+            width: 60%;
+            margin: 0 auto;
+            display: none;
         }
 
         .blue .target { color: #1a73e8; }
@@ -97,16 +70,14 @@
         .pink .target { color: #e91e63; }
 
         footer {
-            text-align: center;
-            font-size: 14px;
-            color: gray;
             margin-top: 20px;
+            color: gray;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>aviator NeuroBet Signals</h1>
+        <h1>AVIATOR NeuroBET</h1>
         <div id="current-time"></div>
     </div>
 
@@ -119,20 +90,18 @@
         <input type="number" step="0.01" id="odd5">
         <br>
         <button onclick="startGenerating()">Submit</button>
+        <p id="status-message"></p>
     </div>
 
-    <div class="main-container">
-        <div class="signal-container" id="signalContainer"></div>
-    </div>
+    <div class="signal-container" id="signalContainer"></div>
 
     <footer>
         <p>Powered by NeuroBet | Best Betting Signals</p>
     </footer>
 
-    <audio id="beepSound">
-        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-    </audio>
+    <audio id="beep" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
+    <!-- Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
@@ -157,17 +126,13 @@
             document.getElementById("current-time").textContent = now.toLocaleTimeString();
         }
         setInterval(updateTime, 1000);
-        updateTime();
-
-        function getRandomFutureTime() {
-            const now = new Date();
-            now.setSeconds(now.getSeconds() + Math.floor(Math.random() * 50) + 10);
-            return now.toLocaleTimeString();
-        }
 
         function startGenerating() {
-            generatePrediction();
-            setInterval(generatePrediction, 30000);
+            document.getElementById("status-message").textContent = "Submitting past odds...";
+            setTimeout(() => {
+                generatePrediction();
+                document.getElementById("status-message").textContent = "Generating new predictions...";
+            }, 2000);
         }
 
         function generatePrediction() {
@@ -184,14 +149,26 @@
 
             const target = (Math.random() * (2.30 - 1.40) + 1.40).toFixed(2);
             const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
-            const futureTime = getRandomFutureTime();
+
+            const now = new Date();
+            now.setSeconds(now.getSeconds() + 10);  // Prediction 10s ahead
+            const futureTime = now.toLocaleTimeString();
 
             let colorClass = "blue";
             if (target >= 2.00) colorClass = "purple";
             if (target >= 10.00) colorClass = "pink";
 
-            const prediction = { site: selectedSite, odds, target, time: futureTime, risk, colorClass };
-            set(push(predictionsRef), prediction);
+            const prediction = {
+                site: selectedSite,
+                odds: odds,
+                target: target,
+                time: futureTime,
+                risk: risk,
+                colorClass: colorClass
+            };
+
+            const newPredictionRef = push(predictionsRef);
+            set(newPredictionRef, prediction);
         }
 
         onChildAdded(predictionsRef, (snapshot) => {
@@ -201,11 +178,10 @@
 
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
-            container.innerHTML = "";
+            container.innerHTML = ""; // Remove previous prediction
 
             const signalCard = document.createElement("div");
             signalCard.classList.add("signal-card", prediction.colorClass);
-
             signalCard.innerHTML = `
                 <h2>${prediction.site}</h2>
                 <p>Past Odds: ${prediction.odds.join(", ")}</p>
@@ -213,12 +189,13 @@
                 <p>Time: <span class="time">${prediction.time}</span></p>
                 <p>Risk: <span class="risk">${prediction.risk}x</span></p>
             `;
-
             container.appendChild(signalCard);
+            signalCard.style.display = "block";
 
+            // Play beep when prediction time is reached
             setTimeout(() => {
-                document.getElementById("beepSound").play();
-            }, 5000);
+                document.getElementById("beep").play();
+            }, 10000); // Beep after 10 seconds
         }
     </script>
 </body>
