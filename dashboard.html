@@ -59,6 +59,8 @@
             margin-top: 15px;
             font-size: 18px;
             text-align: center;
+            font-weight: bold;
+            color: #ffeb3b;
         }
 
         .signal-container {
@@ -103,7 +105,7 @@
 <body>
 
     <div class="header">
-        <h1>Aviator NeuroBet AI Signals</h1>
+        <h1>NeuroBet AI Signals</h1>
     </div>
 
     <div class="input-container">
@@ -115,26 +117,7 @@
 
     <div class="signal-container" id="signalContainer"></div>
 
-    <!-- Firebase Configuration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
-            authDomain: "aviator-nuerobet.firebaseapp.com",
-            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
-            projectId: "aviator-nuerobet",
-            storageBucket: "aviator-nuerobet.appspot.com",
-            messagingSenderId: "88811829830",
-            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
-            measurementId: "G-PNRB5LQTB6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const predictionsRef = ref(database, "predictions");
-
+    <script>
         function submitPastOdds() {
             let pastOdds = document.getElementById("pastOddsInput").value;
             let statusMessage = document.getElementById("statusMessage");
@@ -144,14 +127,18 @@
                 return;
             }
 
+            // Step 1: Submitting odds
             statusMessage.innerText = "✅ Submitting past odds...";
             setTimeout(() => {
+                // Step 2: Analyzing data
                 statusMessage.innerText = "🤖 Analyzing data...";
                 setTimeout(() => {
+                    // Step 3: Generating accurate predictions
                     statusMessage.innerText = "🔎 Generating accurate predictions...";
                     setTimeout(() => {
-                        addPredictionToFirebase();
+                        // Step 4: Show prediction
                         statusMessage.innerText = "✅ Prediction generated!";
+                        displayPrediction(generatePrediction());
                     }, 3000);
                 }, 2000);
             }, 2000);
@@ -178,17 +165,6 @@
                 colorClass
             };
         }
-
-        function addPredictionToFirebase() {
-            const prediction = generatePrediction();
-            const newPredictionRef = push(predictionsRef);
-            set(newPredictionRef, prediction);
-        }
-
-        onChildAdded(predictionsRef, (snapshot) => {
-            const prediction = snapshot.val();
-            displayPrediction(prediction);
-        });
 
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
