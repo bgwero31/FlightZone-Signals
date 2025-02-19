@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator NeuroBet Signals</title>
+    <title>NeuroBet Signals</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -44,6 +44,14 @@
             color: #ff6600;
             margin-top: 50px;
         }
+
+        .alert-box {
+            font-size: 28px;
+            font-weight: bold;
+            color: red;
+            display: none;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +60,7 @@
         <p class="site-display">Betting Site: <span id="bettingSiteDisplay">Loading...</span></p>
         <p class="status" id="statusMessage">Analyzing data...</p>
         <p class="signal-box" id="signalOutput">Waiting for signal...</p>
+        <p class="alert-box" id="alertMessage"></p>
     </div>
 
     <script>
@@ -59,23 +68,56 @@
         const bettingSite = localStorage.getItem("bettingSite");
         document.getElementById("bettingSiteDisplay").textContent = bettingSite ? bettingSite : "Unknown";
 
-        // Simulate analysis process before displaying a signal
-        setTimeout(() => {
-            document.getElementById("statusMessage").textContent = "Processing data...";
-        }, 2000);
+        function generateRandomOdds() {
+            const oddsArray = [1.40, 1.50, 1.80, 2.00, 2.50, 3.00, 4.20, 5.00, 6.50, 10.00, 15.00, 20.00]; // Randomized multipliers
+            return oddsArray[Math.floor(Math.random() * oddsArray.length)];
+        }
 
-        setTimeout(() => {
-            document.getElementById("statusMessage").textContent = "Generating accurate odds...";
-        }, 5000);
+        function getFutureTime() {
+            let now = new Date();
+            now.setSeconds(now.getSeconds() + 3); // Set time 3 seconds ahead
+            return now.toLocaleTimeString();
+        }
 
-        setTimeout(() => {
-            document.getElementById("statusMessage").textContent = "Signal Ready!";
-            document.getElementById("signalOutput").textContent = "Next Odd: 4.2x";
-            
-            // Play a beep sound
-            let beep = new Audio('beep.mp3');
-            beep.play();
-        }, 8000);
+        function updateSignal() {
+            document.getElementById("statusMessage").textContent = "Analyzing odds...";
+
+            setTimeout(() => {
+                document.getElementById("statusMessage").textContent = "Generating new odds...";
+            }, 3000);
+
+            setTimeout(() => {
+                const newSignal = generateRandomOdds();
+                document.getElementById("statusMessage").textContent = "Signal Ready!";
+                document.getElementById("signalOutput").textContent = "Next Odd (" + getFutureTime() + "): " + newSignal + "x";
+
+                // Clear alert box
+                let alertBox = document.getElementById("alertMessage");
+                alertBox.style.display = "none";
+
+                // Play a beep sound
+                let beep = new Audio('beep.mp3');
+                beep.play();
+
+                // Serious alert if high odd (10x and above)
+                if (newSignal >= 10) {
+                    alertBox.textContent = "⚠️ HIGH ODD ALERT: " + newSignal + "x is coming!";
+                    alertBox.style.display = "block";
+                    alertBox.style.color = "red";
+
+                    // Play an alert sound
+                    let alertSound = new Audio('alert.mp3');
+                    alertSound.play();
+                }
+
+                // Schedule next update at a random interval (24-33 seconds)
+                let nextInterval = Math.floor(Math.random() * (33000 - 24000) + 24000);
+                setTimeout(updateSignal, nextInterval);
+            }, 5000);
+        }
+
+        // Start updating signals
+        setTimeout(updateSignal, 3000);
     </script>
 </body>
 </html>
