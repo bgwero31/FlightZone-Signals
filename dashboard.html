@@ -3,187 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet AI Signals</title>
+    <title>Aviator NeuroBet Signals</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #111;
+            font-family: 'Roboto', sans-serif;
+            background: url('futuristic-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: white;
             margin: 0;
             padding: 0;
+            text-align: center;
         }
 
-        .header {
-            background-color: #333;
+        .container {
+            margin-top: 50px;
             padding: 20px;
-            text-align: center;
         }
 
-        .header h1 {
+        h1 {
+            font-size: 50px;
+            color: #00ff99;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .site-display {
             font-size: 30px;
-            text-transform: uppercase;
-            color: gold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        .input-container {
-            margin: 20px auto;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            text-align: center;
-        }
-
-        button {
-            background: gold;
-            color: black;
-            padding: 10px 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .status-message {
-            margin-top: 15px;
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
-            color: #ffeb3b;
-        }
-
-        .signal-container {
+            color: #ffcc00;
             margin-top: 20px;
-            text-align: center;
         }
 
-        .signal-card {
-            background-color: #222;
-            padding: 15px;
-            border-radius: 10px;
-            width: 85%;
-            max-width: 500px;
-            margin: 10px auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        .status {
+            font-size: 24px;
+            margin-top: 30px;
+            color: #00ff99;
         }
 
-        .signal-card h2 {
-            font-size: 20px;
-            color: white;
-            margin: 0;
-        }
-
-        .target {
+        .signal-box {
+            font-size: 40px;
             font-weight: bold;
+            color: #ff6600;
+            margin-top: 50px;
         }
-
-        .time {
-            color: #ffeb3b;
-        }
-
-        .risk {
-            color: #f44336;
-            font-weight: bold;
-        }
-
-        .blue .target { color: #1a73e8; }
-        .purple .target { color: #9c27b0; }
-        .pink .target { color: #e91e63; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <h1>NeuroBet AI Signals</h1>
+    <div class="container">
+        <h1>NeuroBet Signals</h1>
+        <p class="site-display">Betting Site: <span id="bettingSiteDisplay">Loading...</span></p>
+        <p class="status" id="statusMessage">Analyzing data...</p>
+        <p class="signal-box" id="signalOutput">Waiting for signal...</p>
     </div>
-
-    <div class="input-container">
-        <h3>Enter Past Odds</h3>
-        <input type="text" id="pastOddsInput" placeholder="Enter past odds, e.g., 1.50, 2.00, 3.75">
-        <button onclick="submitPastOdds()">Submit</button>
-        <p class="status-message" id="statusMessage"></p>
-    </div>
-
-    <div class="signal-container" id="signalContainer"></div>
 
     <script>
-        function submitPastOdds() {
-            let pastOdds = document.getElementById("pastOddsInput").value;
-            let statusMessage = document.getElementById("statusMessage");
+        // Retrieve the betting site from local storage
+        const bettingSite = localStorage.getItem("bettingSite");
+        document.getElementById("bettingSiteDisplay").textContent = bettingSite ? bettingSite : "Unknown";
 
-            if (!pastOdds) {
-                statusMessage.innerText = "⚠️ Please enter past odds.";
-                return;
-            }
+        // Simulate analysis process before displaying a signal
+        setTimeout(() => {
+            document.getElementById("statusMessage").textContent = "Processing data...";
+        }, 2000);
 
-            // Step 1: Submitting odds
-            statusMessage.innerText = "✅ Submitting past odds...";
-            setTimeout(() => {
-                // Step 2: Analyzing data
-                statusMessage.innerText = "🤖 Analyzing data...";
-                setTimeout(() => {
-                    // Step 3: Generating accurate predictions
-                    statusMessage.innerText = "🔎 Generating accurate predictions...";
-                    setTimeout(() => {
-                        // Step 4: Show prediction
-                        statusMessage.innerText = "✅ Prediction generated!";
-                        displayPrediction(generatePrediction());
-                    }, 3000);
-                }, 2000);
-            }, 2000);
-        }
+        setTimeout(() => {
+            document.getElementById("statusMessage").textContent = "Generating accurate odds...";
+        }, 5000);
 
-        function generatePrediction() {
-            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
-            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2);
-            const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
-            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-            let colorClass = "blue";
-            if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
-                colorClass = "purple";
-            } else if (parseFloat(target) >= 10.0) {
-                colorClass = "pink";
-            }
-
-            return {
-                site: sites[Math.floor(Math.random() * sites.length)],
-                target,
-                time,
-                risk,
-                colorClass
-            };
-        }
-
-        function displayPrediction(prediction) {
-            const container = document.getElementById("signalContainer");
-
-            const card = document.createElement("div");
-            card.classList.add("signal-card", prediction.colorClass);
-
-            card.innerHTML = `
-                <div>
-                    <h2>${prediction.site}</h2>
-                    <p>Target: <span class="target">${prediction.target}x</span></p>
-                    <p>Risk: <span class="risk">${prediction.risk}x</span></p>
-                    <p>Time: <span class="time">${prediction.time}</span></p>
-                </div>
-            `;
-
-            container.prepend(card);
-        }
+        setTimeout(() => {
+            document.getElementById("statusMessage").textContent = "Signal Ready!";
+            document.getElementById("signalOutput").textContent = "Next Odd: 4.2x";
+            
+            // Play a beep sound
+            let beep = new Audio('beep.mp3');
+            beep.play();
+        }, 8000);
     </script>
-
 </body>
 </html>
