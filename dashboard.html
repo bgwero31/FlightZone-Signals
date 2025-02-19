@@ -26,6 +26,41 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
 
+        .input-container {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+        }
+
+        button {
+            background: gold;
+            color: black;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+
         .signal-container {
             margin-top: 20px;
             text-align: center;
@@ -71,8 +106,16 @@
         <h1>NeuroBet AI Signals</h1>
     </div>
 
+    <div class="input-container">
+        <h3>Enter Past Odds</h3>
+        <input type="text" id="pastOddsInput" placeholder="Enter past odds, e.g., 1.50, 2.00, 3.75">
+        <button onclick="submitPastOdds()">Submit</button>
+        <p class="status-message" id="statusMessage"></p>
+    </div>
+
     <div class="signal-container" id="signalContainer"></div>
 
+    <!-- Firebase Configuration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
@@ -92,13 +135,33 @@
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        let userSite = sessionStorage.getItem("userSite") || "MWOS Betting"; // Default site if none entered
+        function submitPastOdds() {
+            let pastOdds = document.getElementById("pastOddsInput").value;
+            let statusMessage = document.getElementById("statusMessage");
 
-        function generateRandomPrediction() {
-            const target = (Math.random() * (6 - 1.2) + 1.2).toFixed(2);
-            const risk = (Math.random() * (8 - 3) + 3).toFixed(0);
-            const seconds = Math.floor(Math.random() * (55 - 20) + 20);
-            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + `:${seconds}`;
+            if (!pastOdds) {
+                statusMessage.innerText = "⚠️ Please enter past odds.";
+                return;
+            }
+
+            statusMessage.innerText = "✅ Submitting past odds...";
+            setTimeout(() => {
+                statusMessage.innerText = "🤖 Analyzing data...";
+                setTimeout(() => {
+                    statusMessage.innerText = "🔎 Generating accurate predictions...";
+                    setTimeout(() => {
+                        addPredictionToFirebase();
+                        statusMessage.innerText = "✅ Prediction generated!";
+                    }, 3000);
+                }, 2000);
+            }, 2000);
+        }
+
+        function generatePrediction() {
+            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
+            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2);
+            const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
+            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
             let colorClass = "blue";
             if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
@@ -108,7 +171,7 @@
             }
 
             return {
-                site: userSite,
+                site: sites[Math.floor(Math.random() * sites.length)],
                 target,
                 time,
                 risk,
@@ -117,50 +180,33 @@
         }
 
         function addPredictionToFirebase() {
-            const prediction = generateRandomPrediction();
+            const prediction = generatePrediction();
             const newPredictionRef = push(predictionsRef);
             set(newPredictionRef, prediction);
         }
 
         onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
-            if (prediction.site === userSite) {
-                displayPrediction(prediction);
-            }
+            displayPrediction(prediction);
         });
 
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
-            const signalCard = document.createElement("div");
-            signalCard.classList.add("signal-card", prediction.colorClass);
 
-            const siteElement = document.createElement("h2");
-            siteElement.textContent = prediction.site;
-            signalCard.appendChild(siteElement);
+            const card = document.createElement("div");
+            card.classList.add("signal-card", prediction.colorClass);
 
-            const targetElement = document.createElement("p");
-            targetElement.innerHTML = `Target: <span class="target">${prediction.target}x</span>`;
-            signalCard.appendChild(targetElement);
+            card.innerHTML = `
+                <div>
+                    <h2>${prediction.site}</h2>
+                    <p>Target: <span class="target">${prediction.target}x</span></p>
+                    <p>Risk: <span class="risk">${prediction.risk}x</span></p>
+                    <p>Time: <span class="time">${prediction.time}</span></p>
+                </div>
+            `;
 
-            const timeElement = document.createElement("p");
-            timeElement.innerHTML = `Time: <span class="time">${prediction.time}</span>`;
-            signalCard.appendChild(timeElement);
-
-            const riskElement = document.createElement("p");
-            riskElement.innerHTML = `Risk: <span class="risk">${prediction.risk}x</span>`;
-            signalCard.appendChild(riskElement);
-
-            container.appendChild(signalCard);
-
-            if (parseFloat(prediction.target) >= 10.0) {
-                document.getElementById("highOddsAlert").style.display = "block";
-                setTimeout(() => {
-                    document.getElementById("highOddsAlert").style.display = "none";
-                }, 8000);
-            }
+            container.prepend(card);
         }
-
-        setInterval(addPredictionToFirebase, 7000);
     </script>
 
 </body>
