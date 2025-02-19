@@ -52,6 +52,12 @@
             display: none;
             margin-top: 20px;
         }
+
+        .next-signal {
+            font-size: 20px;
+            margin-top: 30px;
+            color: #cccccc;
+        }
     </style>
 </head>
 <body>
@@ -61,6 +67,7 @@
         <p class="status" id="statusMessage">Analyzing data...</p>
         <p class="signal-box" id="signalOutput">Waiting for signal...</p>
         <p class="alert-box" id="alertMessage"></p>
+        <p class="next-signal" id="nextSignalMessage">Next signal is coming...</p>
     </div>
 
     <!-- Firebase Configuration -->
@@ -117,6 +124,16 @@
                     let alertSound = new Audio('alert.mp3');
                     alertSound.play();
                 }
+
+                // Show the "Next Signal is Coming" message
+                document.getElementById("nextSignalMessage").textContent = "Next signal is coming...";
+
+                // Clear message after 15 seconds
+                setTimeout(() => {
+                    document.getElementById("statusMessage").textContent = "Analyzing data...";
+                    document.getElementById("signalOutput").textContent = "Waiting for signal...";
+                    document.getElementById("nextSignalMessage").textContent = "Next signal is coming...";
+                }, 15000);
             } else {
                 document.getElementById("statusMessage").textContent = "Waiting for new signals...";
             }
