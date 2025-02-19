@@ -6,45 +6,27 @@
     <title>NeuroBet Signals</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background: url('futuristic-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            background: #1b1b1b;
             color: white;
+            text-align: center;
             margin: 0;
             padding: 0;
-            text-align: center;
         }
-
         .container {
-            margin-top: 50px;
             padding: 20px;
+            margin-top: 50px;
         }
-
         h1 {
-            font-size: 50px;
-            color: #00ff99;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-        }
-
-        .site-display {
             font-size: 30px;
-            color: #ffcc00;
-            margin-top: 20px;
-        }
-
-        .status {
-            font-size: 24px;
-            margin-top: 30px;
             color: #00ff99;
         }
-
         .signal-box {
             font-size: 40px;
             font-weight: bold;
             color: #ff6600;
-            margin-top: 50px;
+            margin-top: 30px;
         }
-
         .alert-box {
             font-size: 28px;
             font-weight: bold;
@@ -52,29 +34,21 @@
             display: none;
             margin-top: 20px;
         }
-
-        .next-signal {
-            font-size: 20px;
-            margin-top: 30px;
-            color: #cccccc;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>NeuroBet Signals</h1>
-        <p class="site-display">Betting Site: <span id="bettingSiteDisplay">Loading...</span></p>
-        <p class="status" id="statusMessage">Analyzing data...</p>
+        <p>Betting Site: <span id="bettingSiteDisplay">Loading...</span></p>
         <p class="signal-box" id="signalOutput">Waiting for signal...</p>
         <p class="alert-box" id="alertMessage"></p>
-        <p class="next-signal" id="nextSignalMessage">Next signal is coming...</p>
     </div>
 
     <!-- Firebase Configuration -->
     <script type="module">
         // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
         // Firebase Config
         const firebaseConfig = {
@@ -93,29 +67,28 @@
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Retrieve the betting site from local storage
-        const bettingSite = localStorage.getItem("bettingSite");
-        document.getElementById("bettingSiteDisplay").textContent = bettingSite ? bettingSite : "Unknown";
+        // Fetch the betting site from local storage
+        const bettingSite = localStorage.getItem("bettingSite") || "Unknown";
+        document.getElementById("bettingSiteDisplay").textContent = bettingSite;
 
         // Listen for predictions from Firebase
         onValue(predictionsRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
+                console.log("Fetched Data from Firebase:", data);
+
                 const keys = Object.keys(data);
-                const latestKey = keys[keys.length - 1]; // Get the latest prediction
+                const latestKey = keys[keys.length - 1]; // Get last prediction
                 const latestPrediction = data[latestKey];
 
-                document.getElementById("statusMessage").textContent = "Signal Ready!";
                 document.getElementById("signalOutput").textContent = `Next Odd (${latestPrediction.time}): ${latestPrediction.target}x`;
 
-                let alertBox = document.getElementById("alertMessage");
-                alertBox.style.display = "none";
-
-                // Play a beep sound
+                // Play notification sound
                 let beep = new Audio('beep.mp3');
                 beep.play();
 
                 // Alert if high odd (10x and above)
+                let alertBox = document.getElementById("alertMessage");
                 if (parseFloat(latestPrediction.target) >= 10) {
                     alertBox.textContent = `⚠️ HIGH ODD ALERT: ${latestPrediction.target}x is coming!`;
                     alertBox.style.display = "block";
@@ -123,35 +96,14 @@
 
                     let alertSound = new Audio('alert.mp3');
                     alertSound.play();
+                } else {
+                    alertBox.style.display = "none";
                 }
-
-                // Show the "Next Signal is Coming" message
-                document.getElementById("nextSignalMessage").textContent = "Next signal is coming...";
-
-                // Clear message after 15 seconds
-                setTimeout(() => {
-                    document.getElementById("statusMessage").textContent = "Analyzing data...";
-                    document.getElementById("signalOutput").textContent = "Waiting for signal...";
-                    document.getElementById("nextSignalMessage").textContent = "Next signal is coming...";
-                }, 15000);
             } else {
-                document.getElementById("statusMessage").textContent = "Waiting for new signals...";
+                console.log("No predictions found in Firebase.");
+                document.getElementById("signalOutput").textContent = "Waiting for new signals...";
             }
         });
-
-        // Push data to Firebase for testing purposes
-        // Uncomment this to test pushing data (for debugging)
-        /*
-        const testPrediction = {
-            time: new Date().toLocaleTimeString(),
-            target: "5.00"
-        };
-        push(predictionsRef, testPrediction).then(() => {
-            console.log("Test Prediction pushed successfully!");
-        }).catch((error) => {
-            console.error("Error pushing test prediction: ", error);
-        });
-        */
     </script>
 </body>
 </html>
