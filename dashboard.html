@@ -7,62 +7,68 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #111;
+            background: #0d0d0d;
             color: white;
             margin: 0;
             padding: 0;
+            text-align: center;
         }
 
         .header {
-            background-color: #333;
+            background: linear-gradient(135deg, #222, #444);
             padding: 20px;
             text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         .header h1 {
             font-size: 40px;
             text-transform: uppercase;
             color: gold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            text-shadow: 3px 3px 10px rgba(255, 215, 0, 0.7);
         }
 
         .signal-container {
-            margin-top: 30px;
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
         .signal-card {
-            background-color: #222;
+            background: rgba(34, 34, 34, 0.9);
             margin-bottom: 15px;
             padding: 20px;
             border-radius: 10px;
             width: 80%;
             max-width: 600px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s;
+        }
+
+        .signal-card:hover {
+            transform: scale(1.05);
         }
 
         .signal-card h2 {
-            font-size: 24px;
-            color: #ff5c33;
+            font-size: 22px;
+            color: #ffcc00;
         }
 
         .signal-card p {
-            font-size: 20px;
-            margin: 10px 0;
+            font-size: 18px;
+            margin: 8px 0;
         }
 
-        .signal-card .target {
+        .target {
             font-weight: bold;
         }
 
-        .signal-card .time {
+        .time {
             color: #ffeb3b;
         }
 
-        .signal-card .risk {
+        .risk {
             color: #f44336;
             font-weight: bold;
         }
@@ -79,17 +85,33 @@
             color: #e91e63;
         }
 
+        .high-odds-alert {
+            background: linear-gradient(45deg, #ff0000, #ff7300);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            margin: 20px auto;
+            max-width: 500px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
         footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
+            margin-top: 20px;
             font-size: 14px;
             color: gray;
         }
     </style>
 </head>
 <body>
+
     <div class="header">
         <h1>NeuroBet Signals</h1>
     </div>
@@ -98,17 +120,19 @@
         <!-- Predictions will be added here -->
     </div>
 
+    <div id="highOddsAlert" class="high-odds-alert" style="display: none;">
+        ⚠️ 10x+ Odds Incoming! Be Ready!
+    </div>
+
     <footer>
         <p>Powered by NeuroBet | Best Betting Signals</p>
     </footer>
 
     <!-- Firebase Configuration -->
     <script type="module">
-        // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        // Your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
             authDomain: "aviator-nuerobet.firebaseapp.com",
@@ -120,19 +144,18 @@
             measurementId: "G-PNRB5LQTB6"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Function to generate random predictions based on specified odds and times
-        function generateRandomPrediction() {
-            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
-            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
-            const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
-            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        let userSite = sessionStorage.getItem("userSite") || "MWOS Betting"; // Default site if none entered
 
-            // Randomly assign a color category based on the target value
+        function generateRandomPrediction() {
+            const target = (Math.random() * (6 - 1.2) + 1.2).toFixed(2);
+            const risk = (Math.random() * (8 - 3) + 3).toFixed(0);
+            const seconds = Math.floor(Math.random() * (55 - 20) + 20);
+            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + `:${seconds}`;
+
             let colorClass = "blue";
             if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
                 colorClass = "purple";
@@ -141,7 +164,7 @@
             }
 
             return {
-                site: sites[Math.floor(Math.random() * sites.length)],
+                site: userSite,
                 target,
                 time,
                 risk,
@@ -149,53 +172,52 @@
             };
         }
 
-        // Function to add prediction to Firebase
         function addPredictionToFirebase() {
             const prediction = generateRandomPrediction();
             const newPredictionRef = push(predictionsRef);
             set(newPredictionRef, prediction);
         }
 
-        // Listen for new predictions and display them
         onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
-            displayPrediction(prediction);
+            if (prediction.site === userSite) {
+                displayPrediction(prediction);
+            }
         });
 
-        // Function to display a prediction
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
-
-            // Create the signal card element
             const signalCard = document.createElement("div");
             signalCard.classList.add("signal-card", prediction.colorClass);
 
-            // Add site
             const siteElement = document.createElement("h2");
             siteElement.textContent = prediction.site;
             signalCard.appendChild(siteElement);
 
-            // Add target
             const targetElement = document.createElement("p");
             targetElement.innerHTML = `Target: <span class="target">${prediction.target}x</span>`;
             signalCard.appendChild(targetElement);
 
-            // Add time
             const timeElement = document.createElement("p");
             timeElement.innerHTML = `Time: <span class="time">${prediction.time}</span>`;
             signalCard.appendChild(timeElement);
 
-            // Add risk
             const riskElement = document.createElement("p");
             riskElement.innerHTML = `Risk: <span class="risk">${prediction.risk}x</span>`;
             signalCard.appendChild(riskElement);
 
-            // Append to container
             container.appendChild(signalCard);
+
+            if (parseFloat(prediction.target) >= 10.0) {
+                document.getElementById("highOddsAlert").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("highOddsAlert").style.display = "none";
+                }, 8000);
+            }
         }
 
-        // Call the function to add a prediction every few seconds (example: every 5 seconds)
-        setInterval(addPredictionToFirebase, 5000); // Adjust as needed
+        setInterval(addPredictionToFirebase, 7000);
     </script>
+
 </body>
 </html>
