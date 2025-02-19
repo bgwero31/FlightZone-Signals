@@ -6,51 +6,109 @@
     <title>NeuroBet Signals</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background: #1b1b1b;
+            font-family: Arial, sans-serif;
+            background: #111;
             color: white;
-            text-align: center;
             margin: 0;
             padding: 0;
         }
-        .container {
+
+        .header {
+            background-color: #333;
             padding: 20px;
-            margin-top: 50px;
+            text-align: center;
         }
-        h1 {
-            font-size: 30px;
-            color: #00ff99;
-        }
-        .signal-box {
+
+        .header h1 {
             font-size: 40px;
-            font-weight: bold;
-            color: #ff6600;
-            margin-top: 30px;
+            text-transform: uppercase;
+            color: gold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
-        .alert-box {
-            font-size: 28px;
+
+        .signal-container {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signal-card {
+            background-color: #222;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .signal-card h2 {
+            font-size: 24px;
+            color: #ff5c33;
+        }
+
+        .signal-card p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .signal-card .target {
             font-weight: bold;
-            color: red;
-            display: none;
-            margin-top: 20px;
+        }
+
+        .signal-card .time {
+            color: #ffeb3b;
+        }
+
+        .signal-card .risk {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .blue .target {
+            color: #1a73e8;
+        }
+
+        .purple .target {
+            color: #9c27b0;
+        }
+
+        .pink .target {
+            color: #e91e63;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: gray;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <h1>NeuroBet Signals</h1>
-        <p>Betting Site: <span id="bettingSiteDisplay">Loading...</span></p>
-        <p class="signal-box" id="signalOutput">Waiting for signal...</p>
-        <p class="alert-box" id="alertMessage"></p>
     </div>
+
+    <div class="signal-container" id="signalContainer">
+        <!-- Predictions will be added here -->
+    </div>
+
+    <footer>
+        <p>Powered by NeuroBet | Best Betting Signals</p>
+    </footer>
 
     <!-- Firebase Configuration -->
     <script type="module">
         // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        // Firebase Config
+        // Your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
             authDomain: "aviator-nuerobet.firebaseapp.com",
@@ -67,43 +125,43 @@
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Fetch the betting site from local storage
-        const bettingSite = localStorage.getItem("bettingSite") || "Unknown";
-        document.getElementById("bettingSiteDisplay").textContent = bettingSite;
+        // Function to generate random predictions based on specified odds and times
+        function generateRandomPrediction() {
+            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
+            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
+            const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
+            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-        // Listen for predictions from Firebase
-        onValue(predictionsRef, (snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                console.log("Fetched Data from Firebase:", data);
-
-                const keys = Object.keys(data);
-                const latestKey = keys[keys.length - 1]; // Get last prediction
-                const latestPrediction = data[latestKey];
-
-                document.getElementById("signalOutput").textContent = `Next Odd (${latestPrediction.time}): ${latestPrediction.target}x`;
-
-                // Play notification sound
-                let beep = new Audio('beep.mp3');
-                beep.play();
-
-                // Alert if high odd (10x and above)
-                let alertBox = document.getElementById("alertMessage");
-                if (parseFloat(latestPrediction.target) >= 10) {
-                    alertBox.textContent = `⚠️ HIGH ODD ALERT: ${latestPrediction.target}x is coming!`;
-                    alertBox.style.display = "block";
-                    alertBox.style.color = "red";
-
-                    let alertSound = new Audio('alert.mp3');
-                    alertSound.play();
-                } else {
-                    alertBox.style.display = "none";
-                }
-            } else {
-                console.log("No predictions found in Firebase.");
-                document.getElementById("signalOutput").textContent = "Waiting for new signals...";
+            // Randomly assign a color category based on the target value
+            let colorClass = "blue";
+            if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
+                colorClass = "purple";
+            } else if (parseFloat(target) >= 10.0) {
+                colorClass = "pink";
             }
+
+            return {
+                site: sites[Math.floor(Math.random() * sites.length)],
+                target,
+                time,
+                risk,
+                colorClass
+            };
+        }
+
+        // Function to add prediction to Firebase
+        function addPredictionToFirebase() {
+            const prediction = generateRandomPrediction();
+            const newPredictionRef = push(predictionsRef);
+            set(newPredictionRef, prediction);
+        }
+
+        // Listen for new predictions and display them
+        onChildAdded(predictionsRef, (snapshot) => {
+            const prediction = snapshot.val();
+            displayPrediction(prediction);
         });
-    </script>
-</body>
-</html>
+
+        // Function to display a prediction
+        function displayPrediction(prediction) {
+            const container = document.getElementById("signalConta
