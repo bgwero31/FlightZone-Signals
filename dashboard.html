@@ -214,7 +214,7 @@
                 site: selectedSite,
                 odds: odds,
                 target: (Math.random() * (5 - 1.2) + 1.2).toFixed(2), // Random between 1.2x - 5x
-                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
                 risk: (Math.random() * (6 - 3) + 3).toFixed(0), // Random between 3x - 6x
                 colorClass: "blue" // This can be adjusted based on odds
             };
