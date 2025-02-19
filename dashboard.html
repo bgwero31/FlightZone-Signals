@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Signals</title>
+    <title>NeuroBet AI Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,41 +20,66 @@
         }
 
         .header h1 {
-            font-size: 40px;
+            font-size: 30px;
             text-transform: uppercase;
             color: gold;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
 
+        .input-container {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+        }
+
+        button {
+            background: gold;
+            color: black;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+
         .signal-container {
             margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
         }
 
         .signal-card {
             background-color: #222;
-            margin-bottom: 10px;
             padding: 15px;
             border-radius: 10px;
             width: 85%;
             max-width: 500px;
+            margin: 10px auto;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .signal-card h2 {
             font-size: 20px;
             color: white;
             margin: 0;
-        }
-
-        .signal-card p {
-            font-size: 18px;
-            margin: 5px 0;
         }
 
         .target {
@@ -70,48 +95,31 @@
             font-weight: bold;
         }
 
-        .blue .target {
-            color: #1a73e8;
-        }
-
-        .purple .target {
-            color: #9c27b0;
-        }
-
-        .pink .target {
-            color: #e91e63;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            font-size: 14px;
-            color: gray;
-        }
+        .blue .target { color: #1a73e8; }
+        .purple .target { color: #9c27b0; }
+        .pink .target { color: #e91e63; }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <h1>NeuroBet Signals</h1>
+        <h1>Aviator NeuroBet AI Signals</h1>
     </div>
 
-    <div class="signal-container" id="signalContainer">
-        <!-- Predictions will be added here -->
+    <div class="input-container">
+        <h3>Enter Past Odds</h3>
+        <input type="text" id="pastOddsInput" placeholder="Enter past odds, e.g., 1.50, 2.00, 3.75">
+        <button onclick="submitPastOdds()">Submit</button>
+        <p class="status-message" id="statusMessage"></p>
     </div>
 
-    <footer>
-        <p>Powered by NeuroBet | Best Betting Signals</p>
-    </footer>
+    <div class="signal-container" id="signalContainer"></div>
 
     <!-- Firebase Configuration -->
     <script type="module">
-        // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
             authDomain: "aviator-nuerobet.firebaseapp.com",
@@ -123,19 +131,38 @@
             measurementId: "G-PNRB5LQTB6"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const predictionsRef = ref(database, "predictions");
 
-        // Function to generate random predictions
-        function generateRandomPrediction() {
+        function submitPastOdds() {
+            let pastOdds = document.getElementById("pastOddsInput").value;
+            let statusMessage = document.getElementById("statusMessage");
+
+            if (!pastOdds) {
+                statusMessage.innerText = "⚠️ Please enter past odds.";
+                return;
+            }
+
+            statusMessage.innerText = "✅ Submitting past odds...";
+            setTimeout(() => {
+                statusMessage.innerText = "🤖 Analyzing data...";
+                setTimeout(() => {
+                    statusMessage.innerText = "🔎 Generating accurate predictions...";
+                    setTimeout(() => {
+                        addPredictionToFirebase();
+                        statusMessage.innerText = "✅ Prediction generated!";
+                    }, 3000);
+                }, 2000);
+            }, 2000);
+        }
+
+        function generatePrediction() {
             const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
-            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
-            const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
+            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2);
+            const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
             const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-            // Determine color based on target value
             let colorClass = "blue";
             if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
                 colorClass = "purple";
@@ -152,31 +179,23 @@
             };
         }
 
-        // Function to add a new prediction to Firebase
         function addPredictionToFirebase() {
-            const prediction = generateRandomPrediction();
+            const prediction = generatePrediction();
             const newPredictionRef = push(predictionsRef);
             set(newPredictionRef, prediction);
         }
 
-        // Listen for new predictions and display them
         onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
             displayPrediction(prediction);
         });
 
-        // Function to display a prediction
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
 
-            // Create signal card
             const card = document.createElement("div");
-            card.classList.add("signal-card");
+            card.classList.add("signal-card", prediction.colorClass);
 
-            // Apply color class
-            card.classList.add(prediction.colorClass);
-
-            // Create prediction details
             card.innerHTML = `
                 <div>
                     <h2>${prediction.site}</h2>
@@ -186,12 +205,9 @@
                 </div>
             `;
 
-            // Add the card to the container
             container.prepend(card);
         }
-
-        // Auto-generate a new prediction every 30 seconds (can be adjusted)
-        setInterval(addPredictionToFirebase, 30000);
     </script>
+
 </body>
 </html>
