@@ -74,7 +74,7 @@
     <script type="module">
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
         // Firebase Config
         const firebaseConfig = {
@@ -138,6 +138,20 @@
                 document.getElementById("statusMessage").textContent = "Waiting for new signals...";
             }
         });
+
+        // Push data to Firebase for testing purposes
+        // Uncomment this to test pushing data (for debugging)
+        /*
+        const testPrediction = {
+            time: new Date().toLocaleTimeString(),
+            target: "5.00"
+        };
+        push(predictionsRef, testPrediction).then(() => {
+            console.log("Test Prediction pushed successfully!");
+        }).catch((error) => {
+            console.error("Error pushing test prediction: ", error);
+        });
+        */
     </script>
 </body>
 </html>
