@@ -79,6 +79,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            margin-top: 30px;
         }
 
         .signal-card {
@@ -132,6 +133,13 @@
             color: #e91e63;
         }
 
+        /* Real-time Clock */
+        .clock {
+            font-size: 20px;
+            color: #ffeb3b;
+            margin-top: 20px;
+        }
+
         footer {
             position: fixed;
             bottom: 10px;
@@ -164,9 +172,13 @@
             </form>
         </div>
 
+        <div id="submittedInfo"></div>
+
         <div class="signal-container" id="signalContainer">
             <!-- Predictions will be dynamically added here -->
         </div>
+
+        <div class="clock" id="clock"></div>
     </div>
 
     <footer>
@@ -197,4 +209,76 @@
         const predictionsRef = ref(database, "predictions");
 
         // Handle user input and generate prediction
-        document.getElementById("user
+        document.getElementById("userInputForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const odds1 = document.getElementById("odds1").value;
+            const odds2 = document.getElementById("odds2").value;
+            const odds3 = document.getElementById("odds3").value;
+            const odds4 = document.getElementById("odds4").value;
+            const odds5 = document.getElementById("odds5").value;
+            const bettingSite = document.getElementById("bettingSiteSelect").value;
+
+            // Display submitted information
+            document.getElementById("submittedInfo").innerHTML = `
+                <h3>Submitted Information</h3>
+                <p><strong>Odds:</strong> ${odds1}, ${odds2}, ${odds3}, ${odds4}, ${odds5}</p>
+                <p><strong>Betting Site:</strong> ${bettingSite}</p>
+            `;
+
+            // Start generating predictions after submission
+            startGeneratingPredictions();
+
+            // Save data to Firebase
+            const newPredictionRef = push(predictionsRef);
+            set(newPredictionRef, {
+                odds1,
+                odds2,
+                odds3,
+                odds4,
+                odds5,
+                bettingSite
+            });
+        });
+
+        // Function to generate signals automatically
+        function startGeneratingPredictions() {
+            setInterval(function() {
+                const prediction = generatePrediction();
+                const signalContainer = document.getElementById("signalContainer");
+                const signalCard = document.createElement("div");
+                signalCard.classList.add("signal-card");
+
+                signalCard.innerHTML = `
+                    <h2>Prediction</h2>
+                    <p><span class="target">${prediction.target}</span></p>
+                    <p class="time">Time: ${new Date().toLocaleTimeString()}</p>
+                    <p class="risk">${prediction.risk}</p>
+                `;
+
+                signalContainer.prepend(signalCard);  // Adds prediction above
+            }, 5000); // Update every 5 seconds for example
+        }
+
+        // Example function to generate random predictions
+        function generatePrediction() {
+            const targets = ["1.20", "2.50", "3.00", "5.00", "10.00"];
+            const risks = ["High Risk", "Medium Risk", "Low Risk"];
+
+            const target = targets[Math.floor(Math.random() * targets.length)];
+            const risk = risks[Math.floor(Math.random() * risks.length)];
+
+            return { target, risk };
+        }
+
+        // Real-time Clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById("clock").textContent = `Current Time: ${timeString}`;
+        }
+
+        setInterval(updateClock, 1000);  // Update clock every second
+    </script>
+</body>
+</html>
