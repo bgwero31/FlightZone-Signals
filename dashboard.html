@@ -3,152 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Aviator Predictor</title>
+    <title>NeuroBet Signals</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #222;
+            background: #111;
             color: white;
             margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
             padding: 20px;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        #current-time {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-        #past-odds {
-            margin-bottom: 10px;
-        }
-        input {
-            padding: 5px;
-            margin: 5px;
-            width: 50px;
             text-align: center;
-            background: #333;
-            color: white;
-            border: 1px solid #555;
         }
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            background: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
+
+        .header h1 {
+            font-size: 40px;
+            text-transform: uppercase;
+            color: gold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
-        button:hover {
-            background: #218838;
+
+        .signal-container {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        #spinner {
-            width: 120px;
-            height: 120px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #ffcc00;
-            border-radius: 50%;
-            margin: 20px auto;
-            animation: spin 2s linear infinite;
+
+        .signal-card {
+            background-color: #222;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .signal-card h2 {
+            font-size: 24px;
+            color: #ff5c33;
         }
-        #odds-container {
-            margin-top: 20px;
-            max-height: 200px;
-            overflow-y: auto;
-            border-top: 1px solid #fff;
-            padding-top: 10px;
+
+        .signal-card p {
+            font-size: 20px;
+            margin: 10px 0;
         }
-        .odd {
-            font-size: 18px;
-            margin: 5px 0;
-            padding: 5px;
-            background: #333;
-            border-radius: 5px;
-            width: 200px;
-            margin: auto;
+
+        .signal-card .target {
+            font-weight: bold;
+        }
+
+        .signal-card .time {
+            color: #ffeb3b;
+        }
+
+        .signal-card .risk {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .blue .target {
+            color: #1a73e8;
+        }
+
+        .purple .target {
+            color: #9c27b0;
+        }
+
+        .pink .target {
+            color: #e91e63;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: gray;
         }
     </style>
 </head>
 <body>
-    <h1>Aviator Predictor</h1>
-    <div id="current-time">Loading time...</div>
-    
-    <div id="past-odds">
-        <input type="text" id="odd1" placeholder="1.00">
-        <input type="text" id="odd2" placeholder="3.00">
-        <input type="text" id="odd3" placeholder="2.00">
-        <input type="text" id="odd4" placeholder="4.00">
-        <input type="text" id="odd5" placeholder="5.00">
-        <button onclick="startPrediction()">Submit</button>
+    <div class="header">
+        <h1>NeuroBet Signals</h1>
     </div>
 
-    <div id="spinner"></div>
-    <div id="odds-container"></div>
+    <div class="signal-container" id="signalContainer">
+        <!-- Predictions will be added here -->
+    </div>
 
-    <audio id="beep-sound">
-        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-    </audio>
+    <footer>
+        <p>Powered by NeuroBet | Best Betting Signals</p>
+    </footer>
 
-    <script>
-        function updateTime() {
-            let now = new Date();
-            let hours = now.getHours().toString().padStart(2, '0');
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            let seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById("current-time").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
-        }
-        setInterval(updateTime, 1000);
+    <!-- Firebase Configuration -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        let oddsList = [];
+        // Your Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
+            authDomain: "aviator-nuerobet.firebaseapp.com",
+            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
+            projectId: "aviator-nuerobet",
+            storageBucket: "aviator-nuerobet.appspot.com",
+            messagingSenderId: "88811829830",
+            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
+            measurementId: "G-PNRB5LQTB6"
+        };
 
-        function startPrediction() {
-            let pastOdds = [
-                document.getElementById("odd1").value,
-                document.getElementById("odd2").value,
-                document.getElementById("odd3").value,
-                document.getElementById("odd4").value,
-                document.getElementById("odd5").value
-            ];
-            if (pastOdds.some(odd => odd === "")) {
-                alert("Please enter all past odds.");
-                return;
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const predictionsRef = ref(database, "predictions");
+
+        // Function to generate random predictions based on specified odds and times
+        function generateRandomPrediction() {
+            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
+            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
+            const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
+            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+            // Randomly assign a color category based on the target value
+            let colorClass = "blue";
+            if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
+                colorClass = "purple";
+            } else if (parseFloat(target) >= 10.0) {
+                colorClass = "pink";
             }
-            document.getElementById("past-odds").style.display = "none";
-            generateOdds();
-            setInterval(generateOdds, 15000);
+
+            return {
+                site: sites[Math.floor(Math.random() * sites.length)],
+                target,
+                time,
+                risk,
+                colorClass
+            };
         }
 
-        function generateOdds() {
-            let minLow = 1.40, maxLow = 2.30;
-            let minHigh = 3.00, maxHigh = 10.00;
-            let newOdd = (Math.random() < 0.7)
-                ? (Math.random() * (maxLow - minLow) + minLow).toFixed(2)
-                : (Math.random() * (maxHigh - minHigh) + minHigh).toFixed(2);
-
-            let now = new Date();
-            now.setMinutes(now.getMinutes() + Math.floor(Math.random() * 3) + 1);
-            let futureTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-
-            let beep = document.getElementById("beep-sound");
-            beep.play();
-
-            let oddsContainer = document.getElementById("odds-container");
-            let newOddElement = document.createElement("div");
-            newOddElement.className = "odd";
-            newOddElement.innerText = `${futureTime} - ${newOdd}x`;
-            
-            oddsContainer.prepend(newOddElement);
-
-            if (oddsList.length >= 10) {
-                oddsContainer.removeChild(oddsContainer.lastChild);
-            }
+        // Function to add prediction to Firebase
+        function addPredictionToFirebase() {
+            const prediction = generateRandomPrediction();
+            const newPredictionRef = push(predictionsRef);
+            set(newPredictionRef, prediction);
         }
+
+        // Listen for new predictions and display them
+        onChildAdded(predictionsRef, (snapshot) => {
+            const prediction = snapshot.val();
+            displayPrediction(prediction);
+        });
+
+        // Function to display a prediction
+        function displayPrediction(prediction) {
+            const container = document.getElementById("signalContainer");
+
+            // Create the signal card element
+            const signalCard = document.createElement("div");
+            signalCard.classList.add("signal-card", prediction.colorClass);
+
+            // Add site
+            const siteElement = document.createElement("h2");
+            siteElement.textContent = prediction.site;
+            signalCard.appendChild(siteElement);
+
+            // Add target
+            const targetElement = document.createElement("p");
+            targetElement.innerHTML = `Target: <span class="target">${prediction.target}x</span>`;
+            signalCard.appendChild(targetElement);
+
+            // Add time
+            const timeElement = document.createElement("p");
+            timeElement.innerHTML = `Time: <span class="time">${prediction.time}</span>`;
+            signalCard.appendChild(timeElement);
+
+            // Add risk
+            const riskElement = document.createElement("p");
+            riskElement.innerHTML = `Risk: <span class="risk">${prediction.risk}x</span>`;
+            signalCard.appendChild(riskElement);
+
+            // Append to container
+            container.appendChild(signalCard);
+        }
+
+        // Call the function to add a prediction every few seconds (example: every 5 seconds)
+        setInterval(addPredictionToFirebase, 5000); // Adjust as needed
     </script>
 </body>
 </html>
