@@ -41,44 +41,41 @@
             text-align: center;
         }
 
-        .input-container {
-            text-align: center;
-            padding: 15px;
-        }
-
-        input {
-            width: 60px;
-            padding: 8px;
-            margin: 5px;
-            text-align: center;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333;
-            color: white;
-        }
-
-        button {
-            background-color: #ff5c33;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
         .main-container {
             text-align: center;
             padding: 20px;
         }
 
+        .form-container input,
+        .form-container select {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #222;
+            color: #fff;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff5c33;
+            color: white;
+            cursor: pointer;
+        }
+
+        #confirmation {
+            font-size: 18px;
+            color: #1a73e8;
+            margin-top: 10px;
+            display: none;
+        }
+
         .signal-container {
             margin-top: 20px;
-            display: flex;
-            flex-direction: column-reverse;
-            align-items: center;
         }
 
         .signal-card {
@@ -110,29 +107,34 @@
         <div id="current-time"></div>
     </div>
 
-    <div class="input-container">
-        <h2>Enter Past 5 Crash Odds</h2>
-        <input type="number" step="0.01" id="odd1">
-        <input type="number" step="0.01" id="odd2">
-        <input type="number" step="0.01" id="odd3">
-        <input type="number" step="0.01" id="odd4">
-        <input type="number" step="0.01" id="odd5">
-        <br>
-        <button onclick="startGenerating()">Submit</button>
-    </div>
-
     <div class="main-container">
-        <div class="signal-container" id="signalContainer"></div>
+        <div class="form-container">
+            <h2>Enter Your Last 5 Crash Game Odds</h2>
+            <form id="userInputForm">
+                <input type="text" id="odds1" placeholder="Enter last odd" required>
+                <input type="text" id="odds2" placeholder="Enter last odd" required>
+                <input type="text" id="odds3" placeholder="Enter last odd" required>
+                <input type="text" id="odds4" placeholder="Enter last odd" required>
+                <input type="text" id="odds5" placeholder="Enter last odd" required>
+                <select id="bettingSiteSelect">
+                    <option value="Moz">Moz</option>
+                    <option value="Africa Bet">Africa Bet</option>
+                </select>
+                <button type="submit">Submit</button>
+            </form>
+            <p id="confirmation">Processing your data and generating signals...</p>
+        </div>
+
+        <div class="signal-container" id="signalContainer">
+            <!-- Predictions will be added here -->
+        </div>
     </div>
 
     <footer>
         <p>Powered by NeuroBet | Best Betting Signals</p>
     </footer>
 
-    <audio id="beepSound">
-        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-    </audio>
-
+    <!-- Firebase Configuration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
@@ -159,40 +161,33 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        function getRandomFutureTime() {
-            const now = new Date();
-            now.setSeconds(now.getSeconds() + Math.floor(Math.random() * 50) + 10);
-            return now.toLocaleTimeString();
-        }
+        document.getElementById("userInputForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-        function startGenerating() {
-            generatePrediction();
-            setInterval(generatePrediction, 30000);
-        }
-
-        function generatePrediction() {
-            const sites = ["Moz", "Africa Bet"];
-            const selectedSite = sites[Math.floor(Math.random() * sites.length)];
+            document.getElementById("confirmation").style.display = "block";
 
             const odds = [
-                parseFloat(document.getElementById("odd1").value) || 1.00,
-                parseFloat(document.getElementById("odd2").value) || 1.00,
-                parseFloat(document.getElementById("odd3").value) || 1.00,
-                parseFloat(document.getElementById("odd4").value) || 1.00,
-                parseFloat(document.getElementById("odd5").value) || 1.00
+                document.getElementById("odds1").value,
+                document.getElementById("odds2").value,
+                document.getElementById("odds3").value,
+                document.getElementById("odds4").value,
+                document.getElementById("odds5").value
             ];
 
-            const target = (Math.random() * (2.30 - 1.40) + 1.40).toFixed(2);
-            const risk = (Math.random() * (6 - 3) + 3).toFixed(0);
-            const futureTime = getRandomFutureTime();
+            const selectedSite = document.getElementById("bettingSiteSelect").value;
 
-            let colorClass = "blue";
-            if (target >= 2.00) colorClass = "purple";
-            if (target >= 10.00) colorClass = "pink";
+            const prediction = {
+                site: selectedSite,
+                odds: odds,
+                target: (Math.random() * (2.30 - 1.40) + 1.40).toFixed(2),
+                time: new Date().toLocaleTimeString(),
+                risk: (Math.random() * (6 - 3) + 3).toFixed(0),
+                colorClass: "blue"
+            };
 
-            const prediction = { site: selectedSite, odds, target, time: futureTime, risk, colorClass };
-            set(push(predictionsRef), prediction);
-        }
+            const newPredictionRef = push(predictionsRef);
+            set(newPredictionRef, prediction);
+        });
 
         onChildAdded(predictionsRef, (snapshot) => {
             const prediction = snapshot.val();
@@ -201,8 +196,6 @@
 
         function displayPrediction(prediction) {
             const container = document.getElementById("signalContainer");
-            container.innerHTML = "";
-
             const signalCard = document.createElement("div");
             signalCard.classList.add("signal-card", prediction.colorClass);
 
@@ -215,10 +208,6 @@
             `;
 
             container.appendChild(signalCard);
-
-            setTimeout(() => {
-                document.getElementById("beepSound").play();
-            }, 5000);
         }
     </script>
 </body>
