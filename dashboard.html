@@ -54,28 +54,53 @@
         <p class="signal-box" id="signalOutput">Waiting for signal...</p>
     </div>
 
-    <script>
-        // Retrieve the betting site from local storage
-        const bettingSite = localStorage.getItem("bettingSite");
-        document.getElementById("bettingSiteDisplay").textContent = bettingSite ? bettingSite : "Unknown";
+    <script type="module">
+        // **Firebase SDK Import**
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, query, limitToLast, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        // Simulate analysis process before displaying a signal
-        setTimeout(() => {
-            document.getElementById("statusMessage").textContent = "Processing data...";
-        }, 2000);
+        // **Firebase Configuration**
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
+            authDomain: "aviator-nuerobet.firebaseapp.com",
+            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
+            projectId: "aviator-nuerobet",
+            storageBucket: "aviator-nuerobet.appspot.com",
+            messagingSenderId: "88811829830",
+            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
+            measurementId: "G-PNRB5LQTB6"
+        };
 
-        setTimeout(() => {
-            document.getElementById("statusMessage").textContent = "Generating accurate odds...";
-        }, 5000);
+        // **Initialize Firebase**
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const predictionsRef = ref(database, "predictions");
 
-        setTimeout(() => {
-            document.getElementById("statusMessage").textContent = "Signal Ready!";
-            document.getElementById("signalOutput").textContent = "Next Odd: 4.2x";
-            
-            // Play a beep sound
-            let beep = new Audio('beep.mp3');
-            beep.play();
-        }, 8000);
+        // **Retrieve User's Betting Site**
+        const bettingSite = localStorage.getItem("bettingSite") || "Unknown";
+        document.getElementById("bettingSiteDisplay").textContent = bettingSite;
+
+        // **Real-time Prediction Fetching**
+        const latestPredictionQuery = query(predictionsRef, limitToLast(1)); // Get the last prediction
+
+        onChildAdded(latestPredictionQuery, (snapshot) => {
+            const prediction = snapshot.val();
+
+            // Check if prediction matches user's betting site
+            if (prediction.site === bettingSite) {
+                document.getElementById("statusMessage").textContent = "Signal Ready!";
+                document.getElementById("signalOutput").textContent = `Next Odd: ${prediction.target}x`;
+
+                // Play beep sound on update
+                let beep = new Audio('beep.mp3');
+                beep.play();
+            }
+        });
+
+        // **Simulate Loading Process Before Fetching**
+        setTimeout(() => { document.getElementById("statusMessage").textContent = "Processing data..."; }, 2000);
+        setTimeout(() => { document.getElementById("statusMessage").textContent = "Generating accurate odds..."; }, 5000);
     </script>
+
 </body>
 </html>
