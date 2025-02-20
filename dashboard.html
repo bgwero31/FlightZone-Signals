@@ -4,47 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeuroBet Signals</title>
-    <script type="module">
-        // Import Firebase SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDW5ntQiR9cF-qZ9vOGY49P6hTOUhTPxdc",
-            authDomain: "neurobet-ai.firebaseapp.com",
-            projectId: "neurobet-ai",
-            storageBucket: "neurobet-ai.appspot.com",
-            messagingSenderId: "793175611155",
-            appId: "1:793175611155:web:10d91cb8d4fca30f6eece6",
-            measurementId: "G-RPZZ9MPQTJ"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Function to fetch predictions from Firestore
-        async function fetchPrediction() {
-            const docRef = doc(db, "predictions", "latest"); // Adjust this to your Firestore document
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                document.getElementById("statusMessage").textContent = "Signal Ready!";
-                document.getElementById("signalOutput").textContent = `Next Odd: ${docSnap.data().odd}x`;
-
-                // Play a beep sound when new prediction arrives
-                let beep = new Audio('beep.mp3');
-                beep.play();
-            } else {
-                document.getElementById("statusMessage").textContent = "No signal available.";
-            }
-        }
-
-        // Call fetchPrediction every 10 seconds to get real-time updates
-        setInterval(fetchPrediction, 10000);
-    </script>
-
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -95,10 +54,54 @@
         <p class="signal-box" id="signalOutput">Waiting for signal...</p>
     </div>
 
-    <script>
-        // Retrieve the betting site from local storage
-        const bettingSite = localStorage.getItem("bettingSite");
-        document.getElementById("bettingSiteDisplay").textContent = bettingSite ? bettingSite : "Unknown";
+    <script type="module">
+        // **Firebase SDK Import**
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, query, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // **Firebase Configuration**
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
+            authDomain: "aviator-nuerobet.firebaseapp.com",
+            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
+            projectId: "aviator-nuerobet",
+            storageBucket: "aviator-nuerobet.appspot.com",
+            messagingSenderId: "88811829830",
+            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
+            measurementId: "G-PNRB5LQTB6"
+        };
+
+        // **Initialize Firebase**
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const predictionsRef = ref(database, "predictions");
+
+        // **Retrieve User's Betting Site**
+        const bettingSite = localStorage.getItem("bettingSite") || "Unknown";
+        document.getElementById("bettingSiteDisplay").textContent = bettingSite;
+
+        // **Real-time Prediction Fetching**
+        const latestPredictionQuery = query(predictionsRef, limitToLast(1));
+
+        onValue(latestPredictionQuery, (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                const prediction = childSnapshot.val();
+
+                if (prediction.site === bettingSite) {
+                    document.getElementById("statusMessage").textContent = "Signal Ready!";
+                    document.getElementById("signalOutput").textContent = `Next Odd: ${prediction.target}x`;
+
+                    // Play beep sound on update
+                    let beep = new Audio('beep.mp3');
+                    beep.play();
+                }
+            });
+        });
+
+        // **Simulate Loading Process Before Fetching**
+        setTimeout(() => { document.getElementById("statusMessage").textContent = "Processing data..."; }, 2000);
+        setTimeout(() => { document.getElementById("statusMessage").textContent = "Generating accurate odds..."; }, 5000);
     </script>
+
 </body>
 </html>
