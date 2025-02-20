@@ -7,26 +7,16 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+            background: #111;
+            color: white;
             margin: 0;
             padding: 0;
-            color: white;
-        }
-
-        /* Futuristic Animation for Background */
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         .header {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: #333;
             padding: 20px;
             text-align: center;
-            border-bottom: 2px solid #ff5c33;
         }
 
         .header h1 {
@@ -36,65 +26,22 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
 
-        /* Main Container */
-        .main-container {
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        /* Form for User Input */
-        .form-container {
-            margin-bottom: 30px;
-        }
-
-        .form-container input,
-        .form-container select {
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            background-color: #222;
-            color: #fff;
-        }
-
-        .form-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            background-color: #ff5c33;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .form-container button:hover {
-            background-color: #ff3b1f;
-        }
-
-        /* Signal Cards */
         .signal-container {
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-top: 30px;
         }
 
         .signal-card {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: #222;
             margin-bottom: 15px;
             padding: 20px;
             border-radius: 10px;
             width: 80%;
             max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-            transition: transform 0.3s ease;
-        }
-
-        .signal-card:hover {
-            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
         }
 
         .signal-card h2 {
@@ -108,6 +55,7 @@
         }
 
         .signal-card .target {
+            color: #1a73e8;
             font-weight: bold;
         }
 
@@ -118,26 +66,6 @@
         .signal-card .risk {
             color: #f44336;
             font-weight: bold;
-        }
-
-        /* Color Classes for Different Odds */
-        .blue .target {
-            color: #1a73e8;
-        }
-
-        .purple .target {
-            color: #9c27b0;
-        }
-
-        .pink .target {
-            color: #e91e63;
-        }
-
-        /* Real-time Clock */
-        .clock {
-            font-size: 20px;
-            color: #ffeb3b;
-            margin-top: 20px;
         }
 
         footer {
@@ -155,130 +83,43 @@
         <h1>NeuroBet Signals</h1>
     </div>
 
-    <div class="main-container">
-        <div class="form-container">
-            <h2>Enter Your Last 5 Crashing Odds</h2>
-            <form id="userInputForm">
-                <input type="number" id="odds1" placeholder="Enter last odd" required>
-                <input type="number" id="odds2" placeholder="Enter last odd" required>
-                <input type="number" id="odds3" placeholder="Enter last odd" required>
-                <input type="number" id="odds4" placeholder="Enter last odd" required>
-                <input type="number" id="odds5" placeholder="Enter last odd" required>
-                <select id="bettingSiteSelect">
-                    <option value="Moz">Moz</option>
-                    <option value="Africa Bet">Africa Bet</option>
-                </select>
-                <button type="submit">Submit</button>
-            </form>
+    <div class="signal-container">
+        <div class="signal-card">
+            <h2>Signal #1: Spin City</h2>
+            <p><span class="target">Target: 2.50x</span></p>
+            <p><span class="time">Time: 10:15 AM</span></p>
+            <p><span class="risk">Risk: 4x</span></p>
         </div>
 
-        <div id="submittedInfo"></div>
-
-        <div class="signal-container" id="signalContainer">
-            <!-- Predictions will be dynamically added here -->
+        <div class="signal-card">
+            <h2>Signal #2: MWOS Betting</h2>
+            <p><span class="target">Target: 1.85x</span></p>
+            <p><span class="time">Time: 10:20 AM</span></p>
+            <p><span class="risk">Risk: 3x</span></p>
         </div>
 
-        <div class="clock" id="clock"></div>
+        <div class="signal-card">
+            <h2>Signal #3: Zanzibet</h2>
+            <p><span class="target">Target: 4.10x</span></p>
+            <p><span class="time">Time: 10:25 AM</span></p>
+            <p><span class="risk">Risk: 5x</span></p>
+        </div>
     </div>
 
     <footer>
         <p>Powered by NeuroBet | Best Betting Signals</p>
     </footer>
 
-    <!-- Firebase Configuration -->
-    <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
-        // Your Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
-            authDomain: "aviator-nuerobet.firebaseapp.com",
-            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
-            projectId: "aviator-nuerobet",
-            storageBucket: "aviator-nuerobet.appspot.com",
-            messagingSenderId: "88811829830",
-            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
-            measurementId: "G-PNRB5LQTB6"
+    <!-- The Audio Element for Robotic Sound -->
+    <audio id="roboticSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    
+    <!-- Script to play sound on page load -->
+    <script>
+        window.onload = function() {
+            // Play the sound
+            var sound = document.getElementById('roboticSound');
+            sound.play();
         };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const predictionsRef = ref(database, "predictions");
-
-        // Handle user input and generate prediction
-        document.getElementById("userInputForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            const odds1 = document.getElementById("odds1").value;
-            const odds2 = document.getElementById("odds2").value;
-            const odds3 = document.getElementById("odds3").value;
-            const odds4 = document.getElementById("odds4").value;
-            const odds5 = document.getElementById("odds5").value;
-            const bettingSite = document.getElementById("bettingSiteSelect").value;
-
-            // Display submitted information
-            document.getElementById("submittedInfo").innerHTML = `
-                <h3>Submitted Information</h3>
-                <p><strong>Odds:</strong> ${odds1}, ${odds2}, ${odds3}, ${odds4}, ${odds5}</p>
-                <p><strong>Betting Site:</strong> ${bettingSite}</p>
-            `;
-
-            // Start generating predictions after submission
-            startGeneratingPredictions();
-
-            // Save data to Firebase
-            const newPredictionRef = push(predictionsRef);
-            set(newPredictionRef, {
-                odds1,
-                odds2,
-                odds3,
-                odds4,
-                odds5,
-                bettingSite
-            });
-        });
-
-        // Function to generate signals automatically
-        function startGeneratingPredictions() {
-            setInterval(function() {
-                const prediction = generatePrediction();
-                const signalContainer = document.getElementById("signalContainer");
-                const signalCard = document.createElement("div");
-                signalCard.classList.add("signal-card");
-
-                signalCard.innerHTML = `
-                    <h2>Prediction</h2>
-                    <p><span class="target">${prediction.target}</span></p>
-                    <p class="time">Time: ${new Date().toLocaleTimeString()}</p>
-                    <p class="risk">${prediction.risk}</p>
-                `;
-
-                signalContainer.prepend(signalCard);  // Adds prediction above
-            }, 5000); // Update every 5 seconds for example
-        }
-
-        // Example function to generate random predictions
-        function generatePrediction() {
-            const targets = ["1.20", "2.50", "3.00", "5.00", "10.00"];
-            const risks = ["High Risk", "Medium Risk", "Low Risk"];
-
-            const target = targets[Math.floor(Math.random() * targets.length)];
-            const risk = risks[Math.floor(Math.random() * risks.length)];
-
-            return { target, risk };
-        }
-
-        // Real-time Clock
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById("clock").textContent = `Current Time: ${timeString}`;
-        }
-
-        setInterval(updateClock, 1000);  // Update clock every second
     </script>
 </body>
 </html>
