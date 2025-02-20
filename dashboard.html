@@ -3,165 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Signals</title>
+    <title>Aviator NeuroBet</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #111;
+            font-family: 'Roboto', sans-serif;
+            background: url('robotic-background.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: white;
             margin: 0;
             padding: 0;
-        }
-
-        .header {
-            background-color: #333;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 40px;
-            text-transform: uppercase;
-            color: gold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        .signal-container {
-            margin-top: 30px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: backgroundAnimation 3s ease infinite;
         }
 
-        .signal-card {
-            background-color: #222;
-            margin-bottom: 15px;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
+            50% { background: linear-gradient(45deg, #1a1a1a, #333); }
+            100% { background: linear-gradient(45deg, #0f0f0f, #1a1a1a); }
         }
 
-        .signal-card h2 {
-            font-size: 24px;
-            color: #ff5c33;
-        }
-
-        .signal-card p {
-            font-size: 20px;
-            margin: 10px 0;
-        }
-
-        .signal-card .target {
-            font-weight: bold;
-        }
-
-        .signal-card .time {
-            color: #ffeb3b;
-        }
-
-        .signal-card .risk {
-            color: #f44336;
-            font-weight: bold;
-        }
-
-        .blue .target {
-            color: #1a73e8;
-        }
-
-        .purple .target {
-            color: #9c27b0;
-        }
-
-        .pink .target {
-            color: #e91e63;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
+        .login-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+            width: 90%;
+            max-width: 400px;
             text-align: center;
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            letter-spacing: 4px;
+            color: #00ff99;
+        }
+
+        .input-field {
+            margin: 15px 0;
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            border: 2px solid #00ff99;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #ff6600;
+        }
+
+        button {
+            padding: 20px 40px;
+            background: linear-gradient(45deg, #ff6600, #ffcc00);
+            border: none;
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background 0.4s ease, transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #ffcc00, #ff6600);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .footer-text {
             font-size: 14px;
-            color: gray;
+            color: #aaa;
+            margin-top: 20px;
+        }
+
+        .footer-text a {
+            color: #00ff99;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>NeuroBet Signals</h1>
+    <div class="login-container">
+        <h1>NeuroBet</h1>
+        <input type="text" class="input-field" id="bettingSite" placeholder="Enter Betting Site" required>
+        <input type="password" class="input-field" id="password" placeholder="Enter Password" required>
+        <button id="navigateButton">Proceed to Dashboard</button>
+        <p class="footer-text">By using NeuroBet, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.</p>
     </div>
 
-    <div class="signal-container" id="signalContainer">
-        <!-- Predictions will be added here -->
-    </div>
+    <script>
+        document.getElementById("navigateButton").addEventListener("click", function() {
+            const bettingSite = document.getElementById("bettingSite").value;
+            const password = document.getElementById("password").value;
 
-    <footer>
-        <p>Powered by NeuroBet | Best Betting Signals</p>
-    </footer>
-
-    <!-- Firebase Configuration -->
-    <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
-        // Your Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
-            authDomain: "aviator-nuerobet.firebaseapp.com",
-            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
-            projectId: "aviator-nuerobet",
-            storageBucket: "aviator-nuerobet.appspot.com",
-            messagingSenderId: "88811829830",
-            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
-            measurementId: "G-PNRB5LQTB6"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const predictionsRef = ref(database, "predictions");
-
-        // Function to generate random predictions based on specified odds and times
-        function generateRandomPrediction() {
-            const sites = ["Spin City", "MWOS Betting", "Zanzibet", "Bet247", "Africa Bet"];
-            const target = (Math.random() * (5 - 1.2) + 1.2).toFixed(2); // Random between 1.2x - 5x
-            const risk = (Math.random() * (6 - 3) + 3).toFixed(0); // Random between 3x - 6x
-            const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-            // Randomly assign a color category based on the target value
-            let colorClass = "blue";
-            if (parseFloat(target) >= 2.0 && parseFloat(target) < 10.0) {
-                colorClass = "purple";
-            } else if (parseFloat(target) >= 10.0) {
-                colorClass = "pink";
+            if (bettingSite && password) {
+                // Store the betting site in local storage
+                localStorage.setItem("bettingSite", bettingSite);
+                
+                // Redirect to the dashboard page
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Please enter both the betting site and password.");
             }
-
-            return {
-                site: sites[Math.floor(Math.random() * sites.length)],
-                target,
-                time,
-                risk,
-                colorClass
-            };
-        }
-
-        // Function to add prediction to Firebase
-        function addPredictionToFirebase() {
-            const prediction = generateRandomPrediction();
-            const newPredictionRef = push(predictionsRef);
-            set(newPredictionRef, prediction);
-        }
-
-        // Listen for new predictions and display them
-        onChildAdded(predictionsRef, (snapshot) => {
-            const prediction = snapshot.val();
-            displayPrediction(prediction);
         });
-
-        // Function to display a prediction
-        function displayPrediction(prediction) {
-            const container = document.getElementById("signalConta
+    </script>
+</body>
+</html>
