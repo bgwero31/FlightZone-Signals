@@ -14,30 +14,25 @@
             padding: 0;
             text-align: center;
         }
-
         .container {
             margin-top: 50px;
             padding: 20px;
         }
-
         h1 {
             font-size: 50px;
             color: #00ff99;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
         }
-
         .site-display {
             font-size: 30px;
             color: #ffcc00;
             margin-top: 20px;
         }
-
         .status {
             font-size: 24px;
             margin-top: 30px;
             color: #00ff99;
         }
-
         .signal-box {
             font-size: 40px;
             font-weight: bold;
@@ -55,9 +50,9 @@
     </div>
 
     <script type="module">
-        // **Firebase SDK Import**
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, query, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        // **Firebase SDK Import (Using Firebase 9 for Compatibility)**
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
         // **Firebase Configuration**
         const firebaseConfig = {
@@ -80,22 +75,21 @@
         const bettingSite = localStorage.getItem("bettingSite") || "Unknown";
         document.getElementById("bettingSiteDisplay").textContent = bettingSite;
 
-        // **Real-time Prediction Fetching**
-        const latestPredictionQuery = query(predictionsRef, limitToLast(1));
-
-        onValue(latestPredictionQuery, (snapshot) => {
-            snapshot.forEach((childSnapshot) => {
-                const prediction = childSnapshot.val();
-
-                if (prediction.site === bettingSite) {
-                    document.getElementById("statusMessage").textContent = "Signal Ready!";
-                    document.getElementById("signalOutput").textContent = `Next Odd: ${prediction.target}x`;
-
-                    // Play beep sound on update
-                    let beep = new Audio('beep.mp3');
-                    beep.play();
-                }
-            });
+        // **Real-time Prediction Fetching (Fix Applied)**
+        onValue(predictionsRef, (snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    const prediction = childSnapshot.val();
+                    if (prediction.site === bettingSite) {
+                        document.getElementById("statusMessage").textContent = "Signal Ready!";
+                        document.getElementById("signalOutput").textContent = `Next Odd: ${prediction.target}x`;
+                        
+                        // Play beep sound on update
+                        let beep = new Audio('beep.mp3');
+                        beep.play();
+                    }
+                });
+            }
         });
 
         // **Simulate Loading Process Before Fetching**
