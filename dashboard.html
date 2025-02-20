@@ -3,123 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Signals</title>
+    <title>Live Aviator Predictor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #111;
+            text-align: center;
+            background-color: #222;
             color: white;
             margin: 0;
-            padding: 0;
-        }
-
-        .header {
-            background-color: #333;
             padding: 20px;
-            text-align: center;
         }
-
-        .header h1 {
-            font-size: 40px;
-            text-transform: uppercase;
-            color: gold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        .signal-container {
-            margin-top: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .signal-card {
-            background-color: #222;
-            margin-bottom: 15px;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
-        }
-
-        .signal-card h2 {
+        h1 {
             font-size: 24px;
-            color: #ff5c33;
+            margin-bottom: 10px;
         }
-
-        .signal-card p {
+        #current-time {
             font-size: 20px;
-            margin: 10px 0;
+            margin-bottom: 20px;
         }
-
-        .signal-card .target {
-            color: #1a73e8;
-            font-weight: bold;
+        #past-odds {
+            margin-bottom: 10px;
         }
-
-        .signal-card .time {
-            color: #ffeb3b;
-        }
-
-        .signal-card .risk {
-            color: #f44336;
-            font-weight: bold;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
+        input {
+            padding: 5px;
+            margin: 5px;
+            width: 50px;
             text-align: center;
-            font-size: 14px;
-            color: gray;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #spinner {
+            width: 120px;
+            height: 120px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #ffcc00;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #odds-container {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid #fff;
+            padding-top: 10px;
+        }
+        .odd {
+            font-size: 18px;
+            margin: 5px 0;
+            padding: 5px;
+            background: #333;
+            border-radius: 5px;
+            width: 200px;
+            margin: auto;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>NeuroBet Signals</h1>
-    </div>
-
-    <div class="signal-container">
-        <div class="signal-card">
-            <h2>Signal #1: Spin City</h2>
-            <p><span class="target">Target: 2.50x</span></p>
-            <p><span class="time">Time: 10:15 AM</span></p>
-            <p><span class="risk">Risk: 4x</span></p>
-        </div>
-
-        <div class="signal-card">
-            <h2>Signal #2: MWOS Betting</h2>
-            <p><span class="target">Target: 1.85x</span></p>
-            <p><span class="time">Time: 10:20 AM</span></p>
-            <p><span class="risk">Risk: 3x</span></p>
-        </div>
-
-        <div class="signal-card">
-            <h2>Signal #3: Zanzibet</h2>
-            <p><span class="target">Target: 4.10x</span></p>
-            <p><span class="time">Time: 10:25 AM</span></p>
-            <p><span class="risk">Risk: 5x</span></p>
-        </div>
-    </div>
-
-    <footer>
-        <p>Powered by NeuroBet | Best Betting Signals</p>
-    </footer>
-
-    <!-- The Audio Element for Robotic Sound -->
-    <audio id="roboticSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    <h1>Aviator Predictor</h1>
+    <div id="current-time">Loading time...</div>
     
-    <!-- Script to play sound on page load -->
+    <div id="past-odds">
+        <input type="text" id="odd1" placeholder="1.00">
+        <input type="text" id="odd2" placeholder="3.00">
+        <input type="text" id="odd3" placeholder="2.00">
+        <input type="text" id="odd4" placeholder="4.00">
+        <input type="text" id="odd5" placeholder="5.00">
+        <button onclick="startPrediction()">Submit</button>
+    </div>
+
+    <div id="spinner"></div>
+    <div id="odds-container"></div>
+
+    <audio id="beep-sound">
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+    </audio>
+
     <script>
-        window.onload = function() {
-            // Play the sound
-            var sound = document.getElementById('roboticSound');
-            sound.play();
-        };
+        function updateTime() {
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("current-time").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+
+        let oddsList = [];
+
+        function startPrediction() {
+            let pastOdds = [
+                document.getElementById("odd1").value,
+                document.getElementById("odd2").value,
+                document.getElementById("odd3").value,
+                document.getElementById("odd4").value,
+                document.getElementById("odd5").value
+            ];
+            if (pastOdds.some(odd => odd === "")) {
+                alert("Please enter all past odds.");
+                return;
+            }
+            document.getElementById("past-odds").style.display = "none";
+            generateOdds();
+            setInterval(generateOdds, 15000);
+        }
+
+        function generateOdds() {
+            let minLow = 1.40, maxLow = 2.30;
+            let minHigh = 3.00, maxHigh = 10.00;
+            let newOdd = (Math.random() < 0.7)
+                ? (Math.random() * (maxLow - minLow) + minLow).toFixed(2)
+                : (Math.random() * (maxHigh - minHigh) + minHigh).toFixed(2);
+
+            let now = new Date();
+            now.setMinutes(now.getMinutes() + Math.floor(Math.random() * 3) + 1);
+            let futureTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+
+            let beep = document.getElementById("beep-sound");
+            beep.play();
+
+            let oddsContainer = document.getElementById("odds-container");
+            let newOddElement = document.createElement("div");
+            newOddElement.className = "odd";
+            newOddElement.innerText = `${futureTime} - ${newOdd}x`;
+            
+            oddsContainer.prepend(newOddElement);
+
+            if (oddsList.length >= 10) {
+                oddsContainer.removeChild(oddsContainer.lastChild);
+            }
+        }
     </script>
 </body>
 </html>
