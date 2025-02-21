@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviatot WagerBot 3000</title>
+    <title>Aviator WagerBot 3000</title>
     <style>
         body {
             background-color: #000;
@@ -11,6 +11,13 @@
             font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
+        }
+
+        .clock {
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffcc00;
+            margin-bottom: 10px;
         }
 
         .neon-container {
@@ -53,34 +60,61 @@
             box-shadow: 0 0 20px #ffcc00;
         }
 
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ffcc00;
+            text-shadow: 0 0 5px #ffcc00;
+        }
     </style>
 </head>
 <body>
 
     <h1>Aviator WagerBot 3000</h1>
 
+    <div class="clock" id="liveClock">Loading...</div>
+
     <div class="neon-container">
         <div id="signals"></div>
+        <button class="neon-btn" onclick="generateSignals()">🔄 Get Signals</button>
         <button class="neon-btn" onclick="logout()">Logout</button>
     </div>
 
+    <div class="footer">
+        <p>🌐 AI Model: WagerBot AI v3.0 | Next Prediction in <span id="countdown">60</span> sec</p>
+    </div>
+
     <script>
-        // Check if user is logged in, else redirect to login page
+        // Check login status
         if (!localStorage.getItem('isLoggedIn')) {
             window.location.href = "wagerbot_login.html";
         }
 
-        // Simulate futuristic signals
+        // Live Clock Function
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("liveClock").textContent = `🕒 ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000); // Update clock every second
+
+        // Simulate AI-generated signals with timestamps
         function generateSignals() {
             const signalsDiv = document.getElementById("signals");
             signalsDiv.innerHTML = "";
 
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+
             const futuristicSignals = [
-                "📡 AI Analysis: Next Peak at 4.8x 🚀",
-                "⚡ Quantum Prediction: Safe Play at 2.1x 🔮",
-                "🛸 WagerBot Alert: High Risk Detected at 9.3x ⚠️",
-                "🤖 AI Adaptive Mode: Recommended Exit at 6.5x",
-                "💡 Neural Network Suggests: Play Small at 1.7x"
+                `📡 AI Analysis (${hours}:${minutes}): Next Peak at 4.8x 🚀`,
+                `⚡ Quantum Prediction (${hours}:${minutes}): Safe Play at 2.1x 🔮`,
+                `🛸 WagerBot Alert (${hours}:${minutes}): High Risk Detected at 9.3x ⚠️`,
+                `🤖 AI Adaptive Mode (${hours}:${minutes}): Recommended Exit at 6.5x`,
+                `💡 Neural Network Suggests (${hours}:${minutes}): Play Small at 1.7x`
             ];
 
             futuristicSignals.forEach(signal => {
@@ -89,16 +123,37 @@
                 signalDiv.textContent = signal;
                 signalsDiv.appendChild(signalDiv);
             });
+
+            resetCountdown();
         }
 
-        // Run function on page load
-        generateSignals();
+        // Auto-refresh every 60 seconds
+        function autoUpdateSignals() {
+            generateSignals();
+            setTimeout(autoUpdateSignals, 60000);
+        }
+        setTimeout(autoUpdateSignals, 60000);
+
+        // Countdown timer
+        function resetCountdown() {
+            let countdown = 60;
+            const countdownElement = document.getElementById("countdown");
+            const interval = setInterval(() => {
+                countdown -= 1;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) clearInterval(interval);
+            }, 1000);
+        }
+        resetCountdown();
 
         // Logout function
         function logout() {
             localStorage.removeItem("isLoggedIn");
             window.location.href = "wagerbot_login.html";
         }
+
+        // Generate initial signals on page load
+        generateSignals();
     </script>
 
 </body>
