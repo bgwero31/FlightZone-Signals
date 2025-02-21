@@ -1,118 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlightZone Signals by B JAY</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');
-
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background-color: #0f0c29;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        .wave-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-
-        .waves {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            bottom: 0;
-            left: 0;
-        }
-
-        h1 {
-            font-family: 'Russo One', sans-serif;
-            font-size: 2em;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            display: inline-block;
-            border-radius: 10px;
-            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
-            letter-spacing: 2px;
-        }
-
-        .section {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: left;
-        }
-
-        .section h2 {
-            border-bottom: 2px solid #ff6600;
-            padding-bottom: 5px;
-            color: #ff6600;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8em;
-        }
-
-        button {
-            padding: 10px 20px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin: 10px;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        button:hover {
-            background: #ff8533;
-        }
-
-        .contact-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .contact-buttons a {
-            text-decoration: none;
-        }
-
-        .telegram-button, .whatsapp-button {
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            font-weight: bold;
-        }
-
-        .telegram-button:hover, .whatsapp-button:hover {
-            background-color: #ff8533;
-        }
-
-        #price {
-            color: #ff6600;
-            font-weight: bold;
-            font-size: 22px;
-        }
-    </style>
-</head>
 <body>
 
     <div class="wave-container">
@@ -124,6 +9,10 @@
     </div>
 
     <h1>FlightZone Signals by B JAY </h1>
+    
+    <!-- Login Button -->
+    <button class="login-button" onclick="openLoginPage()">🔐 Login to WagerBot 3000</button>
+
     <br><br>
     <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
 
@@ -136,39 +25,15 @@
         <button onclick="openBotPage('aviator_predictor_pro.html')">AVIATOR PREDICTOR PRO</button>
         <button onclick="openBotPage('aviator_master_predictor_pro.html')">AVIATOR MASTER PREDICTOR PRO</button>
         <button onclick="openBotPage('aviator_pink_bot.html')">AVIATOR PINK BOT</button>
-        <!-- Added AVIATOR MASTER X Button -->
         <button onclick="openBotPage('aviator_master_x_login.html')">AVIATOR MASTER X</button>
-        <!-- Added AVIATOR NUEROBET Button -->
         <button onclick="openBotPage('aviator_nuerobet_bot.html')">AVIATOR NUEROBET BOT</button>
     </div>
 
-    <div class="section">
-        <h2>🔥 Why Choose FlightZone Signals?</h2>
-        <p>🚀 **FlightZone Signals** by B.JAY uses advanced algorithms and cutting-edge technology to provide you with highly accurate betting predictions. Powered by intelligent systems, our platform analyzes real-time data to give you an edge in every game. With years of expertise and a commitment to excellence, we ensure that you receive the most reliable and effective signals for your betting success. Join us and experience the future of betting predictions.</p>
-        <p>🎯 **99% Accuracy** – Our bots analyze game patterns to provide the most accurate predictions.</p>
-        <p>💰 **Guaranteed Profits** – Join our community of winners making consistent money.</p>
-        <p>📊 **Real-Time Updates** – Instant signals to keep you ahead of the game.</p>
-        <p>🔥 **Trusted by thousands of players!**</p>
-    </div>
-
-    <div class="section">
-        <h2>💰 Special Offer – Only <span id="price">$30</span> Per App!</h2>
-        <p>🔥 Get any bot for just <span id="price">$30</span> 🚀</p>
-        <p>⚡ Limited offer: First 5 users get FREE access to the Aviator Purple Bot!</p>
-    </div>
-
-    <!-- Contact Buttons (Telegram + WhatsApp) -->
-    <div class="contact-buttons">
-        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">
-            <button class="telegram-button">Join Our Telegram 🚀</button>
-        </a>
-
-        <a href="https://wa.me/263774309795" target="_blank">
-            <button class="whatsapp-button">Chat on WhatsApp 📲</button>
-        </a>
-    </div>
-
     <script>
+        function openLoginPage() {
+            window.location.href = "wagerbot_login.html"; // Update this with the actual login page filename
+        }
+
         function openSignalsPage() {
             window.location.href = "signals.html";
         }
@@ -176,13 +41,28 @@
         function openBotPage(page) {
             window.location.href = page;
         }
-
-        function flickerPrice() {
-            var price = document.getElementById("price");
-            price.style.color = (price.style.color === "#ff6600") ? "#ff8533" : "#ff6600";
-        }
-        setInterval(flickerPrice, 1000);
     </script>
 
+    <style>
+        .login-button {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 15px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .login-button:hover {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            box-shadow: 0px 0px 10px rgba(255, 0, 255, 0.5);
+        }
+    </style>
+
 </body>
-</html>
