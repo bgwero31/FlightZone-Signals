@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviatot WagerBot 3000</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #00ffea;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .neon-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 234, 0.7);
+        }
+
+        h1 {
+            font-size: 30px;
+            text-shadow: 0 0 10px #00ffea;
+        }
+
+        .signal {
+            background: rgba(0, 255, 234, 0.2);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-size: 22px;
+            box-shadow: 0 0 10px #00ffea;
+        }
+
+        .neon-btn {
+            background: #ff003c;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px #ff003c;
+        }
+
+        .neon-btn:hover {
+            background: #ffcc00;
+            box-shadow: 0 0 20px #ffcc00;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Aviator WagerBot 3000</h1>
+
+    <div class="neon-container">
+        <div id="signals"></div>
+        <button class="neon-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        // Check if user is logged in, else redirect to login page
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = "wagerbot_login.html";
+        }
+
+        // Simulate futuristic signals
+        function generateSignals() {
+            const signalsDiv = document.getElementById("signals");
+            signalsDiv.innerHTML = "";
+
+            const futuristicSignals = [
+                "📡 AI Analysis: Next Peak at 4.8x 🚀",
+                "⚡ Quantum Prediction: Safe Play at 2.1x 🔮",
+                "🛸 WagerBot Alert: High Risk Detected at 9.3x ⚠️",
+                "🤖 AI Adaptive Mode: Recommended Exit at 6.5x",
+                "💡 Neural Network Suggests: Play Small at 1.7x"
+            ];
+
+            futuristicSignals.forEach(signal => {
+                let signalDiv = document.createElement("div");
+                signalDiv.className = "signal";
+                signalDiv.textContent = signal;
+                signalsDiv.appendChild(signalDiv);
+            });
+        }
+
+        // Run function on page load
+        generateSignals();
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "wagerbot_login.html";
+        }
+    </script>
+
+</body>
+</html>
