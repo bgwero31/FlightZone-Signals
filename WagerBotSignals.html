@@ -67,6 +67,61 @@
             text-shadow: 0 0 5px #ffcc00;
         }
     </style>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCa_evUJ_wEHEVfkmjWgv5o_yKjMfwi4as",
+            authDomain: "jetxbjay.firebaseapp.com",
+            projectId: "jetxbjay",
+            storageBucket: "jetxbjay.appspot.com",
+            messagingSenderId: "913549013656",
+            appId: "1:913549013656:web:ca30589cf273479ce856ed",
+            measurementId: "G-6WLJ1M7ZC7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Function to Fetch Live Signals
+        function fetchSignals() {
+            const signalsRef = ref(db, "aviator_signals");
+
+            onValue(signalsRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const signalsDiv = document.getElementById("signals");
+                    signalsDiv.innerHTML = `
+                        <div class="signal">📡 Next Round: ${data.next_round} 🕒</div>
+                        <div class="signal">⚡ Target: ${data.target}x 🚀</div>
+                        <div class="signal">⚠️ Risk Level: ${data.risk} 🔥</div>
+                    `;
+                    checkSignalTime(data.next_round);
+                }
+            });
+        }
+
+        // Function to Check Signal Time and Alert
+        function checkSignalTime(signalTime) {
+            setInterval(() => {
+                const now = new Date();
+                const currentTime = now.toLocaleTimeString("en-GB", { hour12: false });
+
+                if (currentTime === signalTime) {
+                    alert("🚀 Play Now! The signal is active!");
+                }
+            }, 1000);
+        }
+
+        // Auto-fetch signals on page load
+        fetchSignals();
+
+    </script>
 </head>
 <body>
 
@@ -75,8 +130,8 @@
     <div class="clock" id="liveClock">Loading...</div>
 
     <div class="neon-container">
-        <div id="signals"></div>
-        <button class="neon-btn" onclick="generateSignals()">🔄 Get Signals</button>
+        <div id="signals">Loading Signals...</div>
+        <button class="neon-btn" onclick="fetchSignals()">🔄 Refresh Signals</button>
         <button class="neon-btn" onclick="logout()">Logout</button>
     </div>
 
@@ -100,40 +155,6 @@
         }
         setInterval(updateClock, 1000); // Update clock every second
 
-        // Simulate AI-generated signals with timestamps
-        function generateSignals() {
-            const signalsDiv = document.getElementById("signals");
-            signalsDiv.innerHTML = "";
-
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-
-            const futuristicSignals = [
-                `📡 AI Analysis (${hours}:${minutes}): Next Peak at 4.8x 🚀`,
-                `⚡ Quantum Prediction (${hours}:${minutes}): Safe Play at 2.1x 🔮`,
-                `🛸 WagerBot Alert (${hours}:${minutes}): High Risk Detected at 9.3x ⚠️`,
-                `🤖 AI Adaptive Mode (${hours}:${minutes}): Recommended Exit at 6.5x`,
-                `💡 Neural Network Suggests (${hours}:${minutes}): Play Small at 1.7x`
-            ];
-
-            futuristicSignals.forEach(signal => {
-                let signalDiv = document.createElement("div");
-                signalDiv.className = "signal";
-                signalDiv.textContent = signal;
-                signalsDiv.appendChild(signalDiv);
-            });
-
-            resetCountdown();
-        }
-
-        // Auto-refresh every 60 seconds
-        function autoUpdateSignals() {
-            generateSignals();
-            setTimeout(autoUpdateSignals, 60000);
-        }
-        setTimeout(autoUpdateSignals, 60000);
-
         // Countdown timer
         function resetCountdown() {
             let countdown = 60;
@@ -151,9 +172,6 @@
             localStorage.removeItem("isLoggedIn");
             window.location.href = "wagerbot_login.html";
         }
-
-        // Generate initial signals on page load
-        generateSignals();
     </script>
 
 </body>
