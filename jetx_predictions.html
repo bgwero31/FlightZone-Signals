@@ -3,161 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Purple Bot</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Anton&display=swap" rel="stylesheet">
+    <title>JetX Master Predictor - Signals</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #120136, #4a0072, #ff0077, #ff00ff);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            font-family: Arial, sans-serif;
+            text-align: center;
             color: white;
-            font-family: 'Orbitron', sans-serif;
-            position: relative;
+            animation: backgroundAnimation 10s infinite alternate;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(45deg, #000428, #004e92); }
+            50% { background: linear-gradient(45deg, #360033, #0b8793); }
+            100% { background: linear-gradient(45deg, #1a2a6c, #b21f1f); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: #ffcc00;
+            transition: color 3s ease-in-out;
+            animation: textGlow 3s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px #ffcc00; }
+            50% { text-shadow: 0 0 20px #ff9900; }
+            100% { text-shadow: 0 0 30px #ff6600; }
         }
 
         .container {
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(255, 0, 255, 0.5);
+            background: linear-gradient(45deg, #004d99, #9900cc);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 50px auto;
+            transition: all 1s ease-in-out;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
-        .title {
-            font-size: 2.2em;
-            font-family: 'Anton', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ff00ff, #ff0077);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .predictions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-align: center;
-        }
-
-        .input-field::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 15px;
-            background: #ff0077;
-            color: white;
-            text-transform: uppercase;
-            font-weight: bold;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .button:hover {
-            background: #ff00ff;
-        }
-
-        .error {
-            color: #ff4d4d;
-            font-size: 0.9em;
-            display: none;
-        }
-
-        .info-section {
-            text-align: center;
-            max-width: 400px;
-            margin-top: 15px;
+        .prediction-button {
+            background-color: #333;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .prediction-button:hover {
+            background-color: #ff3366;
+            transform: scale(1.1);
+        }
+
+        .prediction-button.active {
+            background-color: #ff3366;
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        .info {
+            margin-top: 40px;
+            color: white;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
             border-radius: 10px;
         }
 
-        .links {
-            margin-top: 10px;
-        }
-
-        .links a {
-            display: inline-block;
-            margin: 5px;
-            padding: 10px;
-            background: #ff0077;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .usa-flag {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: 40px;
+        .contact {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ff3366;
         }
     </style>
 </head>
 <body>
 
-    <div class="info-section">
-        <h3>🔥 JetX Purple Bot 🔥</h3>
-        <p>The most advanced AI-powered JetX predictor. Get the best signals and maximize your winnings!</p>
-    </div>
+    <h1>JetX Master Predictor - Signals</h1>
+    <div id="clock"></div>
 
     <div class="container">
-        <div class="title">Login</div>
-        <input type="text" id="bettingSite" class="input-field" placeholder="Enter Betting Site">
-        <input type="password" id="password" class="input-field" placeholder="Enter Password">
-        <p id="errorMessage" class="error">Incorrect Password!</p>
-        <button class="button" onclick="checkLogin()">Access Signals</button>
-    </div>
+        <button onclick="getSignals()">Get Signals</button>
+        <div id="predictions" class="predictions"></div>
 
-    <div class="links">
-        <a href="https://t.me/yourtelegramlink" target="_blank">Telegram</a>
-        <a href="https://wa.me/yourwhatsapplink" target="_blank">WhatsApp</a>
+        <div class="info">
+            <p><strong>About the JetX Master Predictor:</strong><br>
+            The JetX Master Predictor provides live betting signals for various sites. We utilize advanced algorithms to provide the best predictions.</p>
+            <p class="contact">For more information or to get in touch, contact B.Jay.</p>
+        </div>
     </div>
-
-    <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" class="usa-flag">
 
     <script>
-        function checkLogin() {
-            var bettingSite = document.getElementById("bettingSite").value;
-            var password = document.getElementById("password").value;
-            var errorMessage = document.getElementById("errorMessage");
+        var predictionTimes = [];
+        var currentPrediction = null;
 
-            if (password === "jetxpurple") {
-                localStorage.setItem("bettingSite", bettingSite);
-                window.location.href = "jetx_signals.html";
-            } else {
-                errorMessage.style.display = "block";
+        function formatTimeWithoutSeconds(date) {
+            let minutes = date.getMinutes();
+            return `${date.getHours()}:${minutes < 10 ? "0" + minutes : minutes}`;
+        }
+
+        function generatePredictionTimes() {
+            let now = new Date();
+            let baseMinute = now.getMinutes() + 1; 
+            if (baseMinute >= 60) baseMinute = 0; 
+
+            predictionTimes = [];
+            for (let i = 0; i < 6; i++) {
+                let time = new Date();
+                time.setMinutes(baseMinute + i * 2);
+                if (time.getMinutes() >= 60) time.setMinutes(time.getMinutes() - 60);
+                predictionTimes.push(formatTimeWithoutSeconds(time));
             }
         }
-    </script>
 
+        function startClock() {
+            setInterval(function() {
+                let now = new Date();
+                document.getElementById('clock').innerHTML = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            }, 1000);
+        }
+
+        function getSignals() {
+            generatePredictionTimes();
+            let predictionsDiv = document.getElementById('predictions');
+            predictionsDiv.innerHTML = ''; 
+
+            predictionTimes.forEach(function(time) {
+                let button = document.createElement('button');
+                button.classList.add('prediction-button');
+                button.textContent = time;
+                button.setAttribute('data-time', time);
+                predictionsDiv.appendChild(button);
+            });
+
+            startSignalCycle();
+        }
+
+        function startSignalCycle() {
+            let interval = setInterval(function() {
+                let now = new Date();
+                let formattedTime = formatTimeWithoutSeconds(now);
+
+                if (predictionTimes.includes(formattedTime)) {
+                    let button = document.querySelector(`button[data-time='${formattedTime}']`);
+                    if (button && formattedTime !== currentPrediction) {
+                        currentPrediction = formattedTime;
+                        let randomOdd = (Math.random() * 1 + 2).toFixed(2); 
+
+                        button.classList.add('active');
+                        button.textContent = `${formattedTime} - ${randomOdd}x`;
+
+                        setTimeout(() => {
+                            button.classList.remove('active');
+                            button.textContent = formattedTime;
+                        }, 60000);
+                    }
+                }
+            }, 1000);
+        }
+
+        startClock();
+    </script>
 </body>
 </html>
