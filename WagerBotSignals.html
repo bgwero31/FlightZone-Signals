@@ -4,6 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviator WagerBot 3000</title>
+    <script type="module">
+        // Firebase Configuration
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCa_evUJ_wEHEVfkmjWgv5o_yKjMfwi4as",
+            authDomain: "jetxbjay.firebaseapp.com",
+            projectId: "jetxbjay",
+            storageBucket: "jetxbjay.firebasestorage.app",
+            messagingSenderId: "913549013656",
+            appId: "1:913549013656:web:ca30589cf273479ce856ed",
+            measurementId: "G-6WLJ1M7ZC7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Function to Fetch and Display Live Predictions
+        function fetchPredictions() {
+            const signalsDiv = document.getElementById("signals");
+            signalsDiv.innerHTML = "Fetching predictions...";
+
+            const predictionsRef = ref(db, "predictions");
+
+            // Listen for live updates from Firebase
+            onValue(predictionsRef, (snapshot) => {
+                signalsDiv.innerHTML = "";
+                if (snapshot.exists()) {
+                    const predictions = snapshot.val();
+                    Object.keys(predictions).forEach(key => {
+                        let signalDiv = document.createElement("div");
+                        signalDiv.className = "signal";
+                        signalDiv.textContent = `📡 Prediction: ${predictions[key].target}x at ${predictions[key].time}`;
+                        signalsDiv.appendChild(signalDiv);
+                    });
+                } else {
+                    signalsDiv.innerHTML = "⚠️ No predictions available!";
+                }
+            }, error => {
+                console.error("Error fetching predictions:", error);
+                signalsDiv.innerHTML = "❌ Error loading predictions.";
+            });
+        }
+
+        // Function to Update Live Clock and Countdown Timer
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("liveClock").textContent = `🕒 ${hours}:${minutes}:${seconds}`;
+
+            // Fetch next prediction time
+            const predictionsRef = ref(db, "predictions");
+            onValue(predictionsRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const predictions = Object.values(snapshot.val());
+                    if (predictions.length > 0) {
+                        document.getElementById("countdown").textContent = `Next Play at ${predictions[0].time}`;
+                    }
+                }
+            });
+        }
+
+        // Auto-refresh every second
+        setInterval(updateClock, 1000);
+
+        // Run prediction fetching when page loads
+        document.addEventListener("DOMContentLoaded", fetchPredictions);
+    </script>
+
     <style>
         body {
             background-color: #000;
@@ -67,61 +140,6 @@
             text-shadow: 0 0 5px #ffcc00;
         }
     </style>
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
-
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCa_evUJ_wEHEVfkmjWgv5o_yKjMfwi4as",
-            authDomain: "jetxbjay.firebaseapp.com",
-            projectId: "jetxbjay",
-            storageBucket: "jetxbjay.appspot.com",
-            messagingSenderId: "913549013656",
-            appId: "1:913549013656:web:ca30589cf273479ce856ed",
-            measurementId: "G-6WLJ1M7ZC7"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // Function to Fetch Live Signals
-        function fetchSignals() {
-            const signalsRef = ref(db, "aviator_signals");
-
-            onValue(signalsRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    const signalsDiv = document.getElementById("signals");
-                    signalsDiv.innerHTML = `
-                        <div class="signal">📡 Next Round: ${data.next_round} 🕒</div>
-                        <div class="signal">⚡ Target: ${data.target}x 🚀</div>
-                        <div class="signal">⚠️ Risk Level: ${data.risk} 🔥</div>
-                    `;
-                    checkSignalTime(data.next_round);
-                }
-            });
-        }
-
-        // Function to Check Signal Time and Alert
-        function checkSignalTime(signalTime) {
-            setInterval(() => {
-                const now = new Date();
-                const currentTime = now.toLocaleTimeString("en-GB", { hour12: false });
-
-                if (currentTime === signalTime) {
-                    alert("🚀 Play Now! The signal is active!");
-                }
-            }, 1000);
-        }
-
-        // Auto-fetch signals on page load
-        fetchSignals();
-
-    </script>
 </head>
 <body>
 
@@ -130,13 +148,13 @@
     <div class="clock" id="liveClock">Loading...</div>
 
     <div class="neon-container">
-        <div id="signals">Loading Signals...</div>
-        <button class="neon-btn" onclick="fetchSignals()">🔄 Refresh Signals</button>
+        <div id="signals">Loading predictions...</div>
+        <button class="neon-btn" onclick="fetchPredictions()">🔄 Refresh Signals</button>
         <button class="neon-btn" onclick="logout()">Logout</button>
     </div>
 
     <div class="footer">
-        <p>🌐 AI Model: WagerBot AI v3.0 | Next Prediction in <span id="countdown">60</span> sec</p>
+        <p>🌐 AI Model: WagerBot AI v3.0 | <span id="countdown">Loading...</span></p>
     </div>
 
     <script>
@@ -144,28 +162,6 @@
         if (!localStorage.getItem('isLoggedIn')) {
             window.location.href = "wagerbot_login.html";
         }
-
-        // Live Clock Function
-        function updateClock() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById("liveClock").textContent = `🕒 ${hours}:${minutes}:${seconds}`;
-        }
-        setInterval(updateClock, 1000); // Update clock every second
-
-        // Countdown timer
-        function resetCountdown() {
-            let countdown = 60;
-            const countdownElement = document.getElementById("countdown");
-            const interval = setInterval(() => {
-                countdown -= 1;
-                countdownElement.textContent = countdown;
-                if (countdown <= 0) clearInterval(interval);
-            }, 1000);
-        }
-        resetCountdown();
 
         // Logout function
         function logout() {
