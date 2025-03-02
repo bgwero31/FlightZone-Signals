@@ -170,17 +170,14 @@
 
         function generateOdds() {
             currentOdds = [];
-            // 70% odds between 1.40x - 2.40x
+            // 60% odds between 1.40x - 2.00x
             for (let i = 0; i < 2; i++) {
                 let randomOdd = (Math.random() * (2.40 - 1.40) + 1.40).toFixed(2);
                 currentOdds.push(randomOdd);
             }
-            // 20% odds between 2.41x - 4.00x
-            let randomOdd2 = (Math.random() * (4.00 - 2.41) + 2.41).toFixed(2);
+            // 30% odds between 2.01x - 3.00x
+            let randomOdd2 = (Math.random() * (3.00 - 2.41) + 2.41).toFixed(2);
             currentOdds.push(randomOdd2);
-            // 10% odds between 4.91x - 15.00x
-            let randomOdd3 = (Math.random() * (15.00 - 4.91) + 4.91).toFixed(2);
-            currentOdds.push(randomOdd3);
 
             displayOdds(currentOdds);
         }
@@ -196,11 +193,15 @@
                 oddsDisplay.appendChild(card);
             });
 
+            setTimeout(() => {
+                oddsDisplay.innerHTML = ""; // Clear odds after 60 seconds
+            }, 60000);
+
             speakOdds(odds);
         }
 
         function speakOdds(odds) {
-            let msg = `Your odds are ${odds[0]} times, ${odds[1]} times, ${odds[2]} times, and ${odds[3]} times.`;
+            let msg = `Your odds are ${odds[0]} times, ${odds[1]} times, and ${odds[2]} times.`;
             speak(msg);
         }
 
@@ -219,6 +220,13 @@
             speak("No odd came. I will generate a new prediction.");
             startBetting();
         }
+
+        // Announce "Play 2.00x or 3.00x" with a random risk multiplier every 3-4 minutes
+        setInterval(() => {
+            const randomRisk = (Math.random() * (12.00 - 7.00) + 7.00).toFixed(2);
+            const randomPlay = Math.random() > 0.5 ? "2.00x" : "3.00x";
+            speak(`Play ${randomPlay}. Risk multiplier from ${randomRisk}x.`);
+        }, Math.floor(Math.random() * (240000 - 180000) + 180000)); // Random interval between 3-4 minutes
     </script>
 
 </body>
