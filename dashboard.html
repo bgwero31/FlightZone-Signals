@@ -75,8 +75,6 @@
             font-size: 24px;
             font-weight: bold;
             color: #ffcc00;
-            position: relative;
-            overflow: hidden;
         }
 
         .countdown {
@@ -84,29 +82,6 @@
             color: #ffcc00;
             font-weight: bold;
             margin-top: 20px;
-        }
-
-        .feedback-buttons {
-            margin-top: 20px;
-        }
-
-        .feedback-buttons button {
-            font-size: 16px;
-            padding: 10px;
-            margin: 5px;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-        }
-
-        .correct {
-            background-color: #00ff00;
-            color: #000;
-        }
-
-        .wrong {
-            background-color: #ff0000;
-            color: #fff;
         }
     </style>
 </head>
@@ -119,19 +94,15 @@
     <div class="container">
         <p>Enter your wager amount and let WagerBot 3000 guide you.</p>
         <input type="number" id="wagerAmount" placeholder="Enter your wager">
-        <button class="neon-btn" onclick="startCountdown()">Start Betting</button>
+        <button class="neon-btn" onclick="startBetting()">Start Betting</button>
 
-        <div class="countdown" id="countdown">Next odds in: 30s</div>
+        <div class="countdown" id="countdown">Waiting for AI prediction...</div>
         <div id="oddsDisplay" class="odds-container"></div>
-        
-        <div class="feedback-buttons">
-            <button class="correct" onclick="oddsCorrect()">✅ Odd Came</button>
-            <button class="wrong" onclick="oddsWrong()">❌ No Odd</button>
-        </div>
     </div>
 
     <script>
         let countdownTimer;
+        let playMinute;
         let currentOdds = [];
 
         function updateClock() {
@@ -143,20 +114,45 @@
         }
         setInterval(updateClock, 1000);
 
-        function startCountdown() {
-            let timeLeft = 30;
+        function startBetting() {
             clearInterval(countdownTimer);
-            document.getElementById("countdown").textContent = `Next odds in: ${timeLeft}s`;
 
+            let now = new Date();
+            let currentMinute = now.getMinutes();
+            let nextPlayTime = Math.random() > 0.5 ? currentMinute + 1 : currentMinute + 2;
+
+            if (nextPlayTime >= 60) {
+                nextPlayTime = 0;
+            }
+
+            playMinute = nextPlayTime;
+            let playTime = `${now.getHours().toString().padStart(2, '0')}:${playMinute.toString().padStart(2, '0')}`;
+
+            speak(`Play on ${playTime}. I will tell you exactly when to catch the odds.`);
+            document.getElementById("countdown").textContent = `Next play time: ${playTime}`;
+
+            let remainingSeconds = ((playMinute - currentMinute) * 60) - now.getSeconds();
+            if (remainingSeconds <= 0) remainingSeconds = 60; 
+            startCountdown(remainingSeconds);
+        }
+
+        function startCountdown(seconds) {
+            document.getElementById("countdown").textContent = `Countdown: ${seconds}s`;
+            
             countdownTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById("countdown").textContent = `Next odds in: ${timeLeft}s`;
+                seconds--;
+                document.getElementById("countdown").textContent = `Countdown: ${seconds}s`;
 
-                if (timeLeft <= 0) {
+                if (seconds <= 0) {
                     clearInterval(countdownTimer);
-                    generateOdds();
+                    announcePlay();
                 }
             }, 1000);
+        }
+
+        function announcePlay() {
+            speak("Now! Play on this minute! Catch the odds!");
+            generateOdds();
         }
 
         function generateOdds() {
@@ -183,22 +179,17 @@
         }
 
         function speakOdds(odds) {
-            let msg = new SpeechSynthesisUtterance();
-            msg.text = `Your odds are ${odds[0]} times, ${odds[1]} times, and ${odds[2]} times.`;
+            let msg = `Your odds are ${odds[0]} times, ${odds[1]} times, and ${odds[2]} times.`;
+            speak(msg);
+        }
+
+        function speak(text) {
+            let msg = new SpeechSynthesisUtterance(text);
             msg.rate = 1;
             msg.pitch = 1.2;
             speechSynthesis.speak(msg);
         }
 
-        function oddsCorrect() {
-            alert("✅ AI is accurate! Betting system confirmed.");
-            startCountdown();
-        }
-
-        function oddsWrong() {
-            alert("❌ Adjusting AI predictions... New odds coming.");
-            generateOdds();
-        }
     </script>
 
 </body>
