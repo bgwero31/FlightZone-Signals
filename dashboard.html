@@ -117,7 +117,6 @@
         let countdownTimer;
         let playMinute;
         let currentOdds = [];
-        let predictedTime;
 
         function updateClock() {
             const now = new Date();
@@ -146,7 +145,7 @@
             document.getElementById("countdown").textContent = `Next play time: ${playTime}`;
 
             let remainingSeconds = ((playMinute - currentMinute) * 60) - now.getSeconds();
-            if (remainingSeconds <= 0) remainingSeconds = 60;
+            if (remainingSeconds <= 0) remainingSeconds = 60; 
             startCountdown(remainingSeconds);
         }
 
@@ -167,31 +166,22 @@
         function announcePlay() {
             speak("Now! Play on this minute! Catch the odds!");
             generateOdds();
-            setTimeout(playAgain, 240000); // after 4 minutes, suggest playing again
-            setTimeout(playAgain, 180000); // after 3 minutes, suggest playing again
         }
 
         function generateOdds() {
             currentOdds = [];
-            // Random choice between 2.00x or 3.00x for target odds
-            let randomTargetOdd = Math.random() > 0.5 ? 2.00 : 3.00;
-            // Random risk multiplier between 6.00x - 12.00x
-            let randomRiskOdd = (Math.random() * (12.00 - 6.00) + 6.00).toFixed(2);
+            // 70% odds between 1.40x - 2.40x
+            for (let i = 0; i < 2; i++) {
+                let randomOdd = (Math.random() * (2.40 - 1.40) + 1.40).toFixed(2);
+                currentOdds.push(randomOdd);
+            }
+            // 20% odds between 2.41x - 4.00x
+            let randomOdd2 = (Math.random() * (4.00 - 2.41) + 2.41).toFixed(2);
+            currentOdds.push(randomOdd2);
+            // 10% odds between 4.91x - 15.00x
+            let randomOdd3 = (Math.random() * (15.00 - 4.91) + 4.91).toFixed(2);
+            currentOdds.push(randomOdd3);
 
-            currentOdds.push({target: randomTargetOdd, risk: randomRiskOdd});
-            displayOdds(currentOdds);
-        }
-
-        function playAgain() {
-            speak("Play again on this minute! Target odds: 2.00x, Risk: 10.00x");
-            generateOddsForPlayAgain();
-        }
-
-        function generateOddsForPlayAgain() {
-            currentOdds = [];
-            let randomTargetOdd = 2.00; // Target always 2.00x
-            let randomRiskOdd = (Math.random() * (12.00 - 6.00) + 6.00).toFixed(2); // Random risk between 6x to 12x
-            currentOdds.push({target: randomTargetOdd, risk: randomRiskOdd});
             displayOdds(currentOdds);
         }
 
@@ -202,7 +192,7 @@
             odds.forEach(odd => {
                 let card = document.createElement("div");
                 card.className = "odds-card";
-                card.innerHTML = `🚀 <br> Multiplier: <br> <span class="glow">${odd.target}x</span> <br> Risk: <br> <span class="glow">${odd.risk}x</span>`;
+                card.innerHTML = `🚀 <br> Multiplier: <br> <span class="glow">${odd}x</span>`;
                 oddsDisplay.appendChild(card);
             });
 
@@ -210,7 +200,7 @@
         }
 
         function speakOdds(odds) {
-            let msg = `Your odds are ${odds[0].target} times with a risk of ${odds[0].risk} times.`;
+            let msg = `Your odds are ${odds[0]} times, ${odds[1]} times, ${odds[2]} times, and ${odds[3]} times.`;
             speak(msg);
         }
 
