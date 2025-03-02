@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WagerBot 3000 - Futuristic AI</title>
+    <title>WagerBot 3000 - AI Betting Guide</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
@@ -77,34 +77,36 @@
             color: #ffcc00;
             position: relative;
             overflow: hidden;
-            transform: perspective(1000px) rotateY(0deg);
-            animation: rotate3D 3s infinite alternate;
         }
 
-        @keyframes rotate3D {
-            0% { transform: perspective(1000px) rotateY(0deg); }
-            100% { transform: perspective(1000px) rotateY(20deg); }
-        }
-
-        .stop-message {
-            font-size: 22px;
+        .countdown {
+            font-size: 24px;
+            color: #ffcc00;
             font-weight: bold;
-            margin-top: 15px;
+            margin-top: 20px;
+        }
+
+        .feedback-buttons {
+            margin-top: 20px;
+        }
+
+        .feedback-buttons button {
+            font-size: 16px;
             padding: 10px;
-            border-radius: 10px;
-            background: rgba(255, 0, 60, 0.2);
-            box-shadow: 0 0 10px #ff003c;
-            display: none;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
         }
 
-        .glow {
-            text-shadow: 0 0 10px #00ffea;
-            animation: glow 2s infinite alternate;
+        .correct {
+            background-color: #00ff00;
+            color: #000;
         }
 
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #ffcc00; }
-            100% { text-shadow: 0 0 15px #ff003c; }
+        .wrong {
+            background-color: #ff0000;
+            color: #fff;
         }
     </style>
 </head>
@@ -117,13 +119,21 @@
     <div class="container">
         <p>Enter your wager amount and let WagerBot 3000 guide you.</p>
         <input type="number" id="wagerAmount" placeholder="Enter your wager">
-        <button class="neon-btn" onclick="calculateOdds()">Start Betting</button>
+        <button class="neon-btn" onclick="startCountdown()">Start Betting</button>
 
+        <div class="countdown" id="countdown">Next odds in: 30s</div>
         <div id="oddsDisplay" class="odds-container"></div>
-        <div id="stopMessage" class="stop-message">💥 Stop Now! You've reached your target!</div>
+        
+        <div class="feedback-buttons">
+            <button class="correct" onclick="oddsCorrect()">✅ Odd Came</button>
+            <button class="wrong" onclick="oddsWrong()">❌ No Odd</button>
+        </div>
     </div>
 
     <script>
+        let countdownTimer;
+        let currentOdds = [];
+
         function updateClock() {
             const now = new Date();
             const hours = now.getHours().toString().padStart(2, '0');
@@ -131,36 +141,31 @@
             const seconds = now.getSeconds().toString().padStart(2, '0');
             document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
         }
-
         setInterval(updateClock, 1000);
 
-        function calculateOdds() {
-            const wager = parseFloat(document.getElementById("wagerAmount").value);
-            if (isNaN(wager) || wager <= 0) {
-                alert("Please enter a valid wager amount.");
-                return;
-            }
+        function startCountdown() {
+            let timeLeft = 30;
+            clearInterval(countdownTimer);
+            document.getElementById("countdown").textContent = `Next odds in: ${timeLeft}s`;
 
-            let odds = generateOdds();
-            let winnings = wager * odds[0];
+            countdownTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("countdown").textContent = `Next odds in: ${timeLeft}s`;
 
-            displayOdds(odds);
-            speakOdds(odds);
-
-            if (winnings >= wager * 5) {
-                document.getElementById("stopMessage").style.display = "block";
-            } else {
-                document.getElementById("stopMessage").style.display = "none";
-            }
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    generateOdds();
+                }
+            }, 1000);
         }
 
         function generateOdds() {
-            let odds = [];
+            currentOdds = [];
             for (let i = 0; i < 3; i++) {
                 let randomOdd = (Math.random() * (10 - 1) + 1).toFixed(2);
-                odds.push(randomOdd);
+                currentOdds.push(randomOdd);
             }
-            return odds;
+            displayOdds(currentOdds);
         }
 
         function displayOdds(odds) {
@@ -173,6 +178,8 @@
                 card.innerHTML = `🚀 <br> Multiplier: <br> <span class="glow">${odd}x</span>`;
                 oddsDisplay.appendChild(card);
             });
+
+            speakOdds(odds);
         }
 
         function speakOdds(odds) {
@@ -180,8 +187,17 @@
             msg.text = `Your odds are ${odds[0]} times, ${odds[1]} times, and ${odds[2]} times.`;
             msg.rate = 1;
             msg.pitch = 1.2;
-            msg.voice = speechSynthesis.getVoices().find(voice => voice.name.includes('Google')) || speechSynthesis.getVoices()[0];
             speechSynthesis.speak(msg);
+        }
+
+        function oddsCorrect() {
+            alert("✅ AI is accurate! Betting system confirmed.");
+            startCountdown();
+        }
+
+        function oddsWrong() {
+            alert("❌ Adjusting AI predictions... New odds coming.");
+            generateOdds();
         }
     </script>
 
