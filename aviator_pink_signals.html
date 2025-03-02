@@ -75,7 +75,7 @@
     }
   </style>
 </head>
-<body>
+<body onload="greetUser()">
   <h1>Pink Aviator Bot</h1>
   
   <div id="clock"></div>
@@ -92,10 +92,36 @@
 
   <div class="footer">All rights reserved by Pink Aviator Bot 2025</div>
 
-  <!-- Updated audio element using sci-fi ping sound -->
   <audio id="beepSound" src="https://actions.google.com/sounds/v1/scifi/metal_ping.ogg" preload="auto"></audio>
 
   <script>
+    function speak(text) {
+      var speech = new SpeechSynthesisUtterance();
+      speech.text = text;
+      speech.rate = 1;
+      speech.pitch = 1;
+      speech.volume = 1;
+      speech.lang = 'en-US';
+      window.speechSynthesis.speak(speech);
+    }
+
+    function greetUser() {
+      var now = new Date();
+      var hour = now.getHours();
+      var greeting = "Welcome to Pink Aviator Bot. ";
+
+      if (hour < 12) {
+        greeting += "Good morning!";
+      } else if (hour < 18) {
+        greeting += "Good afternoon!";
+      } else {
+        greeting += "Good evening!";
+      }
+
+      greeting += " Press the generate signals button to start.";
+      speak(greeting);
+    }
+
     function updateClock() {
       var now = new Date();
       var hours = now.getHours().toString().padStart(2, '0');
@@ -114,22 +140,25 @@
 
     function generateTimeSlots() {
       var cardContainer = document.getElementById('cardContainer');
-      cardContainer.innerHTML = ''; // Clear previous cards
+      cardContainer.innerHTML = ''; 
       
       var currentTime = new Date();
       
       for (let i = 0; i < 6; i++) {
-        let futureTime = new Date(currentTime.getTime() + (i + 1) * 120000); // 2-minute gap
+        let futureTime = new Date(currentTime.getTime() + (i + 1) * 120000); 
         let formattedTime = futureTime.getHours().toString().padStart(2, '0') + ":" + futureTime.getMinutes().toString().padStart(2, '0');
         
         let card = document.createElement('div');
         card.classList.add('time-card');
         card.textContent = formattedTime;
         card.setAttribute("data-time", formattedTime);
-        card.setAttribute("data-odds", getRandomLowOdd() + " - " + getRandomBigOdd()); // Store static odds
+        let lowOdd = getRandomLowOdd();
+        let bigOdd = getRandomBigOdd();
+        card.setAttribute("data-odds", lowOdd + " - " + bigOdd);
         cardContainer.appendChild(card);
       }
 
+      speak("Signals have been generated. Wait for the predicted time to catch your odd.");
       checkTimeAndUpdateOdds();
     }
 
@@ -141,25 +170,26 @@
         let cards = document.querySelectorAll('.time-card');
         cards.forEach(card => {
           if (card.getAttribute("data-time") === currentTimeStr) {
-            card.innerHTML = card.getAttribute("data-odds"); // Show stored odds
+            let odds = card.getAttribute("data-odds");
+            card.innerHTML = odds;
             card.classList.add('glowing');
             
-            // Play the beep sound (reset time and play)
             var beepSound = document.getElementById('beepSound');
             beepSound.currentTime = 0;
             beepSound.play();
 
+            speak("Now! Catch your odd: " + odds);
+
             setTimeout(() => {
-              card.innerHTML = card.getAttribute("data-time"); // Remove odds
+              card.innerHTML = card.getAttribute("data-time");
               card.classList.remove('glowing');
-            }, 60000); // Display odds for 10 seconds
+            }, 60000);
           }
         });
-      }, 1000); // Check every second
+      }, 1000);
     }
 
     document.getElementById('getSignalsBtn').addEventListener('click', function() {
-      // Ensure the beep plays on click as well (user interaction)
       var beepSound = document.getElementById('beepSound');
       beepSound.currentTime = 0;
       beepSound.play();
