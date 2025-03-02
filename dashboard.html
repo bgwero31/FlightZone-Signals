@@ -29,6 +29,14 @@
             text-shadow: 0 0 20px #ffcc00;
         }
 
+        .clock {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px #ffcc00;
+        }
+
         input, button {
             font-size: 18px;
             padding: 10px;
@@ -70,12 +78,12 @@
             position: relative;
             overflow: hidden;
             transform: perspective(1000px) rotateY(0deg);
-            animation: flip 3s infinite alternate;
+            animation: rotate3D 3s infinite alternate;
         }
 
-        @keyframes flip {
+        @keyframes rotate3D {
             0% { transform: perspective(1000px) rotateY(0deg); }
-            100% { transform: perspective(1000px) rotateY(10deg); }
+            100% { transform: perspective(1000px) rotateY(20deg); }
         }
 
         .stop-message {
@@ -104,6 +112,8 @@
 
     <h1 class="glow">🚀 WagerBot 3000 - AI Betting Guide</h1>
 
+    <div class="clock" id="clock">00:00:00</div>
+
     <div class="container">
         <p>Enter your wager amount and let WagerBot 3000 guide you.</p>
         <input type="number" id="wagerAmount" placeholder="Enter your wager">
@@ -114,6 +124,16 @@
     </div>
 
     <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateClock, 1000);
+
         function calculateOdds() {
             const wager = parseFloat(document.getElementById("wagerAmount").value);
             if (isNaN(wager) || wager <= 0) {
@@ -125,6 +145,7 @@
             let winnings = wager * odds[0];
 
             displayOdds(odds);
+            speakOdds(odds);
 
             if (winnings >= wager * 5) {
                 document.getElementById("stopMessage").style.display = "block";
@@ -152,6 +173,15 @@
                 card.innerHTML = `🚀 <br> Multiplier: <br> <span class="glow">${odd}x</span>`;
                 oddsDisplay.appendChild(card);
             });
+        }
+
+        function speakOdds(odds) {
+            let msg = new SpeechSynthesisUtterance();
+            msg.text = `Your odds are ${odds[0]} times, ${odds[1]} times, and ${odds[2]} times.`;
+            msg.rate = 1;
+            msg.pitch = 1.2;
+            msg.voice = speechSynthesis.getVoices().find(voice => voice.name.includes('Google')) || speechSynthesis.getVoices()[0];
+            speechSynthesis.speak(msg);
         }
     </script>
 
