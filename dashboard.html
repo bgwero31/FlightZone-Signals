@@ -91,6 +91,41 @@
         .feedback-btns button {
             margin: 5px;
         }
+
+        .flash-card {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ff003c, #ffcc00);
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 0 30px #ffcc00;
+            animation: flashAnimation 6s forwards;
+        }
+
+        @keyframes flashAnimation {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 16px;
+            color: #ffcc00;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -112,6 +147,12 @@
             <button class="neon-btn" onclick="noOdd()">No Odd ❌</button>
         </div>
     </div>
+
+    <div class="flash-card" id="flashCard"></div>
+
+    <footer>
+        <p>&copy; 2025 WagerBot 3000. All rights reserved. Made with AI for better betting.</p>
+    </footer>
 
     <script>
         let countdownTimer;
@@ -170,16 +211,17 @@
 
         function generateOdds() {
             currentOdds = [];
-            // 60% odds between 1.40x - 2.00x
+            // 60% odds between 1.40x - 2.40x
             for (let i = 0; i < 2; i++) {
                 let randomOdd = (Math.random() * (2.40 - 1.40) + 1.40).toFixed(2);
                 currentOdds.push(randomOdd);
             }
-            // 30% odds between 2.01x - 3.00x
+            // 30% odds between 2.41x - 3.00x
             let randomOdd2 = (Math.random() * (3.00 - 2.41) + 2.41).toFixed(2);
             currentOdds.push(randomOdd2);
 
             displayOdds(currentOdds);
+            flashOdds(currentOdds);
         }
 
         function displayOdds(odds) {
@@ -221,11 +263,23 @@
             startBetting();
         }
 
+        function flashOdds(odds) {
+            const flashCard = document.getElementById("flashCard");
+            flashCard.innerHTML = `🚀 Play ${odds[0]}x - ${odds[1]}x Risk ${Math.random().toFixed(2)}x`;
+
+            flashCard.style.display = "block";
+
+            setTimeout(() => {
+                flashCard.style.display = "none";
+            }, 6000); // Flash for 6 seconds
+        }
+
         // Announce "Play 2.00x or 3.00x" with a random risk multiplier every 3-4 minutes
         setInterval(() => {
-            const randomRisk = (Math.random() * (12.00 - 7.00) + 7.00).toFixed(2);
+            const randomRisk = (Math.random() * (13.00 - 6.00) + 6.00).toFixed(2);
             const randomPlay = Math.random() > 0.5 ? "2.00x" : "3.00x";
             speak(`Play ${randomPlay}. Risk multiplier from ${randomRisk}x.`);
+            flashOdds([randomPlay, randomRisk]);
         }, Math.floor(Math.random() * (240000 - 180000) + 180000)); // Random interval between 3-4 minutes
     </script>
 
