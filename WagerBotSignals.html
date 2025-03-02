@@ -3,129 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator WagerBot 3000</title>
-    <script type="module">
-        // Firebase Configuration
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCa_evUJ_wEHEVfkmjWgv5o_yKjMfwi4as",
-            authDomain: "jetxbjay.firebaseapp.com",
-            projectId: "jetxbjay",
-            storageBucket: "jetxbjay.firebasestorage.app",
-            messagingSenderId: "913549013656",
-            appId: "1:913549013656:web:ca30589cf273479ce856ed",
-            measurementId: "G-6WLJ1M7ZC7"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // Function to Fetch and Display Live Predictions
-        function fetchPredictions() {
-            const signalsDiv = document.getElementById("signals");
-            signalsDiv.innerHTML = "Fetching predictions...";
-
-            const predictionsRef = ref(db, "predictions");
-
-            // Listen for live updates from Firebase
-            onValue(predictionsRef, (snapshot) => {
-                signalsDiv.innerHTML = "";
-                if (snapshot.exists()) {
-                    const predictions = snapshot.val();
-                    Object.keys(predictions).forEach(key => {
-                        let signalDiv = document.createElement("div");
-                        signalDiv.className = "signal";
-                        signalDiv.textContent = `📡 Prediction: ${predictions[key].target}x at ${predictions[key].time}`;
-                        signalsDiv.appendChild(signalDiv);
-                    });
-                } else {
-                    signalsDiv.innerHTML = "⚠️ No predictions available!";
-                }
-            }, error => {
-                console.error("Error fetching predictions:", error);
-                signalsDiv.innerHTML = "❌ Error loading predictions.";
-            });
-        }
-
-        // Function to Update Live Clock and Countdown Timer
-        function updateClock() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById("liveClock").textContent = `🕒 ${hours}:${minutes}:${seconds}`;
-
-            // Fetch next prediction time
-            const predictionsRef = ref(db, "predictions");
-            onValue(predictionsRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const predictions = Object.values(snapshot.val());
-                    if (predictions.length > 0) {
-                        document.getElementById("countdown").textContent = `Next Play at ${predictions[0].time}`;
-                    }
-                }
-            });
-        }
-
-        // Auto-refresh every second
-        setInterval(updateClock, 1000);
-
-        // Run prediction fetching when page loads
-        document.addEventListener("DOMContentLoaded", fetchPredictions);
-    </script>
-
+    <title>WagerBot 3000 - Futuristic AI</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
         body {
-            background-color: #000;
-            color: #00ffea;
+            background: radial-gradient(circle, #001f3f, #000);
             font-family: 'Orbitron', sans-serif;
+            color: #00ffea;
             text-align: center;
             padding: 20px;
         }
 
-        .clock {
-            font-size: 26px;
-            font-weight: bold;
-            text-shadow: 0 0 10px #ffcc00;
-            margin-bottom: 10px;
-        }
-
-        .neon-container {
-            max-width: 600px;
+        .container {
+            max-width: 800px;
             margin: auto;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0, 255, 234, 0.7);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px #00ffea;
         }
 
         h1 {
-            font-size: 30px;
-            text-shadow: 0 0 10px #00ffea;
+            font-size: 35px;
+            text-shadow: 0 0 20px #ffcc00;
         }
 
-        .signal {
-            background: rgba(0, 255, 234, 0.2);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            font-size: 22px;
-            box-shadow: 0 0 10px #00ffea;
+        input, button {
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            margin: 10px;
         }
 
         .neon-btn {
             background: #ff003c;
             color: white;
-            padding: 10px 20px;
-            font-size: 18px;
             font-weight: bold;
-            border-radius: 10px;
             cursor: pointer;
-            transition: 0.3s;
             box-shadow: 0 0 15px #ff003c;
+            transition: 0.3s;
         }
 
         .neon-btn:hover {
@@ -133,40 +51,107 @@
             box-shadow: 0 0 20px #ffcc00;
         }
 
-        .footer {
+        .odds-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-top: 20px;
-            font-size: 14px;
+        }
+
+        .odds-card {
+            background: linear-gradient(135deg, #001f3f, #004080);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #00ffea;
+            font-size: 24px;
+            font-weight: bold;
             color: #ffcc00;
-            text-shadow: 0 0 5px #ffcc00;
+            position: relative;
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(0deg);
+            animation: flip 3s infinite alternate;
+        }
+
+        @keyframes flip {
+            0% { transform: perspective(1000px) rotateY(0deg); }
+            100% { transform: perspective(1000px) rotateY(10deg); }
+        }
+
+        .stop-message {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 0, 60, 0.2);
+            box-shadow: 0 0 10px #ff003c;
+            display: none;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px #00ffea;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #ffcc00; }
+            100% { text-shadow: 0 0 15px #ff003c; }
         }
     </style>
 </head>
 <body>
 
-    <h1>Aviator WagerBot 3000</h1>
+    <h1 class="glow">🚀 WagerBot 3000 - AI Betting Guide</h1>
 
-    <div class="clock" id="liveClock">Loading...</div>
+    <div class="container">
+        <p>Enter your wager amount and let WagerBot 3000 guide you.</p>
+        <input type="number" id="wagerAmount" placeholder="Enter your wager">
+        <button class="neon-btn" onclick="calculateOdds()">Start Betting</button>
 
-    <div class="neon-container">
-        <div id="signals">Loading predictions...</div>
-        <button class="neon-btn" onclick="fetchPredictions()">🔄 Refresh Signals</button>
-        <button class="neon-btn" onclick="logout()">Logout</button>
-    </div>
-
-    <div class="footer">
-        <p>🌐 AI Model: WagerBot AI v3.0 | <span id="countdown">Loading...</span></p>
+        <div id="oddsDisplay" class="odds-container"></div>
+        <div id="stopMessage" class="stop-message">💥 Stop Now! You've reached your target!</div>
     </div>
 
     <script>
-        // Check login status
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = "wagerbot_login.html";
+        function calculateOdds() {
+            const wager = parseFloat(document.getElementById("wagerAmount").value);
+            if (isNaN(wager) || wager <= 0) {
+                alert("Please enter a valid wager amount.");
+                return;
+            }
+
+            let odds = generateOdds();
+            let winnings = wager * odds[0];
+
+            displayOdds(odds);
+
+            if (winnings >= wager * 5) {
+                document.getElementById("stopMessage").style.display = "block";
+            } else {
+                document.getElementById("stopMessage").style.display = "none";
+            }
         }
 
-        // Logout function
-        function logout() {
-            localStorage.removeItem("isLoggedIn");
-            window.location.href = "wagerbot_login.html";
+        function generateOdds() {
+            let odds = [];
+            for (let i = 0; i < 3; i++) {
+                let randomOdd = (Math.random() * (10 - 1) + 1).toFixed(2);
+                odds.push(randomOdd);
+            }
+            return odds;
+        }
+
+        function displayOdds(odds) {
+            const oddsDisplay = document.getElementById("oddsDisplay");
+            oddsDisplay.innerHTML = "";
+
+            odds.forEach(odd => {
+                let card = document.createElement("div");
+                card.className = "odds-card";
+                card.innerHTML = `🚀 <br> Multiplier: <br> <span class="glow">${odd}x</span>`;
+                oddsDisplay.appendChild(card);
+            });
         }
     </script>
 
