@@ -75,19 +75,19 @@
     }
   </style>
 </head>
-<body onload="greetUser()">
+<body>
   <h1>Pink Aviator Bot</h1>
-  
+
   <div id="clock"></div>
-  
+
   <button id="getSignalsBtn" class="btn">Get Signals</button>
-  
+
   <div class="card-container" id="cardContainer"></div>
 
   <div class="info">
     <h3>Welcome to the Pink Signal Bot</h3>
     <p><strong>Welcome to the Pink Signal Bot - Your Ultimate Aviator Prediction Tool!</strong></p>
-    <p>Get the most accurate <strong>Pink signals</strong> (high-risk, high-reward) for Aviator and increase your chances of making big wins. Our bot uses advanced algorithms to provide real-time predictions, so you're always ahead of the game! Whether you're looking for <strong>10x multipliers</strong> or higher, <strong>Pink signals</strong> are designed to help you unlock massive payouts.</p>
+    <p>Get the most accurate <strong>Pink signals</strong> (high-risk, high-reward) for Aviator and increase your chances of making big wins.</p>
   </div>
 
   <div class="footer">All rights reserved by Pink Aviator Bot 2025</div>
@@ -96,29 +96,25 @@
 
   <script>
     function speak(text) {
-      var speech = new SpeechSynthesisUtterance();
-      speech.text = text;
-      speech.rate = 1;
-      speech.pitch = 1;
-      speech.volume = 1;
-      speech.lang = 'en-US';
-      window.speechSynthesis.speak(speech);
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      speechSynthesis.speak(utterance);
     }
 
     function greetUser() {
       var now = new Date();
-      var hour = now.getHours();
-      var greeting = "Welcome to Pink Aviator Bot. ";
-
-      if (hour < 12) {
-        greeting += "Good morning!";
-      } else if (hour < 18) {
-        greeting += "Good afternoon!";
+      var hours = now.getHours();
+      var greeting = "Welcome to Pink Bot. ";
+      
+      if (hours < 12) {
+        greeting += "Good morning.";
+      } else if (hours < 18) {
+        greeting += "Good afternoon.";
       } else {
-        greeting += "Good evening!";
+        greeting += "Good evening.";
       }
 
-      greeting += " Press the generate signals button to start.";
+      greeting += " Press the generate signals button to get predictions.";
       speak(greeting);
     }
 
@@ -140,25 +136,23 @@
 
     function generateTimeSlots() {
       var cardContainer = document.getElementById('cardContainer');
-      cardContainer.innerHTML = ''; 
-      
+      cardContainer.innerHTML = '';
+
       var currentTime = new Date();
-      
+
       for (let i = 0; i < 6; i++) {
-        let futureTime = new Date(currentTime.getTime() + (i + 1) * 120000); 
+        let futureTime = new Date(currentTime.getTime() + (i + 1) * 120000);
         let formattedTime = futureTime.getHours().toString().padStart(2, '0') + ":" + futureTime.getMinutes().toString().padStart(2, '0');
-        
+
         let card = document.createElement('div');
         card.classList.add('time-card');
         card.textContent = formattedTime;
         card.setAttribute("data-time", formattedTime);
-        let lowOdd = getRandomLowOdd();
-        let bigOdd = getRandomBigOdd();
-        card.setAttribute("data-odds", lowOdd + " - " + bigOdd);
+        card.setAttribute("data-odds", getRandomLowOdd() + " - " + getRandomBigOdd()); 
+        card.setAttribute("data-announced", "false");
         cardContainer.appendChild(card);
       }
 
-      speak("Signals have been generated. Wait for the predicted time to catch your odd.");
       checkTimeAndUpdateOdds();
     }
 
@@ -166,19 +160,20 @@
       setInterval(() => {
         let now = new Date();
         let currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-        
+
         let cards = document.querySelectorAll('.time-card');
         cards.forEach(card => {
-          if (card.getAttribute("data-time") === currentTimeStr) {
-            let odds = card.getAttribute("data-odds");
-            card.innerHTML = odds;
+          if (card.getAttribute("data-time") === currentTimeStr && card.getAttribute("data-announced") === "false") {
+            let oddText = card.getAttribute("data-odds");
+            card.innerHTML = oddText;
             card.classList.add('glowing');
-            
+            card.setAttribute("data-announced", "true");
+
             var beepSound = document.getElementById('beepSound');
             beepSound.currentTime = 0;
             beepSound.play();
 
-            speak("Now! Catch your odd: " + odds);
+            speak(oddText);
 
             setTimeout(() => {
               card.innerHTML = card.getAttribute("data-time");
@@ -197,6 +192,10 @@
     });
 
     setInterval(updateClock, 1000);
+
+    window.onload = function() {
+      greetUser();
+    };
   </script>
 </body>
 </html>
