@@ -95,6 +95,8 @@
   <audio id="beepSound" src="https://actions.google.com/sounds/v1/scifi/metal_ping.ogg" preload="auto"></audio>
 
   <script>
+    let announcedTimes = new Set(); // Keeps track of announced times
+
     function speak(text) {
       var speech = new SpeechSynthesisUtterance();
       speech.text = text;
@@ -108,7 +110,7 @@
     function greetUser() {
       var now = new Date();
       var hour = now.getHours();
-      var greeting = "FLIGHTZONE SIGNALS,Welcome to Pink Aviator Bot. ";
+      var greeting = "Welcome to Pink Aviator Bot. ";
 
       if (hour < 12) {
         greeting += "Good morning!";
@@ -142,6 +144,8 @@
       var cardContainer = document.getElementById('cardContainer');
       cardContainer.innerHTML = ''; 
       
+      announcedTimes.clear(); // Reset announced times
+
       var currentTime = new Date();
       
       for (let i = 0; i < 6; i++) {
@@ -167,6 +171,8 @@
         let now = new Date();
         let currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
         
+        if (announcedTimes.has(currentTimeStr)) return; // Skip if already announced
+
         let cards = document.querySelectorAll('.time-card');
         cards.forEach(card => {
           if (card.getAttribute("data-time") === currentTimeStr) {
@@ -179,6 +185,7 @@
             beepSound.play();
 
             speak("Now! Catch your odd: " + odds);
+            announcedTimes.add(currentTimeStr); // Mark this time as announced
 
             setTimeout(() => {
               card.innerHTML = card.getAttribute("data-time");
