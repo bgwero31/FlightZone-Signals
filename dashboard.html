@@ -3,55 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WagerBot 3000 - AI Betting Guide</title>
+    <title>Aviator WagerBot 3000</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
         body {
-            background: radial-gradient(circle, #001f3f, #000);
-            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
             color: #00ffea;
+            font-family: 'Orbitron', sans-serif;
             text-align: center;
             padding: 20px;
         }
 
-        .container {
-            max-width: 800px;
+        .clock {
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .neon-container {
+            max-width: 600px;
             margin: auto;
-            background: rgba(0, 0, 0, 0.85);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px #00ffea;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 234, 0.7);
         }
 
         h1 {
-            font-size: 35px;
-            text-shadow: 0 0 20px #ffcc00;
+            font-size: 30px;
+            text-shadow: 0 0 10px #00ffea;
         }
 
-        .clock {
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffcc00;
-            margin-bottom: 10px;
-            text-shadow: 0 0 15px #ffcc00;
-        }
-
-        input, button {
-            font-size: 18px;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            margin: 10px;
+        .signal {
+            background: rgba(0, 255, 234, 0.2);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-size: 22px;
+            box-shadow: 0 0 10px #00ffea;
         }
 
         .neon-btn {
             background: #ff003c;
             color: white;
+            padding: 10px 20px;
+            font-size: 18px;
             font-weight: bold;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 15px #ff003c;
             transition: 0.3s;
+            box-shadow: 0 0 15px #ff003c;
         }
 
         .neon-btn:hover {
@@ -59,137 +60,119 @@
             box-shadow: 0 0 20px #ffcc00;
         }
 
-        .odds-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
+        .footer {
             margin-top: 20px;
-        }
-
-        .odds-card {
-            background: linear-gradient(135deg, #001f3f, #004080);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px #00ffea;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 14px;
             color: #ffcc00;
-        }
-
-        .countdown {
-            font-size: 24px;
-            color: #ffcc00;
-            font-weight: bold;
-            margin-top: 20px;
+            text-shadow: 0 0 5px #ffcc00;
         }
     </style>
 </head>
 <body>
 
-    <h1 class="glow">🚀 WagerBot 3000 - AI Betting Guide</h1>
+    <h1>Aviator WagerBot 3000</h1>
 
-    <div class="clock" id="clock">00:00:00</div>
+    <div class="clock" id="liveClock">Loading...</div>
 
-    <div class="container">
-        <p>Enter your wager amount and let WagerBot 3000 guide you.</p>
-        <input type="number" id="wagerAmount" placeholder="Enter your wager">
-        <button class="neon-btn" onclick="startBetting()">Start Betting</button>
+    <div class="neon-container">
+        <div id="signals"></div>
+        <button class="neon-btn" onclick="startBetting()">🎰 Start Betting</button>
+        <button class="neon-btn" onclick="logout()">Logout</button>
+    </div>
 
-        <div class="countdown" id="countdown">Waiting for AI prediction...</div>
-        <div id="oddsDisplay" class="odds-container"></div>
+    <div class="footer">
+        <p>🌐 AI Model: WagerBot AI v3.0 | Next Prediction in <span id="countdown">60</span> sec</p>
     </div>
 
     <script>
-        let countdownTimer;
-        let playMinute;
-        let currentOdds = [];
-
+        // Live Clock
         function updateClock() {
             const now = new Date();
             const hours = now.getHours().toString().padStart(2, '0');
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById("liveClock").textContent = `🕒 ${hours}:${minutes}:${seconds}`;
         }
         setInterval(updateClock, 1000);
 
-        function startBetting() {
-            clearInterval(countdownTimer);
-
-            let now = new Date();
-            let currentMinute = now.getMinutes();
-            let nextPlayTime = Math.random() > 0.5 ? currentMinute + 1 : currentMinute + 2;
-
-            if (nextPlayTime >= 60) {
-                nextPlayTime = 0;
+        function generateRandomOdds() {
+            let random = Math.random() * 100;
+            if (random < 70) {
+                return (Math.random() * (2.40 - 1.40) + 1.40).toFixed(2);
+            } else if (random < 90) {
+                return (Math.random() * (4.00 - 2.41) + 2.41).toFixed(2);
+            } else {
+                return (Math.random() * (15.00 - 4.91) + 4.91).toFixed(2);
             }
-
-            playMinute = nextPlayTime;
-            let playTime = `${now.getHours().toString().padStart(2, '0')}:${playMinute.toString().padStart(2, '0')}`;
-
-            speak(`Play on ${playTime}. I will tell you exactly when to catch the odds.`);
-            document.getElementById("countdown").textContent = `Next play time: ${playTime}`;
-
-            let remainingSeconds = ((playMinute - currentMinute) * 60) - now.getSeconds();
-            if (remainingSeconds <= 0) remainingSeconds = 60; 
-            startCountdown(remainingSeconds);
         }
 
-        function startCountdown(seconds) {
-            document.getElementById("countdown").textContent = `Countdown: ${seconds}s`;
-            
-            countdownTimer = setInterval(() => {
-                seconds--;
-                document.getElementById("countdown").textContent = `Countdown: ${seconds}s`;
+        function getNextPlayTime() {
+            const now = new Date();
+            let nextMinutes = Math.floor(Math.random() * 2) + 1;
+            now.setMinutes(now.getMinutes() + nextMinutes);
+            now.setSeconds(0);
+            return now.toTimeString().split(" ")[0].slice(0, 5);
+        }
 
-                if (seconds <= 0) {
-                    clearInterval(countdownTimer);
-                    announcePlay();
+        function startBetting() {
+            const signalsDiv = document.getElementById("signals");
+            signalsDiv.innerHTML = "";
+            let nextPlayTime = getNextPlayTime();
+            let countdownTime = Math.floor(Math.random() * (90 - 30) + 30); 
+
+            let message = `🎯 AI: Play on **${nextPlayTime}**! I will tell you when exactly to enter.`;
+            let odds = `🔥 Predicted Odds: ${generateRandomOdds()}x`;
+
+            let signalDiv = document.createElement("div");
+            signalDiv.className = "signal";
+            signalDiv.innerHTML = `${message} <br> ${odds}`;
+            signalsDiv.appendChild(signalDiv);
+
+            resetCountdown(countdownTime, nextPlayTime);
+        }
+
+        function resetCountdown(countdown, nextPlayTime) {
+            const countdownElement = document.getElementById("countdown");
+            let interval = setInterval(() => {
+                countdown -= 1;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    AIannouncePlay(nextPlayTime);
                 }
             }, 1000);
         }
 
-        function announcePlay() {
-            speak("Now! Play on this minute! Catch the odds!");
-            generateOdds();
-        }
+        function AIannouncePlay(nextPlayTime) {
+            const signalsDiv = document.getElementById("signals");
+            let announceDiv = document.createElement("div");
+            announceDiv.className = "signal";
+            announceDiv.innerHTML = `📢 AI: **PLAY NOW on ${nextPlayTime}!** Catch the odds! 🚀`;
+            signalsDiv.appendChild(announceDiv);
 
-        function generateOdds() {
-            currentOdds = [];
-            for (let i = 0; i < 3; i++) {
-                let randomOdd = (Math.random() * (10 - 1) + 1).toFixed(2);
-                currentOdds.push(randomOdd);
+            let specialMessage = checkSpecialTime();
+            if (specialMessage) {
+                let specialDiv = document.createElement("div");
+                specialDiv.className = "signal";
+                specialDiv.innerHTML = specialMessage;
+                signalsDiv.appendChild(specialDiv);
             }
-            displayOdds(currentOdds);
         }
 
-        function displayOdds(odds) {
-            const oddsDisplay = document.getElementById("oddsDisplay");
-            oddsDisplay.innerHTML = "";
-
-            odds.forEach(odd => {
-                let card = document.createElement("div");
-                card.className = "odds-card";
-                card.innerHTML = `🚀 <br> Multiplier: <br> <span class="glow">${odd}x</span>`;
-                oddsDisplay.appendChild(card);
-            });
-
-            speakOdds(odds);
+        function checkSpecialTime() {
+            const now = new Date();
+            if (now.getMinutes() % 4 === 0) {
+                let safeOdds = [2.00, 3.00][Math.floor(Math.random() * 2)];
+                let riskOdds = (Math.random() * (12.00 - 7.00) + 7.00).toFixed(2);
+                return `🔥 AI SPECIAL: Play **${safeOdds}x** at risk **${riskOdds}x**!`;
+            }
+            return null;
         }
 
-        function speakOdds(odds) {
-            let msg = `Your odds are ${odds[0]} times, ${odds[1]} times, and ${odds[2]} times.`;
-            speak(msg);
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "wagerbot_login.html";
         }
-
-        function speak(text) {
-            let msg = new SpeechSynthesisUtterance(text);
-            msg.rate = 1;
-            msg.pitch = 1.2;
-            speechSynthesis.speak(msg);
-        }
-
     </script>
 
 </body>
