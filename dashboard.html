@@ -3,79 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroBet Signals</title>
+    <title>WagerBot 3000 - Futuristic AI</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #222; color: white; }
-        .container { margin-top: 50px; }
-        h1 { color: #00ff99; }
-        .site-display { font-size: 24px; color: #ffcc00; }
-        .status { font-size: 20px; color: #00ff99; margin-top: 20px; }
-        .signal-box { font-size: 30px; font-weight: bold; color: #ff6600; margin-top: 40px; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            background: radial-gradient(circle, #001f3f, #000);
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffea;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px #00ffea;
+        }
+
+        h1 {
+            font-size: 35px;
+            text-shadow: 0 0 20px #ffcc00;
+        }
+
+        input, button {
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            margin: 10px;
+        }
+
+        .neon-btn {
+            background: #ff003c;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ff003c;
+            transition: 0.3s;
+        }
+
+        .neon-btn:hover {
+            background: #ffcc00;
+            box-shadow: 0 0 20px #ffcc00;
+        }
+
+        .odds-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .odds-card {
+            background: linear-gradient(135deg, #001f3f, #004080);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #00ffea;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            position: relative;
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(0deg);
+            animation: flip 3s infinite alternate;
+        }
+
+        @keyframes flip {
+            0% { transform: perspective(1000px) rotateY(0deg); }
+            100% { transform: perspective(1000px) rotateY(10deg); }
+        }
+
+        .stop-message {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 0, 60, 0.2);
+            box-shadow: 0 0 10px #ff003c;
+            display: none;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px #00ffea;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #ffcc00; }
+            100% { text-shadow: 0 0 15px #ff003c; }
+        }
     </style>
 </head>
 <body>
+
+    <h1 class="glow">🚀 WagerBot 3000 - AI Betting Guide</h1>
+
     <div class="container">
-        <h1>NeuroBet Signals</h1>
-        <p class="site-display">Betting Site: <span id="bettingSiteDisplay">Loading...</span></p>
-        <p class="status" id="statusMessage">Analyzing data...</p>
-        <p class="signal-box" id="signalOutput">Waiting for signal...</p>
+        <p>Enter your wager amount and let WagerBot 3000 guide you.</p>
+        <input type="number" id="wagerAmount" placeholder="Enter your wager">
+        <button class="neon-btn" onclick="calculateOdds()">Start Betting</button>
+
+        <div id="oddsDisplay" class="odds-container"></div>
+        <div id="stopMessage" class="stop-message">💥 Stop Now! You've reached your target!</div>
     </div>
 
-    <script type="module">
-        // Import Firebase SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, query, limitToLast, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    <script>
+        function calculateOdds() {
+            const wager = parseFloat(document.getElementById("wagerAmount").value);
+            if (isNaN(wager) || wager <= 0) {
+                alert("Please enter a valid wager amount.");
+                return;
+            }
 
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDUdinEMEfxzCZdDohtuamtAqdUk9BK8Cs",
-            authDomain: "aviator-nuerobet.firebaseapp.com",
-            databaseURL: "https://aviator-nuerobet-default-rtdb.firebaseio.com",
-            projectId: "aviator-nuerobet",
-            storageBucket: "aviator-nuerobet.appspot.com",
-            messagingSenderId: "88811829830",
-            appId: "1:88811829830:web:e5659b0cb1a17cb3b16847",
-            measurementId: "G-PNRB5LQTB6"
-        };
+            let odds = generateOdds();
+            let winnings = wager * odds[0];
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const predictionsRef = ref(database, "predictions");
+            displayOdds(odds);
 
-        // Get Betting Site from Storage
-        const bettingSite = localStorage.getItem("bettingSite")?.trim();
-        document.getElementById("bettingSiteDisplay").textContent = bettingSite || "Unknown";
+            if (winnings >= wager * 5) {
+                document.getElementById("stopMessage").style.display = "block";
+            } else {
+                document.getElementById("stopMessage").style.display = "none";
+            }
+        }
 
-        // Check if Betting Site is Defined
-        if (!bettingSite) {
-            document.getElementById("statusMessage").textContent = "No betting site found!";
-        } else {
-            // Fetch Predictions for the Entered Betting Site
-            const latestPredictionQuery = query(predictionsRef, limitToLast(1));
+        function generateOdds() {
+            let odds = [];
+            for (let i = 0; i < 3; i++) {
+                let randomOdd = (Math.random() * (10 - 1) + 1).toFixed(2);
+                odds.push(randomOdd);
+            }
+            return odds;
+        }
 
-            onChildAdded(latestPredictionQuery, (snapshot) => {
-                const prediction = snapshot.val();
+        function displayOdds(odds) {
+            const oddsDisplay = document.getElementById("oddsDisplay");
+            oddsDisplay.innerHTML = "";
 
-                // Normalize site names
-                const firebaseSite = prediction.site.trim().toLowerCase();
-                const selectedSite = bettingSite.toLowerCase();
-
-                console.log("Fetched Prediction:", prediction);
-                console.log("User Betting Site:", selectedSite);
-
-                if (firebaseSite === selectedSite) {
-                    document.getElementById("statusMessage").textContent = "Signal Ready!";
-                    document.getElementById("signalOutput").textContent = `Next Odd: ${prediction.target}x`;
-
-                    // Play beep sound
-                    let beep = new Audio('beep.mp3');
-                    beep.play();
-                } else {
-                    console.log("No match found for this site.");
-                }
+            odds.forEach(odd => {
+                let card = document.createElement("div");
+                card.className = "odds-card";
+                card.innerHTML = `🚀 <br> Multiplier: <br> <span class="glow">${odd}x</span>`;
+                oddsDisplay.appendChild(card);
             });
         }
     </script>
+
 </body>
 </html>
