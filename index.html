@@ -1,163 +1,205 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlightZone Signals by B JAY</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>FlightZone Signals by B JAY</title>  
+    <style>  
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');  
+        body {  
+            font-family: 'Arial', sans-serif;  
+            text-align: center;  
+            background: url('https://source.unsplash.com/1600x900/?galaxy,stars,futuristic,night') no-repeat center center fixed;  
+            background-size: cover;  
+            color: #ffffff;  
+            margin: 0;  
+            padding: 0;  
+            overflow-x: hidden;  
+        }  
 
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background: url('https://i.imgur.com/QpBHOdp.jpeg') no-repeat center center fixed;
-            background-size: cover;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            position: relative;
-        }
+        .wave-container {  
+            position: fixed;  
+            width: 100%;  
+            height: 100%;  
+            top: 0;  
+            left: 0;  
+            z-index: -1;  
+        }  
 
-        /* Futuristic Stars Animation */
-        .stars {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            background: url('https://i.imgur.com/x3N0kBr.png') repeat;
-            animation: moveStars 60s linear infinite;
-        }
+        .waves {  
+            position: absolute;  
+            width: 100%;  
+            height: 100%;  
+            bottom: 0;  
+            left: 0;  
+        }  
 
-        @keyframes moveStars {
-            from { background-position: 0 0; }
-            to { background-position: -1000px 1000px; }
-        }
+        h1 {  
+            font-family: 'Russo One', sans-serif;  
+            font-size: 2em;  
+            background: rgba(255, 255, 255, 0.1);  
+            padding: 10px 20px;  
+            display: inline-block;  
+            border-radius: 10px;  
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);  
+            letter-spacing: 2px;  
+        }  
 
-        h1 {
-            font-family: 'Russo One', sans-serif;
-            font-size: 2em;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            display: inline-block;
-            border-radius: 10px;
-            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 2;
-        }
+        .section {  
+            background: rgba(255, 255, 255, 0.1);  
+            backdrop-filter: blur(10px);  
+            -webkit-backdrop-filter: blur(10px);  
+            padding: 15px;  
+            border-radius: 15px;  
+            max-width: 600px;  
+            margin: 20px auto;  
+            text-align: left;  
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);  
+        }  
 
-        .glassy-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 12px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: center;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 2;
-        }
+        .section h2 {  
+            border-bottom: 2px solid #ff6600;  
+            padding-bottom: 5px;  
+            color: #ff6600;  
+            font-family: 'Bebas Neue', sans-serif;  
+            font-size: 1.8em;  
+        }  
 
-        .glassy-card h2 {
-            border-bottom: 2px solid #ff6600;
-            padding-bottom: 5px;
-            color: #ff6600;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8em;
-        }
+        button {  
+            padding: 10px 20px;  
+            background: #ff6600;  
+            color: white;  
+            border: none;  
+            font-size: 14px;  
+            border-radius: 5px;  
+            cursor: pointer;  
+            transition: 0.3s;  
+            margin: 10px;  
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);  
+        }  
 
-        button {
-            padding: 10px 20px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin: 10px;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-        }
+        button:hover {  
+            background: #ff8533;  
+        }  
 
-        button:hover {
-            background: #ff8533;
-        }
+        .contact-buttons {  
+            display: flex;  
+            justify-content: center;  
+            gap: 15px;  
+            margin-top: 20px;  
+        }  
 
-        .contact-links {
-            margin-top: 20px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
+        .contact-buttons a {  
+            text-decoration: none;  
+        }  
 
-        .contact-links a {
-            text-decoration: none;
-            color: #ff6600;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0 10px;
-            transition: color 0.3s;
-        }
+        .telegram-button, .whatsapp-button {  
+            background-color: #ff6600;  
+            color: white;  
+            border: none;  
+            padding: 12px 25px;  
+            font-size: 16px;  
+            cursor: pointer;  
+            border-radius: 5px;  
+            transition: background-color 0.3s;  
+            font-weight: bold;  
+        }  
 
-        .contact-links a:hover {
-            color: #ff8533;
-        }
+        .telegram-button:hover, .whatsapp-button:hover {  
+            background-color: #ff8533;  
+        }  
 
-        footer {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            text-align: center;
-            font-size: 14px;
-            margin-top: 30px;
-            position: relative;
-            z-index: 2;
-        }
+        #price {  
+            color: #ff6600;  
+            font-weight: bold;  
+            font-size: 22px;  
+            animation: flicker 1.5s infinite alternate;  
+        }  
+
+        @keyframes flicker {  
+            0% { opacity: 1; }  
+            50% { opacity: 0.5; }  
+            100% { opacity: 1; }  
+        }  
+
+        footer {  
+            background: rgba(0, 0, 0, 0.9);  
+            padding: 20px;  
+            text-align: center;  
+            font-size: 14px;  
+            margin-top: 30px;  
+        }  
+
+        .contact-links {  
+            margin-top: 20px;  
+            text-align: center;  
+        }  
+
+        .contact-links a {  
+            text-decoration: none;  
+            color: #ff6600;  
+            font-size: 16px;  
+            font-weight: bold;  
+            margin: 0 10px;  
+            transition: color 0.3s;  
+        }  
+
+        .contact-links a:hover {  
+            color: #ff8533;  
+        }  
     </style>
-</head>
-<body>
 
-    <div class="stars"></div> <!-- Futuristic stars overlay -->
+</head>  
+<body>  
 
-    <h1>FlightZone Signals by B JAY</h1>
-    <br><br>
-    <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
+<h1>FlightZone Signals by B JAY</h1>  
+<br><br>  
+<button onclick="openSignalsPage()">🎲 Get Free Signals</button>  
 
-    <div class="glassy-card">
-        <h2>Available Bots</h2>
-        <button onclick="openBotPage('jetx_master_predictor.html')">JETX MASTER PREDICTOR</button>
-        <button onclick="openBotPage('jetx_purple_bot.html')">JETX PURPLE BOT</button>
-        <button onclick="openBotPage('jetx_pink_bot.html')">JETX PINK BOT</button>
-        <button onclick="openBotPage('jetx_martingale_bot.html')">JETX MARTINGALE BOT</button>
-        <button onclick="openBotPage('aviator_predictor_pro.html')">AVIATOR PREDICTOR PRO</button>
-        <button onclick="openBotPage('aviator_master_predictor_pro.html')">AVIATOR MASTER PREDICTOR PRO</button>
-        <button onclick="openBotPage('aviator_pink_bot.html')">AVIATOR PINK BOT</button>
-        <button onclick="openBotPage('aviator_master_x_login.html')">AVIATOR MASTER X</button>
-        <button onclick="openBotPage('aviator_nuerobet_bot.html')">AVIATOR NUEROBET BOT</button>
-    </div>
+<div class="section">  
+    <h2>Available Bots</h2>  
+    <button onclick="openBotPage('jetx_master_predictor.html')">JETX MASTER PREDICTOR</button>  
+    <button onclick="openBotPage('jetx_purple_bot.html')">JETX PURPLE BOT</button>  
+    <button onclick="openBotPage('jetx_pink_bot.html')">JETX PINK BOT</button>  
+    <button onclick="openBotPage('jetx_martingale_bot.html')">JETX MARTINGALE BOT</button>  
+    <button onclick="openBotPage('aviator_predictor_pro.html')">AVIATOR PREDICTOR PRO</button>  
+    <button onclick="openBotPage('aviator_master_predictor_pro.html')">AVIATOR MASTER PREDICTOR PRO</button>  
+    <button onclick="openBotPage('aviator_pink_bot.html')">AVIATOR PINK BOT</button>  
+    <button onclick="openBotPage('aviator_master_x_login.html')">AVIATOR MASTER X</button>  
+    <button onclick="openBotPage('aviator_nuerobet_bot.html')">AVIATOR NUEROBET BOT</button>  
+</div>  
 
-    <div class="contact-links">
-        <a href="https://t.me/BJAYMICK" target="_blank">Join Telegram</a>
-        <a href="https://wa.me/263774309795" target="_blank">WhatsApp Us</a>
-    </div>
+<div class="section">  
+    <h2>🔥 Why Choose FlightZone Signals?</h2>  
+    <p>🚀 **FlightZone Signals** by B.JAY uses advanced algorithms and cutting-edge technology to provide you with highly accurate betting predictions. Powered by AI, our bots analyze betting patterns to give you the best odds for success.</p>  
+    <p>🎯 **99% Accuracy** – Our bots analyze game patterns to provide the most accurate predictions.</p>  
+    <p>💰 **Guaranteed Profits** – Join our community of winners making consistent money.</p>  
+    <p>📊 **Real-Time Updates** – Instant signals to keep you ahead of the game.</p>  
+    <p>🔥 **Trusted by thousands of players!**</p>  
+</div>  
 
-    <footer>
-        <p>&copy; 2025 FlightZone Signals by B JAY | All Rights Reserved</p>
-    </footer>
+<div class="contact-links">  
+    <a href="https://t.me/BJAYMICK" target="_blank">Join Telegram</a>  
+    <a href="https://wa.me/263774309795" target="_blank">WhatsApp Us</a>  
+</div>  
 
-    <script>
-        function openSignalsPage() {
-            window.location.href = "signals.html";
-        }
+<div class="section">  
+    <p>💰 **Limited Offer – Only <span id="price">$49.99</span> for premium access!</p>  
+</div>  
 
-        function openBotPage(botPage) {
-            window.location.href = botPage;
-        }
-    </script>
+<footer>  
+    <p>&copy; 2025 FlightZone Signals by B JAY | All Rights Reserved</p>  
+</footer>  
 
-</body>
+<script>  
+    function openSignalsPage() {  
+        window.location.href = "signals.html";  
+    }  
+
+    function openBotPage(botPage) {  
+        window.location.href = botPage;  
+    }  
+</script>
+
+</body>  
 </html>
