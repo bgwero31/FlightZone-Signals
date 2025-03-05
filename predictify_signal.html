@@ -5,32 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Predictify</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             text-align: center;
-            background: linear-gradient(to right, #1e3c72, #2a5298);
+            background: radial-gradient(circle, #000428, #004e92);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
+            overflow: hidden;
         }
 
         .signal-container {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             padding: 40px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            width: 350px;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
+            width: 360px;
+            animation: fadeIn 1s ease-in-out;
         }
 
         h2 {
-            font-family: 'Russo One', sans-serif;
             font-size: 24px;
             margin-bottom: 20px;
+            text-shadow: 0 0 10px cyan;
         }
 
         .spinner-container {
@@ -41,22 +43,22 @@
         }
 
         .spinner {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             border: 10px solid rgba(255, 255, 255, 0.2);
-            border-top: 10px solid #ff6600;
+            border-top: 10px solid cyan;
             border-radius: 50%;
             animation: spin 0s linear infinite;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.8em;
+            font-size: 2em;
             font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            color: cyan;
+            text-shadow: 0 0 10px cyan;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             cursor: pointer;
         }
 
@@ -66,31 +68,38 @@
         }
 
         .spinning {
-            animation: spin 0.5s linear infinite;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         button {
             padding: 15px;
-            background: #00bcd4;
-            color: white;
+            background: cyan;
+            color: black;
             font-size: 18px;
             width: 100%;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.2s ease;
             margin-top: 20px;
+            font-weight: bold;
         }
 
         button:hover {
-            background: #0097a7;
+            background: #00e5ff;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
 
     <div class="signal-container">
-        <h2>Predictify</h2>
+        <h2>Predictify - AI Safe Odds Predictor</h2>
         <div class="spinner-container">
             <div class="spinner" id="spinner">Tap to Predict</div>
         </div>
@@ -98,22 +107,40 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let welcomeMessage = new SpeechSynthesisUtterance("Welcome to Predictify, your AI-powered safe odds predictor.");
+            welcomeMessage.rate = 1;
+            window.speechSynthesis.speak(welcomeMessage);
+        });
+
         function startPrediction() {
             let spinner = document.getElementById("spinner");
             spinner.innerHTML = "";
             spinner.classList.add("spinning");
 
             setTimeout(() => {
-                let randomOdds = (Math.random() * (10 - 1) + 1).toFixed(2) + "x";
-                spinner.innerHTML = randomOdds;
+                let selectedOdd = generateOdds();
+                spinner.innerHTML = selectedOdd + "x";
                 spinner.classList.remove("spinning");
 
                 // AI Voice Output
-                let speech = new SpeechSynthesisUtterance("Next target: " + randomOdds);
-                speech.rate = 1; // Normal speed
+                let speech = new SpeechSynthesisUtterance("Next target: " + selectedOdd + "x");
+                speech.rate = 1;
                 window.speechSynthesis.speak(speech);
 
             }, 3000);
+        }
+
+        function generateOdds() {
+            let random = Math.random() * 100; 
+
+            if (random <= 75) {
+                return (Math.random() * (2.50 - 1.00) + 1.00).toFixed(2); // 75% chance for 1.00x - 2.50x
+            } else if (random <= 95) {
+                return (Math.random() * (9.99 - 2.60) + 2.60).toFixed(2); // 20% chance for 2.60x - 9.99x
+            } else {
+                return (Math.random() * (20.00 - 10.00) + 10.00).toFixed(2); // 5% chance for 10.00x - 20.00x
+            }
         }
     </script>
 
