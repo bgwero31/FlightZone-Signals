@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Predictify</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');
+
         body {
             font-family: 'Roboto', sans-serif;
+            text-align: center;
             background: linear-gradient(to right, #1e3c72, #2a5298);
             height: 100vh;
             display: flex;
@@ -14,23 +17,58 @@
             align-items: center;
             color: white;
         }
+
         .signal-container {
             background: rgba(0, 0, 0, 0.7);
             padding: 40px;
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            width: 300px;
+            width: 350px;
         }
+
         h2 {
+            font-family: 'Russo One', sans-serif;
             font-size: 24px;
             margin-bottom: 20px;
         }
-        #prediction {
-            font-size: 26px;
-            font-weight: bold;
-            margin-top: 20px;
+
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 250px;
         }
+
+        .spinner {
+            width: 180px;
+            height: 180px;
+            border: 10px solid rgba(255, 255, 255, 0.2);
+            border-top: 10px solid #ff6600;
+            border-radius: 50%;
+            animation: spin 0s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinning {
+            animation: spin 0.5s linear infinite;
+        }
+
         button {
             padding: 15px;
             background: #00bcd4;
@@ -41,33 +79,43 @@
             border-radius: 10px;
             cursor: pointer;
             transition: background 0.3s ease;
+            margin-top: 20px;
         }
+
         button:hover {
             background: #0097a7;
         }
     </style>
 </head>
 <body>
+
     <div class="signal-container">
-        <h2>Predictify - Safe Odds Predictor</h2>
-        <p id="prediction">Click the button to get your next safe odd prediction!</p>
-        <button onclick="getPrediction()">Get Prediction</button>
+        <h2>Predictify</h2>
+        <div class="spinner-container">
+            <div class="spinner" id="spinner">Tap to Predict</div>
+        </div>
+        <button onclick="startPrediction()">Get Prediction</button>
     </div>
 
     <script>
-        function getPrediction() {
-            let safeOdds = [1.30, 2.00, 3.00];  // Safe odds range
-            let randomIndex = Math.floor(Math.random() * safeOdds.length);
-            let selectedOdd = safeOdds[randomIndex];
+        function startPrediction() {
+            let spinner = document.getElementById("spinner");
+            spinner.innerHTML = "";
+            spinner.classList.add("spinning");
 
-            // Display prediction
-            document.getElementById("prediction").innerText = "Next Target: " + selectedOdd + "x";
+            setTimeout(() => {
+                let randomOdds = (Math.random() * (10 - 1) + 1).toFixed(2) + "x";
+                spinner.innerHTML = randomOdds;
+                spinner.classList.remove("spinning");
 
-            // AI Voice Output
-            let speech = new SpeechSynthesisUtterance("Next target: " + selectedOdd + "x, play safe!");
-            speech.rate = 1; // Normal speed
-            window.speechSynthesis.speak(speech);
+                // AI Voice Output
+                let speech = new SpeechSynthesisUtterance("Next target: " + randomOdds);
+                speech.rate = 1; // Normal speed
+                window.speechSynthesis.speak(speech);
+
+            }, 3000);
         }
     </script>
+
 </body>
 </html>
