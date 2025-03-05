@@ -19,7 +19,6 @@
             overflow-x: hidden;
         }
 
-        /* Gradient Background Animation */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -123,6 +122,26 @@
 <h1>FlightZone Signals by B JAY</h1>
 <br><br>
 <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
+
+<!-- Buy Now Section (Initially Hidden) -->
+<div id="plans-section">
+    <h2>Choose Your Plan</h2>
+    <button onclick="selectPlan(10)">24 Hours - $10</button>
+    <button onclick="selectPlan(17)">1 Week - $17</button>
+    <button onclick="selectPlan(25)">2 Weeks - $25</button>
+    <button onclick="selectPlan(35)">1 Month - $35</button>
+    <button onclick="selectPlan(50)">Unlimited - $50</button>
+</div>
+
+<div id="payment-options">
+    <h2>Select a Payment Method</h2>
+    <p>Selected Plan: <span id="selected-plan"></span></p>
+    <button onclick="redirectToPayment('ecocash')">Ecocash</button>
+    <button onclick="redirectToPayment('mukuru')">Mukuru</button>
+    <button onclick="redirectToPayment('mastercard')">MasterCard</button>
+</div>
+
+<!-- Buy Now Button -->
 <button onclick="showPlans()">💳 Buy Now</button>
 
 <div class="scrollable-content">
@@ -150,28 +169,6 @@
     <div class="contact-links">
         <a href="https://t.me/BJAYMICK" target="_blank">Join Telegram</a>
         <a href="https://wa.me/263774309795" target="_blank">WhatsApp Us</a>
-    </div>
-
-    <div class="section">
-        <p>💰 **Limited Offer – Only <span id="price">$40.00</span> for premium access!</p>
-    </div>
-
-    <!-- Buy Now Section -->
-    <div id="plans-section">
-        <h2>Choose Your Plan</h2>
-        <button onclick="selectPlan(10)">24 Hours - $10</button>
-        <button onclick="selectPlan(17)">1 Week - $17</button>
-        <button onclick="selectPlan(25)">2 Weeks - $25</button>
-        <button onclick="selectPlan(35)">1 Month - $35</button>
-        <button onclick="selectPlan(50)">Unlimited - $50</button>
-    </div>
-
-    <div id="payment-options">
-        <h2>Select a Payment Method</h2>
-        <p>Selected Plan: <span id="selected-plan"></span></p>
-        <button onclick="redirectToPayment('ecocash')">Ecocash</button>
-        <button onclick="redirectToPayment('mukuru')">Mukuru</button>
-        <button onclick="redirectToPayment('mastercard')">MasterCard</button>
     </div>
 </div>
 
