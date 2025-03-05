@@ -21,15 +21,9 @@
 
         /* Gradient Background Animation */
         @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         h1 {
@@ -45,7 +39,7 @@
 
         .scrollable-content {
             overflow-y: auto;
-            max-height: calc(100vh - 120px); /* Adjust height for top content */
+            max-height: calc(100vh - 120px);
             padding: 20px;
             width: 100%;
             box-sizing: border-box;
@@ -54,7 +48,6 @@
             -webkit-backdrop-filter: blur(10px);
             border-radius: 10px;
             margin-top: 20px;
-            overflow: auto;
         }
 
         .section {
@@ -67,14 +60,6 @@
             margin: 20px auto;
             text-align: left;
             box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .section h2 {
-            border-bottom: 2px solid #ff6600;
-            padding-bottom: 5px;
-            color: #ff6600;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8em;
         }
 
         button {
@@ -94,67 +79,6 @@
             background: #ff8533;
         }
 
-        .contact-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .contact-buttons a {
-            text-decoration: none;
-        }
-
-        .telegram-button, .whatsapp-button {
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            font-weight: bold;
-        }
-
-        .telegram-button:hover, .whatsapp-button:hover {
-            background-color: #ff8533;
-        }
-
-        #price {
-            color: #ff6600;
-            font-weight: bold;
-            font-size: 22px;
-            animation: flicker 1.5s infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        footer {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            text-align: center;
-            font-size: 14px;
-            margin-top: 30px;
-        }
-
-        .contact-links {
-            margin-top: 20px;
-            text-align: center;
-        }
-
         .contact-links a {
             text-decoration: none;
             color: #ff6600;
@@ -167,6 +91,28 @@
         .contact-links a:hover {
             color: #ff8533;
         }
+
+        /* Buy Now Section */
+        #plans-section, #payment-options {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        #selected-plan {
+            font-weight: bold;
+            color: #ff6600;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -174,6 +120,7 @@
 <h1>FlightZone Signals by B JAY</h1>
 <br><br>
 <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
+<button onclick="showPlans()">💳 Buy Now</button>
 
 <div class="scrollable-content">
     <div class="section">
@@ -190,12 +137,11 @@
     </div>
 
     <div class="section">
-        <h2> Why Choose FlightZone Signals?</h2>
-        <p>**FlightZone Signals** by B.JAY uses advanced algorithms and cutting-edge technology to provide you with highly accurate betting predictions. Powered by AI, our bots analyze betting patterns to give you the best odds for success.</p>
-        <p> **99% Accuracy** – Our bots analyze game patterns to provide the most accurate predictions.</p>
-        <p> **Guaranteed Profits** – Join our community of winners making consistent money.</p>
-        <p> **Real-Time Updates** – Instant signals to keep you ahead of the game.</p>
-        <p> **Trusted by thousands of players!**</p>
+        <h2>Why Choose FlightZone Signals?</h2>
+        <p>**FlightZone Signals** by B.JAY uses advanced algorithms and cutting-edge technology to provide highly accurate betting predictions.</p>
+        <p>**99% Accuracy** – Our bots analyze game patterns to provide the most accurate predictions.</p>
+        <p>**Guaranteed Profits** – Join our community of winners making consistent money.</p>
+        <p>**Real-Time Updates** – Instant signals to keep you ahead of the game.</p>
     </div>
 
     <div class="contact-links">
@@ -204,7 +150,25 @@
     </div>
 
     <div class="section">
-        <p>💰 **Limited Offer – Only <span id="price">$40.00</span> for premium access!</p>
+        <p>💰 **Limited Offer – Only <span id="price">$35.00</span> for premium access!</p>
+    </div>
+
+    <!-- Buy Now Section -->
+    <div id="plans-section">
+        <h2>Choose Your Plan</h2>
+        <button onclick="selectPlan(10)">24 Hours - $10</button>
+        <button onclick="selectPlan(17)">1 Week - $17</button>
+        <button onclick="selectPlan(25)">2 Weeks - $25</button>
+        <button onclick="selectPlan(35)">1 Month - $35</button>
+        <button onclick="selectPlan(50)">Unlimited - $50</button>
+    </div>
+
+    <div id="payment-options">
+        <h2>Select a Payment Method</h2>
+        <p>Selected Plan: <span id="selected-plan"></span></p>
+        <button onclick="redirectToPayment('ecocash')">Ecocash</button>
+        <button onclick="redirectToPayment('mukuru')">Mukuru</button>
+        <button onclick="redirectToPayment('mastercard')">MasterCard</button>
     </div>
 </div>
 
@@ -213,12 +177,34 @@
 </footer>
 
 <script>
+    let selectedPrice = 10;
+
     function openSignalsPage() {
         window.location.href = "signals.html";
     }
 
     function openBotPage(botPage) {
         window.location.href = botPage;
+    }
+
+    function showPlans() {
+        document.getElementById("plans-section").style.display = "block";
+    }
+
+    function selectPlan(price) {
+        selectedPrice = price;
+        document.getElementById("selected-plan").innerText = "$" + selectedPrice;
+        document.getElementById("payment-options").style.display = "block";
+    }
+
+    function redirectToPayment(method) {
+        if (method === 'ecocash') {
+            window.location.href = "tel:*153*1*1*0774309795*" + selectedPrice + "%23";
+        } else if (method === 'mukuru') {
+            window.location.href = "tel:*646%23";
+        } else if (method === 'mastercard') {
+            alert("Use this MasterCard Number: 5321 6208 3660 9376\nAmount: $" + selectedPrice);
+        }
     }
 </script>
 
