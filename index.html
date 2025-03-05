@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlightZone Signals by B JAY</title>
     <style>
+        /* Styles remain the same */
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&display=swap');
 
         body {
@@ -195,6 +196,16 @@
         selectedPrice = price;
         document.getElementById("selected-plan").innerText = "$" + selectedPrice;
         document.getElementById("payment-options").style.display = "block";
+    }
+
+    function redirectToPayment(paymentMethod) {
+        if (paymentMethod === 'ecocash') {
+            window.location.href = "tel:*153*1*1*" + selectedPrice + "#";
+        } else if (paymentMethod === 'mukuru') {
+            window.location.href = "tel:*646#";
+        } else if (paymentMethod === 'mastercard') {
+            window.location.href = "tel:5321620836609376";
+        }
     }
 </script>
 
