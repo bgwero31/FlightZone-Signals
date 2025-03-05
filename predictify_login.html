@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Predictify</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .login-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 320px;
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        select, input {
+            display: block;
+            margin: 10px auto;
+            padding: 12px;
+            width: 100%;
+            background: #1e2a47;
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        select:focus, input:focus {
+            background: #2a5298;
+            outline: none;
+        }
+        button {
+            padding: 15px;
+            background: #00bcd4;
+            color: white;
+            font-size: 18px;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0097a7;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login to Predictify</h2>
+        
+        <select id="country">
+            <option value="Kenya">Kenya</option>
+            <option value="Nigeria">Nigeria</option>
+            <option value="South Africa">South Africa</option>
+            <option value="Uganda">Uganda</option>
+            <option value="Zimbabwe">Zimbabwe</option>
+            <option value="Ghana">Ghana</option>
+            <option value="Tanzania">Tanzania</option>
+            <option value="Zambia">Zambia</option>
+            <option value="Botswana">Botswana</option>
+            <option value="Namibia">Namibia</option>
+            <option value="Malawi">Malawi</option>
+            <option value="Lesotho">Lesotho</option>
+            <option value="Rwanda">Rwanda</option>
+            <option value="Cote d'Ivoire">Cote d'Ivoire</option>
+            <option value="Senegal">Senegal</option>
+            <option value="Egypt">Egypt</option>
+            <option value="Morocco">Morocco</option>
+        </select>
+
+        <input type="text" id="betting-site" placeholder="Enter Your Betting Site">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+
+        <footer>
+            <p>Predictify 2025 - All rights reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        function login() {
+            let password = document.getElementById("password").value;
+
+            if (password === "2520#") {
+                window.location.href = "predictify_signal.html"; // Redirect to signal page
+            } else {
+                alert("Incorrect password! Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
