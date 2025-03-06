@@ -28,6 +28,18 @@
             to { text-shadow: 0 0 20px #00f, 0 0 40px #0ff; }
         }
 
+        .clock, .countdown {
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.7; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
+
         .prediction-container {
             background: rgba(25, 25, 25, 0.95);
             padding: 25px;
@@ -49,7 +61,6 @@
             font-weight: bold;
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             display: none;
         }
@@ -58,20 +69,7 @@
         .purple { background: #a020f0; box-shadow: 0px 0px 20px #a020f0; }
         .pink { background: #ff007f; box-shadow: 0px 0px 20px #ff007f; }
 
-        .clock {
-            font-size: 20px;
-            font-weight: bold;
-            text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);
-            animation: pulse 1.5s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { opacity: 0.7; transform: scale(1); }
-            to { opacity: 1; transform: scale(1.05); }
-        }
-
         .glowing-button {
-            display: inline-block;
             background: linear-gradient(45deg, #00ffff, #00ff99);
             padding: 12px 20px;
             border-radius: 8px;
@@ -90,45 +88,29 @@
             box-shadow: 0 0 30px rgba(0, 255, 255, 1);
         }
 
-        /* Spinner Animation */
-        .spinner {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border: 6px solid rgba(255, 255, 255, 0.3);
-            border-top: 6px solid #00ffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
     </style>
 </head>
 <body>
     <h1>Aviator Predictor Pro</h1>
     <div class="clock" id="clock"></div>
+    <div class="countdown" id="countdown"></div>
 
     <div class="prediction-container">
         <p>Next Prediction:</p>
         <div id="prediction" class="prediction">Waiting...</div>
-        <div id="spinner" class="spinner"></div>
     </div>
 
     <button class="glowing-button" onclick="startPredictions()">Generate Signal</button>
 
     <script>
         let running = false;
+        let logoutTime = 300; // 5 minutes in seconds
+        let countdownInterval;
 
         function startPredictions() {
             if (!running) {
                 running = true;
-                document.getElementById("spinner").style.display = "block";
-                setTimeout(generatePrediction, 8000); // Spinner for 8s before first prediction
+                setTimeout(generatePrediction, 3000);
             }
         }
 
@@ -137,9 +119,7 @@
             let max = 2.50;
             let odd = (Math.random() * (max - min) + min).toFixed(2);
             let predictionElement = document.getElementById("prediction");
-            let spinnerElement = document.getElementById("spinner");
 
-            // Set odd color
             if (odd < 2) {
                 predictionElement.className = "prediction blue";
             } else if (odd < 4) {
@@ -148,21 +128,12 @@
                 predictionElement.className = "prediction pink";
             }
 
-            // Show the prediction
             predictionElement.innerText = `Target Now: ${odd}x`;
             predictionElement.style.display = "block";
-            spinnerElement.style.display = "none";
 
-            // Hide prediction after 13 seconds and show spinner
             setTimeout(() => {
                 predictionElement.style.display = "none";
-                spinnerElement.style.display = "block";
-
-                // Random time for spinner (40s to 70s)
-                let nextTime = Math.floor(Math.random() * (70 - 40 + 1)) + 40;
-
-                setTimeout(generatePrediction, nextTime * 1000);
-            }, 13000);
+            }, 10000);
         }
 
         function updateClock() {
@@ -173,7 +144,41 @@
             document.getElementById("clock").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
         }
 
-        setInterval(updateClock, 1000);
+        function startCountdown() {
+            let savedTime = localStorage.getItem("logoutTime");
+
+            if (savedTime) {
+                logoutTime = parseInt(savedTime);
+            } else {
+                localStorage.setItem("logoutTime", logoutTime);
+            }
+
+            countdownInterval = setInterval(() => {
+                logoutTime--;
+                localStorage.setItem("logoutTime", logoutTime);
+
+                let minutes = Math.floor(logoutTime / 60);
+                let seconds = logoutTime % 60;
+                document.getElementById("countdown").innerText = `Auto Logout In: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if (logoutTime <= 0) {
+                    logout();
+                }
+            }, 1000);
+        }
+
+        function logout() {
+            alert("Session expired! Please log in again.");
+            localStorage.removeItem("logoutTime");
+            clearInterval(countdownInterval);
+            window.location.reload();
+        }
+
+        window.onload = function () {
+            updateClock();
+            setInterval(updateClock, 1000);
+            startCountdown();
+        };
     </script>
 
     <footer>
