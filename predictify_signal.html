@@ -1,24 +1,233 @@
-<script>
-    function snowfall() {
-        let canvas = document.getElementById("snow-canvas");
-        let ctx = canvas.getContext("2d");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictify</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            background: radial-gradient(circle, #000428, #004e92);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
 
-        let snowflakes = [];
+        /* Live Time */
+        .live-time {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: cyan;
+            text-shadow: 0 0 5px cyan;
+        }
 
-        function createSnowflakes() {
-            for (let i = 0; i < 200; i++) {  // Increased the number of snowflakes
-                snowflakes.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    radius: Math.random() * 5 + 2,  // Bigger snowflakes
-                    speed: Math.random() * 3 + 2,  // Faster movement
-                    opacity: Math.random() * 0.8 + 0.2  // Slight transparency
-                });
+        /* Moving Stars Animation */
+        .background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            width: 2px;
+            height: 2px;
+            opacity: 0.8;
+            animation: moveStars linear infinite;
+        }
+
+        @keyframes moveStars {
+            from { transform: translateY(0); }
+            to { transform: translateY(100vh); }
+        }
+
+        /* Signal Container */
+        .signal-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
+            width: 360px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px cyan;
+        }
+
+        /* Spinner */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 250px;
+        }
+
+        .spinner {
+            width: 200px;
+            height: 200px;
+            border: 10px solid rgba(255, 255, 255, 0.2);
+            border-top: 10px solid cyan;
+            border-radius: 50%;
+            animation: spin 0s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: cyan;
+            text-shadow: 0 0 10px cyan;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            cursor: pointer;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinning {
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Prediction Button */
+        button {
+            padding: 15px;
+            background: cyan;
+            color: black;
+            font-size: 18px;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #00e5ff;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 14px;
+            color: cyan;
+            text-shadow: 0 0 5px cyan;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Live Time -->
+    <div class="live-time" id="live-time"></div>
+
+    <!-- Animated Background -->
+    <div class="background"></div>
+
+    <!-- Prediction Container -->
+    <div class="signal-container">
+        <h2>Predictify - AI Safe Odds Predictor</h2>
+        <div class="spinner-container">
+            <div class="spinner" id="spinner">Tap to Predict</div>
+        </div>
+        <button onclick="startPrediction()">Get Prediction</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">Powered by Predictify AI | Safe & Smart Predictions</div>
+
+    <script>
+        // Welcome Message
+        document.addEventListener("DOMContentLoaded", function() {
+            let welcomeMessage = new SpeechSynthesisUtterance("Welcome to Predictify, your AI-powered safe odds predictor.");
+            welcomeMessage.rate = 1;
+            window.speechSynthesis.speak(welcomeMessage);
+        });
+
+        function startPrediction() {
+            let spinner = document.getElementById("spinner");
+            
+            spinner.innerHTML = "";
+            spinner.classList.add("spinning");
+
+            // Whoosh Sound
+            let whooshSound = new Audio("https://www.fesliyanstudios.com/play-mp3/6481");
+            whooshSound.play();
+
+            setTimeout(() => {
+                let selectedOdd = generateOdds();
+                spinner.innerHTML = selectedOdd + "x";
+                spinner.classList.remove("spinning");
+
+                // AI Voice Output
+                let speech = new SpeechSynthesisUtterance("Next target: " + selectedOdd + "x");
+                speech.rate = 1;
+                window.speechSynthesis.speak(speech);
+            }, 3000);
+        }
+
+        function generateOdds() {
+            let random = Math.random() * 100; 
+
+            if (random <= 75) {
+                return (Math.random() * (2.50 - 1.00) + 1.00).toFixed(2);
+            } else if (random <= 95) {
+                return (Math.random() * (9.99 - 2.60) + 2.60).toFixed(2);
+            } else {
+                return (Math.random() * (20.00 - 10.00) + 10.00).toFixed(2);
             }
         }
 
-        function drawSnowflakes() {
-            ctx.clearRect(0,
+        // Live Time
+        function updateTime() {
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, "0");
+            let minutes = now.getMinutes().toString().padStart(2, "0");
+            let seconds = now.getSeconds().toString().padStart(2, "0");
+            document.getElementById("live-time").innerText = `Time: ${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Generate Stars
+        for (let i = 0; i < 100; i++) {
+            let star = document.createElement("div");
+            star.classList.add("star");
+            star.style.left = Math.random() * 100 + "vw";
+            star.style.animationDuration = (Math.random() * 3 + 2) + "s";
+            document.querySelector(".background").appendChild(star);
+        }
+    </script>
+
+</body>
+</html>
