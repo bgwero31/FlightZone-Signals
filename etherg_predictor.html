@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EtherG Predictor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            background: radial-gradient(circle, #000428, #004e92);
+            color: white;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 35px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
+        }
+
+        .container {
+            max-width: 400px;
+            background: rgba(25, 25, 25, 0.9);
+            padding: 20px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        input, button {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        input {
+            background: #111;
+            color: white;
+        }
+
+        button {
+            background: #00ffff;
+            color: black;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .prediction {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .blue { background: #00ffff; }
+        .purple { background: #a020f0; }
+        .pink { background: #ff007f; }
+
+        .glow {
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff; }
+            to { text-shadow: 0 0 20px #00ffff; }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="glow">EtherG Predictor</h1>
+
+    <div id="loginPage" class="container">
+        <h2>Enter Password</h2>
+        <input type="password" id="passwordInput" placeholder="Enter password">
+        <button onclick="checkLogin()">Login</button>
+    </div>
+
+    <div id="predictorPage" class="container hidden">
+        <h2>Next Prediction:</h2>
+        <div id="prediction" class="prediction">Waiting...</div>
+        <button onclick="generatePrediction()">Generate Signal</button>
+    </div>
+
+    <script>
+        function checkLogin() {
+            let password = document.getElementById("passwordInput").value;
+            if (password === "mick2025") {
+                document.getElementById("loginPage").classList.add("hidden");
+                document.getElementById("predictorPage").classList.remove("hidden");
+            } else {
+                alert("Incorrect Password!");
+            }
+        }
+
+        function generatePrediction() {
+            let min = 1.50, max = 2.50;
+            let odd = (Math.random() * (max - min) + min).toFixed(2);
+            let predictionElement = document.getElementById("prediction");
+
+            predictionElement.className = "prediction";
+            if (odd < 2) predictionElement.classList.add("blue");
+            else if (odd < 4) predictionElement.classList.add("purple");
+            else predictionElement.classList.add("pink");
+
+            predictionElement.innerText = `Target Now: ${odd}x`;
+            predictionElement.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
