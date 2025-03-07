@@ -3,107 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EtherG Predictor</title>
+    <title>EtherG Predictor - AI Powered Predictions</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
+        /* Styling for futuristic design */
         body {
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            background: radial-gradient(circle, #000428, #004e92);
-            color: white;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 35px;
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
-        }
-
-        .container {
-            max-width: 400px;
-            background: rgba(25, 25, 25, 0.9);
-            padding: 20px;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-
-        input, button {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            background-color: #141414;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
             text-align: center;
         }
 
-        input {
-            background: #111;
-            color: white;
-        }
-
-        button {
-            background: #00ffff;
-            color: black;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .hidden {
-            display: none;
+        .header {
+            background-color: #1d1d1d;
+            padding: 20px;
+            border-bottom: 3px solid #ff9900;
         }
 
         .prediction {
-            font-size: 24px;
+            font-size: 25px;
             font-weight: bold;
-            padding: 15px;
+            padding: 10px;
+            margin-top: 20px;
             border-radius: 10px;
+            transition: all 0.5s ease;
+        }
+
+        .blue { color: blue; }
+        .purple { color: purple; }
+        .pink { color: pink; }
+
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Flag_of_Zimbabwe.svg/2560px-Flag_of_Zimbabwe.svg.png');
+            background-size: cover;
+        }
+
+        .feedback-section {
+            margin-top: 20px;
             display: none;
         }
 
-        .blue { background: #00ffff; }
-        .purple { background: #a020f0; }
-        .pink { background: #ff007f; }
-
-        .glow {
-            animation: glow 1.5s infinite alternate;
+        /* Add button styles */
+        .button {
+            background-color: #ff9900;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #fff; }
-            to { text-shadow: 0 0 20px #00ffff; }
+        .button:hover {
+            background-color: #e68900;
         }
     </style>
 </head>
 <body>
-    <h1 class="glow">EtherG Predictor</h1>
-
-    <div id="loginPage" class="container">
-        <h2>Enter Password</h2>
-        <input type="password" id="passwordInput" placeholder="Enter password">
-        <button onclick="checkLogin()">Login</button>
+    <div class="header">
+        <h1>Welcome to EtherG Predictor</h1>
+        <p>Get accurate betting predictions powered by AI!</p>
     </div>
 
-    <div id="predictorPage" class="container hidden">
-        <h2>Next Prediction:</h2>
-        <div id="prediction" class="prediction">Waiting...</div>
-        <button onclick="generatePrediction()">Generate Signal</button>
+    <div id="prediction" class="prediction"></div>
+
+    <!-- Generate Prediction Button -->
+    <button class="button" onclick="generatePrediction()">Generate Prediction</button>
+
+    <!-- Feedback Section -->
+    <div id="feedbackSection" class="feedback-section">
+        <h2>How did the prediction perform?</h2>
+        <p>Did the prediction of <span id="predictedOdds"></span> come through on the betting site?</p>
+        <button class="button" onclick="submitFeedback(true)">Yes</button>
+        <button class="button" onclick="submitFeedback(false)">No</button>
+
+        <h3>Enter the number of successful predictions today:</h3>
+        <input type="number" id="successfulPredictions" placeholder="e.g. 3 out of 12" />
+        <button class="button" onclick="submitFeedback()">Submit Feedback</button>
     </div>
+
+    <!-- Footer with Zimbabwean Flag -->
+    <div class="footer"></div>
 
     <script>
-        function checkLogin() {
-            let password = document.getElementById("passwordInput").value;
-            if (password === "mick2025") {
-                document.getElementById("loginPage").classList.add("hidden");
-                document.getElementById("predictorPage").classList.remove("hidden");
-            } else {
-                alert("Incorrect Password!");
-            }
-        }
-
+        // Simple prediction logic
         function generatePrediction() {
             let min = 1.50, max = 2.50;
             let odd = (Math.random() * (max - min) + min).toFixed(2);
@@ -115,9 +102,24 @@
             else predictionElement.classList.add("pink");
 
             predictionElement.innerText = `Target Now: ${odd}x`;
-            predictionElement.style.display = "block";
+            document.getElementById("predictedOdds").innerText = odd + "x";
+
+            // Show feedback section
+            document.getElementById("feedbackSection").style.display = "block";
+        }
+
+        // Submit feedback function
+        function submitFeedback(isSuccessful) {
+            let successfulPredictions = document.getElementById("successfulPredictions").value;
+            console.log("Feedback received:", isSuccessful, "Successful Predictions:", successfulPredictions);
+
+            // Send this data to backend to improve AI (API call to process feedback)
+            alert("Thank you for your feedback! We will improve predictions based on your input.");
+            
+            // Reset the input fields and hide feedback section
+            document.getElementById("successfulPredictions").value = "";
+            document.getElementById("feedbackSection").style.display = "none";
         }
     </script>
-
 </body>
 </html>
