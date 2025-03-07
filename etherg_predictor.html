@@ -140,6 +140,9 @@
                 document.getElementById("loginScreen").style.display = "none";
                 document.getElementById("predictionScreen").style.display = "block";
                 alert("Logged in successfully! Welcome to the AI Prediction System.");
+                
+                // Start auto prediction generation after login
+                setInterval(generatePrediction, 5000);  // Generate a prediction every 5 seconds
             } else {
                 alert("Incorrect password. Please try again.");
             }
