@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
             color: white;
             display: flex;
             flex-direction: column;
@@ -16,71 +16,64 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            text-align: center;
         }
 
         .container {
-            width: 80%;
-            max-width: 600px;
-            text-align: center;
-            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.9);
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            animation: fadeIn 1s ease-in-out;
         }
 
         h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
+            font-size: 28px;
         }
 
         .prediction {
             font-size: 24px;
-            padding: 20px;
+            padding: 15px;
             margin: 20px 0;
             border-radius: 10px;
             display: none;
+            font-weight: bold;
         }
 
         .blue { background-color: #3498db; }
         .purple { background-color: #9b59b6; }
         .pink { background-color: #e91e63; }
 
-        #loginSection, #predictionSection {
-            display: none;
-        }
-
-        #feedbackSection {
-            display: none;
-            margin-top: 20px;
+        input, button {
+            width: 80%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
         }
 
         button {
             background-color: #1abc9c;
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
         }
 
         button:hover {
             background-color: #16a085;
         }
 
-        input {
-            padding: 10px;
-            width: 80%;
-            border: none;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
         footer {
             position: absolute;
             bottom: 10px;
             right: 10px;
-            font-size: 14px;
-            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .hidden {
@@ -97,75 +90,54 @@
             <button onclick="login()">Login</button>
         </div>
 
-        <div id="predictionSection">
+        <div id="predictionSection" class="hidden">
             <h1>Get Predictions</h1>
-            <button onclick="generatePrediction()">Get Predictions</button>
+            <button onclick="generatePrediction()">Get Prediction</button>
             <div id="prediction" class="prediction"></div>
-        </div>
-
-        <div id="feedbackSection" class="hidden">
-            <h2>How did the prediction perform?</h2>
-            <p>Did the prediction of <span id="predictedOdds"></span> come through on the betting site?</p>
-            <button onclick="submitFeedback(true)">Yes</button>
-            <button onclick="submitFeedback(false)">No</button>
-            <h3>Enter the number of successful predictions today:</h3>
-            <input type="number" id="successfulPredictions" placeholder="e.g. 3 out of 12">
-            <button onclick="submitFeedback()">Submit Feedback</button>
         </div>
     </div>
 
     <footer>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Flag_of_Zimbabwe.svg/1280px-Flag_of_Zimbabwe.svg.png" alt="Zimbabwean Flag" width="40" height="40">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Zimbabwe.svg" alt="Zimbabwe Flag" width="50">
     </footer>
 
     <script>
-        // AI Model Setup (for demo purposes)
         function login() {
             const bettingSite = document.getElementById("bettingSite").value;
             const password = document.getElementById("password").value;
 
             if (bettingSite && password === 'mick2025') {
                 document.getElementById("loginSection").style.display = "none";
-                document.getElementById("predictionSection").style.display = "block";
-                alert("Welcome to EtherG Predictor! Let's get started with predictions.");
+                document.getElementById("predictionSection").classList.remove("hidden");
+                speakAI("Welcome to EtherG Predictor! Let's start predicting.");
             } else {
                 alert("Invalid login credentials!");
             }
         }
 
         function generatePrediction() {
-            let min = 1.50, max = 2.50;
-            let odd = (Math.random() * (max - min) + min).toFixed(2);
+            let odds = [1.50, 2.20, 3.80, 10.50, 15.00];
+            let randomIndex = Math.floor(Math.random() * odds.length);
+            let odd = odds[randomIndex].toFixed(2);
+            let confidence = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
+            
             let predictionElement = document.getElementById("prediction");
-
             predictionElement.className = "prediction";
+
             if (odd < 2) predictionElement.classList.add("blue");
-            else if (odd < 4) predictionElement.classList.add("purple");
+            else if (odd < 10) predictionElement.classList.add("purple");
             else predictionElement.classList.add("pink");
 
-            predictionElement.innerText = `Prediction: ${odd}x`;
-
-            // AI confidence level simulation
-            const confidenceLevel = Math.floor(Math.random() * 100) + 1;
-            predictionElement.innerText += ` (Confidence: ${confidenceLevel}%)`;
-
+            predictionElement.innerText = `Prediction: ${odd}x (Confidence: ${confidence}%)`;
             predictionElement.style.display = "block";
 
-            // Show feedback section after generating a prediction
-            document.getElementById("feedbackSection").classList.remove("hidden");
-            document.getElementById("predictedOdds").innerText = odd + "x";
+            speakAI(`The next odd is ${odd}x with ${confidence} percent confidence.`);
         }
 
-        function submitFeedback(isSuccessful) {
-            let successfulPredictions = document.getElementById("successfulPredictions").value;
-            console.log("Feedback received: ", isSuccessful, "Successful Predictions: ", successfulPredictions);
-
-            // Here, we'd send feedback to the backend for further AI model improvement.
-            alert("Thank you for your feedback! Your input helps improve predictions.");
-
-            // Reset input fields and hide feedback section
-            document.getElementById("successfulPredictions").value = "";
-            document.getElementById("feedbackSection").classList.add("hidden");
+        function speakAI(text) {
+            let speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "en-US";
+            window.speechSynthesis.speak(speech);
         }
     </script>
 </body>
