@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EtherG Predictor - Advanced AI</title>
+    <title>EtherG Predictor - AI Signals</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -15,7 +15,6 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
             text-align: center;
         }
 
@@ -29,16 +28,13 @@
             animation: fadeIn 1s ease-in-out;
         }
 
-        h1 {
-            font-size: 28px;
-        }
+        h1 { font-size: 28px; }
 
         .prediction {
             font-size: 24px;
             padding: 15px;
             margin: 20px 0;
             border-radius: 10px;
-            display: none;
             font-weight: bold;
         }
 
@@ -61,24 +57,14 @@
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: #16a085;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-        }
+        button:hover { background-color: #16a085; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
 
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -91,15 +77,11 @@
         </div>
 
         <div id="predictionSection" class="hidden">
-            <h1>Get Predictions</h1>
-            <button onclick="generatePrediction()">Get Prediction</button>
+            <h1>AI Betting Predictions</h1>
+            <button onclick="startGeneratingPredictions()">Start AI Predictions</button>
             <div id="prediction" class="prediction"></div>
         </div>
     </div>
-
-    <footer>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Zimbabwe.svg" alt="Zimbabwe Flag" width="50">
-    </footer>
 
     <script>
         function login() {
@@ -109,18 +91,38 @@
             if (bettingSite && password === 'mick2025') {
                 document.getElementById("loginSection").style.display = "none";
                 document.getElementById("predictionSection").classList.remove("hidden");
-                speakAI("Welcome to EtherG Predictor! Let's start predicting.");
+                speakAI("Welcome to EtherG Predictor! AI will now analyze and predict the best odds.");
             } else {
                 alert("Invalid login credentials!");
             }
         }
 
-        function generatePrediction() {
-            let odds = [1.50, 2.20, 3.80, 10.50, 15.00];
-            let randomIndex = Math.floor(Math.random() * odds.length);
-            let odd = odds[randomIndex].toFixed(2);
+        function startGeneratingPredictions() {
+            analyzeOdds();
+        }
+
+        function analyzeOdds() {
+            let oddsPool = [1.40, 1.85, 2.10, 3.50, 5.00, 10.00, 12.50, 20.00];
+            let probability = Math.random();
+
+            let selectedOdd;
+            if (probability < 0.50) selectedOdd = oddsPool[0]; // Most common low odds
+            else if (probability < 0.75) selectedOdd = oddsPool[2]; // Mid odds
+            else if (probability < 0.90) selectedOdd = oddsPool[4]; // High odds
+            else selectedOdd = oddsPool[Math.floor(Math.random() * 3) + 5]; // Rare big odds
+
             let confidence = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
-            
+
+            if (confidence > 85) {
+                displayPrediction(selectedOdd, confidence);
+                speakAI(`Prediction found: ${selectedOdd}x with ${confidence} percent confidence.`);
+            } 
+
+            let nextAnalysisTime = Math.floor(Math.random() * (20000 - 10000) + 10000); 
+            setTimeout(analyzeOdds, nextAnalysisTime); 
+        }
+
+        function displayPrediction(odd, confidence) {
             let predictionElement = document.getElementById("prediction");
             predictionElement.className = "prediction";
 
@@ -130,8 +132,6 @@
 
             predictionElement.innerText = `Prediction: ${odd}x (Confidence: ${confidence}%)`;
             predictionElement.style.display = "block";
-
-            speakAI(`The next odd is ${odd}x with ${confidence} percent confidence.`);
         }
 
         function speakAI(text) {
