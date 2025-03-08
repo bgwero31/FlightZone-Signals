@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EtherG Predictor - Safe Odds </title>
+    <title>EtherG Safe Odd Predictor</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -68,15 +68,27 @@
         .hidden { display: none; }
 
         footer {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             width: 100%;
             background-color: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 10px 0;
-            font-size: 14px;
+            font-size: 18px;
             text-align: center;
+            padding: 10px 0;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .footer-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: moveFooter 15s linear infinite;
+        }
+
+        @keyframes moveFooter {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
     </style>
@@ -91,14 +103,16 @@
         </div>
 
         <div id="predictionSection" class="hidden">
-            <h1>AI Betting Predictions</h1>
+            <h1>EtherG Predictor</h1>
             <button onclick="startGeneratingPredictions()">Start AI Predictions</button>
             <div id="prediction" class="prediction"></div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 EtherG Predictor - All Rights Reserved</p>
+        <div class="footer-content">
+            <p>FlightZone Signals Bots - Empowering Your Betting Strategy,choose your bot...Aviator Predictor Pro,Aviator Master X,Aviator Neurobet,Aviator Master Predictor Pro,Aviator Pink Bot..so grab yours now contact B.JAY..</p>
+        </div>
     </footer>
 
     <script>
@@ -136,7 +150,8 @@
                 speakAI(`Prediction found: ${selectedOdd}x with ${confidence} percent confidence.`);
             } 
 
-            let nextAnalysisTime = Math.floor(Math.random() * (20000 - 10000) + 10000); 
+            // Randomize the next analysis time with a higher level of variation
+            let nextAnalysisTime = Math.floor(Math.random() * (30000 - 10000) + 10000); // Interval between 10-30 seconds
             setTimeout(analyzeOdds, nextAnalysisTime); 
         }
 
