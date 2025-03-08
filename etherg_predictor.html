@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EtherG Safe Odd Predictor</title>
+    <title>EtherG Safe Odds Predictor</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -83,7 +83,7 @@
         .footer-content {
             display: inline-block;
             white-space: nowrap;
-            animation: moveFooter 15s linear infinite;
+            animation: moveFooter 30s linear infinite; /* Reduced speed of scrolling */
         }
 
         @keyframes moveFooter {
@@ -103,7 +103,7 @@
         </div>
 
         <div id="predictionSection" class="hidden">
-            <h1>EtherG Predictor</h1>
+            <h1>AVIATOR ETHERG PREDICTOR </h1>
             <button onclick="startGeneratingPredictions()">Start AI Predictions</button>
             <div id="prediction" class="prediction"></div>
         </div>
@@ -111,7 +111,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>FlightZone Signals Bots - Empowering Your Betting Strategy,choose your bot...Aviator Predictor Pro,Aviator Master X,Aviator Neurobet,Aviator Master Predictor Pro,Aviator Pink Bot..so grab yours now contact B.JAY..</p>
+            <p>FlightZone Signals Bots - Empowering Your Betting Strategy, choose your bot... Aviator Predictor Pro, Aviator Master X, Aviator Neurobet, Aviator Master Predictor Pro, Aviator Pink Bot... so grab yours now contact B.JAY</p>
         </div>
     </footer>
 
@@ -123,7 +123,7 @@
             if (bettingSite && password === 'mick2025') {
                 document.getElementById("loginSection").style.display = "none";
                 document.getElementById("predictionSection").classList.remove("hidden");
-                speakAI("Welcome to EtherG Predictor! AI will now analyze and predict the best odds.");
+                speakAI("Welcome to AVIATOR EtherG Predictor! AI will now analyze and predict the best odds.");
             } else {
                 alert("Invalid login credentials!");
             }
@@ -134,25 +134,31 @@
         }
 
         function analyzeOdds() {
-            let oddsPool = [1.40, 1.85, 2.10, 3.50, 5.00, 10.00, 12.50, 20.00];
-            let probability = Math.random();
+            let oddsPoolLow = [1.10, 1.30, 1.50, 1.75, 2.00, 2.30]; // Odds between 1.10x and 2.30x
+            let oddsPoolMid = [2.31, 2.50, 2.80, 3.00, 3.50, 4.00]; // Odds between 2.31x and 4.00x
+            let oddsPoolHigh = [5.00, 7.00, 10.00, 15.00, 20.00]; // Odds higher than 4.00x
 
+            let probability = Math.random();
             let selectedOdd;
-            if (probability < 0.50) selectedOdd = oddsPool[0]; // Most common low odds
-            else if (probability < 0.75) selectedOdd = oddsPool[2]; // Mid odds
-            else if (probability < 0.90) selectedOdd = oddsPool[4]; // High odds
-            else selectedOdd = oddsPool[Math.floor(Math.random() * 3) + 5]; // Rare big odds
+
+            if (probability < 0.70) {
+                selectedOdd = oddsPoolLow[Math.floor(Math.random() * oddsPoolLow.length)]; // 70% from 1.10x to 2.30x
+            } else if (probability < 0.90) {
+                selectedOdd = oddsPoolMid[Math.floor(Math.random() * oddsPoolMid.length)]; // 20% from 2.31x to 4.00x
+            } else {
+                selectedOdd = oddsPoolHigh[Math.floor(Math.random() * oddsPoolHigh.length)]; // 10% odds higher than 4.00x
+            }
 
             let confidence = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
 
             if (confidence > 85) {
                 displayPrediction(selectedOdd, confidence);
                 speakAI(`Prediction found: ${selectedOdd}x with ${confidence} percent confidence.`);
-            } 
+            }
 
-            // Randomize the next analysis time with a higher level of variation
-            let nextAnalysisTime = Math.floor(Math.random() * (30000 - 10000) + 10000); // Interval between 10-30 seconds
-            setTimeout(analyzeOdds, nextAnalysisTime); 
+            // Reduced analysis time to between 15-30 seconds for more accuracy
+            let nextAnalysisTime = Math.floor(Math.random() * (30000 - 15000) + 15000); // Interval between 15-30 seconds
+            setTimeout(analyzeOdds, nextAnalysisTime);
         }
 
         function displayPrediction(odd, confidence) {
