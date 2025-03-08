@@ -116,21 +116,21 @@
     </style>
 </head>
 <body>
-    <div class="header">FlightZone Signals Bots - Professional AI Predictions</div>
+    <div class="header">FlightZone Signals - Professional AI Predictions</div>
     <div class="marquee">
         <span>🚀 Try our premium AI: Aviator Predictor Pro | Aviator Master X | Aviator Pink Bot | Aviator NeuroBet 🚀</span>
     </div>
 
     <div class="container">
         <div id="loginSection">
-            <h1>Login to AI Predictor</h1>
+            <h1>Login to EtherG Predictor</h1>
             <input type="text" id="bettingSite" placeholder="Enter Betting Site" />
             <input type="password" id="password" placeholder="Enter Password" />
             <button onclick="login()">Login</button>
         </div>
 
         <div id="predictionSection" class="hidden">
-            <h1>AI Betting Predictions</h1>
+            <h1>AVIATOR ETHERG PREDICTOR</h1>
             <button onclick="startGeneratingPredictions()">Start AI Predictions</button>
             <div id="prediction" class="prediction"></div>
         </div>
@@ -153,6 +153,8 @@
         }
 
         function startGeneratingPredictions() {
+            // Disable the button to avoid multiple clicks
+            document.querySelector("button").disabled = true;
             generatePredictions();
         }
 
@@ -160,67 +162,45 @@
             // Define odds pools for low (safe) and high (best) odds
             let lowOddsPool = [1.00, 1.10, 1.30, 1.40, 1.55, 1.75, 1.85, 2.00];
             let highOddsPool = [5.00, 7.00, 10.00, 15.00, 20.00, 25.00];
-            
-            // Simulated past performance data (can be adjusted)
-            let historicalPerformance = [0.85, 0.90, 0.75, 0.80, 0.95];  
+
+            // Simulated historical performance data (can be adjusted)
+            let historicalPerformance = [0.85, 0.90, 0.75, 0.80, 0.95];
             let averagePerformance = historicalPerformance.reduce((a, b) => a + b) / historicalPerformance.length;
 
             // Random probability based on historical data for prediction accuracy
-            let probability = Math.random() * averagePerformance; 
+            let probability = Math.random();
 
-            // Confidence factor based on the prediction's historical accuracy
-            let confidence = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
+            // Get current time for accurate prediction times
+            let currentTime = new Date();
+            let minutes = currentTime.getMinutes();
+            let seconds = currentTime.getSeconds();
 
-            let selectedOdd;
+            // Choose a random delay time for the next prediction
+            let delayTimes = [15, 20, 30]; // in seconds
+            let delayTime = delayTimes[Math.floor(Math.random() * delayTimes.length)];
 
-            // Decision making for safe odds vs best odds
-            if (probability < 0.70) {
-                // Safe bet (low odds)
-                selectedOdd = lowOddsPool[Math.floor(Math.random() * lowOddsPool.length)];
-                displayPrediction(selectedOdd, confidence, "safe");
-                speakAI(`Safe Prediction: ${selectedOdd}x (Confidence: ${confidence}%)`);
-            } else {
-                // High-risk bet (best odds)
-                let confirmBigOdd = Math.random();
-                if (confirmBigOdd > 0.85 && confidence > 90) { 
-                    selectedOdd = highOddsPool[Math.floor(Math.random() * highOddsPool.length)];
-                    displayPrediction(selectedOdd, confidence, "best");
-                    speakAI(`Best Prediction: ${selectedOdd}x (Confidence: ${confidence}%)`);
-                } else {
-                    // If not risky enough for best odds, fallback to safe bet
-                    selectedOdd = lowOddsPool[Math.floor(Math.random() * lowOddsPool.length)];
-                    displayPrediction(selectedOdd, confidence, "safe");
-                    speakAI(`Safe Prediction: ${selectedOdd}x (Confidence: ${confidence}%)`);
-                }
-            }
+            // Calculate the next prediction time
+            let nextPredictionTime = new Date(currentTime.getTime() + delayTime * 1000);
 
-            // No fixed time intervals: AI will choose when the odds are optimal to predict
-            let nextAnalysisTime = Math.random() * 2000 + 1000;  // Randomized next prediction time (1-3 seconds)
-            setTimeout(generatePredictions, nextAnalysisTime);  // Re-run after a short delay
-        }
+            // Display the prediction
+            let predictionText = `
+                **Prediction Time: ${nextPredictionTime.getHours()}:${nextPredictionTime.getMinutes()}:${nextPredictionTime.getSeconds()}**
+                - Odds: ${probability < 0.5 ? lowOddsPool[Math.floor(Math.random() * lowOddsPool.length)] : highOddsPool[Math.floor(Math.random() * highOddsPool.length)]}
+            `;
 
-        function displayPrediction(odd, confidence, predictionType) {
+            // Display the prediction in the container
             let predictionElement = document.getElementById("prediction");
-            predictionElement.className = "prediction";
+            predictionElement.innerHTML = predictionText;
 
-            // Display prediction based on odd ranges
-            if (odd < 2) predictionElement.classList.add("blue");
-            else if (odd < 10) predictionElement.classList.add("purple");
-            else predictionElement.classList.add("pink");
-
-            // Show additional info about the type of prediction (Safe/Best)
-            if (predictionType === "safe") {
-                predictionElement.innerText = `Safe Prediction: ${odd}x (Confidence: ${confidence}%)`;
-            } else {
-                predictionElement.innerText = `Best Prediction: ${odd}x (Confidence: ${confidence}%)`;
-            }
-            predictionElement.style.display = "block";
+            // Repeat the prediction generation after the chosen delay time
+            setTimeout(generatePredictions, delayTime * 1000);
         }
 
-        function speakAI(text) {
-            let speech = new SpeechSynthesisUtterance(text);
-            speech.lang = "en-US";
-            window.speechSynthesis.speak(speech);
+        function speakAI(message) {
+            if ('speechSynthesis' in window) {
+                let msg = new SpeechSynthesisUtterance(message);
+                window.speechSynthesis.speak(msg);
+            }
         }
     </script>
 </body>
