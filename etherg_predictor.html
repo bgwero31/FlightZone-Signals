@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EtherG Predictor - AI Signals</title>
+    <title>FlightZone Signals - EtherG Predictor</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+            background: linear-gradient(to right, #1a1a2e, #16213e, #0f3460);
             color: white;
             display: flex;
             flex-direction: column;
@@ -26,9 +26,46 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
             animation: fadeIn 1s ease-in-out;
+            position: relative;
         }
 
-        h1 { font-size: 28px; }
+        .header {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            color: white;
+        }
+
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: fixed;
+            top: 40px;
+            background: black;
+            color: yellow;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .marquee span {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        h1 { font-size: 28px; margin-top: 60px; }
 
         .prediction {
             font-size: 24px;
@@ -65,23 +102,41 @@
         }
 
         .hidden { display: none; }
+
+        .footer {
+            width: 100%;
+            padding: 10px;
+            background: black;
+            color: white;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
     </style>
 </head>
 <body>
+    <div class="header">FlightZone Signals Bots - Professional AI Predictions</div>
+    <div class="marquee">
+        <span>🚀 Try our premium AI: Aviator Predictor Pro | Aviator Master X | Aviator Pink Bot | Aviator NeuroBet 🚀</span>
+    </div>
+
     <div class="container">
         <div id="loginSection">
-            <h1>Login to EtherG Predictor</h1>
+            <h1>Login to AVIATOR EtherG Predictor</h1>
             <input type="text" id="bettingSite" placeholder="Enter Betting Site" />
             <input type="password" id="password" placeholder="Enter Password" />
             <button onclick="login()">Login</button>
         </div>
 
         <div id="predictionSection" class="hidden">
-            <h1>EtherG safe odds Predictor </h1>
+            <h1>EtherG safe odds PREDICTOR </h1>
             <button onclick="startGeneratingPredictions()">Start AI Predictions</button>
             <div id="prediction" class="prediction"></div>
         </div>
     </div>
+
+    <div class="footer">© 2025 FlightZone Signals. All Rights Reserved.</div>
 
     <script>
         function login() {
@@ -91,7 +146,7 @@
             if (bettingSite && password === 'mick2025') {
                 document.getElementById("loginSection").style.display = "none";
                 document.getElementById("predictionSection").classList.remove("hidden");
-                speakAI("Welcome to EtherG Predictor! AI will now analyze and predict the best odds.");
+                speakAI("Welcome to FlightZone Predictor! AI will now analyze and predict the best odds.");
             } else {
                 alert("Invalid login credentials!");
             }
@@ -102,21 +157,25 @@
         }
 
         function analyzeOdds() {
-            let oddsPool = [1.40, 1.85, 2.10, 3.50, 5.00, 10.00, 12.50, 20.00];
+            let lowOddsPool = [1.00, 1.10, 1.30, 1.40, 1.55, 1.75, 1.85, 2.00];
+            let bigOddsPool = [5.00, 7.00, 10.00, 15.00, 20.00, 25.00];
             let probability = Math.random();
+            let confidence = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
 
             let selectedOdd;
-            if (probability < 0.50) selectedOdd = oddsPool[0]; // Most common low odds
-            else if (probability < 0.75) selectedOdd = oddsPool[2]; // Mid odds
-            else if (probability < 0.90) selectedOdd = oddsPool[4]; // High odds
-            else selectedOdd = oddsPool[Math.floor(Math.random() * 3) + 5]; // Rare big odds
+            if (probability < 0.70) {
+                selectedOdd = lowOddsPool[Math.floor(Math.random() * lowOddsPool.length)];
+            } else {
+                let confirmBigOdd = Math.random();
+                if (confirmBigOdd > 0.85 && confidence > 90) { 
+                    selectedOdd = bigOddsPool[Math.floor(Math.random() * bigOddsPool.length)];
+                } else {
+                    selectedOdd = lowOddsPool[Math.floor(Math.random() * lowOddsPool.length)];
+                }
+            }
 
-            let confidence = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
-
-            if (confidence > 85) {
-                displayPrediction(selectedOdd, confidence);
-                speakAI(`Prediction found: ${selectedOdd}x with ${confidence} percent confidence.`);
-            } 
+            displayPrediction(selectedOdd, confidence);
+            speakAI(`Prediction found: ${selectedOdd}x with ${confidence} percent confidence.`);
 
             let nextAnalysisTime = Math.floor(Math.random() * (20000 - 10000) + 10000); 
             setTimeout(analyzeOdds, nextAnalysisTime); 
