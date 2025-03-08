@@ -116,6 +116,8 @@
     </footer>
 
     <script>
+        let lastOdd = null;  // Variable to keep track of the last odd to avoid repetition
+
         function login() {
             const bettingSite = document.getElementById("bettingSite").value;
             const password = document.getElementById("password").value;
@@ -148,6 +150,13 @@
             } else {
                 selectedOdd = oddsPoolHigh[Math.floor(Math.random() * oddsPoolHigh.length)]; // 10% odds higher than 4.00x
             }
+
+            // Check to make sure that the same odd is not repeated consecutively
+            while (selectedOdd === lastOdd) {
+                selectedOdd = oddsPoolLow[Math.floor(Math.random() * oddsPoolLow.length)]; // Re-select if the same odd as lastOdd
+            }
+
+            lastOdd = selectedOdd; // Update lastOdd with the current selected odd
 
             let confidence = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
 
