@@ -19,7 +19,6 @@
             position: relative;
         }
 
-        /* Decorative floating particles */
         body::before {
             content: "";
             position: absolute;
@@ -123,7 +122,7 @@
         </div>
 
         <div id="predictionSection" class="hidden">
-            <h1>ETHERG - SAFE ODDS PREDICTOR...</h1>
+            <h1>FLIGHTZONE SIGNALS by B.JAY</h1>
             <button onclick="startGeneratingPredictions()">Start AI Predictions</button>
             <div id="prediction" class="prediction"></div>
         </div>
@@ -142,10 +141,10 @@
             const bettingSite = document.getElementById("bettingSite").value;
             const password = document.getElementById("password").value;
 
-            if (bettingSite && password === 'bjmick2025') {
+            if (bettingSite && password === 'mick2025') {
                 document.getElementById("loginSection").style.display = "none";
                 document.getElementById("predictionSection").classList.remove("hidden");
-                speakAI("Welcome to FLIGHTZONE SIGNALS by B.JAY. AI will now analyze and predict the best odds.");
+                speakAI("Welcome to ETHERG PREDICTOR. AI will now analyze and predict the best odds.");
             } else {
                 alert("Invalid login credentials!");
             }
@@ -155,24 +154,24 @@
             analyzeOdds();
         }
 
-        function analyzeOdds() {
-            let oddsPoolLow = [1.10, 1.30, 1.50, 1.75, 2.00, 2.30];
-            let oddsPoolMid = [2.31, 2.50, 2.80, 3.00, 3.50, 4.00];
-            let oddsPoolHigh = [5.00, 7.00, 10.00, 15.00, 20.00];
+        function getRandomOdd(min, max, decimals = 2) {
+            return parseFloat((Math.random() * (max - min) + min).toFixed(decimals));
+        }
 
+        function analyzeOdds() {
             let probability = Math.random();
             let selectedOdd;
 
             if (probability < 0.70) {
-                selectedOdd = oddsPoolLow[Math.floor(Math.random() * oddsPoolLow.length)];
+                selectedOdd = getRandomOdd(1.00, 2.30);
             } else if (probability < 0.90) {
-                selectedOdd = oddsPoolMid[Math.floor(Math.random() * oddsPoolMid.length)];
+                selectedOdd = getRandomOdd(2.31, 4.00);
             } else {
-                selectedOdd = oddsPoolHigh[Math.floor(Math.random() * oddsPoolHigh.length)];
+                selectedOdd = getRandomOdd(5.00, 20.00);
             }
 
             while (selectedOdd === lastOdd) {
-                selectedOdd = oddsPoolLow[Math.floor(Math.random() * oddsPoolLow.length)];
+                selectedOdd = getRandomOdd(1.00, 2.30);
             }
 
             lastOdd = selectedOdd;
@@ -180,7 +179,6 @@
 
             if (confidence > 85) {
                 displayPrediction(selectedOdd, confidence);
-
                 if (selectedOdd >= 5.00) {
                     speakAI(`Risk alert! ${selectedOdd}x. Let's risk this one! Confidence is ${confidence} percent.`);
                 } else {
