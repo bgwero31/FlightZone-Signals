@@ -6,48 +6,50 @@
     <title>EtherG Safe Odds Predictor</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
-            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            background: url('https://images.unsplash.com/photo-1606761568499-6c3c723ebf98?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            color: white;
             position: relative;
+            overflow: hidden;
         }
 
         body::before {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(white 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.03;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
             z-index: 0;
         }
 
         .container {
             position: relative;
-            z-index: 2;
+            z-index: 1;
             width: 90%;
             max-width: 500px;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-            animation: fadeIn 1s ease-in-out;
-            margin-bottom: 50px;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 1.5s ease-in-out;
         }
 
         h1 {
-            font-size: 26px;
-            margin-bottom: 10px;
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00ffe0, #ff00cc, #00ffe0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
         }
 
         .prediction {
@@ -56,54 +58,68 @@
             margin: 20px 0;
             border-radius: 10px;
             font-weight: bold;
+            text-align: center;
+            color: #fff;
         }
 
-        .blue { background-color: #3498db; }
-        .purple { background-color: #9b59b6; }
-        .pink { background-color: #e91e63; }
+        .blue { background: rgba(52, 152, 219, 0.3); border: 1px solid #3498db; }
+        .purple { background: rgba(155, 89, 182, 0.3); border: 1px solid #9b59b6; }
+        .pink { background: rgba(233, 30, 99, 0.3); border: 1px solid #e91e63; }
 
         input, button {
-            width: 80%;
-            padding: 10px;
-            margin: 10px;
-            border-radius: 5px;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
             border: none;
             font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(8px);
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #ccc;
         }
 
         button {
-            background-color: #1abc9c;
-            color: white;
+            background: linear-gradient(135deg, #00ffe0, #ff00cc);
+            color: #000;
+            font-weight: bold;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #16a085;
+            background: linear-gradient(135deg, #00ffc3, #ff0099);
+        }
+
+        .hidden {
+            display: none;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
-
-        .hidden { display: none; }
 
         footer {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            font-size: 18px;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
             text-align: center;
-            padding: 10px 0;
-            z-index: 3;
+            padding: 10px;
+            font-size: 16px;
         }
 
         .footer-content {
             display: inline-block;
             white-space: nowrap;
             animation: moveFooter 30s linear infinite;
+            color: #ddd;
         }
 
         @keyframes moveFooter {
@@ -122,7 +138,7 @@
         </div>
 
         <div id="predictionSection" class="hidden">
-            <h1>FLIGHTZONE SIGNALS by B.JAY</h1>
+            <h1>ETHERG PREDICTOR </h1>
             <button onclick="startGeneratingPredictions()">Start AI Predictions</button>
             <div id="prediction" class="prediction"></div>
         </div>
@@ -130,7 +146,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>FlightZone Signals Bots - Empowering Your Betting Strategy | Choose your bot: Aviator Predictor Pro, Aviator Master X, Aviator Neurobet, Aviator Master Predictor Pro, Aviator Pink Bot. Contact B.JAY Now!</p>
+            FlightZone Signals Bots - Empowering Your Betting Strategy | Choose your bot: Aviator Predictor Pro, Aviator Master X, Aviator Neurobet, Aviator Master Predictor Pro, Aviator Pink Bot. Contact B.JAY Now!
         </div>
     </footer>
 
@@ -141,10 +157,10 @@
             const bettingSite = document.getElementById("bettingSite").value;
             const password = document.getElementById("password").value;
 
-            if (bettingSite && password === 'mick2025') {
+            if (bettingSite && password === 'bjmick2025') {
                 document.getElementById("loginSection").style.display = "none";
                 document.getElementById("predictionSection").classList.remove("hidden");
-                speakAI("Welcome to ETHERG PREDICTOR. AI will now analyze and predict the best odds.");
+                speakAI("Welcome to EtherG Predictor by B.JAY. AI will now analyze and predict the best odds.");
             } else {
                 alert("Invalid login credentials!");
             }
