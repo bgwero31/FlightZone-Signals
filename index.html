@@ -114,98 +114,108 @@
             font-size: 14px;
             margin-top: 30px;
         }
+
+        .site-logo {
+            max-width: 200px;
+            margin-top: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
     </style>
 </head>
 <body>
 
-<h1>FlightZone Signals by B JAY</h1>
-<br><br>
-<button onclick="openSignalsPage()">🎲 Get Free Signals</button>
+    <!-- Logo Image Added Here -->
+    <img src="Photo_1738307314027.png" alt="FlightZone Signals Logo" class="site-logo">
 
-<div id="plans-section">
-    <h2>Choose Your Plan</h2>
-    <button onclick="selectPlan(10)">24 Hours - $10</button>
-    <button onclick="selectPlan(17)">1 Week - $17</button>
-    <button onclick="selectPlan(25)">2 Weeks - $25</button>
-    <button onclick="selectPlan(35)">1 Month - $35</button>
-    <button onclick="selectPlan(50)">Unlimited - $50</button>
-</div>
+    <h1>FlightZone Signals by B JAY</h1>
+    <br><br>
+    <button onclick="openSignalsPage()">🎲 Get Free Signals</button>
 
-<div id="payment-options">
-    <h2>Select a Payment Method</h2>
-    <p>Selected Plan: <span id="selected-plan"></span></p>
-    <button onclick="redirectToPayment('ecocash')">Ecocash</button>
-    <button onclick="redirectToPayment('mukuru')">Mukuru</button>
-    <button onclick="redirectToPayment('mastercard')">MasterCard</button>
-</div>
-
-<button onclick="showPlans()">💳 Buy Now</button>
-
-<div class="scrollable-content">
-    <div class="section">
-        <h2>Available Bots</h2>
-        <button onclick="openBotPage('jetx_master_predictor.html')">JETX MASTER PREDICTOR</button>
-        <button onclick="openBotPage('jetx_purple_bot.html')">JETX PURPLE BOT</button>
-        <button onclick="openBotPage('jetx_pink_bot.html')">JETX PINK BOT</button>
-        <button onclick="openBotPage('jetx_martingale_bot.html')">JETX MARTINGALE BOT</button>
-        <button onclick="openBotPage('aviator_predictor_pro.html')">AVIATOR PREDICTOR PRO</button>
-        <button onclick="openBotPage('aviator_master_predictor_pro.html')">AVIATOR MASTER PREDICTOR PRO</button>
-        <button onclick="openBotPage('aviator_pink_bot.html')">AVIATOR PINK BOT</button>
-        <button onclick="openBotPage('aviator_master_x_login.html')">AVIATOR MASTER X</button>
-        <button onclick="openBotPage('aviator_nuerobet_bot.html')">AVIATOR NUEROBET BOT</button>
-        <button onclick="openBotPage('predictify_login.html')">PREDICTIFY</button>
-        <button onclick="openBotPage('etherg_predictor.html')">ETHERG PREDICTOR</button> <!-- New Button Added -->
+    <div id="plans-section">
+        <h2>Choose Your Plan</h2>
+        <button onclick="selectPlan(10)">24 Hours - $10</button>
+        <button onclick="selectPlan(17)">1 Week - $17</button>
+        <button onclick="selectPlan(25)">2 Weeks - $25</button>
+        <button onclick="selectPlan(35)">1 Month - $35</button>
+        <button onclick="selectPlan(50)">Unlimited - $50</button>
     </div>
 
-    <div class="section">
-        <h2>Why Choose FlightZone Signals?</h2>
-        <p>**FlightZone Signals** by B.JAY uses advanced algorithms and cutting-edge technology to provide highly accurate betting predictions.</p>
-        <p>**99% Accuracy** – Our bots analyze game patterns to provide the most accurate predictions.</p>
-        <p>**Guaranteed Profits** – Join our community of winners making consistent money.</p>
-        <p>**Real-Time Updates** – Instant signals to keep you ahead of the game.</p>
+    <div id="payment-options">
+        <h2>Select a Payment Method</h2>
+        <p>Selected Plan: <span id="selected-plan"></span></p>
+        <button onclick="redirectToPayment('ecocash')">Ecocash</button>
+        <button onclick="redirectToPayment('mukuru')">Mukuru</button>
+        <button onclick="redirectToPayment('mastercard')">MasterCard</button>
     </div>
 
-    <div class="contact-links">
-        <a href="https://t.me/BJAYMICK" target="_blank">Join Telegram</a>
-        <a href="https://wa.me/263774309795" target="_blank">WhatsApp Us</a>
+    <button onclick="showPlans()">💳 Buy Now</button>
+
+    <div class="scrollable-content">
+        <div class="section">
+            <h2>Available Bots</h2>
+            <button onclick="openBotPage('jetx_master_predictor.html')">JETX MASTER PREDICTOR</button>
+            <button onclick="openBotPage('jetx_purple_bot.html')">JETX PURPLE BOT</button>
+            <button onclick="openBotPage('jetx_pink_bot.html')">JETX PINK BOT</button>
+            <button onclick="openBotPage('jetx_martingale_bot.html')">JETX MARTINGALE BOT</button>
+            <button onclick="openBotPage('aviator_predictor_pro.html')">AVIATOR PREDICTOR PRO</button>
+            <button onclick="openBotPage('aviator_master_predictor_pro.html')">AVIATOR MASTER PREDICTOR PRO</button>
+            <button onclick="openBotPage('aviator_pink_bot.html')">AVIATOR PINK BOT</button>
+            <button onclick="openBotPage('aviator_master_x_login.html')">AVIATOR MASTER X</button>
+            <button onclick="openBotPage('aviator_nuerobet_bot.html')">AVIATOR NUEROBET BOT</button>
+            <button onclick="openBotPage('predictify_login.html')">PREDICTIFY</button>
+            <button onclick="openBotPage('etherg_predictor.html')">ETHERG PREDICTOR</button>
+        </div>
+
+        <div class="section">
+            <h2>Why Choose FlightZone Signals?</h2>
+            <p><strong>FlightZone Signals</strong> by B.JAY uses advanced algorithms and cutting-edge technology to provide highly accurate betting predictions.</p>
+            <p><strong>99% Accuracy</strong> – Our bots analyze game patterns to provide the most accurate predictions.</p>
+            <p><strong>Guaranteed Profits</strong> – Join our community of winners making consistent money.</p>
+            <p><strong>Real-Time Updates</strong> – Instant signals to keep you ahead of the game.</p>
+        </div>
+
+        <div class="contact-links">
+            <a href="https://t.me/BJAYMICK" target="_blank">Join Telegram</a>
+            <a href="https://wa.me/263774309795" target="_blank">WhatsApp Us</a>
+        </div>
     </div>
-</div>
 
-<footer>
-    <p>&copy; 2025 FlightZone Signals by B JAY | All Rights Reserved</p>
-</footer>
+    <footer>
+        <p>&copy; 2025 FlightZone Signals by B JAY | All Rights Reserved</p>
+    </footer>
 
-<script>
-    let selectedPrice = 10;
+    <script>
+        let selectedPrice = 10;
 
-    function openSignalsPage() {
-        window.location.href = "signals.html";
-    }
-
-    function openBotPage(botPage) {
-        window.location.href = botPage;
-    }
-
-    function showPlans() {
-        document.getElementById("plans-section").style.display = "block";
-    }
-
-    function selectPlan(price) {
-        selectedPrice = price;
-        document.getElementById("selected-plan").innerText = "$" + selectedPrice;
-        document.getElementById("payment-options").style.display = "block";
-    }
-
-    function redirectToPayment(paymentMethod) {
-        if (paymentMethod === 'ecocash') {
-            window.location.href = "tel:*153*1*1*" + selectedPrice + "#";
-        } else if (paymentMethod === 'mukuru') {
-            window.location.href = "tel:*646#";
-        } else if (paymentMethod === 'mastercard') {
-            window.location.href = "https://wa.me/263774309795";
+        function openSignalsPage() {
+            window.location.href = "signals.html";
         }
-    }
-</script>
+
+        function openBotPage(botPage) {
+            window.location.href = botPage;
+        }
+
+        function showPlans() {
+            document.getElementById("plans-section").style.display = "block";
+        }
+
+        function selectPlan(price) {
+            selectedPrice = price;
+            document.getElementById("selected-plan").innerText = "$" + selectedPrice;
+            document.getElementById("payment-options").style.display = "block";
+        }
+
+        function redirectToPayment(paymentMethod) {
+            if (paymentMethod === 'ecocash') {
+                window.location.href = "tel:*153*1*1*" + selectedPrice + "#";
+            } else if (paymentMethod === 'mukuru') {
+                window.location.href = "tel:*646#";
+            } else if (paymentMethod === 'mastercard') {
+                window.location.href = "https://wa.me/263774309795";
+            }
+        }
+    </script>
 
 </body>
 </html>
