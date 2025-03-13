@@ -1,236 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predictify</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
-        body {
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            background: radial-gradient(circle, #000428, #004e92);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .live-time {
-            font-size: 18px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            color: cyan;
-            text-shadow: 0 0 5px cyan;
-        }
-
-        .background {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            width: 2px;
-            height: 2px;
-            opacity: 0.8;
-            animation: moveStars linear infinite;
-        }
-
-        @keyframes moveStars {
-            from { transform: translateY(0); }
-            to { transform: translateY(100vh); }
-        }
-
-        .signal-container {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
-            width: 360px;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px cyan;
-        }
-
-        .spinner-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 250px;
-        }
-
-        .spinner {
-            width: 200px;
-            height: 200px;
-            border: 10px solid rgba(255, 255, 255, 0.2);
-            border-top: 10px solid cyan;
-            border-radius: 50%;
-            animation: spin 0s linear infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2em;
-            font-weight: bold;
-            color: cyan;
-            text-shadow: 0 0 10px cyan;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            cursor: pointer;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .spinning {
-            animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        button {
-            padding: 15px;
-            background: cyan;
-            color: black;
-            font-size: 18px;
-            width: 100%;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background: #00e5ff;
-            transform: scale(1.05);
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 10px;
-            font-size: 14px;
-            color: cyan;
-            text-shadow: 0 0 5px cyan;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Predictify</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+    body {
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      background: radial-gradient(circle, #000428, #004e92);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+    .live-time {
+      font-size: 18px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: cyan;
+      text-shadow: 0 0 5px cyan;
+    }
+    .background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .star {
+      position: absolute;
+      background: white;
+      width: 2px;
+      height: 2px;
+      opacity: 0.8;
+      animation: moveStars linear infinite;
+    }
+    @keyframes moveStars {
+      from { transform: translateY(0); }
+      to { transform: translateY(100vh); }
+    }
+    .signal-container {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
+      width: 360px;
+      animation: fadeIn 1s ease-in-out;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px cyan;
+    }
+    .spinner-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 250px;
+    }
+    .spinner {
+      width: 200px;
+      height: 200px;
+      border: 10px solid rgba(255, 255, 255, 0.2);
+      border-top: 10px solid cyan;
+      border-radius: 50%;
+      animation: spin 0s linear infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      font-weight: bold;
+      color: cyan;
+      text-shadow: 0 0 10px cyan;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      cursor: pointer;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spinning {
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    button {
+      padding: 15px;
+      background: cyan;
+      color: black;
+      font-size: 18px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #00e5ff;
+      transform: scale(1.05);
+    }
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 14px;
+      color: cyan;
+      text-shadow: 0 0 5px cyan;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="live-time" id="live-time"></div>
-    <div class="background"></div>
+  <div class="live-time" id="live-time"></div>
+  <div class="background"></div>
 
-    <div class="signal-container">
-        <h2>Predictify - Safe Odds Predictor</h2>
-        <div class="spinner-container">
-            <div class="spinner" id="spinner">Tap to Predict</div>
-        </div>
-        <button onclick="startPrediction()">Get Prediction</button>
+  <div class="signal-container">
+    <h2>Predictify - Safe Odds Predictor</h2>
+    <div class="spinner-container">
+      <div class="spinner" id="spinner">Tap to Predict</div>
     </div>
+    <button onclick="startPrediction()">Get Prediction</button>
+  </div>
 
-    <div class="footer">Powered by Predictify | Safe & Smart Predictions</div>
+  <div class="footer">Powered by FlightZone Signals Predictify | Safe & Smart Predictions</div>
 
-    <script>
-        // Welcome Voice
-        document.addEventListener("DOMContentLoaded", function () {
-            let welcomeMessage = new SpeechSynthesisUtterance("Welcome to Predictify, your AI-powered safe odds predictor.");
-            welcomeMessage.rate = 1;
-            window.speechSynthesis.speak(welcomeMessage);
-        });
+  <script>
+    // Welcome Voice
+    document.addEventListener("DOMContentLoaded", function () {
+      let welcomeMessage = new SpeechSynthesisUtterance("Welcome to Predictify, your AI-powered safe odds predictor.");
+      welcomeMessage.rate = 1;
+      window.speechSynthesis.speak(welcomeMessage);
+    });
 
-        // Odds Logic
-        function generateOdds() {
-            let random = Math.random() * 100;
+    // Updated Odds Generator - Based on New Distribution
+    function generateOdds() {
+      let rand = Math.random();
 
-            if (random <= 75) {
-                return (Math.random() * (2.09 - 1.05) + 1.05).toFixed(2); // Safe odds
-            } else if (random <= 90) {
-                return (Math.random() * (3.50 - 2.10) + 2.10).toFixed(2); // Mid odds
-            } else if (random <= 97) {
-                return (Math.random() * (9.99 - 3.51) + 3.51).toFixed(2); // Big odds
-            } else {
-                return (Math.random() * (20.00 - 10.00) + 10.00).toFixed(2); // Pink odds
-            }
+      let min, max;
+
+      if (rand <= 0.85) {
+        min = 1.00;
+        max = 1.50;
+      } else if (rand <= 0.92) {
+        min = 1.51;
+        max = 2.30;
+      } else if (rand <= 0.97) {
+        min = 2.31;
+        max = 8.00;
+      } else {
+        min = 8.01;
+        max = 15.00;
+      }
+
+      return (Math.random() * (max - min) + min).toFixed(2);
+    }
+
+    function startPrediction() {
+      let spinner = document.getElementById("spinner");
+      spinner.innerHTML = "";
+      spinner.classList.add("spinning");
+
+      let whooshSound = new Audio("https://www.fesliyanstudios.com/play-mp3/6481");
+      whooshSound.play();
+
+      setTimeout(() => {
+        let selectedOdd = generateOdds();
+        spinner.innerHTML = selectedOdd + "x";
+        spinner.classList.remove("spinning");
+
+        spinner.style.boxShadow = "none";
+
+        if (parseFloat(selectedOdd) >= 10.00) {
+          spinner.style.boxShadow = "0 0 20px 5px pink, 0 0 50px 10px white";
+          let jackpotSound = new Audio("https://www.fesliyanstudios.com/play-mp3/6520");
+          jackpotSound.play();
+
+          let pinkVoice = new SpeechSynthesisUtterance("Jackpot! Pink Odds: " + selectedOdd + " times");
+          pinkVoice.rate = 1;
+          pinkVoice.pitch = 1;
+          window.speechSynthesis.speak(pinkVoice);
+        } else {
+          let speech = new SpeechSynthesisUtterance("Next target: " + selectedOdd + " times");
+          speech.rate = 1;
+          window.speechSynthesis.speak(speech);
         }
+      }, 3000);
+    }
 
-        // Start Prediction
-        function startPrediction() {
-            let spinner = document.getElementById("spinner");
-            spinner.innerHTML = "";
-            spinner.classList.add("spinning");
+    // Live Clock
+    function updateTime() {
+      let now = new Date();
+      let hours = now.getHours().toString().padStart(2, "0");
+      let minutes = now.getMinutes().toString().padStart(2, "0");
+      let seconds = now.getSeconds().toString().padStart(2, "0");
+      document.getElementById("live-time").innerText = `Time: ${hours}:${minutes}:${seconds}`;
+    }
 
-            let whooshSound = new Audio("https://www.fesliyanstudios.com/play-mp3/6481");
-            whooshSound.play();
+    setInterval(updateTime, 1000);
+    updateTime();
 
-            setTimeout(() => {
-                let selectedOdd = generateOdds();
-                spinner.innerHTML = selectedOdd + "x";
-                spinner.classList.remove("spinning");
-
-                spinner.style.boxShadow = "none";
-
-                if (parseFloat(selectedOdd) >= 10.00) {
-                    spinner.style.boxShadow = "0 0 20px 5px pink, 0 0 50px 10px white";
-
-                    let jackpotSound = new Audio("https://www.fesliyanstudios.com/play-mp3/6520");
-                    jackpotSound.play();
-
-                    let pinkVoice = new SpeechSynthesisUtterance("Jackpot! Pink Odds: " + selectedOdd + " times");
-                    pinkVoice.rate = 1;
-                    pinkVoice.pitch = 1;
-                    window.speechSynthesis.speak(pinkVoice);
-                } else {
-                    let speech = new SpeechSynthesisUtterance("Next target: " + selectedOdd + " times");
-                    speech.rate = 1;
-                    window.speechSynthesis.speak(speech);
-                }
-            }, 3000);
-        }
-
-        // Live Clock
-        function updateTime() {
-            let now = new Date();
-            let hours = now.getHours().toString().padStart(2, "0");
-            let minutes = now.getMinutes().toString().padStart(2, "0");
-            let seconds = now.getSeconds().toString().padStart(2, "0");
-            document.getElementById("live-time").innerText = `Time: ${hours}:${minutes}:${seconds}`;
-        }
-
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // Animated Stars
-        for (let i = 0; i < 100; i++) {
-            let star = document.createElement("div");
-            star.classList.add("star");
-            star.style.left = Math.random() * 100 + "vw";
-            star.style.animationDuration = (Math.random() * 3 + 2) + "s";
-            document.querySelector(".background").appendChild(star);
-        }
-    </script>
+    // Animated Stars
+    for (let i = 0; i < 100; i++) {
+      let star = document.createElement("div");
+      star.classList.add("star");
+      star.style.left = Math.random() * 100 + "vw";
+      star.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      document.querySelector(".background").appendChild(star);
+    }
+  </script>
 
 </body>
 </html>
