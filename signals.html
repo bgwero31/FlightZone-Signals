@@ -1,252 +1,271 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Live Predictions - FlightZone Signals</title>  
-    <style>  
-        body {  
-            font-family: Arial, sans-serif;  
-            text-align: center;  
-            background: #3498db;  
-            color: black;  
-        }  
-        h1 {  
-            background: rgba(255, 204, 0, 0.8);  
-            padding: 15px;  
-            border-radius: 10px;  
-            color: black;  
-        }  
-        .site-section {  
-            background: rgba(255, 255, 255, 0.1);  
-            padding: 20px;  
-            margin: 15px;  
-            border-radius: 8px;  
-        }  
-        .prediction {  
-            font-size: 18px;  
-            margin: 5px 0;  
-        }  
-        .risk {  
-            color: red;  
-            font-weight: bold;  
-        }  
-        .play-now {  
-            display: none;  
-            font-size: 20px;  
-            font-weight: bold;  
-            color: white;  
-            background: red;  
-            padding: 10px;  
-            border-radius: 5px;  
-            margin-top: 10px;  
-        }  
-        #clock {  
-            font-size: 24px;  
-            font-weight: bold;  
-            margin-bottom: 20px;  
-        }  
-        button {  
-            padding: 12px 25px;  
-            background: #ff9900;  
-            color: white;  
-            border: none;  
-            font-size: 16px;  
-            border-radius: 5px;  
-            cursor: pointer;  
-            transition: 0.3s;  
-        }  
-        button:hover {  
-            background: #ff6600;  
-        }  
-        .password-section {  
-            margin: 15px;  
-            padding: 10px;  
-            background: rgba(255, 255, 255, 0.2);  
-            border-radius: 8px;  
-        }  
-        .select-game, .select-country {  
-            margin: 15px;  
-            padding: 10px;  
-            background: rgba(255, 255, 255, 0.2);  
-            border-radius: 8px;  
-        }  
-        .contact-links {  
-            margin-top: 30px;  
-            background: rgba(255, 255, 255, 0.2);  
-            padding: 15px;  
-            border-radius: 8px;  
-        }  
-        .contact-links a {  
-            text-decoration: none;  
-            color: white;  
-            font-size: 18px;  
-            padding: 10px 20px;  
-            margin: 10px;  
-            background: #0078ff;  
-            border-radius: 5px;  
-            display: inline-block;  
-            transition: 0.3s;  
-        }  
-        .contact-links a:hover {  
-            background: #005bb5;  
-        }  
-        /* Raindrop effect for signal page */
-        @keyframes raindrops {
-            0% {
-                opacity: 0.3;
-                transform: translateY(-5px);
-            }
-            50% {
-                opacity: 0.6;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0.3;
-                transform: translateY(5px);
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlightZone Signals - Live Predictions by B JAY</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(145deg, #1c1c1c, #2c3e50);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
         }
+
+        h1 {
+            background: #ffcc00;
+            color: black;
+            padding: 20px;
+            margin: 0;
+            font-size: 28px;
+            border-bottom: 4px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        #clock {
+            font-size: 24px;
+            margin: 15px 0;
+            color: #ffffff;
+        }
+
+        .select-country, .password-section, .select-game {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin: 15px auto;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+
+        label, select, input {
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        input[type="password"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: #ff9900;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: #ff6600;
+        }
+
+        .site-section {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .prediction {
+            font-size: 16px;
+            margin: 6px 0;
+        }
+
+        .risk {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        .play-now {
+            display: none;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background: #e74c3c;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        .contact-links {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+        }
+
+        .contact-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            margin: 10px;
+            padding: 10px 18px;
+            background: #0078ff;
+            border-radius: 6px;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+
+        .contact-links a:hover {
+            background: #005bb5;
+        }
+
         .raindrop-effect {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: url('https://example.com/futuristic-background.jpg') no-repeat center center fixed;
             background-size: cover;
             z-index: -1;
-            animation: raindrops 0.5s ease-in-out infinite;
+            animation: raindrops 1.5s ease-in-out infinite;
+            opacity: 0.4;
         }
-    </style>  
-</head>  
-<body>  
-    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>  
-    <div id="clock">Loading Time...</div>  
 
-    <div class="select-country">  
-        <label for="country">Select Country:</label>  
-        <select id="country">  
-            <option value="Kenya">Kenya</option>  
-            <option value="Zimbabwe">Zimbabwe</option>  
-            <option value="South Africa">South Africa</option>  
-            <option value="USA">USA</option>  
-            <option value="Nigeria">Nigeria</option>  
-        </select>  
-    </div>  
+        @keyframes raindrops {
+            0% { opacity: 0.3; transform: translateY(-5px); }
+            50% { opacity: 0.6; transform: translateY(0); }
+            100% { opacity: 0.3; transform: translateY(5px); }
+        }
+    </style>
+</head>
+<body>
 
-    <div class="password-section">  
-        <label for="password">Enter Password:</label>  
-        <input type="password" id="password" placeholder="Password" />  
-        <br /><br />  
-        <button onclick="login()">Login</button>  
-    </div>  
+    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
+    <div id="clock">Loading time...</div>
 
-    <div id="predictions" style="display:none;">  
-        <div class="select-game">  
-            <label for="game">Select Game:</label>  
-            <select id="game">  
-                <option value="aviator">Aviator</option>  
-                <option value="jetx">JetX</option>  
-            </select>  
-            <br /><br />  
-            <button onclick="generatePredictions()">Generate Signals</button>  
-        </div>  
+    <div class="select-country">
+        <label for="country">Select Country:</label>
+        <select id="country">
+            <option value="Kenya">Kenya</option>
+            <option value="Zimbabwe">Zimbabwe</option>
+            <option value="South Africa">South Africa</option>
+            <option value="USA">USA</option>
+            <option value="Nigeria">Nigeria</option>
+        </select>
+    </div>
 
-        <div id="signals"></div>  
-    </div>  
+    <div class="password-section">
+        <label for="password">Enter Password:</label>
+        <input type="password" id="password" placeholder="Password">
+        <br><br>
+        <button onclick="login()">Login</button>
+    </div>
 
-    <div class="contact-links">  
-        <p>Join our community on:</p>  
-        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>  
-        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>  
-    </div>  
+    <div id="predictions" style="display:none;">
+        <div class="select-game">
+            <label for="game">Select Game:</label>
+            <select id="game">
+                <option value="aviator">Aviator</option>
+                <option value="jetx">JetX</option>
+            </select>
+            <br><br>
+            <button onclick="generatePredictions()">Generate Signals</button>
+        </div>
+
+        <div id="signals"></div>
+    </div>
+
+    <div class="contact-links">
+        <p>Join Our Community:</p>
+        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>
+        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
+    </div>
 
     <div class="raindrop-effect"></div>
 
-    <script>  
-        let isLoggedIn = false;  
-        let countryBettingSites = {  
-            Kenya: ["Moz Betting", "SpinFeed", "Bet247", "PremierBet"],  
-            Zimbabwe: ["AfricaBet", "SpinCity", "Mwos Betting", "Bet247", "PremierBet"],  
-            "South Africa": ["HollywoodBets", "SportPesa", "Betway", "Supabets"],  
-            USA: ["DraftKings", "FanDue", "BetMGM", "Caesars Sportsbook"],  
-            Nigeria: ["1win", "Bet9ja", "1XBet", "Betway", "NairaBet"]  
-        };  
+    <script>
+        let isLoggedIn = false;
 
-        function updateClock() {  
-            const now = new Date();  
-            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });  
-        }  
-        setInterval(updateClock, 1000);  
-        updateClock();  
+        const countryBettingSites = {
+            Kenya: ["Moz Betting", "SpinFeed", "Bet247", "PremierBet"],
+            Zimbabwe: ["AfricaBet", "SpinCity", "Mwos Betting", "Bet247", "PremierBet"],
+            "South Africa": ["HollywoodBets", "SportPesa", "Betway", "Supabets"],
+            USA: ["DraftKings", "FanDue", "BetMGM", "Caesars Sportsbook"],
+            Nigeria: ["1win", "Bet9ja", "1XBet", "Betway", "NairaBet"]
+        };
 
-        function login() {  
-            const password = document.getElementById('password').value;  
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-            if (password === 'bjay#2025') {  
-                alert('Login Successful!');  
-                isLoggedIn = true;  
-                document.querySelector('.password-section').style.display = 'none';  
-                document.querySelector('#predictions').style.display = 'block';  
-            } else {  
-                alert('Incorrect password. Please try again.');  
-            }  
-        }  
+        function login() {
+            const password = document.getElementById('password').value;
+            if (password === 'bjay#2025') {
+                alert("Login Successful!");
+                isLoggedIn = true;
+                document.querySelector('.password-section').style.display = 'none';
+                document.getElementById('predictions').style.display = 'block';
+            } else {
+                alert("Incorrect password. Try again.");
+            }
+        }
 
-        function generatePredictions() {  
-            if (!isLoggedIn) {  
-                alert("Please log in first.");  
-                return;  
-            }  
+        function generatePredictions() {
+            if (!isLoggedIn) {
+                alert("Please log in first.");
+                return;
+            }
 
-            const selectedGame = document.getElementById('game').value;  
-            const country = document.getElementById('country').value;  
-            const bettingSites = countryBettingSites[country];  
-            let output = "";  
+            const selectedGame = document.getElementById('game').value;
+            const country = document.getElementById('country').value;
+            const bettingSites = countryBettingSites[country];
+            let output = "";
 
-            const now = new Date();  
-            let startMinutes = now.getMinutes();  
-            let currentHour = now.getHours();  
+            const now = new Date();
+            let startMinutes = now.getMinutes();
+            let currentHour = now.getHours();
 
-            bettingSites.forEach(site => {  
-                output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;  
+            bettingSites.forEach(site => {
+                output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;
+                for (let i = 0; i < 10; i++) {
+                    let minutes = (startMinutes + i) % 60;
+                    let seconds = Math.floor(Math.random() * 60);
+                    let target = (Math.random() * (2.2 - 1.40) + 1.40).toFixed(2);
+                    let risk = (Math.random() * (2.80 - 2.20) + 2.20).toFixed(2);
+                    let showRisk = Math.random() > 0.5;
+                    let label = selectedGame === "aviator" ? "Risk" : "Steady Climb";
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${target}x ${showRisk ? `| <span class="risk">${label} ${risk}x</span>` : ''}</p>`;
+                }
+                output += "</div>";
+            });
 
-                for (let i = 0; i < 10; i++) {  
-                    let minutes = (startMinutes + i) % 60;  
-                    let seconds = Math.floor(Math.random() * 60);  
+            document.getElementById("signals").innerHTML = output;
+            triggerPlayNow();
+        }
 
-                    let targetMultiplier = (Math.random() * (2.00 - 1.40) + 1.40).toFixed(2);  
-                    let riskMultiplier = (Math.random() * (2.60 - 2.01) + 2.50).toFixed(2);  
+        function triggerPlayNow() {
+            const sites = ["Moz Betting", "SpinFeed", "Bet247", "PremierBet", "AfricaBet", "SpinCity", "Mwos Betting"];
+            sites.forEach(site => {
+                setTimeout(() => {
+                    const playNow = document.getElementById(`play-now-${site}`);
+                    playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;
+                    playNow.style.display = "block";
+                    setTimeout(() => playNow.style.display = "none", 10000);
+                }, Math.random() * 84000);
+            });
+        }
+    </script>
 
-                    let showRisk = Math.random() > 0.5;  
-
-                    let riskLabel = selectedGame === "aviator" ? "Risk" : "Steady Climb";  
-
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${targetMultiplier}x ${showRisk ? `| <span class="risk">${riskLabel} ${riskMultiplier}x</span>` : ''}</p>`;  
-                }  
-                output += "</div>";  
-            });  
-
-            document.getElementById('signals').innerHTML = output;  
-            triggerPlayNow();  
-        }  
-
-        function triggerPlayNow() {  
-            const bettingSites = ["Moz Betting", "SpinFeed", "Bet247", "PremierBet", "AfricaBet", "SpinCity", "Mwos Betting"];  
-
-            bettingSites.forEach(site => {  
-                setTimeout(() => {  
-                    const playNow = document.getElementById(`play-now-${site}`);  
-                    playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;  
-                    playNow.style.display = "block";  
-
-                    setTimeout(() => {  
-                        playNow.style.display = "none";  
-                    }, 10000);  
-                }, Math.random() * 84000);  
-            });  
-        }  
-    </script>  
-
-</body>  
+</body>
 </html>
