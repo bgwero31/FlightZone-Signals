@@ -10,32 +10,73 @@
       color: #fff;
       text-align: center;
       padding-top: 50px;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-size: cover;
+    }
+
+    h1 {
+      font-size: 48px;
+      color: #00c6ff;
+      text-shadow: 2px 2px 10px rgba(0, 198, 255, 0.8);
+      margin-bottom: 30px;
+      animation: fadeIn 2s ease-out;
     }
 
     #login-section, #signal-section {
       display: none;
     }
+
     #login-section {
       display: block;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 0 15px rgba(0, 198, 255, 0.8);
     }
 
-    input[type="password"] {
-      padding: 10px;
+    .input-container {
+      margin: 15px 0;
+      position: relative;
+    }
+
+    input[type="password"], input[type="text"] {
+      padding: 12px 20px;
       border-radius: 5px;
       outline: none;
       font-size: 16px;
-      width: 200px;
+      width: 100%;
       border: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      transition: all 0.3s;
+    }
+
+    input[type="password"]:focus, input[type="text"]:focus {
+      background: rgba(0, 198, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 198, 255, 0.8);
     }
 
     .btn {
-      padding: 10px 20px;
+      padding: 12px 25px;
       background: #00c6ff;
       color: #000;
       border: none;
       border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #00b8e6;
     }
 
     #clock {
@@ -78,6 +119,12 @@
       font-size: 14px;
       color: #ccc;
     }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
   </style>
 </head>
 <body>
@@ -85,9 +132,12 @@
   <h1>AVISCOPE</h1>
 
   <div id="login-section">
-    <p>Enter Access Code</p>
-    <input type="password" id="accessCode" placeholder="Enter code...">
-    <br><br>
+    <div class="input-container">
+      <input type="text" id="bettingSite" placeholder="Enter Betting Site...">
+    </div>
+    <div class="input-container">
+      <input type="password" id="accessCode" placeholder="Enter access code...">
+    </div>
     <button class="btn" onclick="checkPassword()">Enter</button>
   </div>
 
@@ -102,30 +152,29 @@
   </footer>
 
   <script>
-    const signals = [
-      "Target 1.32x (Blue)",
-      "Target 1.95x (Blue)",
-      "Target 2.70x (Purple)",
-      "Target 3.05x (Purple)",
-      "Target 2.48x (Purple)",
-      "Target 1.88x (Blue)",
-      "Target 3.94x (Purple)",
-      "Target 2.17x (Purple)",
-      "Target 1.55x (Blue)",
-      "Target 3.65x (Purple)",
-      "Target 4.00x (Purple)",
-      "Target 2.95x (Purple)"
-    ];
+    const lowOdds = [];
+    const highOdds = [];
+
+    // Populate lowOdds (75% of signals) with values between 1.30x and 2.00x
+    for (let i = 1.30; i <= 2.00; i += 0.05) {
+      lowOdds.push(`Target ${i.toFixed(2)}x (Blue)`);
+    }
+
+    // Populate highOdds (25% of signals) with values between 2.01x and 5.00x
+    for (let i = 2.01; i <= 5.00; i += 0.10) {
+      highOdds.push(`Target ${i.toFixed(2)}x (Purple)`);
+    }
 
     function checkPassword() {
       var pass = document.getElementById("accessCode").value;
-      if (pass === "bjay1") {
+      var site = document.getElementById("bettingSite").value;
+      if (pass === "bjay1" && site !== "") {
         document.getElementById("login-section").style.display = "none";
         document.getElementById("signal-section").style.display = "block";
         showClock();
         startRandomSignal();
       } else {
-        alert("Wrong code bro.");
+        alert("Wrong code or missing betting site.");
       }
     }
 
@@ -139,8 +188,17 @@
 
     function startRandomSignal() {
       function showSignal() {
-        const randomIndex = Math.floor(Math.random() * signals.length);
-        document.getElementById("signal-box").innerHTML = signals[randomIndex];
+        let randomSignal;
+
+        // 75% chance to pick a low odd
+        if (Math.random() < 0.75) {
+          randomSignal = lowOdds[Math.floor(Math.random() * lowOdds.length)];
+        } else {
+          // 25% chance to pick a high odd
+          randomSignal = highOdds[Math.floor(Math.random() * highOdds.length)];
+        }
+
+        document.getElementById("signal-box").innerHTML = randomSignal;
 
         const randomDelay = Math.floor(Math.random() * (35000 - 20000 + 1)) + 20000; // 20s - 35s
         setTimeout(showSignal, randomDelay);
@@ -151,4 +209,3 @@
 
 </body>
 </html>
-
