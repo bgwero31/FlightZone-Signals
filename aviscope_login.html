@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AVISCOPE</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    #login-section, #signal-section {
+      display: none;
+    }
+    #login-section {
+      display: block;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      width: 200px;
+      border: none;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: #00c6ff;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #clock {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    #spinner {
+      margin-top: 20px;
+      height: 60px;
+      width: 60px;
+      border: 6px dashed #fff;
+      border-radius: 50%;
+      animation: spin 2s linear infinite;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+
+    #signal-box {
+      margin-top: 25px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #00ffcc;
+      background: #ffffff12;
+      padding: 15px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>AVISCOPE</h1>
+
+  <div id="login-section">
+    <p>Enter Access Code</p>
+    <input type="password" id="accessCode" placeholder="Enter code...">
+    <br><br>
+    <button class="btn" onclick="checkPassword()">Enter</button>
+  </div>
+
+  <div id="signal-section">
+    <div id="clock"></div>
+    <div id="spinner"></div>
+    <div id="signal-box">Loading Signal...</div>
+  </div>
+
+  <footer>
+    All rights reserved © AVISCOPE 2025
+  </footer>
+
+  <script>
+    const signals = [
+      "Target 1.32x (Blue)",
+      "Target 1.95x (Blue)",
+      "Target 2.70x (Purple)",
+      "Target 3.05x (Purple)",
+      "Target 2.48x (Purple)",
+      "Target 1.88x (Blue)",
+      "Target 3.94x (Purple)",
+      "Target 2.17x (Purple)",
+      "Target 1.55x (Blue)",
+      "Target 3.65x (Purple)",
+      "Target 4.00x (Purple)",
+      "Target 2.95x (Purple)"
+    ];
+
+    function checkPassword() {
+      var pass = document.getElementById("accessCode").value;
+      if (pass === "bjay1") {
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("signal-section").style.display = "block";
+        showClock();
+        startRandomSignal();
+      } else {
+        alert("Wrong code bro.");
+      }
+    }
+
+    function showClock() {
+      setInterval(() => {
+        const now = new Date();
+        const time = now.toLocaleTimeString();
+        document.getElementById("clock").innerHTML = "Current Time: " + time;
+      }, 1000);
+    }
+
+    function startRandomSignal() {
+      function showSignal() {
+        const randomIndex = Math.floor(Math.random() * signals.length);
+        document.getElementById("signal-box").innerHTML = signals[randomIndex];
+
+        const randomDelay = Math.floor(Math.random() * (35000 - 20000 + 1)) + 20000; // 20s - 35s
+        setTimeout(showSignal, randomDelay);
+      }
+      showSignal();
+    }
+  </script>
+
+</body>
+</html>
+
