@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aviator AI Predictor - PREDICTA-UP</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(145deg, #0f0f3d, #000000);
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffe1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background: rgba(10, 10, 30, 0.9);
+            border: 2px solid #00ffe1;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 25px #00ffe1;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #00ffe1;
+            color: #00ffe1;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #00ffe1;
+            color: #000;
+            font-weight: bold;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 20px;
+            background-color: #0f0f3d;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #00ffe1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="loginBox">
+        <h2>Enter Access Password</h2>
+        <input type="password" id="password" placeholder="Enter password...">
+        <button onclick="login()">Unlock Predictor</button>
+    </div>
+
+    <div class="container" id="predictorBox" style="display:none;">
+        <h2>Aviator AI Predictor Bot</h2>
+        <textarea id="pastOdds" placeholder="Enter past odds e.g. 3.70x, 6.35x, 1.92x, 1.80x"></textarea>
+        <button onclick="predict()">Predict Next Odds</button>
+        <div id="output">Prediction will appear here...</div>
+    </div>
+
+    <script>
+        function login() {
+            let pass = document.getElementById("password").value;
+            if (pass === "PREDICTA-UP") {
+                document.getElementById("loginBox").style.display = "none";
+                document.getElementById("predictorBox").style.display = "block";
+            } else {
+                alert("Wrong password!");
+            }
+        }
+
+        function predict() {
+            let input = document.getElementById("pastOdds").value;
+            let odds = input.split(",").map(val => parseFloat(val.trim().replace("x", "")));
+
+            // Simulated AI Prediction Model (basic logic for now, upgradeable)
+            let sum = odds.reduce((a, b) => a + b, 0);
+            let avg = sum / odds.length;
+            let volatility = Math.abs(odds[odds.length - 1] - avg);
+            let predicted = (avg + (Math.random() * volatility)).toFixed(2);
+
+            // Add AI-styled output color based on multiplier
+            let color = predicted >= 10 ? "pink" : predicted >= 2 ? "purple" : "blue";
+            document.getElementById("output").innerHTML =
+                `Next Predicted Odds: <span style="color:${color}; font-weight:bold;">${predicted}x</span>`;
+        }
+    </script>
+</body>
+</html>
