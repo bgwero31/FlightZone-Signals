@@ -145,44 +145,33 @@
         synth.speak(utter);
     }
 
-    function calculateCrash(serverSeed, clientSeed, nonce) {
-        const msg = clientSeed + ":" + nonce;
-        const key = new TextEncoder().encode(serverSeed);
-        const data = new TextEncoder().encode(msg);
-        return window.crypto.subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"])
-            .then(cryptoKey => window.crypto.subtle.sign("HMAC", cryptoKey, data))
-            .then(signature => {
-                const hashHex = Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
-                if (parseInt(hashHex, 16) % 33 === 0) return 1.00;
-                const h = parseInt(hashHex.slice(0, 13), 16);
-                const e = Math.pow(2, 52);
-                let crash = (100 * e - h) / (e - h);
-                crash = Math.max(1.0, Math.min(crash, 10)); // Limit to max 10x for realism
-                return Math.round(crash * 100) / 100;
-            });
+    function calculateCustomCrash() {
+        let random = Math.random();
+        let crash;
+        if (random <= 0.75) {
+            // 75% chance: 1.00x to 3.00x
+            crash = (Math.random() * (3.00 - 1.00)) + 1.00;
+        } else {
+            // 25% chance: 3.01x to 10.00x
+            crash = (Math.random() * (10.00 - 3.01)) + 3.01;
+        }
+        return Math.round(crash * 100) / 100;
     }
 
     function predict() {
-        const serverSeed = document.getElementById("serverSeed").value.trim();
-        const clientSeed = document.getElementById("clientSeed").value.trim();
         const nonce = parseInt(document.getElementById("nonce").value);
         const count = parseInt(document.getElementById("count").value);
         const result = document.getElementById("result");
         result.innerHTML = "Processing AI predictions...";
 
-        let complete = 0;
         const predictions = [];
-
         for (let i = 0; i < count; i++) {
-            calculateCrash(serverSeed, clientSeed, nonce + i).then(crash => {
-                predictions.push(`➤ Round ${nonce + i}: <strong>${crash.toFixed(2)}x</strong>`);
-                complete++;
-                if (complete === count) {
-                    result.innerHTML = predictions.join("<br>");
-                    speak("Signals successfully generated.");
-                }
-            });
+            const crash = calculateCustomCrash();
+            predictions.push(`➤ Round ${nonce + i}: <strong>${crash.toFixed(2)}x</strong>`);
         }
+
+        result.innerHTML = predictions.join("<br>");
+        speak("Signals successfully generated.");
     }
 </script>
 </body>
