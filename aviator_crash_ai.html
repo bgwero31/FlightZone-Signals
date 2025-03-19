@@ -1,85 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Aviator Crash Predictor</title>
     <meta charset="UTF-8">
+    <title>BJAY AI Crash Predictor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
+            background: linear-gradient(to right, #0f0f0f, #121212);
+            color: #00ffe1;
             font-family: 'Segoe UI', sans-serif;
-            background: #0f0f0f;
-            color: #00ffcc;
             margin: 0;
             padding: 0;
         }
         .container {
             max-width: 600px;
-            margin: auto;
-            margin-top: 60px;
-            background: #111;
+            margin: 80px auto;
+            background: rgba(0, 0, 0, 0.9);
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 30px #00ffcc;
+            border-radius: 16px;
+            box-shadow: 0 0 20px #00ffe1;
+        }
+        h2 {
+            text-align: center;
         }
         input, button {
-            padding: 12px;
             width: 100%;
-            margin-bottom: 18px;
+            padding: 12px;
+            margin: 12px 0;
             border-radius: 6px;
             border: none;
             font-size: 16px;
-            background: #1e1e1e;
-            color: #00ffcc;
+            background: #222;
+            color: #00ffe1;
         }
         button {
-            background: #00ffcc;
+            background-color: #00ffe1;
             color: #000;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
         }
         button:hover {
-            background: #00ffee;
+            background-color: #00ffff;
         }
         #result {
-            margin-top: 15px;
-            background: #000;
+            margin-top: 20px;
+            background: #111;
             padding: 15px;
             border-radius: 10px;
-            color: #fff;
         }
-        footer {
+        #clock {
+            font-size: 16px;
             text-align: center;
-            padding: 20px;
-            color: #888;
-            font-size: 14px;
-            margin-top: 60px;
+            margin-top: -10px;
+            color: #ffb3ff;
         }
         .ai-greet {
             font-size: 18px;
-            color: #ff00ff;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            color: #ff69b4;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+            margin-top: 60px;
         }
     </style>
 </head>
-<body>
+<body onload="updateClock(); setInterval(updateClock, 1000);">
 
 <div class="container" id="loginSection">
     <h2>Welcome to BJAY AI SIGNAL SYSTEM</h2>
-    <p style="font-size:14px;">Enter system access key below to unlock future predictions...</p>
+    <div id="clock"></div>
+    <p style="font-size:14px;">Enter access key to unlock future predictions:</p>
     <input type="password" id="loginPassword" placeholder="Access Key">
     <button onclick="login()">Access AI Signals</button>
     <p id="loginMsg" style="color:red;"></p>
 </div>
 
 <div class="container" id="signalsSection" style="display:none;">
-    <h2>Aviator Crash Predictor</h2>
+    <h2>AI Crash Predictor Signals</h2>
     <div class="ai-greet" id="aiGreeting"></div>
 
     <label>Server Seed:</label>
-    <input type="text" id="serverSeed">
+    <input type="text" id="serverSeed" placeholder="Enter server seed">
 
     <label>Client Seed:</label>
-    <input type="text" id="clientSeed">
+    <input type="text" id="clientSeed" placeholder="Enter client seed">
 
     <label>Starting Nonce:</label>
     <input type="number" id="nonce" value="0">
@@ -111,31 +120,35 @@
         }
     }
 
-    function playAIGreeting() {
+    function updateClock() {
         const now = new Date();
-        const hour = now.getHours();
-        let greet = "Hello commander, welcome back.";
-        if (hour >= 0 && hour < 12) greet = "Good morning commander, BJAY AI is now active.";
-        else if (hour >= 12 && hour < 18) greet = "Good afternoon commander, systems are running.";
-        else greet = "Good evening commander, crash predictors are loaded.";
+        const time = now.toLocaleTimeString();
+        document.getElementById('clock').innerText = "Current Time: " + time;
+    }
 
+    function playAIGreeting() {
+        const hour = new Date().getHours();
+        let greet = "Hello commander, welcome back.";
+        if (hour < 12) greet = "Good morning commander, BJAY AI is active.";
+        else if (hour < 18) greet = "Good afternoon commander, systems are live.";
+        else greet = "Good evening commander, predictions ready.";
         document.getElementById("aiGreeting").innerText = greet;
-        speak(greet + " Ready to begin predictions.");
+        speak(greet + " Signals will be generated shortly.");
     }
 
     function speak(text) {
         const synth = window.speechSynthesis;
         const utter = new SpeechSynthesisUtterance(text);
         utter.rate = 1;
-        utter.pitch = 1.3;
-        utter.voice = synth.getVoices().find(voice => voice.name.includes("Google") || voice.name.includes("UK"));
+        utter.pitch = 1.2;
+        utter.volume = 1;
         synth.speak(utter);
     }
 
     function calculateCrash(serverSeed, clientSeed, nonce) {
-        const message = clientSeed + ":" + nonce;
+        const msg = clientSeed + ":" + nonce;
         const key = new TextEncoder().encode(serverSeed);
-        const data = new TextEncoder().encode(message);
+        const data = new TextEncoder().encode(msg);
         return window.crypto.subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"])
             .then(cryptoKey => window.crypto.subtle.sign("HMAC", cryptoKey, data))
             .then(signature => {
@@ -143,34 +156,34 @@
                 if (parseInt(hashHex, 16) % 33 === 0) return 1.00;
                 const h = parseInt(hashHex.slice(0, 13), 16);
                 const e = Math.pow(2, 52);
-                const crash = (100 * e - h) / (e - h);
-                return Math.max(1.0, Math.round(crash * 100) / 100);
+                let crash = (100 * e - h) / (e - h);
+                crash = Math.max(1.0, Math.min(crash, 10)); // Limit to max 10x for realism
+                return Math.round(crash * 100) / 100;
             });
     }
 
     function predict() {
-        const serverSeed = document.getElementById('serverSeed').value;
-        const clientSeed = document.getElementById('clientSeed').value;
-        const startNonce = parseInt(document.getElementById('nonce').value);
-        const count = parseInt(document.getElementById('count').value);
-        const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = "Processing... Stand by.";
+        const serverSeed = document.getElementById("serverSeed").value.trim();
+        const clientSeed = document.getElementById("clientSeed").value.trim();
+        const nonce = parseInt(document.getElementById("nonce").value);
+        const count = parseInt(document.getElementById("count").value);
+        const result = document.getElementById("result");
+        result.innerHTML = "Processing AI predictions...";
 
-        let predictions = [];
         let complete = 0;
+        const predictions = [];
 
         for (let i = 0; i < count; i++) {
-            calculateCrash(serverSeed, clientSeed, startNonce + i).then(crash => {
-                predictions[i] = `➤ Round ${startNonce + i}: <strong>${crash}x</strong>`;
+            calculateCrash(serverSeed, clientSeed, nonce + i).then(crash => {
+                predictions.push(`➤ Round ${nonce + i}: <strong>${crash.toFixed(2)}x</strong>`);
                 complete++;
                 if (complete === count) {
-                    resultDiv.innerHTML = predictions.join("<br>");
-                    speak("Signals generated successfully. Predictions ready.");
+                    result.innerHTML = predictions.join("<br>");
+                    speak("Signals successfully generated.");
                 }
             });
         }
     }
 </script>
-
 </body>
 </html>
