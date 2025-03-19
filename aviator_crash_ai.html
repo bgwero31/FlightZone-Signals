@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aviator Crash Predictor</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: #00ffcc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            margin-top: 60px;
+            background: #111;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px #00ffcc;
+        }
+        input, button {
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            border: none;
+            font-size: 16px;
+            background: #1e1e1e;
+            color: #00ffcc;
+        }
+        button {
+            background: #00ffcc;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #00ffee;
+        }
+        #result {
+            margin-top: 15px;
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 14px;
+            margin-top: 60px;
+        }
+        .ai-greet {
+            font-size: 18px;
+            color: #ff00ff;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="loginSection">
+    <h2>Welcome to BJAY AI SIGNAL SYSTEM</h2>
+    <p style="font-size:14px;">Enter system access key below to unlock future predictions...</p>
+    <input type="password" id="loginPassword" placeholder="Access Key">
+    <button onclick="login()">Access AI Signals</button>
+    <p id="loginMsg" style="color:red;"></p>
+</div>
+
+<div class="container" id="signalsSection" style="display:none;">
+    <h2>Aviator Crash Predictor</h2>
+    <div class="ai-greet" id="aiGreeting"></div>
+
+    <label>Server Seed:</label>
+    <input type="text" id="serverSeed">
+
+    <label>Client Seed:</label>
+    <input type="text" id="clientSeed">
+
+    <label>Starting Nonce:</label>
+    <input type="number" id="nonce" value="0">
+
+    <label>Number of Predictions:</label>
+    <input type="number" id="count" value="10">
+
+    <button onclick="predict()">Generate AI Predictions</button>
+
+    <div id="result"></div>
+</div>
+
+<footer>
+    Powered by BJAY A.I Bot | 2025 © Designed to Predict Your Future<br>
+    Stay Sharp. Play Smart. Trust the Bots.
+</footer>
+
+<script>
+    const correctPassword = "bjay2025";
+
+    function login() {
+        const entered = document.getElementById("loginPassword").value;
+        if (entered === correctPassword) {
+            document.getElementById("loginSection").style.display = "none";
+            document.getElementById("signalsSection").style.display = "block";
+            playAIGreeting();
+        } else {
+            document.getElementById("loginMsg").innerText = "Access Denied. Invalid Key.";
+        }
+    }
+
+    function playAIGreeting() {
+        const now = new Date();
+        const hour = now.getHours();
+        let greet = "Hello commander, welcome back.";
+        if (hour >= 0 && hour < 12) greet = "Good morning commander, BJAY AI is now active.";
+        else if (hour >= 12 && hour < 18) greet = "Good afternoon commander, systems are running.";
+        else greet = "Good evening commander, crash predictors are loaded.";
+
+        document.getElementById("aiGreeting").innerText = greet;
+        speak(greet + " Ready to begin predictions.");
+    }
+
+    function speak(text) {
+        const synth = window.speechSynthesis;
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = 1;
+        utter.pitch = 1.3;
+        utter.voice = synth.getVoices().find(voice => voice.name.includes("Google") || voice.name.includes("UK"));
+        synth.speak(utter);
+    }
+
+    function calculateCrash(serverSeed, clientSeed, nonce) {
+        const message = clientSeed + ":" + nonce;
+        const key = new TextEncoder().encode(serverSeed);
+        const data = new TextEncoder().encode(message);
+        return window.crypto.subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"])
+            .then(cryptoKey => window.crypto.subtle.sign("HMAC", cryptoKey, data))
+            .then(signature => {
+                const hashHex = Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
+                if (parseInt(hashHex, 16) % 33 === 0) return 1.00;
+                const h = parseInt(hashHex.slice(0, 13), 16);
+                const e = Math.pow(2, 52);
+                const crash = (100 * e - h) / (e - h);
+                return Math.max(1.0, Math.round(crash * 100) / 100);
+            });
+    }
+
+    function predict() {
+        const serverSeed = document.getElementById('serverSeed').value;
+        const clientSeed = document.getElementById('clientSeed').value;
+        const startNonce = parseInt(document.getElementById('nonce').value);
+        const count = parseInt(document.getElementById('count').value);
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = "Processing... Stand by.";
+
+        let predictions = [];
+        let complete = 0;
+
+        for (let i = 0; i < count; i++) {
+            calculateCrash(serverSeed, clientSeed, startNonce + i).then(crash => {
+                predictions[i] = `➤ Round ${startNonce + i}: <strong>${crash}x</strong>`;
+                complete++;
+                if (complete === count) {
+                    resultDiv.innerHTML = predictions.join("<br>");
+                    speak("Signals generated successfully. Predictions ready.");
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
