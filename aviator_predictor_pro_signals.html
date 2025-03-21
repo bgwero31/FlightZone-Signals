@@ -1,180 +1,169 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Aviator Predictor Pro</title>  
-    <style>  
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');  body {  
-        font-family: 'Orbitron', sans-serif;  
-        text-align: center;  
-        background: radial-gradient(circle, #000428, #004e92);  
-        color: white;  
-        padding: 20px;  
-        overflow: hidden;  
-    }  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviator Predictor Pro</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle, #000428, #004e92);
+      color: white;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
 
-    h1 {  
-        font-size: 35px;  
-        color: #0ff;  
-        text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;  
-        animation: neonGlow 1.5s infinite alternate;  
-    }  
+    h1 {
+      font-size: 34px;
+      color: #00ffff;
+      text-align: center;
+      text-shadow: 0 0 12px #0ff, 0 0 30px #0ff;
+      margin-bottom: 10px;
+    }
 
-    @keyframes neonGlow {  
-        from { text-shadow: 0 0 10px #0ff, 0 0 30px #0ff; }  
-        to { text-shadow: 0 0 20px #00f, 0 0 40px #0ff; }  
-    }  
+    .prediction-container {
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+      max-width: 450px;
+      margin: auto;
+      text-align: center;
+    }
 
-    .prediction-container {  
-        background: rgba(25, 25, 25, 0.95);  
-        padding: 25px;  
-        border-radius: 15px;  
-        width: 90%;  
-        max-width: 450px;  
-        margin: 20px auto;  
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);  
-        transform: perspective(1000px) rotateX(5deg);  
-        transition: transform 0.5s ease-in-out;  
-    }  
+    .prediction {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 20px 0;
+      padding: 18px;
+      border-radius: 12px;
+      display: none;
+    }
 
-    .prediction-container:hover {  
-        transform: perspective(1000px) rotateX(0deg) scale(1.05);  
-    }  
+    .blue { background: #00ffff; color: #000; box-shadow: 0 0 20px #00ffff; }
+    .purple { background: #a020f0; box-shadow: 0 0 20px #a020f0; }
+    .pink { background: #ff007f; box-shadow: 0 0 20px #ff007f; }
 
-    .prediction {  
-        font-size: 26px;  
-        font-weight: bold;  
-        padding: 15px;  
-        border-radius: 10px;  
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);  
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);  
-        display: none;  
-    }  
+    .loader {
+      display: none;
+      margin: 20px auto;
+      border: 6px solid #fff3;
+      border-top: 6px solid #0ff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1.2s linear infinite;
+    }
 
-    .blue { background: #00ffff; box-shadow: 0px 0px 20px #00ffff; }  
-    .purple { background: #a020f0; box-shadow: 0px 0px 20px #a020f0; }  
-    .pink { background: #ff007f; box-shadow: 0px 0px 20px #ff007f; }  
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
 
-    .clock {  
-        font-size: 20px;  
-        font-weight: bold;  
-        text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.8);  
-        animation: pulse 1.5s infinite alternate;  
-    }  
+    .glowing-button {
+      background: linear-gradient(45deg, #00ffff, #00ff99);
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,255,255,0.8);
+      margin-top: 20px;
+    }
 
-    @keyframes pulse {  
-        from { opacity: 0.7; transform: scale(1); }  
-        to { opacity: 1; transform: scale(1.05); }  
-    }  
+    .glowing-button:hover {
+      transform: scale(1.05);
+    }
 
-    .glowing-button {  
-        display: inline-block;  
-        background: linear-gradient(45deg, #00ffff, #00ff99);  
-        padding: 12px 20px;  
-        border-radius: 8px;  
-        font-size: 18px;  
-        font-weight: bold;  
-        color: black;  
-        text-shadow: 0 0 5px white;  
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);  
-        border: none;  
-        cursor: pointer;  
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s;  
-    }  
+    .clock {
+      position: fixed;
+      top: 10px;
+      right: 15px;
+      background: rgba(0, 255, 255, 0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      text-shadow: 0 0 6px #0ff;
+    }
 
-    .glowing-button:hover {  
-        transform: scale(1.1);  
-        box-shadow: 0 0 30px rgba(0, 255, 255, 1);  
-    }  
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
 
-    /* Spinner Animation */  
-    .spinner {  
-        display: none;  
-        width: 40px;  
-        height: 40px;  
-        border: 6px solid rgba(255, 255, 255, 0.3);  
-        border-top: 6px solid #00ffff;  
-        border-radius: 50%;  
-        animation: spin 1s linear infinite;  
-        margin: 10px auto;  
-    }  
+  <div class="clock" id="clock"></div>
 
-    @keyframes spin {  
-        0% { transform: rotate(0deg); }  
-        100% { transform: rotate(360deg); }  
-    }  
+  <h1>Aviator Predictor Pro</h1>
 
-</style>
+  <div class="prediction-container">
+    <div id="prediction" class="prediction">Waiting...</div>
+    <div class="loader" id="loader"></div>
+    <button class="glowing-button" onclick="startPredictions()">Start AI Signal</button>
+  </div>
 
-</head>  
-<body>  
-    <h1>Aviator Predictor Pro</h1>  
-    <div class="clock" id="clock"></div>  <div class="prediction-container">  
-    <p>Next Prediction:</p>  
-    <div id="prediction" class="prediction">Waiting...</div>  
-    <div id="spinner" class="spinner"></div>  
-</div>  
+  <footer>ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025</footer>
 
-<button class="glowing-button" onclick="startPredictions()">Generate Signal</button>  
+<script>
+  let active = false;
 
-<script>  
-    let running = false;  
+  function startPredictions() {
+    if (!active) {
+      active = true;
+      document.getElementById("loader").style.display = "block";
+      setTimeout(generatePrediction, randomDelay());
+    }
+  }
 
-    function startPredictions() {  
-        if (!running) {  
-            running = true;  
-            document.getElementById("spinner").style.display = "block";  
-            setTimeout(generatePrediction, 8000); // Spinner for 8s before first prediction  
-        }  
-    }  
+  function generatePrediction() {
+    let min = 1.30;
+    let max = 2.80;
 
-    function generatePrediction() {  
-        let min = 1.50;  
-        let max = 2.50;  
-        let odd = (Math.random() * (max - min) + min).toFixed(2);  
-        let predictionElement = document.getElementById("prediction");  
-        let spinnerElement = document.getElementById("spinner");  
+    let odd = (Math.random() * (max - min) + min).toFixed(2);
+    let predictionElement = document.getElementById("prediction");
+    let loader = document.getElementById("loader");
 
-        // Set odd color  
-        if (odd < 2) {  
-            predictionElement.className = "prediction blue";  
-        } else if (odd < 4) {  
-            predictionElement.className = "prediction purple";  
-        } else {  
-            predictionElement.className = "prediction pink";  
-        }  
+    if (odd < 2) {
+      predictionElement.className = "prediction blue";
+    } else if (odd < 3) {
+      predictionElement.className = "prediction purple";
+    } else {
+      predictionElement.className = "prediction pink";
+    }
 
-        // Show the prediction  
-        predictionElement.innerText = `Target Now: ${odd}x`;  
-        predictionElement.style.display = "block";  
-        spinnerElement.style.display = "none";  
+    predictionElement.innerText = `Target Now: ${odd}x`;
+    loader.style.display = "none";
+    predictionElement.style.display = "block";
 
-        // Hide prediction after 13 seconds and show spinner  
-        setTimeout(() => {  
-            predictionElement.style.display = "none";  
-            spinnerElement.style.display = "block";  
+    setTimeout(() => {
+      predictionElement.style.display = "none";
+      loader.style.display = "block";
+      setTimeout(generatePrediction, randomDelay());
+    }, 10000); // Show prediction for 10s
+  }
 
-            // Random time for spinner (40s to 70s)  
-            let nextTime = Math.floor(Math.random() * (70 - 40 + 1)) + 40;  
+  function randomDelay() {
+    return (Math.floor(Math.random() * 20) + 15) * 1000; // Between 15-35s
+  }
 
-            setTimeout(generatePrediction, nextTime * 1000);  
-        }, 13000);  
-    }  
+  function updateClock() {
+    const now = new Date();
+    const hrs = String(now.getHours()).padStart(2, '0');
+    const mins = String(now.getMinutes()).padStart(2, '0');
+    const secs = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('clock').innerText = `${hrs}:${mins}:${secs}`;
+  }
 
-    function updateClock() {  
-        let now = new Date();  
-        let hours = now.getHours().toString().padStart(2, '0');  
-        let minutes = now.getMinutes().toString().padStart(2, '0');  
-        let seconds = now.getSeconds().toString().padStart(2, '0');  
-        document.getElementById("clock").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;  
-    }  
-
-    setInterval(updateClock, 1000);  
-</script>  
-
-<footer>  
-    <p>ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025</p>  
-</footer>
-
-</body>  
+  setInterval(updateClock, 1000);
+</script>
+</body>
 </html>
