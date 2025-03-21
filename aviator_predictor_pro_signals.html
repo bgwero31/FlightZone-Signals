@@ -1,169 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aviator Predictor Pro</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle, #000428, #004e92);
-      color: white;
-      margin: 0;
-      padding: 20px;
-      overflow-x: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Predictor Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-    h1 {
-      font-size: 34px;
-      color: #00ffff;
-      text-align: center;
-      text-shadow: 0 0 12px #0ff, 0 0 30px #0ff;
-      margin-bottom: 10px;
-    }
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #000428, #004e92);
+            color: white;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .prediction-container {
-      background: rgba(0, 0, 0, 0.85);
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
-      max-width: 450px;
-      margin: auto;
-      text-align: center;
-    }
+        h1 {
+            margin-top: 20px;
+            font-size: 36px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            animation: neonGlow 1.5s infinite alternate;
+        }
 
-    .prediction {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 20px 0;
-      padding: 18px;
-      border-radius: 12px;
-      display: none;
-    }
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 10px #0ff, 0 0 30px #0ff; }
+            to { text-shadow: 0 0 20px #00f, 0 0 40px #0ff; }
+        }
 
-    .blue { background: #00ffff; color: #000; box-shadow: 0 0 20px #00ffff; }
-    .purple { background: #a020f0; box-shadow: 0 0 20px #a020f0; }
-    .pink { background: #ff007f; box-shadow: 0 0 20px #ff007f; }
+        .clock {
+            margin-top: 10px;
+            font-size: 20px;
+            text-shadow: 0 0 10px cyan;
+            animation: pulse 2s infinite alternate;
+        }
 
-    .loader {
-      display: none;
-      margin: 20px auto;
-      border: 6px solid #fff3;
-      border-top: 6px solid #0ff;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1.2s linear infinite;
-    }
+        @keyframes pulse {
+            from { opacity: 0.8; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
+        .main-spinner {
+            width: 220px;
+            height: 220px;
+            border: 8px solid rgba(255, 255, 255, 0.2);
+            border-top: 8px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+            margin: 30px auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(0,255,255,0.4);
+        }
 
-    .glowing-button {
-      background: linear-gradient(45deg, #00ffff, #00ff99);
-      padding: 12px 25px;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #000;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(0,255,255,0.8);
-      margin-top: 20px;
-    }
+        .main-prediction {
+            font-size: 28px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            font-weight: bold;
+        }
 
-    .glowing-button:hover {
-      transform: scale(1.05);
-    }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-    .clock {
-      position: fixed;
-      top: 10px;
-      right: 15px;
-      background: rgba(0, 255, 255, 0.2);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      text-shadow: 0 0 6px #0ff;
-    }
+        .outer-signals {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            max-width: 500px;
+            margin: 20px auto;
+        }
 
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 14px;
-      color: #aaa;
-    }
-  </style>
+        .signal-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #00ffff;
+            border-radius: 12px;
+            padding: 10px 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00ffff;
+            box-shadow: 0 0 15px #00ffff;
+            text-align: center;
+            flex: 1;
+            margin: 5px;
+        }
+
+        .glowing-button {
+            margin-top: 20px;
+            background: linear-gradient(45deg, #00ffff, #00ff99);
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            text-shadow: 0 0 5px white;
+            box-shadow: 0 0 20px rgba(0,255,255,0.7);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .glowing-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0,255,255,1);
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            font-size: 14px;
+            color: #aaa;
+            border-top: 1px solid #00ffff;
+        }
+    </style>
 </head>
 <body>
+    <h1>Aviator Predictor Pro</h1>
+    <div class="clock" id="clock">Current Time: --:--:--</div>
 
-  <div class="clock" id="clock"></div>
+    <div class="main-spinner">
+        <div class="main-prediction" id="mainPrediction">Waiting...</div>
+    </div>
 
-  <h1>Aviator Predictor Pro</h1>
+    <div class="outer-signals">
+        <div class="signal-box" id="signal1">--.--x</div>
+        <div class="signal-box" id="signal2">--.--x</div>
+        <div class="signal-box" id="signal3">--.--x</div>
+    </div>
 
-  <div class="prediction-container">
-    <div id="prediction" class="prediction">Waiting...</div>
-    <div class="loader" id="loader"></div>
-    <button class="glowing-button" onclick="startPredictions()">Start AI Signal</button>
-  </div>
+    <button class="glowing-button" onclick="startPrediction()">Generate Signal</button>
 
-  <footer>ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025</footer>
+    <footer>
+        ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025
+    </footer>
 
-<script>
-  let active = false;
+    <script>
+        function updateClock() {
+            let now = new Date();
+            let hrs = String(now.getHours()).padStart(2, '0');
+            let mins = String(now.getMinutes()).padStart(2, '0');
+            let secs = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById("clock").innerText = `Current Time: ${hrs}:${mins}:${secs}`;
+        }
 
-  function startPredictions() {
-    if (!active) {
-      active = true;
-      document.getElementById("loader").style.display = "block";
-      setTimeout(generatePrediction, randomDelay());
-    }
-  }
+        setInterval(updateClock, 1000);
 
-  function generatePrediction() {
-    let min = 1.30;
-    let max = 2.80;
+        function generateAccurateOdd() {
+            let min = 1.30, max = 2.50;
+            return (Math.random() * (max - min) + min).toFixed(2);
+        }
 
-    let odd = (Math.random() * (max - min) + min).toFixed(2);
-    let predictionElement = document.getElementById("prediction");
-    let loader = document.getElementById("loader");
+        function startPrediction() {
+            const prediction = generateAccurateOdd();
+            document.getElementById("mainPrediction").innerText = `Target Now: ${prediction}x`;
 
-    if (odd < 2) {
-      predictionElement.className = "prediction blue";
-    } else if (odd < 3) {
-      predictionElement.className = "prediction purple";
-    } else {
-      predictionElement.className = "prediction pink";
-    }
-
-    predictionElement.innerText = `Target Now: ${odd}x`;
-    loader.style.display = "none";
-    predictionElement.style.display = "block";
-
-    setTimeout(() => {
-      predictionElement.style.display = "none";
-      loader.style.display = "block";
-      setTimeout(generatePrediction, randomDelay());
-    }, 10000); // Show prediction for 10s
-  }
-
-  function randomDelay() {
-    return (Math.floor(Math.random() * 20) + 15) * 1000; // Between 15-35s
-  }
-
-  function updateClock() {
-    const now = new Date();
-    const hrs = String(now.getHours()).padStart(2, '0');
-    const mins = String(now.getMinutes()).padStart(2, '0');
-    const secs = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('clock').innerText = `${hrs}:${mins}:${secs}`;
-  }
-
-  setInterval(updateClock, 1000);
-</script>
+            // Outer Signals
+            document.getElementById("signal1").innerText = `${generateAccurateOdd()}x`;
+            document.getElementById("signal2").innerText = `${generateAccurateOdd()}x`;
+            document.getElementById("signal3").innerText = `${generateAccurateOdd()}x`;
+        }
+    </script>
 </body>
 </html>
