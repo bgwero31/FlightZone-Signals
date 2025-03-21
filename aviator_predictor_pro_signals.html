@@ -6,51 +6,66 @@
   <title>Aviator Predictor Pro</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
     body {
       font-family: 'Orbitron', sans-serif;
       background: radial-gradient(circle, #000428, #004e92);
-      color: white;
       margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+      padding: 20px;
+      overflow: hidden;
+      color: white;
     }
 
     h1 {
-      font-size: 34px;
-      color: #00ffff;
+      font-size: 32px;
       text-align: center;
+      color: #00ffff;
       text-shadow: 0 0 12px #0ff, 0 0 30px #0ff;
-      margin: 20px 0;
+      margin-bottom: 20px;
     }
 
     .spinner-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 60vh;
+      width: 300px;
+      height: 300px;
+      margin: 40px auto;
+      perspective: 1000px;
     }
 
     .spinner {
-      width: 200px;
-      height: 200px;
-      border: 10px solid rgba(255, 255, 255, 0.2);
-      border-top: 10px solid #00ffff;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
-      animation: spin 1.5s linear infinite;
+      border: 8px solid rgba(0, 255, 255, 0.3);
+      border-top: 8px solid #00ffff;
+      border-left: 8px solid #00ffff;
+      animation: rotateSpinner 4s infinite linear;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: 30px;
-      font-weight: bold;
-      color: #000;
-      background: #00ffff;
-      box-shadow: 0 0 30px #00ffff;
-      text-shadow: none;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 50px rgba(0,255,255,0.4);
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
+    @keyframes rotateSpinner {
+      0% { transform: rotateX(0deg) rotateY(0deg); }
+      25% { transform: rotateX(180deg) rotateY(0deg); }
+      50% { transform: rotateX(180deg) rotateY(180deg); }
+      75% { transform: rotateX(0deg) rotateY(180deg); }
+      100% { transform: rotateX(0deg) rotateY(0deg); }
+    }
+
+    .odds-display {
+      font-size: 36px;
+      font-weight: bold;
+      color: #00ffff;
+      text-shadow: 0 0 10px #0ff;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      position: absolute;
+    }
+
+    .visible {
+      opacity: 1;
     }
 
     .glowing-button {
@@ -64,7 +79,7 @@
       cursor: pointer;
       box-shadow: 0 0 20px rgba(0,255,255,0.8);
       display: block;
-      margin: 20px auto;
+      margin: 30px auto 0;
     }
 
     .glowing-button:hover {
@@ -84,60 +99,79 @@
     }
 
     footer {
-      margin-top: 40px;
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       color: #aaa;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
 
-  <div class="clock" id="clock"></div>
+<div class="clock" id="clock"></div>
 
-  <h1>Aviator Predictor Pro</h1>
+<h1>Aviator Predictor Pro</h1>
 
-  <div class="spinner-container">
-    <div class="spinner" id="prediction">--</div>
+<div class="spinner-container">
+  <div class="spinner" id="spinner">
+    <div class="odds-display" id="oddsDisplay">Target Now: --</div>
   </div>
+</div>
 
-  <button class="glowing-button" onclick="startPredictions()">Start AI Signal</button>
+<button class="glowing-button" onclick="startAI()">Start AI Signal</button>
 
-  <footer>ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025</footer>
+<footer>ALL RIGHTS RESERVED | FLIGHTZONE SIGNALS 2025</footer>
 
-  <script>
-    let active = false;
+<script>
+  let active = false;
 
-    function startPredictions() {
-      if (!active) {
-        active = true;
-        generatePrediction();
-      }
+  function startAI() {
+    if (!active) {
+      active = true;
+      generateNewPrediction();
     }
+  }
 
-    function generatePrediction() {
+  function generateNewPrediction() {
+    const oddsDisplay = document.getElementById("oddsDisplay");
+
+    // Hide odds temporarily to simulate AI delay
+    oddsDisplay.classList.remove("visible");
+    oddsDisplay.innerText = "Target Now: --";
+
+    // Simulate prediction delay
+    setTimeout(() => {
       let min = 1.20;
       let max = 2.30;
-      let odd = (Math.random() * (max - min) + min).toFixed(2);
+      let newOdd = (Math.random() * (max - min) + min).toFixed(2);
 
-      document.getElementById("prediction").innerText = `${odd}x`;
+      // Display new odds
+      oddsDisplay.innerText = `Target Now: ${newOdd}x`;
+      oddsDisplay.classList.add("visible");
 
-      setTimeout(generatePrediction, randomDelay());
-    }
+      // Repeat prediction after 12 seconds with delay in between
+      setTimeout(() => {
+        oddsDisplay.classList.remove("visible");
+        setTimeout(generateNewPrediction, randomDelay());
+      }, 10000);
 
-    function randomDelay() {
-      return (Math.floor(Math.random() * 15) + 10) * 1000; // Random every 10s - 25s
-    }
+    }, 2000); // Delay before odds show (AI thinking)
+  }
 
-    function updateClock() {
-      const now = new Date();
-      const hrs = String(now.getHours()).padStart(2, '0');
-      const mins = String(now.getMinutes()).padStart(2, '0');
-      const secs = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').innerText = `${hrs}:${mins}:${secs}`;
-    }
+  function randomDelay() {
+    return (Math.floor(Math.random() * 15) + 10) * 1000; // 10s to 25s
+  }
 
-    setInterval(updateClock, 1000);
-  </script>
+  function updateClock() {
+    const now = new Date();
+    const hrs = String(now.getHours()).padStart(2, '0');
+    const mins = String(now.getMinutes()).padStart(2, '0');
+    const secs = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('clock').innerText = `${hrs}:${mins}:${secs}`;
+  }
+
+  setInterval(updateClock, 1000);
+</script>
+
 </body>
 </html>
