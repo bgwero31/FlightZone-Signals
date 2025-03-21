@@ -33,32 +33,19 @@
     }
 
     .spinner-box {
-      margin: 20px auto;
+      margin: 30px auto;
       width: 220px;
       height: 220px;
       border-radius: 50%;
-      background: conic-gradient(#00ffff 0% 33%, #ff00ff 33% 66%, #00ff99 66% 100%);
+      background: #ff00ff;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      font-size: 22px;
+      font-weight: bold;
+      text-shadow: 0 0 10px #fff;
       position: relative;
-      font-size: 18px;
-      font-weight: bold;
-      text-shadow: 0 0 10px #0ff;
-      animation: rotate 5s linear infinite;
-    }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .spinner-text {
-      position: absolute;
-      text-align: center;
-      z-index: 2;
-      font-size: 20px;
-      font-weight: bold;
     }
 
     .glowing-button {
@@ -79,22 +66,20 @@
       box-shadow: 0 0 30px #00ffff;
     }
 
-    .next-targets {
-      margin-top: 30px;
-    }
-
-    .target-box {
-      background: rgba(0, 255, 255, 0.1);
-      margin: 8px auto;
-      padding: 10px 20px;
-      border-radius: 12px;
-      width: 300px;
-      box-shadow: 0 0 10px #00ffff33;
+    .confidence-box {
+      position: absolute;
+      right: 30px;
+      bottom: 40px;
+      background: rgba(0,255,255,0.2);
+      padding: 12px 18px;
+      border-radius: 10px;
       font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 0 12px #00ffff55;
     }
 
     footer {
-      margin-top: 30px;
+      margin-top: 50px;
       font-size: 14px;
       opacity: 0.6;
     }
@@ -106,14 +91,12 @@
 <h1>Aviator Predictor Pro</h1>
 <div class="clock" id="clock">Time Loading...</div>
 
-<div class="spinner-box">
-  <div class="spinner-text" id="spinnerText">Play Now<br>1.65x</div>
+<div class="spinner-box" id="spinner-text">
+  Play Now<br>1.65x
 </div>
 
-<button class="glowing-button" onclick="generatePrediction()">Generate New Signal</button>
-
-<div class="next-targets" id="nextTargetBox">
-  <div class="target-box" id="targetDisplay">Next Target → 1.72x<br>Confidence: 95%</div>
+<div class="confidence-box" id="confidence-box">
+  Confidence: 95%
 </div>
 
 <footer>
@@ -121,27 +104,28 @@
 </footer>
 
 <script>
-function updateClock() {
-  const now = new Date();
-  const time = now.toLocaleTimeString();
-  document.getElementById("clock").innerText = "Current Time: " + time;
-}
-setInterval(updateClock, 1000);
+  // Update clock every second
+  function updateClock() {
+    const now = new Date();
+    const time = now.toLocaleTimeString();
+    document.getElementById("clock").innerText = "Current Time: " + time;
+  }
+  setInterval(updateClock, 1000);
 
-function generatePrediction() {
-  const newOdd = generateOdd();
-  document.getElementById("spinnerText").innerHTML = `Play Now<br>${newOdd}x`;
+  // Generate random odds from 1.20x to 2.50x
+  function getRandomOdds() {
+    let odds = (Math.random() * (2.50 - 1.20) + 1.20).toFixed(2);
+    return odds;
+  }
 
-  const nextTargetOdd = generateOdd();
-  const confidence = Math.floor(Math.random() * 11) + 90; // 90% - 100%
-  document.getElementById("targetDisplay").innerHTML = `Next Target → ${nextTargetOdd}x<br>Confidence: ${confidence}%`;
-}
+  // Update the spinner text every 5 seconds
+  function updateSpinner() {
+    const randomOdds = getRandomOdds();
+    document.getElementById("spinner-text").innerHTML = `Play Now<br>${randomOdds}x`;
+  }
 
-function generateOdd() {
-  const min = 1.30;
-  const max = 2.50;
-  return (Math.random() * (max - min) + min).toFixed(2);
-}
+  setInterval(updateSpinner, 5000); // Change every 5 seconds
+  updateSpinner(); // Initial call
 </script>
 
 </body>
