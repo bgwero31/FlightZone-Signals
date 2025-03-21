@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aviator Predictor Pro</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
@@ -14,24 +14,20 @@
       padding: 20px;
       overflow: hidden;
     }
-
     h1 {
       font-size: 36px;
       color: #0ff;
       text-shadow: 0 0 15px #0ff;
     }
-
     .clock {
       font-size: 20px;
       margin-bottom: 10px;
       animation: pulse 1.5s infinite alternate;
     }
-
     @keyframes pulse {
       from { opacity: 0.7; transform: scale(1); }
       to { opacity: 1; transform: scale(1.05); }
     }
-
     .spinner-box {
       margin: 20px auto;
       width: 220px;
@@ -47,51 +43,40 @@
       text-shadow: 0 0 10px #0ff;
       position: relative;
     }
-
     .spinner-box::before,
     .spinner-box::after,
-    .spinner-box div {
+    .spinner-box div.spin-part {
       content: '';
       position: absolute;
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      animation: rotate 6s infinite linear;
     }
-
+    .spin-part {
+      animation: rotate 1.5s infinite linear;
+    }
     .spinner-box::before {
       background: #00ffff;
       clip-path: polygon(0% 0%, 100% 0%, 100% 33%, 0% 33%);
       animation: rotateLeft 3s infinite linear;
     }
-
     .spinner-box::after {
       background: #ff00ff;
       clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
       animation: rotateRight 2s infinite linear;
     }
-
-    .spinner-box div {
-      background: #00ff99;
-      clip-path: polygon(0% 66%, 100% 66%, 100% 100%, 0% 100%);
-      animation: rotate 1.5s infinite linear;
-    }
-
     @keyframes rotateLeft {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(-360deg); }
     }
-
     @keyframes rotateRight {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     .glowing-button {
       background: linear-gradient(45deg, #00ffff, #00ff99);
       padding: 12px 24px;
@@ -104,33 +89,10 @@
       cursor: pointer;
       transition: 0.3s;
     }
-
     .glowing-button:hover {
       transform: scale(1.1);
       box-shadow: 0 0 30px #00ffff;
     }
-
-    .next-targets {
-      margin-top: 30px;
-    }
-
-    .target-box {
-      background: rgba(0, 255, 255, 0.1);
-      margin: 8px auto;
-      padding: 10px 20px;
-      border-radius: 12px;
-      width: 300px;
-      box-shadow: 0 0 10px #00ffff33;
-      font-size: 18px;
-    }
-
-    .confidence {
-      font-size: 14px;
-      color: #0ff;
-      opacity: 0.9;
-      margin-top: 4px;
-    }
-
     footer {
       margin-top: 30px;
       font-size: 14px;
@@ -139,93 +101,67 @@
   </style>
 </head>
 <body>
+  <h1>Aviator Predictor Pro</h1>
+  <div class="clock" id="clock">Time Loading...</div>
+  <div class="spinner-box" id="spinner">
+    <div class="spin-part" id="spinAnimation"></div>
+    <div id="spinner-text">Waiting...</div>
+  </div>
+  <button class="glowing-button" onclick="startPredictions()">Generate Signals</button>
+  <footer>
+    <p>ALL RIGHTS RESERVED • FLIGHTZONE SIGNALS 2025</p>
+  </footer>
 
-<h1>Aviator Predictor Pro</h1>
-<div class="clock" id="clock">Time Loading...</div>
+  <script>
+    let running = false;
+    let spinElement = document.getElementById("spinAnimation");
 
-<div class="spinner-box" id="spinner">
-  <div></div>
-  <div id="spinner-text">Waiting...</div>
-</div>
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").innerText = "Current Time: " + now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
 
-<button class="glowing-button" onclick="startPredictions()">Generate Signals</button>
+    function startPredictions() {
+      if (!running) {
+        running = true;
+        runPredictionCycle();
+      }
+    }
 
-<div class="next-targets" id="nextTargets">
-  <!-- Targets will appear here -->
-</div>
+    function runPredictionCycle() {
+      // Stop Spinner
+      spinElement.style.animation = "none";
 
-<footer>
-  <p>ALL RIGHTS RESERVED • FLIGHTZONE SIGNALS 2025</p>
-</footer>
+      const now = new Date();
+      const playTime = now.toLocaleTimeString();
+      const odd = generateOdd();
 
-<script>
-let running = false;
+      document.getElementById("spinner-text").innerHTML =
+        `<div>Play Now:</div><div>${playTime}</div><div>${odd}x</div>`;
 
-function updateClock() {
-  const now = new Date();
-  const time = now.toLocaleTimeString();
-  document.getElementById("clock").innerText = "Current Time: " + time;
-}
-setInterval(updateClock, 1000);
+      // After 10 seconds, restart spinner
+      setTimeout(() => {
+        spinElement.style.animation = "rotate 1.5s infinite linear";
+        document.getElementById("spinner-text").innerText = "Calculating...";
+        
+        // Wait 18–28 seconds, then next odd
+        const delay = getRandomSeconds(18, 28) * 1000;
+        setTimeout(() => {
+          runPredictionCycle();
+        }, delay);
+      }, 10000);
+    }
 
-function startPredictions() {
-  if (!running) {
-    running = true;
-    document.getElementById("spinner-text").innerText = "Generating...";
-    setTimeout(() => {
-      generateSignals();
-    }, 3000);
-  }
-}
+    function generateOdd() {
+      const min = 1.20;
+      const max = 2.50;
+      return (Math.random() * (max - min) + min).toFixed(2);
+    }
 
-function generateSignals() {
-  updateMainPrediction();
-}
-
-function updateMainPrediction() {
-  const currentTime = new Date();
-  const playNowTime = currentTime.toLocaleTimeString();
-  const playNowOdd = generateOdd();
-
-  // Show in spinner
-  document.getElementById("spinner-text").innerHTML =
-    `<div>Play Now:</div><div>${playNowTime}</div><div>${playNowOdd}x</div>`;
-
-  let targets = [];
-  targets.push({ time: playNowTime, odd: playNowOdd });
-
-  let nextTime = new Date(currentTime);
-  for (let i = 1; i <= 2; i++) {
-    nextTime = new Date(nextTime.getTime() + getRandomSeconds(15, 30) * 1000);
-    targets.push({ time: nextTime.toLocaleTimeString(), odd: generateOdd() });
-  }
-
-  displayNextTargets(targets);
-
-  const waitTime = getRandomSeconds(15, 25);
-  setTimeout(() => {
-    updateMainPrediction();
-  }, waitTime * 1000);
-}
-
-function displayNextTargets(targets) {
-  let html = "<h3>Next Targets</h3>";
-  targets.forEach((t, i) => {
-    html += `<div class="target-box">Next Target ${i + 1} → ${t.time} → ${t.odd}x
-              <div class="confidence">Confidence Level: High</div></div>`;
-  });
-  document.getElementById("nextTargets").innerHTML = html;
-}
-
-function generateOdd() {
-  let min = 1.20;
-  let max = 2.50;
-  return (Math.random() * (max - min) + min).toFixed(2);
-}
-
-function getRandomSeconds(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-</script>
+    function getRandomSeconds(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
 </body>
 </html>
