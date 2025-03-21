@@ -28,6 +28,15 @@
       from { opacity: 0.7; transform: scale(1); }
       to { opacity: 1; transform: scale(1.05); }
     }
+
+    .prediction-box {
+      font-size: 22px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
     .spinner-box {
       margin: 20px auto;
       width: 220px;
@@ -37,12 +46,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      font-size: 20px;
-      font-weight: bold;
-      text-shadow: 0 0 10px #0ff;
       position: relative;
     }
+
     .spinner-box::before,
     .spinner-box::after,
     .spinner-box div.spin-part {
@@ -52,31 +58,38 @@
       height: 100%;
       border-radius: 50%;
     }
+
     .spin-part {
       animation: rotate 1.5s infinite linear;
     }
+
     .spinner-box::before {
       background: #00ffff;
       clip-path: polygon(0% 0%, 100% 0%, 100% 33%, 0% 33%);
       animation: rotateLeft 3s infinite linear;
     }
+
     .spinner-box::after {
       background: #ff00ff;
       clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
       animation: rotateRight 2s infinite linear;
     }
+
     @keyframes rotateLeft {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(-360deg); }
     }
+
     @keyframes rotateRight {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
     @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
     .glowing-button {
       background: linear-gradient(45deg, #00ffff, #00ff99);
       padding: 12px 24px;
@@ -89,10 +102,12 @@
       cursor: pointer;
       transition: 0.3s;
     }
+
     .glowing-button:hover {
       transform: scale(1.1);
       box-shadow: 0 0 30px #00ffff;
     }
+
     footer {
       margin-top: 30px;
       font-size: 14px;
@@ -103,11 +118,18 @@
 <body>
   <h1>Aviator Predictor Pro</h1>
   <div class="clock" id="clock">Time Loading...</div>
-  <div class="spinner-box" id="spinner">
-    <div class="spin-part" id="spinAnimation"></div>
-    <div id="spinner-text">Waiting...</div>
+
+  <!-- Prediction Box Above Spinner -->
+  <div class="prediction-box" id="prediction-box">
+    Waiting for Prediction...
   </div>
+
+  <div class="spinner-box">
+    <div class="spin-part" id="spinAnimation"></div>
+  </div>
+
   <button class="glowing-button" onclick="startPredictions()">Generate Signals</button>
+
   <footer>
     <p>ALL RIGHTS RESERVED • FLIGHTZONE SIGNALS 2025</p>
   </footer>
@@ -137,14 +159,14 @@
       const playTime = now.toLocaleTimeString();
       const odd = generateOdd();
 
-      document.getElementById("spinner-text").innerHTML =
-        `<div>Play Now:</div><div>${playTime}</div><div>${odd}x</div>`;
+      document.getElementById("prediction-box").innerHTML =
+        `<div>Play Now: ${playTime} | ${odd}x</div>`;
 
       // After 10 seconds, restart spinner
       setTimeout(() => {
         spinElement.style.animation = "rotate 1.5s infinite linear";
-        document.getElementById("spinner-text").innerText = "Calculating...";
-        
+        document.getElementById("prediction-box").innerText = "Calculating...";
+
         // Wait 18–28 seconds, then next odd
         const delay = getRandomSeconds(18, 28) * 1000;
         setTimeout(() => {
