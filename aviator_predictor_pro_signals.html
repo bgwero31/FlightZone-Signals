@@ -9,7 +9,7 @@
 
     body {
       font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle, #000428, #004e92);
+      background: linear-gradient(to bottom right, #1c1c2b, #2f3e4e);
       margin: 0;
       padding: 20px;
       overflow: hidden;
@@ -43,7 +43,7 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      box-shadow: 0 0 50px rgba(0,255,255,0.4);
+      box-shadow: 0 0 50px rgba(0,255,255,0.2);
     }
 
     @keyframes rotateSpinner {
@@ -128,6 +128,7 @@
   function startAI() {
     if (!active) {
       active = true;
+      speak("Welcome Baron. I am ready to start predicting accurate odds for you.");
       generateNewPrediction();
     }
   }
@@ -135,31 +136,32 @@
   function generateNewPrediction() {
     const oddsDisplay = document.getElementById("oddsDisplay");
 
-    // Hide odds temporarily to simulate AI delay
     oddsDisplay.classList.remove("visible");
     oddsDisplay.innerText = "Target Now: --";
 
-    // Simulate prediction delay
+    speak("Please wait... I am calculating the next accurate odd.");
+
     setTimeout(() => {
       let min = 1.20;
       let max = 2.30;
       let newOdd = (Math.random() * (max - min) + min).toFixed(2);
 
-      // Display new odds
       oddsDisplay.innerText = `Target Now: ${newOdd}x`;
       oddsDisplay.classList.add("visible");
 
-      // Repeat prediction after 12 seconds with delay in between
+      speak(`Prediction ready. Target now is ${newOdd} times.`);
+
       setTimeout(() => {
         oddsDisplay.classList.remove("visible");
+        speak("Please wait... I am calculating the next accurate odd.");
         setTimeout(generateNewPrediction, randomDelay());
       }, 10000);
 
-    }, 2000); // Delay before odds show (AI thinking)
+    }, 2000);
   }
 
   function randomDelay() {
-    return (Math.floor(Math.random() * 15) + 10) * 1000; // 10s to 25s
+    return (Math.floor(Math.random() * 15) + 10) * 1000;
   }
 
   function updateClock() {
@@ -171,6 +173,12 @@
   }
 
   setInterval(updateClock, 1000);
+
+  function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    speechSynthesis.speak(utterance);
+  }
 </script>
 
 </body>
