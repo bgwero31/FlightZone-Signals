@@ -11,7 +11,7 @@
       background: radial-gradient(circle, #000428, #004e92);
       color: white;
       margin: 0;
-      padding: 20px;
+      padding: 0;
       overflow-x: hidden;
     }
 
@@ -20,56 +20,38 @@
       color: #00ffff;
       text-align: center;
       text-shadow: 0 0 12px #0ff, 0 0 30px #0ff;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
-    .prediction-container {
-      background: rgba(0, 0, 0, 0.85);
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
-      max-width: 500px;
-      margin: auto;
-      text-align: center;
-      position: relative;
+    .spinner-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60vh;
     }
 
-    .spinner-box {
-      width: 180px;
-      height: 180px;
+    .spinner {
+      width: 200px;
+      height: 200px;
+      border: 10px solid rgba(255, 255, 255, 0.2);
+      border-top: 10px solid #00ffff;
       border-radius: 50%;
-      border: 12px solid #00ffff50;
-      border-top-color: #00ffff;
-      animation: spin 1.2s linear infinite;
-      margin: 30px auto;
-      position: relative;
+      animation: spin 1.5s linear infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      font-weight: bold;
+      color: #000;
+      background: #00ffff;
+      box-shadow: 0 0 30px #00ffff;
+      text-shadow: none;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg);}
       100% { transform: rotate(360deg);}
     }
-
-    .prediction {
-      position: absolute;
-      top: 145px;
-      left: 0;
-      right: 0;
-      font-size: 30px;
-      font-weight: bold;
-      margin: auto;
-      color: #000;
-      padding: 12px 18px;
-      border-radius: 15px;
-      display: none;
-      max-width: 60%;
-      text-align: center;
-      box-shadow: 0 0 15px #fff;
-    }
-
-    .blue { background: #00ffff; box-shadow: 0 0 15px #00ffff; }
-    .purple { background: #a020f0; box-shadow: 0 0 15px #a020f0; }
-    .pink { background: #ff007f; box-shadow: 0 0 15px #ff007f; }
 
     .glowing-button {
       background: linear-gradient(45deg, #00ffff, #00ff99);
@@ -81,7 +63,8 @@
       color: #000;
       cursor: pointer;
       box-shadow: 0 0 20px rgba(0,255,255,0.8);
-      margin-top: 25px;
+      display: block;
+      margin: 20px auto;
     }
 
     .glowing-button:hover {
@@ -114,66 +97,47 @@
 
   <h1>Aviator Predictor Pro</h1>
 
-  <div class="prediction-container">
-    <div class="spinner-box" id="spinner-box"></div>
-    <div id="prediction" class="prediction">Waiting...</div>
-    <button class="glowing-button" onclick="startPredictions()">Start AI Signal</button>
+  <div class="spinner-container">
+    <div class="spinner" id="prediction">--</div>
   </div>
+
+  <button class="glowing-button" onclick="startPredictions()">Start AI Signal</button>
 
   <footer>ALL RIGHTS RESERVED. FLIGHTZONE SIGNALS 2025</footer>
 
-<script>
-  let active = false;
+  <script>
+    let active = false;
 
-  function startPredictions() {
-    if (!active) {
-      active = true;
-      generatePrediction();
-    }
-  }
-
-  function generatePrediction() {
-    let min = 1.20;
-    let max = 2.30;
-    
-    // More randomization with less repetition
-    let odd = (Math.random() * (max - min) + min).toFixed(2);
-    
-    let predictionElement = document.getElementById("prediction");
-    predictionElement.className = "prediction"; // reset class
-
-    // Randomly assign color based on odd ranges
-    if (odd <= 1.70) {
-      predictionElement.classList.add("blue");
-    } else if (odd <= 2.00) {
-      predictionElement.classList.add("purple");
-    } else {
-      predictionElement.classList.add("pink");
+    function startPredictions() {
+      if (!active) {
+        active = true;
+        generatePrediction();
+      }
     }
 
-    predictionElement.innerText = `Target: ${odd}x`;
-    predictionElement.style.display = "block";
+    function generatePrediction() {
+      let min = 1.20;
+      let max = 2.30;
+      let odd = (Math.random() * (max - min) + min).toFixed(2);
 
-    // Repeat next prediction in random delay
-    setTimeout(() => {
-      predictionElement.style.display = "none";
+      document.getElementById("prediction").innerText = `${odd}x`;
+
       setTimeout(generatePrediction, randomDelay());
-    }, 8000); // display duration
-  }
+    }
 
-  function randomDelay() {
-    return (Math.floor(Math.random() * 15) + 10) * 1000; // 10s - 25s
-  }
+    function randomDelay() {
+      return (Math.floor(Math.random() * 15) + 10) * 1000; // Random every 10s - 25s
+    }
 
-  function updateClock() {
-    const now = new Date();
-    const hrs = String(now.getHours()).padStart(2, '0');
-    const mins = String(now.getMinutes()).padStart(2, '0');
-    const secs = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('clock').innerText = `${hrs}:${mins}:${secs}`;
-  }
+    function updateClock() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const secs = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').innerText = `${hrs}:${mins}:${secs}`;
+    }
 
-  setInterval(updateClock, 1000);
-</script>
+    setInterval(updateClock, 1000);
+  </script>
 </body>
 </html>
