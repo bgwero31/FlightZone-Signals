@@ -33,19 +33,63 @@
     }
 
     .spinner-box {
-      margin: 30px auto;
+      margin: 20px auto;
       width: 220px;
       height: 220px;
       border-radius: 50%;
-      background: #ff00ff;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
-      text-shadow: 0 0 10px #fff;
+      text-shadow: 0 0 10px #0ff;
       position: relative;
+    }
+
+    .spinner-box::before,
+    .spinner-box::after,
+    .spinner-box div {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      animation: rotate 6s infinite linear;
+    }
+
+    .spinner-box::before {
+      background: #00ffff;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 33%, 0% 33%);
+      animation: rotateLeft 3s infinite linear;
+    }
+
+    .spinner-box::after {
+      background: #ff00ff;
+      clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+      animation: rotateRight 2s infinite linear;
+    }
+
+    .spinner-box div {
+      background: #00ff99;
+      clip-path: polygon(0% 66%, 100% 66%, 100% 100%, 0% 100%);
+      animation: rotate 1.5s infinite linear;
+    }
+
+    @keyframes rotateLeft {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+
+    @keyframes rotateRight {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .glowing-button {
@@ -66,24 +110,32 @@
       box-shadow: 0 0 30px #00ffff;
     }
 
-    .confidence-box {
-      position: absolute;
-      right: 30px;
-      bottom: 40px;
-      background: rgba(0,255,255,0.2);
-      padding: 12px 18px;
-      border-radius: 10px;
+    .next-targets {
+      margin-top: 30px;
+    }
+
+    .target-box {
+      background: rgba(0, 255, 255, 0.1);
+      margin: 8px auto;
+      padding: 10px 20px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 0 10px #00ffff33;
       font-size: 18px;
-      font-weight: bold;
-      box-shadow: 0 0 12px #00ffff55;
+    }
+
+    .confidence {
+      font-size: 14px;
+      color: #0ff;
+      opacity: 0.9;
+      margin-top: 4px;
     }
 
     footer {
-      margin-top: 50px;
+      margin-top: 30px;
       font-size: 14px;
       opacity: 0.6;
     }
-
   </style>
 </head>
 <body>
@@ -91,12 +143,15 @@
 <h1>Aviator Predictor Pro</h1>
 <div class="clock" id="clock">Time Loading...</div>
 
-<div class="spinner-box" id="spinner-text">
-  Play Now<br>1.65x
+<div class="spinner-box" id="spinner">
+  <div></div>
+  <div id="spinner-text">Waiting...</div>
 </div>
 
-<div class="confidence-box" id="confidence-box">
-  Confidence: 95%
+<button class="glowing-button" onclick="startPredictions()">Generate Signals</button>
+
+<div class="next-targets" id="nextTargets">
+  <!-- Targets will appear here -->
 </div>
 
 <footer>
@@ -104,29 +159,73 @@
 </footer>
 
 <script>
-  // Update clock every second
-  function updateClock() {
-    const now = new Date();
-    const time = now.toLocaleTimeString();
-    document.getElementById("clock").innerText = "Current Time: " + time;
-  }
-  setInterval(updateClock, 1000);
+let running = false;
 
-  // Generate random odds from 1.20x to 2.50x
-  function getRandomOdds() {
-    let odds = (Math.random() * (2.50 - 1.20) + 1.20).toFixed(2);
-    return odds;
+function updateClock() {
+  const now = new Date();
+  const time = now.toLocaleTimeString();
+  document.getElementById("clock").innerText = "Current Time: " + time;
+}
+setInterval(updateClock, 1000);
+
+function startPredictions() {
+  if (!running) {
+    running = true;
+    document.getElementById("spinner-text").innerText = "Generating...";
+    setTimeout(() => {
+      generateSignals();
+    }, 3000);
+  }
+}
+
+function generateSignals() {
+  updateMainPrediction();
+}
+
+function updateMainPrediction() {
+  const currentTime = new Date();
+  const playNowTime = currentTime.toLocaleTimeString();
+  const playNowOdd = generateOdd();
+
+  // Show in spinner
+  document.getElementById("spinner-text").innerHTML =
+    `<div>Play Now:</div><div>${playNowTime}</div><div>${playNowOdd}x</div>`;
+
+  let targets = [];
+  targets.push({ time: playNowTime, odd: playNowOdd });
+
+  let nextTime = new Date(currentTime);
+  for (let i = 1; i <= 2; i++) {
+    nextTime = new Date(nextTime.getTime() + getRandomSeconds(15, 30) * 1000);
+    targets.push({ time: nextTime.toLocaleTimeString(), odd: generateOdd() });
   }
 
-  // Update the spinner text every 5 seconds
-  function updateSpinner() {
-    const randomOdds = getRandomOdds();
-    document.getElementById("spinner-text").innerHTML = `Play Now<br>${randomOdds}x`;
-  }
+  displayNextTargets(targets);
 
-  setInterval(updateSpinner, 5000); // Change every 5 seconds
-  updateSpinner(); // Initial call
+  const waitTime = getRandomSeconds(15, 25);
+  setTimeout(() => {
+    updateMainPrediction();
+  }, waitTime * 1000);
+}
+
+function displayNextTargets(targets) {
+  let html = "<h3>Next Targets</h3>";
+  targets.forEach((t, i) => {
+    html += `<div class="target-box">Next Target ${i + 1} → ${t.time} → ${t.odd}x
+              <div class="confidence">Confidence Level: High</div></div>`;
+  });
+  document.getElementById("nextTargets").innerHTML = html;
+}
+
+function generateOdd() {
+  let min = 1.20;
+  let max = 2.50;
+  return (Math.random() * (max - min) + min).toFixed(2);
+}
+
+function getRandomSeconds(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 </script>
-
 </body>
 </html>
