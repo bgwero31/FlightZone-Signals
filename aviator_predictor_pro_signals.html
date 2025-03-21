@@ -34,15 +34,16 @@
 
     .spinner-box {
       margin: 20px auto;
-      width: 200px;
-      height: 200px;
+      width: 220px;
+      height: 220px;
       border-radius: 50%;
       background: radial-gradient(circle, #00ffff44, #001f3f);
       box-shadow: 0 0 25px #00ffff88, 0 0 10px #0ff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      flex-direction: column;
+      font-size: 20px;
       font-weight: bold;
       text-shadow: 0 0 10px #0ff;
     }
@@ -91,12 +92,14 @@
 <h1>Aviator Predictor Pro</h1>
 <div class="clock" id="clock">Time Loading...</div>
 
-<div class="spinner-box" id="spinner">Waiting...</div>
+<div class="spinner-box" id="spinner">
+  <div>Waiting...</div>
+</div>
 
 <button class="glowing-button" onclick="startPredictions()">Generate Signals</button>
 
 <div class="next-targets" id="nextTargets">
-  <!-- Next predictions will load here -->
+  <!-- Targets will appear here -->
 </div>
 
 <footer>
@@ -116,10 +119,10 @@ setInterval(updateClock, 1000);
 function startPredictions() {
   if (!running) {
     running = true;
-    document.getElementById("spinner").innerText = "Generating...";
+    document.getElementById("spinner").innerHTML = "<div>Generating...</div>";
     setTimeout(() => {
       generateSignals();
-    }, 4000);
+    }, 3000);
   }
 }
 
@@ -128,20 +131,25 @@ function generateSignals() {
 }
 
 function updateMainPrediction() {
-  const odd = generateOdd();
-  document.getElementById("spinner").innerText = "Play Now: " + odd + "x";
+  const currentTime = new Date();
+  const playNowTime = currentTime.toLocaleTimeString();
+  const playNowOdd = generateOdd();
 
-  const upcomingTargets = [];
-  let nextTime = new Date();
+  // Show in spinner
+  document.getElementById("spinner").innerHTML =
+    `<div>Play Now:</div><div>${playNowTime}</div><div>${playNowOdd}x</div>`;
 
-  for (let i = 1; i <= 3; i++) {
-    nextTime = new Date(nextTime.getTime() + getRandomSeconds(15, 35) * 1000);
-    let timeStr = nextTime.toLocaleTimeString();
-    let nextOdd = generateOdd();
-    upcomingTargets.push({ time: timeStr, odd: nextOdd });
+  // Now build next targets (first one matches spinner)
+  let targets = [];
+  targets.push({ time: playNowTime, odd: playNowOdd });
+
+  let nextTime = new Date(currentTime);
+  for (let i = 1; i <= 2; i++) {
+    nextTime = new Date(nextTime.getTime() + getRandomSeconds(15, 30) * 1000);
+    targets.push({ time: nextTime.toLocaleTimeString(), odd: generateOdd() });
   }
 
-  displayNextTargets(upcomingTargets);
+  displayNextTargets(targets);
 
   const waitTime = getRandomSeconds(15, 25);
   setTimeout(() => {
@@ -152,7 +160,7 @@ function updateMainPrediction() {
 function displayNextTargets(targets) {
   let html = "<h3>Next Targets</h3>";
   targets.forEach((t, i) => {
-    html += `<div class="target-box">Next Target ${i+1} → ${t.time} → ${t.odd}x</div>`;
+    html += `<div class="target-box">Next Target ${i + 1} → ${t.time} → ${t.odd}x</div>`;
   });
   document.getElementById("nextTargets").innerHTML = html;
 }
