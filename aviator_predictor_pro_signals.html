@@ -37,71 +37,28 @@
       width: 220px;
       height: 220px;
       border-radius: 50%;
-      background: transparent;
+      background: conic-gradient(#00ffff 0% 33%, #ff00ff 33% 66%, #00ff99 66% 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      font-size: 20px;
+      position: relative;
+      font-size: 18px;
       font-weight: bold;
       text-shadow: 0 0 10px #0ff;
-      position: relative;
-    }
-
-    .spinner-box::before,
-    .spinner-box::after,
-    .spinner-box div {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      animation: rotate 6s infinite linear;
-    }
-
-    .spinner-box::before {
-      background: #00ffff;
-      clip-path: polygon(0% 0%, 100% 0%, 100% 33%, 0% 33%);
-      animation: rotateLeft 3s infinite linear;
-    }
-
-    .spinner-box::after {
-      background: #ff00ff;
-      clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
-      animation: rotateRight 2s infinite linear;
-    }
-
-    .spinner-box div {
-      background: #00ff99;
-      clip-path: polygon(0% 66%, 100% 66%, 100% 100%, 0% 100%);
-      animation: rotate 1.5s infinite linear;
-    }
-
-    @keyframes rotateLeft {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(-360deg);
-      }
-    }
-
-    @keyframes rotateRight {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      animation: rotate 5s linear infinite;
     }
 
     @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .spinner-text {
+      position: absolute;
+      text-align: center;
+      z-index: 2;
+      font-size: 20px;
+      font-weight: bold;
     }
 
     .glowing-button {
@@ -149,15 +106,14 @@
 <h1>Aviator Predictor Pro</h1>
 <div class="clock" id="clock">Time Loading...</div>
 
-<div class="spinner-box" id="spinner">
-  <div></div>
-  <div id="spinner-text">Waiting...</div>
+<div class="spinner-box">
+  <div class="spinner-text" id="spinnerText">Play Now<br>1.65x</div>
 </div>
 
-<button class="glowing-button" onclick="startPredictions()">Generate Signals</button>
+<button class="glowing-button" onclick="generatePrediction()">Generate New Signal</button>
 
-<div class="next-targets" id="nextTargets">
-  <!-- Targets will appear here -->
+<div class="next-targets" id="nextTargetBox">
+  <div class="target-box" id="targetDisplay">Next Target → 1.72x<br>Confidence: 95%</div>
 </div>
 
 <footer>
@@ -165,8 +121,6 @@
 </footer>
 
 <script>
-let running = false;
-
 function updateClock() {
   const now = new Date();
   const time = now.toLocaleTimeString();
@@ -174,63 +128,19 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 
-function startPredictions() {
-  if (!running) {
-    running = true;
-    document.getElementById("spinner-text").innerText = "Generating...";
-    setTimeout(() => {
-      generateSignals();
-    }, 3000);
-  }
-}
+function generatePrediction() {
+  const newOdd = generateOdd();
+  document.getElementById("spinnerText").innerHTML = `Play Now<br>${newOdd}x`;
 
-function generateSignals() {
-  updateMainPrediction();
-}
-
-function updateMainPrediction() {
-  const currentTime = new Date();
-  const playNowTime = currentTime.toLocaleTimeString();
-  const playNowOdd = generateOdd();
-
-  // Show in spinner
-  document.getElementById("spinner-text").innerHTML =
-    `<div>Play Now:</div><div>${playNowTime}</div><div>${playNowOdd}x</div>`;
-
-  // Now build next targets (first one matches spinner)
-  let targets = [];
-  targets.push({ time: playNowTime, odd: playNowOdd });
-
-  let nextTime = new Date(currentTime);
-  for (let i = 1; i <= 2; i++) {
-    nextTime = new Date(nextTime.getTime() + getRandomSeconds(15, 30) * 1000);
-    targets.push({ time: nextTime.toLocaleTimeString(), odd: generateOdd() });
-  }
-
-  displayNextTargets(targets);
-
-  const waitTime = getRandomSeconds(15, 25);
-  setTimeout(() => {
-    updateMainPrediction();
-  }, waitTime * 1000);
-}
-
-function displayNextTargets(targets) {
-  let html = "<h3>Next Targets</h3>";
-  targets.forEach((t, i) => {
-    html += `<div class="target-box">Next Target ${i + 1} → ${t.time} → ${t.odd}x</div>`;
-  });
-  document.getElementById("nextTargets").innerHTML = html;
+  const nextTargetOdd = generateOdd();
+  const confidence = Math.floor(Math.random() * 11) + 90; // 90% - 100%
+  document.getElementById("targetDisplay").innerHTML = `Next Target → ${nextTargetOdd}x<br>Confidence: ${confidence}%`;
 }
 
 function generateOdd() {
-  let min = 1.30;
-  let max = 2.50;
+  const min = 1.30;
+  const max = 2.50;
   return (Math.random() * (max - min) + min).toFixed(2);
-}
-
-function getRandomSeconds(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 </script>
 
