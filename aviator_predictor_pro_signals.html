@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aviator Predictor AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviator Predictor Pro</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
     body {
       font-family: 'Orbitron', sans-serif;
-      text-align: center;
-      background: radial-gradient(circle at center, #000428, #004e92);
+      background: linear-gradient(to right, #000428, #004e92);
       color: white;
-      margin: 0;
+      text-align: center;
       padding: 20px;
+      overflow: hidden;
     }
 
     h1 {
       font-size: 36px;
       color: #0ff;
-      text-shadow: 0 0 20px #0ff;
+      text-shadow: 0 0 15px #0ff;
+    }
+
+    .clock {
+      font-size: 20px;
+      margin-bottom: 10px;
       animation: pulse 1.5s infinite alternate;
     }
 
@@ -27,190 +32,141 @@
       to { opacity: 1; transform: scale(1.05); }
     }
 
-    .clock {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-
-    .big-spinner {
+    .spinner-box {
+      margin: 20px auto;
       width: 200px;
       height: 200px;
-      margin: 0 auto 20px;
-      border: 12px solid rgba(255, 255, 255, 0.1);
-      border-top: 12px solid #00ffff;
       border-radius: 50%;
-      animation: spin 4s linear infinite;
+      background: radial-gradient(circle, #00ffff44, #001f3f);
+      box-shadow: 0 0 25px #00ffff88, 0 0 10px #0ff;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    .glowing-button {
+      background: linear-gradient(45deg, #00ffff, #00ff99);
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      color: black;
+      font-weight: bold;
+      box-shadow: 0 0 20px #00ffffaa;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .glowing-button:hover {
+      transform: scale(1.1);
       box-shadow: 0 0 30px #00ffff;
     }
 
-    .main-prediction {
-      font-size: 28px;
-      font-weight: bold;
-      color: #000;
-      background: #00ffff;
-      padding: 15px 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #0ff;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .extra-signals {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .signal-box {
-      font-size: 22px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      box-shadow: 0 0 15px rgba(255,255,255,0.4);
-    }
-
-    .blue { background: #00ffff; color: #000; box-shadow: 0 0 10px #00ffff; }
-    .purple { background: #a020f0; color: #fff; box-shadow: 0 0 10px #a020f0; }
-    .pink { background: #ff007f; color: #fff; box-shadow: 0 0 10px #ff007f; }
-
-    #generateBtn {
-      padding: 12px 30px;
-      font-size: 18px;
-      background-color: #0ff;
-      color: #000;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #0ff;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
-
-    #history {
+    .next-targets {
       margin-top: 30px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
-    .history-item {
-      font-size: 20px;
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 8px;
+    .target-box {
+      background: rgba(0, 255, 255, 0.1);
+      margin: 8px auto;
+      padding: 10px 20px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 0 10px #00ffff33;
+      font-size: 18px;
     }
 
     footer {
-      margin-top: 40px;
+      margin-top: 30px;
       font-size: 14px;
-      color: #aaa;
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-  <h1>Aviator Predictor A.I.</h1>
-  <div class="clock" id="clock">Current Time: --:--:--</div>
+<h1>Aviator Predictor Pro</h1>
+<div class="clock" id="clock">Time Loading...</div>
 
-  <button id="generateBtn" onclick="startFirstPrediction()">Generate Signals</button>
+<div class="spinner-box" id="spinner">Waiting...</div>
 
-  <div class="big-spinner">
-    <div class="main-prediction" id="mainPrediction">Waiting...</div>
-  </div>
+<button class="glowing-button" onclick="startPredictions()">Generate Signals</button>
 
-  <div class="extra-signals">
-    <div class="signal-box" id="signal1">--</div>
-    <div class="signal-box" id="signal2">--</div>
-    <div class="signal-box" id="signal3">--</div>
-  </div>
+<div class="next-targets" id="nextTargets">
+  <!-- Next predictions will load here -->
+</div>
 
-  <div id="history"></div>
+<footer>
+  <p>ALL RIGHTS RESERVED • FLIGHTZONE SIGNALS 2025</p>
+</footer>
 
-  <footer>ALL RIGHTS RESERVED © FLIGHTZONE SIGNALS 2025</footer>
+<script>
+let running = false;
 
-  <script>
-    function updateClock() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById("clock").innerText = `Current Time: ${h}:${m}:${s}`;
-    }
-    setInterval(updateClock, 1000);
+function updateClock() {
+  const now = new Date();
+  const time = now.toLocaleTimeString();
+  document.getElementById("clock").innerText = "Current Time: " + time;
+}
+setInterval(updateClock, 1000);
 
-    function generateAccurateOdd() {
-      return (Math.random() * (2.50 - 1.30) + 1.30).toFixed(2);
-    }
+function startPredictions() {
+  if (!running) {
+    running = true;
+    document.getElementById("spinner").innerText = "Generating...";
+    setTimeout(() => {
+      generateSignals();
+    }, 4000);
+  }
+}
 
-    function applyColor(element, value) {
-      element.classList.remove("blue", "purple", "pink");
-      if (value < 2) {
-        element.classList.add("blue");
-      } else if (value < 4) {
-        element.classList.add("purple");
-      } else {
-        element.classList.add("pink");
-      }
-    }
+function generateSignals() {
+  updateMainPrediction();
+}
 
-    let predictionRunning = false;
+function updateMainPrediction() {
+  const odd = generateOdd();
+  document.getElementById("spinner").innerText = "Play Now: " + odd + "x";
 
-    function startFirstPrediction() {
-      document.getElementById("generateBtn").style.display = "none";
-      startPredictionCycle();
-    }
+  const upcomingTargets = [];
+  let nextTime = new Date();
 
-    function startPredictionCycle() {
-      const mainVal = generateAccurateOdd();
-      const elMain = document.getElementById("mainPrediction");
-      elMain.innerText = `Target: ${mainVal}x`;
-      applyColor(elMain, mainVal);
+  for (let i = 1; i <= 3; i++) {
+    nextTime = new Date(nextTime.getTime() + getRandomSeconds(15, 35) * 1000);
+    let timeStr = nextTime.toLocaleTimeString();
+    let nextOdd = generateOdd();
+    upcomingTargets.push({ time: timeStr, odd: nextOdd });
+  }
 
-      const val1 = generateAccurateOdd();
-      const val2 = generateAccurateOdd();
-      const val3 = generateAccurateOdd();
+  displayNextTargets(upcomingTargets);
 
-      let s1 = document.getElementById("signal1");
-      let s2 = document.getElementById("signal2");
-      let s3 = document.getElementById("signal3");
+  const waitTime = getRandomSeconds(15, 25);
+  setTimeout(() => {
+    updateMainPrediction();
+  }, waitTime * 1000);
+}
 
-      s1.innerText = `${val1}x`;
-      s2.innerText = `${val2}x`;
-      s3.innerText = `${val3}x`;
+function displayNextTargets(targets) {
+  let html = "<h3>Next Targets</h3>";
+  targets.forEach((t, i) => {
+    html += `<div class="target-box">Next Target ${i+1} → ${t.time} → ${t.odd}x</div>`;
+  });
+  document.getElementById("nextTargets").innerHTML = html;
+}
 
-      applyColor(s1, val1);
-      applyColor(s2, val2);
-      applyColor(s3, val3);
+function generateOdd() {
+  let min = 1.30;
+  let max = 2.50;
+  return (Math.random() * (max - min) + min).toFixed(2);
+}
 
-      addToHistory(mainVal);
+function getRandomSeconds(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+</script>
 
-      // Next prediction cycle in 15–25 seconds
-      let nextDelay = Math.floor(Math.random() * (25 - 15 + 1) + 15) * 1000;
-      setTimeout(startPredictionCycle, nextDelay);
-    }
-
-    function addToHistory(value) {
-      const time = new Date().toLocaleTimeString();
-      const div = document.createElement("div");
-      div.classList.add("history-item");
-
-      if (value < 2) {
-        div.classList.add("blue");
-      } else if (value < 4) {
-        div.classList.add("purple");
-      } else {
-        div.classList.add("pink");
-      }
-
-      div.innerText = `${time} → ${value}x`;
-      document.getElementById("history").prepend(div);
-    }
-  </script>
 </body>
 </html>
