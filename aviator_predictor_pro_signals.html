@@ -28,7 +28,7 @@
       width: 300px;
       height: 300px;
       margin: 40px auto;
-      perspective: 1000px;
+      position: relative;
     }
 
     .spinner {
@@ -62,6 +62,9 @@
       opacity: 0;
       transition: opacity 0.5s ease-in-out;
       position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .visible {
@@ -113,9 +116,8 @@
 <h1>Aviator Predictor Pro</h1>
 
 <div class="spinner-container">
-  <div class="spinner" id="spinner">
-    <div class="odds-display" id="oddsDisplay">Target Now: --</div>
-  </div>
+  <div class="odds-display" id="oddsDisplay">Target Now: --</div>
+  <div class="spinner" id="spinner"></div>
 </div>
 
 <button class="glowing-button" onclick="startAI()">Start AI Signal</button>
@@ -128,7 +130,7 @@
   function startAI() {
     if (!active) {
       active = true;
-      speak("Welcome to flightzone signals.I am ready to start predicting accurate odds for you.");
+      speak("Welcome to flightzone signals. I am ready to start predicting accurate odds for you.");
       generateNewPrediction();
     }
   }
@@ -151,17 +153,21 @@
 
       speak(`Prediction ready. Target now is ${newOdd} times.`);
 
+      // Display stays for 10 seconds
       setTimeout(() => {
         oddsDisplay.classList.remove("visible");
         speak("Please wait... I am calculating the next accurate odd.");
-        setTimeout(generateNewPrediction, randomDelay());
+
+        // After that, random delay 18–25 sec before next prediction
+        const waitTime = randomDelay();
+        setTimeout(generateNewPrediction, waitTime);
       }, 10000);
 
-    }, 2000);
+    }, 2000); // Short delay before showing odd
   }
 
   function randomDelay() {
-    return (Math.floor(Math.random() * 15) + 10) * 1000;
+    return (Math.floor(Math.random() * 8) + 18) * 1000; // 18 to 25 seconds
   }
 
   function updateClock() {
