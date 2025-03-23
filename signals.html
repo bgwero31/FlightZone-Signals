@@ -13,6 +13,7 @@
             padding: 0;
             text-align: center;
         }
+
         h1 {
             background: #ffcc00;
             color: black;
@@ -22,11 +23,13 @@
             border-bottom: 4px solid #fff;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
+
         #clock {
             font-size: 24px;
             margin: 15px 0;
             color: #ffffff;
         }
+
         .select-country, .password-section, .select-game {
             background: rgba(255, 255, 255, 0.1);
             padding: 15px;
@@ -35,17 +38,20 @@
             max-width: 400px;
             border-radius: 10px;
         }
+
         label, select, input {
             font-size: 16px;
             margin-bottom: 10px;
             display: block;
             width: 100%;
         }
+
         input[type="password"] {
             padding: 10px;
             border-radius: 5px;
             border: none;
         }
+
         button {
             padding: 12px 25px;
             background: #ff9900;
@@ -56,9 +62,11 @@
             cursor: pointer;
             transition: 0.3s ease;
         }
+
         button:hover {
             background: #ff6600;
         }
+
         .site-section {
             background: rgba(255, 255, 255, 0.05);
             margin: 20px auto;
@@ -68,14 +76,17 @@
             max-width: 700px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
+
         .prediction {
             font-size: 16px;
             margin: 6px 0;
         }
+
         .risk {
             color: #ff4d4d;
             font-weight: bold;
         }
+
         .play-now {
             display: none;
             font-size: 20px;
@@ -87,17 +98,20 @@
             margin: 10px 0;
             animation: pulse 1s infinite;
         }
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.08); }
             100% { transform: scale(1); }
         }
+
         .contact-links {
             margin: 25px 0;
             padding: 20px;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 10px;
         }
+
         .contact-links a {
             text-decoration: none;
             color: white;
@@ -109,9 +123,11 @@
             display: inline-block;
             transition: background 0.3s ease;
         }
+
         .contact-links a:hover {
             background: #005bb5;
         }
+
         .raindrop-effect {
             position: fixed;
             top: 0; left: 0;
@@ -122,6 +138,7 @@
             animation: raindrops 1.5s ease-in-out infinite;
             opacity: 0.4;
         }
+
         @keyframes raindrops {
             0% { opacity: 0.3; transform: translateY(-5px); }
             50% { opacity: 0.6; transform: translateY(0); }
@@ -131,128 +148,129 @@
 </head>
 <body>
 
-    <h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
-    <div id="clock">Loading time...</div>
+<h1>🚀 FlightZone Free Signals by B JAY ✈️</h1>
+<div id="clock">Loading time...</div>
 
-    <div class="select-country">
-        <label for="country">Select Country:</label>
-        <select id="country">
-            <option value="Kenya">Kenya</option>
-            <option value="Zimbabwe">Zimbabwe</option>
-            <option value="South Africa">South Africa</option>
-            <option value="USA">USA</option>
-            <option value="Nigeria">Nigeria</option>
-            <option value="Pakistan">Pakistan</option>
+<div class="select-country">
+    <label for="country">Select Country:</label>
+    <select id="country">
+        <option value="Kenya">Kenya</option>
+        <option value="Zimbabwe">Zimbabwe</option>
+        <option value="South Africa">South Africa</option>
+        <option value="USA">USA</option>
+        <option value="Nigeria">Nigeria</option>
+        <option value="Pakistan">Pakistan</option>
+    </select>
+</div>
+
+<div class="password-section">
+    <label for="password">Enter Password:</label>
+    <input type="password" id="password" placeholder="Password">
+    <br><br>
+    <button onclick="login()">Login</button>
+</div>
+
+<div id="predictions" style="display:none;">
+    <div class="select-game">
+        <label for="game">Select Game:</label>
+        <select id="game">
+            <option value="aviator">Aviator</option>
+            <option value="jetx">JetX</option>
         </select>
-    </div>
-
-    <div class="password-section">
-        <label for="password">Enter Password:</label>
-        <input type="password" id="password" placeholder="Password">
         <br><br>
-        <button onclick="login()">Login</button>
+        <button onclick="generatePredictions()">Generate Signals</button>
     </div>
 
-    <div id="predictions" style="display:none;">
-        <div class="select-game">
-            <label for="game">Select Game:</label>
-            <select id="game">
-                <option value="aviator">Aviator</option>
-                <option value="jetx">JetX</option>
-            </select>
-            <br><br>
-            <button onclick="generatePredictions()">Generate Signals</button>
-        </div>
+    <div id="signals"></div>
+</div>
 
-        <div id="signals"></div>
-    </div>
+<div class="contact-links">
+    <p>Join Our Community:</p>
+    <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>
+    <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
+</div>
 
-    <div class="contact-links">
-        <p>Join Our Community:</p>
-        <a href="https://t.me/+AYYEyGmnPnk4MjM0" target="_blank">Telegram</a>
-        <a href="https://chat.whatsapp.com/EfXQQOKAyJKKTyV1Zo0dhy" target="_blank">WhatsApp</a>
-    </div>
+<div class="raindrop-effect"></div>
 
-    <div class="raindrop-effect"></div>
+<script>
+    let isLoggedIn = false;
 
-    <script>
-        let isLoggedIn = false;
+    const countryBettingSites = {
+        Kenya: ["Moz Betting", "SpinFeed", "Bet247", "PremierBet"],
+        Zimbabwe: ["AfricaBet", "SpinCity", "Mwos Betting", "Bet247", "PremierBet"],
+        "South Africa": ["HollywoodBets", "SportPesa", "Betway", "Supabets"],
+        USA: ["DraftKings", "FanDue", "BetMGM", "Caesars Sportsbook"],
+        Nigeria: ["1win", "Bet9ja", "1XBet", "Betway", "NairaBet"],
+        Pakistan: ["1win", "Mostbet", "BetFairPK", "PKBetZone", "BetKingPK", "PakWinners"]
+    };
 
-        const countryBettingSites = {
-            Kenya: ["Moz Betting", "SpinFeed", "Bet247", "PremierBet"],
-            Zimbabwe: ["AfricaBet", "SpinCity", "Mwos Betting", "Bet247", "PremierBet"],
-            "South Africa": ["HollywoodBets", "SportPesa", "Betway", "Supabets"],
-            USA: ["DraftKings", "FanDue", "BetMGM", "Caesars Sportsbook"],
-            Nigeria: ["1win", "Bet9ja", "1XBet", "Betway", "NairaBet"],
-            Pakistan: ["1win", "Mostbet", "BetFairPK", "PKBetZone", "BetKingPK", "PakWinners"]
-        };
+    function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+        document.getElementById("clock").innerText = "🕒 " + timeString;
+    }
 
-        function updateClock() {
-            const now = new Date();
-            document.getElementById("clock").innerText = "🕒 " + now.toLocaleTimeString('en-US', { hour12: false });
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function login() {
+        const password = document.getElementById('password').value;
+        if (password === 'bjay#2025') {
+            alert("Login Successful!");
+            isLoggedIn = true;
+            document.querySelector('.password-section').style.display = 'none';
+            document.getElementById('predictions').style.display = 'block';
+        } else {
+            alert("Incorrect password. Try again.");
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+    }
 
-        function login() {
-            const password = document.getElementById('password').value;
-            if (password === 'bjay#2025') {
-                alert("Login Successful!");
-                isLoggedIn = true;
-                document.querySelector('.password-section').style.display = 'none';
-                document.getElementById('predictions').style.display = 'block';
-            } else {
-                alert("Incorrect password. Try again.");
-            }
+    function generatePredictions() {
+        if (!isLoggedIn) {
+            alert("Please log in first.");
+            return;
         }
 
-        function generatePredictions() {
-            if (!isLoggedIn) {
-                alert("Please log in first.");
-                return;
+        const selectedGame = document.getElementById('game').value;
+        const country = document.getElementById('country').value;
+        const bettingSites = countryBettingSites[country] || [];
+        let output = "";
+
+        const now = new Date();
+        let startMinutes = now.getMinutes();
+        let currentHour = now.getHours();
+
+        bettingSites.forEach(site => {
+            output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;
+            for (let i = 0; i < 10; i++) {
+                let minutes = (startMinutes + i) % 60;
+                let target = (Math.random() * (3.00 - 1.50) + 1.50).toFixed(2);
+                let risk = (Math.random() * (15.00 - 4.00) + 4.00).toFixed(2);
+                let showRisk = Math.random() > 0.5;
+                let label = selectedGame === "aviator" ? "Risk" : "Steady Climb";
+                output += `<p class="prediction">🕒 ${currentHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} | Target ${target}x ${showRisk ? `| <span class="risk">${label} ${risk}x</span>` : ''}</p>`;
             }
+            output += "</div>";
+        });
 
-            const selectedGame = document.getElementById('game').value;
-            const country = document.getElementById('country').value;
-            const bettingSites = countryBettingSites[country] || [];
-            let output = "";
+        document.getElementById("signals").innerHTML = output;
+        triggerPlayNow();
+    }
 
-            const now = new Date();
-            let startMinutes = now.getMinutes();
-            let currentHour = now.getHours();
-
-            bettingSites.forEach(site => {
-                output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;
-                for (let i = 0; i < 10; i++) {
-                    let minutes = (startMinutes + i) % 60;
-                    let seconds = Math.floor(Math.random() * 60).toString().padStart(2, '0');
-                    let target = (Math.random() * (2.2 - 1.4) + 1.4).toFixed(2);
-                    let risk = (Math.random() * (2.8 - 2.2) + 2.2).toFixed(2);
-                    let showRisk = Math.random() > 0.5;
-                    let label = selectedGame === "aviator" ? "Risk" : "Climb";
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds} | Target ${target}x ${showRisk ? `| <span class="risk">${label} ${risk}x</span>` : ''}</p>`;
+    function triggerPlayNow() {
+        const allSites = [].concat(...Object.values(countryBettingSites));
+        allSites.forEach(site => {
+            setTimeout(() => {
+                const playNow = document.getElementById(`play-now-${site}`);
+                if (playNow) {
+                    playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;
+                    playNow.style.display = "block";
+                    setTimeout(() => playNow.style.display = "none", 10000);
                 }
-                output += "</div>";
-            });
-
-            document.getElementById("signals").innerHTML = output;
-            triggerPlayNow();
-        }
-
-        function triggerPlayNow() {
-            const allSites = [].concat(...Object.values(countryBettingSites));
-            allSites.forEach(site => {
-                setTimeout(() => {
-                    const playNow = document.getElementById(`play-now-${site}`);
-                    if (playNow) {
-                        playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;
-                        playNow.style.display = "block";
-                        setTimeout(() => playNow.style.display = "none", 10000);
-                    }
-                }, Math.random() * 84000);
-            });
-        }
-    </script>
+            }, Math.random() * 84000);
+        });
+    }
+</script>
 
 </body>
 </html>
