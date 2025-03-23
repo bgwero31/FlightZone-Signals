@@ -13,7 +13,6 @@
             padding: 0;
             text-align: center;
         }
-
         h1 {
             background: #ffcc00;
             color: black;
@@ -23,13 +22,11 @@
             border-bottom: 4px solid #fff;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-
         #clock {
             font-size: 24px;
             margin: 15px 0;
             color: #ffffff;
         }
-
         .select-country, .password-section, .select-game {
             background: rgba(255, 255, 255, 0.1);
             padding: 15px;
@@ -38,20 +35,17 @@
             max-width: 400px;
             border-radius: 10px;
         }
-
         label, select, input {
             font-size: 16px;
             margin-bottom: 10px;
             display: block;
             width: 100%;
         }
-
         input[type="password"] {
             padding: 10px;
             border-radius: 5px;
             border: none;
         }
-
         button {
             padding: 12px 25px;
             background: #ff9900;
@@ -62,11 +56,9 @@
             cursor: pointer;
             transition: 0.3s ease;
         }
-
         button:hover {
             background: #ff6600;
         }
-
         .site-section {
             background: rgba(255, 255, 255, 0.05);
             margin: 20px auto;
@@ -76,17 +68,14 @@
             max-width: 700px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
-
         .prediction {
             font-size: 16px;
             margin: 6px 0;
         }
-
         .risk {
             color: #ff4d4d;
             font-weight: bold;
         }
-
         .play-now {
             display: none;
             font-size: 20px;
@@ -98,20 +87,17 @@
             margin: 10px 0;
             animation: pulse 1s infinite;
         }
-
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.08); }
             100% { transform: scale(1); }
         }
-
         .contact-links {
             margin: 25px 0;
             padding: 20px;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 10px;
         }
-
         .contact-links a {
             text-decoration: none;
             color: white;
@@ -123,11 +109,9 @@
             display: inline-block;
             transition: background 0.3s ease;
         }
-
         .contact-links a:hover {
             background: #005bb5;
         }
-
         .raindrop-effect {
             position: fixed;
             top: 0; left: 0;
@@ -138,7 +122,6 @@
             animation: raindrops 1.5s ease-in-out infinite;
             opacity: 0.4;
         }
-
         @keyframes raindrops {
             0% { opacity: 0.3; transform: translateY(-5px); }
             50% { opacity: 0.6; transform: translateY(0); }
@@ -242,12 +225,12 @@
                 output += `<div class="site-section"><h2>📡 ${site} Signals</h2><div id="play-now-${site}" class="play-now"></div>`;
                 for (let i = 0; i < 10; i++) {
                     let minutes = (startMinutes + i) % 60;
-                    let seconds = Math.floor(Math.random() * 60);
+                    let seconds = Math.floor(Math.random() * 60).toString().padStart(2, '0');
                     let target = (Math.random() * (2.2 - 1.4) + 1.4).toFixed(2);
                     let risk = (Math.random() * (2.8 - 2.2) + 2.2).toFixed(2);
                     let showRisk = Math.random() > 0.5;
-                    let label = selectedGame === "aviator" ? "Risk" : "Steady Climb";
-                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${target}x ${showRisk ? `| <span class="risk">${label} ${risk}x</span>` : ''}</p>`;
+                    let label = selectedGame === "aviator" ? "Risk" : "Climb";
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds} | Target ${target}x ${showRisk ? `| <span class="risk">${label} ${risk}x</span>` : ''}</p>`;
                 }
                 output += "</div>";
             });
