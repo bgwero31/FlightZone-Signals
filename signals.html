@@ -247,8 +247,29 @@
                     let risk = (Math.random() * (2.8 - 2.2) + 2.2).toFixed(2);
                     let showRisk = Math.random() > 0.5;
                     let label = selectedGame === "aviator" ? "Risk" : "Steady Climb";
-                    // Adjusted condition for showing risk or steady climb
-                    if (showRisk) {
-                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${target}x | <span class="risk">${label} ${risk}x</span></p>`;
-                    } else {
-                        output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString
+                    output += `<p class="prediction">🕒 ${currentHour}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} | Target ${target}x ${showRisk ? `| <span class="risk">${label} ${risk}x</span>` : ''}</p>`;
+                }
+                output += "</div>";
+            });
+
+            document.getElementById("signals").innerHTML = output;
+            triggerPlayNow();
+        }
+
+        function triggerPlayNow() {
+            const allSites = [].concat(...Object.values(countryBettingSites));
+            allSites.forEach(site => {
+                setTimeout(() => {
+                    const playNow = document.getElementById(`play-now-${site}`);
+                    if (playNow) {
+                        playNow.innerHTML = `🔥 Play Now ${Math.random() > 0.5 ? '2x' : (Math.random() * (6 - 2) + 2).toFixed(1) + 'x'} 🔥`;
+                        playNow.style.display = "block";
+                        setTimeout(() => playNow.style.display = "none", 10000);
+                    }
+                }, Math.random() * 84000);
+            });
+        }
+    </script>
+
+</body>
+</html>
