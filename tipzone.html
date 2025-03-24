@@ -79,6 +79,11 @@
     <p>Stay tuned for today's top tips in Football, Volleyball, and Basketball. We update daily!</p>
     <div class="cta">Get your free tips now!</div>
     <button onclick="showFreeTips()">Get Free Tips</button>
+    <div id="freeTipsContent" style="display:none; margin-top: 10px;">
+        <p><strong>Football:</strong> Team A vs Team B - Tip: Over 2.5 Goals</p>
+        <p><strong>Volleyball:</strong> Team X vs Team Y - Tip: Team X Wins</p>
+        <p><strong>Basketball:</strong> Team M vs Team N - Tip: Handicap - Team M +5.5</p>
+    </div>
 </div>
 
 <div class="section">
@@ -86,6 +91,12 @@
     <p>Unlock exclusive, high-accuracy tips for betting on football, basketball, and crash games.</p>
     <input type="text" id="vipCode" placeholder="Enter VIP Code" />
     <button onclick="unlockVIP()">Unlock VIP Tips</button>
+    <div id="vipTipsContent" style="display:none; margin-top: 10px;">
+        <p><strong>Football:</strong> Team C vs Team D - Tip: Double Chance - Team C or Draw</p>
+        <p><strong>Basketball:</strong> Team E vs Team F - Tip: Under 180.5 Points</p>
+        <p><strong>Aviator:</strong> Tip: Target 3.50x</p>
+        <p><strong>JetX:</strong> Tip: Target 2.40x</p>
+    </div>
 </div>
 
 <div class="section">
@@ -93,6 +104,11 @@
     <p>Get the best crash game tips for Aviator, JetX, and Lucky Jet, with precise predictions to maximize your wins!</p>
     <div class="cta">Start Winning with Crash Games!</div>
     <button onclick="showCrashTips()">Get Crash Tips</button>
+    <div id="crashTipsContent" style="display:none; margin-top: 10px;">
+        <p><strong>Aviator Tip:</strong> Bet on 2.00x</p>
+        <p><strong>JetX Tip:</strong> Bet on 1.80x</p>
+        <p><strong>Lucky Jet Tip:</strong> Bet on 3.00x</p>
+    </div>
 </div>
 
 <div class="section">
@@ -120,7 +136,8 @@
     function unlockVIP() {
         var code = document.getElementById("vipCode").value;
         if(code === "BJAYVIP2025") {
-            alert("VIP tips unlocked! Check your inbox for the next predictions.");
+            document.getElementById("vipTipsContent").style.display = "block";
+            alert("VIP tips unlocked!");
         } else {
             alert("Incorrect VIP code. Try again.");
         }
@@ -134,12 +151,14 @@
 
     // Display Free Tips
     function showFreeTips() {
-        alert("Today's Free Tips: Football - Team A vs Team B, Volleyball - Team X vs Team Y, Basketball - Team M vs Team N.");
+        var content = document.getElementById("freeTipsContent");
+        content.style.display = content.style.display === "none" ? "block" : "none";
     }
 
     // Display Crash Tips
     function showCrashTips() {
-        alert("Aviator Tip: Bet on 2.00x, JetX Tip: Bet on 1.80x, Lucky Jet Tip: Bet on 3.00x.");
+        var content = document.getElementById("crashTipsContent");
+        content.style.display = content.style.display === "none" ? "block" : "none";
     }
 
     // Share Referral
