@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TipZone - Smart Winning Tips by B JAY</title>
+    <style>
+        /* General Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #3a3a3a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .section {
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .cta {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px;
+        }
+        .theme-toggle {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .theme-toggle:hover {
+            background-color: #444;
+        }
+        /* Dark Theme */
+        body.dark-mode {
+            background-color: #333;
+            color: white;
+        }
+        .dark-mode header {
+            background-color: #222;
+        }
+        .dark-mode .section {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Smart Winning Tips Daily by B JAY</h1>
+    <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
+</header>
+
+<div class="section">
+    <h2>Free Tips</h2>
+    <p>Stay tuned for today's top tips in Football, Volleyball, and Basketball. We update daily!</p>
+    <div class="cta">Get your free tips now!</div>
+    <button onclick="showFreeTips()">Get Free Tips</button>
+</div>
+
+<div class="section">
+    <h2>VIP Tips</h2>
+    <p>Unlock exclusive, high-accuracy tips for betting on football, basketball, and crash games.</p>
+    <input type="text" id="vipCode" placeholder="Enter VIP Code" />
+    <button onclick="unlockVIP()">Unlock VIP Tips</button>
+</div>
+
+<div class="section">
+    <h2>Aviator, JetX, and Lucky Jet Tips</h2>
+    <p>Get the best crash game tips for Aviator, JetX, and Lucky Jet, with precise predictions to maximize your wins!</p>
+    <div class="cta">Start Winning with Crash Games!</div>
+    <button onclick="showCrashTips()">Get Crash Tips</button>
+</div>
+
+<div class="section">
+    <h2>Payment Info</h2>
+    <button onclick="showEcocash()">Pay via Ecocash</button>
+    <div id="ecocashPopup" style="display: none;">
+        <p>Ecocash Number: +263774309795</p>
+    </div>
+    <p>If you want to access premium features, pay via Ecocash. Your payments help us improve our predictions!</p>
+</div>
+
+<div class="section">
+    <h2>Referral Program</h2>
+    <p>Share our app with friends and earn rewards! For every successful referral, get a month of VIP tips for free.</p>
+    <button onclick="shareReferral()">Share Referral</button>
+</div>
+
+<script>
+    // Dark/Light Mode Toggle
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+    }
+
+    // VIP Code Unlock Logic
+    function unlockVIP() {
+        var code = document.getElementById("vipCode").value;
+        if(code === "BJAYVIP2025") {
+            alert("VIP tips unlocked! Check your inbox for the next predictions.");
+        } else {
+            alert("Incorrect VIP code. Try again.");
+        }
+    }
+
+    // Ecocash Popup
+    function showEcocash() {
+        var popup = document.getElementById("ecocashPopup");
+        popup.style.display = popup.style.display === "none" ? "block" : "none";
+    }
+
+    // Display Free Tips
+    function showFreeTips() {
+        alert("Today's Free Tips: Football - Team A vs Team B, Volleyball - Team X vs Team Y, Basketball - Team M vs Team N.");
+    }
+
+    // Display Crash Tips
+    function showCrashTips() {
+        alert("Aviator Tip: Bet on 2.00x, JetX Tip: Bet on 1.80x, Lucky Jet Tip: Bet on 3.00x.");
+    }
+
+    // Share Referral
+    function shareReferral() {
+        alert("Share this app link with friends to earn rewards!");
+    }
+</script>
+
+</body>
+</html>
