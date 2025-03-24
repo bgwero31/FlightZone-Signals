@@ -1,170 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TipZone - Smart Winning Tips by B JAY</title>
-    <style>
-        /* General Styles */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-        }
-        header {
-            background-color: #3a3a3a;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        .section {
-            padding: 20px;
-            margin: 20px;
-            border-radius: 8px;
-            background-color: #ffffff;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .cta {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            margin: 20px;
-        }
-        .theme-toggle {
-            cursor: pointer;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin: 10px;
-        }
-        .theme-toggle:hover {
-            background-color: #444;
-        }
-        /* Dark Theme */
-        body.dark-mode {
-            background-color: #333;
-            color: white;
-        }
-        .dark-mode header {
-            background-color: #222;
-        }
-        .dark-mode .section {
-            background-color: #555;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TipZone - Smart Winning Tips by B JAY</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+    }
+    header {
+      background-color: #3a3a3a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .section {
+      padding: 20px;
+      margin: 20px;
+      border-radius: 8px;
+      background-color: #ffffff;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .cta {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin: 10px;
+    }
+    .theme-toggle:hover {
+      background-color: #444;
+    }
+    .tips-box {
+      margin-top: 15px;
+      background-color: #e9f7ef;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .tips-box p {
+      margin: 5px 0;
+    }
+    .dark-mode {
+      background-color: #222;
+      color: white;
+    }
+    .dark-mode .section {
+      background-color: #444;
+    }
+    .dark-mode .tips-box {
+      background-color: #333;
+    }
+  </style>
 </head>
 <body>
 
 <header>
-    <h1>Smart Winning Tips Daily by B JAY</h1>
-    <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
+  <h1>Smart Winning Tips Daily by B JAY</h1>
+  <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
 </header>
 
 <div class="section">
-    <h2>Free Tips</h2>
-    <p>Stay tuned for today's top tips in Football, Volleyball, and Basketball. We update daily!</p>
-    <div class="cta">Get your free tips now!</div>
-    <button onclick="showFreeTips()">Get Free Tips</button>
-    <div id="freeTipsContent" style="display:none; margin-top: 10px;">
-        <p><strong>Football:</strong> Team A vs Team B - Tip: Over 2.5 Goals</p>
-        <p><strong>Volleyball:</strong> Team X vs Team Y - Tip: Team X Wins</p>
-        <p><strong>Basketball:</strong> Team M vs Team N - Tip: Handicap - Team M +5.5</p>
-    </div>
-</div>
-
-<div class="section">
-    <h2>VIP Tips</h2>
-    <p>Unlock exclusive, high-accuracy tips for betting on football, basketball, and crash games.</p>
-    <input type="text" id="vipCode" placeholder="Enter VIP Code" />
-    <button onclick="unlockVIP()">Unlock VIP Tips</button>
-    <div id="vipTipsContent" style="display:none; margin-top: 10px;">
-        <p><strong>Football:</strong> Team C vs Team D - Tip: Double Chance - Team C or Draw</p>
-        <p><strong>Basketball:</strong> Team E vs Team F - Tip: Under 180.5 Points</p>
-        <p><strong>Aviator:</strong> Tip: Target 3.50x</p>
-        <p><strong>JetX:</strong> Tip: Target 2.40x</p>
-    </div>
-</div>
-
-<div class="section">
-    <h2>Aviator, JetX, and Lucky Jet Tips</h2>
-    <p>Get the best crash game tips for Aviator, JetX, and Lucky Jet, with precise predictions to maximize your wins!</p>
-    <div class="cta">Start Winning with Crash Games!</div>
-    <button onclick="showCrashTips()">Get Crash Tips</button>
-    <div id="crashTipsContent" style="display:none; margin-top: 10px;">
-        <p><strong>Aviator Tip:</strong> Bet on 2.00x</p>
-        <p><strong>JetX Tip:</strong> Bet on 1.80x</p>
-        <p><strong>Lucky Jet Tip:</strong> Bet on 3.00x</p>
-    </div>
-</div>
-
-<div class="section">
-    <h2>Payment Info</h2>
-    <button onclick="showEcocash()">Pay via Ecocash</button>
-    <div id="ecocashPopup" style="display: none;">
-        <p>Ecocash Number: +263774309795</p>
-    </div>
-    <p>If you want to access premium features, pay via Ecocash. Your payments help us improve our predictions!</p>
-</div>
-
-<div class="section">
-    <h2>Referral Program</h2>
-    <p>Share our app with friends and earn rewards! For every successful referral, get a month of VIP tips for free.</p>
-    <button onclick="shareReferral()">Share Referral</button>
+  <h2>Choose Tip Category</h2>
+  <div class="cta">Select a category to view tips</div>
+  <button onclick="showTips('football')">Football Tips</button>
+  <button onclick="showTips('basketball')">Basketball Tips</button>
+  <button onclick="showTips('volleyball')">Volleyball Tips</button>
+  <button onclick="showTips('aviator')">Aviator</button>
+  <button onclick="showTips('jetx')">JetX</button>
+  <button onclick="showTips('luckyjet')">Lucky Jet</button>
+  <button onclick="refreshTips()">Refresh Tips</button>
+  
+  <div id="tipsContainer" class="tips-box"></div>
 </div>
 
 <script>
-    // Dark/Light Mode Toggle
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-    }
+  let tipsData = {
+    football: [],
+    basketball: [],
+    volleyball: [],
+    aviator: [],
+    jetx: [],
+    luckyjet: []
+  };
 
-    // VIP Code Unlock Logic
-    function unlockVIP() {
-        var code = document.getElementById("vipCode").value;
-        if(code === "BJAYVIP2025") {
-            document.getElementById("vipTipsContent").style.display = "block";
-            alert("VIP tips unlocked!");
-        } else {
-            alert("Incorrect VIP code. Try again.");
-        }
-    }
+  function generateTime(index) {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + index + 1);
+    return now.toTimeString().split(" ")[0].substring(0, 5);
+  }
 
-    // Ecocash Popup
-    function showEcocash() {
-        var popup = document.getElementById("ecocashPopup");
-        popup.style.display = popup.style.display === "none" ? "block" : "none";
+  function generateTips() {
+    const sampleTeams = ["Team A vs Team B", "Team X vs Team Y", "Team Alpha vs Beta", "Team C vs D", "Red vs Blue", "Green vs Orange", "Lions vs Tigers", "Falcons vs Eagles", "Sharks vs Wolves", "Stars vs Suns"];
+    for (let cat in tipsData) {
+      tipsData[cat] = [];
+      for (let i = 0; i < 10; i++) {
+        const time = generateTime(i);
+        const tip = (cat === "aviator" || cat === "jetx" || cat === "luckyjet")
+          ? `${cat.toUpperCase()} Tip - Bet on ${(Math.random() * 5 + 1).toFixed(2)}x at ${time}`
+          : `${sampleTeams[i]} - Tip Time: ${time}`;
+        tipsData[cat].push(tip);
+      }
     }
+  }
 
-    // Display Free Tips
-    function showFreeTips() {
-        var content = document.getElementById("freeTipsContent");
-        content.style.display = content.style.display === "none" ? "block" : "none";
+  function showTips(category) {
+    const container = document.getElementById("tipsContainer");
+    container.innerHTML = "";
+    if (!tipsData[category] || tipsData[category].length === 0) {
+      container.innerHTML = "<p>No tips available yet. Click Refresh Tips first.</p>";
+      return;
     }
+    tipsData[category].forEach(tip => {
+      const p = document.createElement("p");
+      p.textContent = tip;
+      container.appendChild(p);
+    });
+  }
 
-    // Display Crash Tips
-    function showCrashTips() {
-        var content = document.getElementById("crashTipsContent");
-        content.style.display = content.style.display === "none" ? "block" : "none";
-    }
+  function refreshTips() {
+    generateTips();
+    alert("Tips refreshed! Now click a category to view.");
+  }
 
-    // Share Referral
-    function shareReferral() {
-        alert("Share this app link with friends to earn rewards!");
-    }
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+  }
+
+  // Auto load tips on first load
+  generateTips();
 </script>
 
 </body>
