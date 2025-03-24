@@ -109,10 +109,8 @@
   <h2>Aviator, JetX, and Lucky Jet Tips</h2>
   <p>Get the best crash game tips for Aviator, JetX, and Lucky Jet, with precise predictions to maximize your wins!</p>
   <div class="cta">Start Winning with Crash Games!</div>
-  <button onclick="showTips('aviator')">Aviator</button>
-  <button onclick="showTips('jetx')">JetX</button>
-  <button onclick="showTips('luckyjet')">Lucky Jet</button>
-  <button onclick="refreshTips()">Refresh Crash Tips</button>
+  <button onclick="showCrashTips()">Refresh Crash Tips</button>
+  <div id="crashTimeClock" style="font-weight:bold; font-size:18px; margin-top:10px;"></div>
   <div id="crashTips" class="tips-box"></div>
 </div>
 
@@ -150,15 +148,34 @@
     return now.toTimeString().split(" ")[0].substring(0, 5);
   }
 
+  function getRandomTime() {
+    const now = new Date();
+    let randomMinutes = Math.floor(Math.random() * 30);
+    let randomSeconds = Math.floor(Math.random() * 60);
+    let hours = now.getHours().toString().padStart(2, '0');
+    let minutes = (now.getMinutes() + randomMinutes) % 60;
+    let minsFormatted = minutes.toString().padStart(2, '0');
+    let secsFormatted = randomSeconds.toString().padStart(2, '0');
+    return `${hours}:${minsFormatted}:${secsFormatted}`;
+  }
+
   function generateTips() {
     const sample = ["Team A vs B", "Team X vs Y", "Team Alpha vs Beta", "Stars vs Suns", "Lions vs Tigers"];
     for (let cat in tipsData) {
       tipsData[cat] = [];
       for (let i = 0; i < 5; i++) {
-        const time = generateTime(i);
-        if (cat.includes("aviator") || cat.includes("jetx") || cat.includes("luckyjet")) {
-          tipsData[cat].push(`${cat.toUpperCase()} Tip: Bet on ${(Math.random() * 5 + 1).toFixed(2)}x at ${time}`);
+        let time;
+        if (cat === 'aviator') {
+          time = getRandomTime();
+          tipsData[cat].push(`Aviator Tip: Bet at ${time} — Target ${(Math.random() * 5 + 1).toFixed(2)}x`);
+        } else if (cat === 'jetx') {
+          time = getRandomTime();
+          tipsData[cat].push(`JetX Tip: Bet at ${time} — Target ${(Math.random() * 5 + 1).toFixed(2)}x`);
+        } else if (cat === 'luckyjet') {
+          time = getRandomTime();
+          tipsData[cat].push(`Lucky Jet Tip: Bet at ${time} — Target ${(Math.random() * 5 + 1).toFixed(2)}x`);
         } else {
+          time = generateTime(i);
           tipsData[cat].push(`${sample[i % sample.length]} - Tip Time: ${time}`);
         }
       }
@@ -184,6 +201,13 @@
     alert("Tips refreshed! Select a category again.");
   }
 
+  function showCrashTips() {
+    generateTips(); // Regenerate only crash section
+    showTips('aviator');
+    showTips('jetx');
+    showTips('luckyjet');
+  }
+
   function toggleTheme() {
     document.body.classList.toggle('dark-mode');
   }
@@ -207,7 +231,14 @@
     alert("Share this app link with friends to earn rewards!");
   }
 
-  // Generate tips on first load
+  function updateCrashClock() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString();
+    document.getElementById("crashTimeClock").innerText = "Current Time: " + timeString;
+  }
+  setInterval(updateCrashClock, 1000);
+  updateCrashClock();
+
   generateTips();
 </script>
 
