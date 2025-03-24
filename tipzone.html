@@ -109,8 +109,14 @@
   <h2>Aviator, JetX, and Lucky Jet Tips</h2>
   <p>Get the best crash game tips for Aviator, JetX, and Lucky Jet, with precise predictions to maximize your wins!</p>
   <div class="cta">Start Winning with Crash Games!</div>
-  <button onclick="showCrashTips()">Refresh Crash Tips</button>
-  <div id="crashTimeClock" style="font-weight:bold; font-size:18px; margin-top:10px;"></div>
+  <input type="password" id="crashPass" placeholder="Enter password to access crash tips">
+  <button onclick="accessCrashTips()">Access Crash Tips</button>
+  <div id="crashButtons" style="display:none;">
+    <button onclick="showTips('aviator')">Aviator</button>
+    <button onclick="showTips('jetx')">JetX</button>
+    <button onclick="showTips('luckyjet')">Lucky Jet</button>
+    <button onclick="refreshTips()">Refresh Crash Tips</button>
+  </div>
   <div id="crashTips" class="tips-box"></div>
 </div>
 
@@ -142,40 +148,27 @@
     vipVolleyball: []
   };
 
-  function generateTime(index) {
+  function generateSequentialTime(index, startHour, startMinute) {
     const now = new Date();
-    now.setMinutes(now.getMinutes() + index + 1);
-    return now.toTimeString().split(" ")[0].substring(0, 5);
-  }
-
-  function getRandomTime() {
-    const now = new Date();
-    let randomMinutes = Math.floor(Math.random() * 30);
-    let randomSeconds = Math.floor(Math.random() * 60);
-    let hours = now.getHours().toString().padStart(2, '0');
-    let minutes = (now.getMinutes() + randomMinutes) % 60;
-    let minsFormatted = minutes.toString().padStart(2, '0');
-    let secsFormatted = randomSeconds.toString().padStart(2, '0');
-    return `${hours}:${minsFormatted}:${secsFormatted}`;
+    now.setHours(startHour);
+    now.setMinutes(startMinute + index);
+    const hour = now.getHours().toString().padStart(2, '0');
+    const minute = now.getMinutes().toString().padStart(2, '0');
+    const second = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+    return `${hour}, ${minute}, ${second}`;
   }
 
   function generateTips() {
     const sample = ["Team A vs B", "Team X vs Y", "Team Alpha vs Beta", "Stars vs Suns", "Lions vs Tigers"];
+    let startHour = new Date().getHours();
+    let startMinute = new Date().getMinutes();
     for (let cat in tipsData) {
       tipsData[cat] = [];
       for (let i = 0; i < 5; i++) {
-        let time;
-        if (cat === 'aviator') {
-          time = getRandomTime();
-          tipsData[cat].push(`Aviator Tip: Bet at ${time} — Target ${(Math.random() * 5 + 1).toFixed(2)}x`);
-        } else if (cat === 'jetx') {
-          time = getRandomTime();
-          tipsData[cat].push(`JetX Tip: Bet at ${time} — Target ${(Math.random() * 5 + 1).toFixed(2)}x`);
-        } else if (cat === 'luckyjet') {
-          time = getRandomTime();
-          tipsData[cat].push(`Lucky Jet Tip: Bet at ${time} — Target ${(Math.random() * 5 + 1).toFixed(2)}x`);
+        const time = generateSequentialTime(i, startHour, startMinute);
+        if (cat === "aviator" || cat === "jetx" || cat === "luckyjet") {
+          tipsData[cat].push(`${cat.toUpperCase()} Tip: Bet on ${(Math.random() * 5 + 1).toFixed(2)}x at ${time}`);
         } else {
-          time = generateTime(i);
           tipsData[cat].push(`${sample[i % sample.length]} - Tip Time: ${time}`);
         }
       }
@@ -201,13 +194,6 @@
     alert("Tips refreshed! Select a category again.");
   }
 
-  function showCrashTips() {
-    generateTips(); // Regenerate only crash section
-    showTips('aviator');
-    showTips('jetx');
-    showTips('luckyjet');
-  }
-
   function toggleTheme() {
     document.body.classList.toggle('dark-mode');
   }
@@ -222,6 +208,16 @@
     }
   }
 
+  function accessCrashTips() {
+    var pass = document.getElementById("crashPass").value;
+    if (pass === "tips") {
+      alert("Crash tips unlocked!");
+      document.getElementById("crashButtons").style.display = "block";
+    } else {
+      alert("Incorrect password for crash tips.");
+    }
+  }
+
   function showEcocash() {
     const popup = document.getElementById("ecocashPopup");
     popup.style.display = popup.style.display === "none" ? "block" : "none";
@@ -230,14 +226,6 @@
   function shareReferral() {
     alert("Share this app link with friends to earn rewards!");
   }
-
-  function updateCrashClock() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString();
-    document.getElementById("crashTimeClock").innerText = "Current Time: " + timeString;
-  }
-  setInterval(updateCrashClock, 1000);
-  updateCrashClock();
 
   generateTips();
 </script>
