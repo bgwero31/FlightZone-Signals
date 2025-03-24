@@ -26,8 +26,8 @@
     button {
       background-color: #4CAF50;
       color: white;
-      padding: 10px 20px;
-      margin: 5px;
+      padding: 10px 15px;
+      margin: 6px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -39,7 +39,7 @@
       font-size: 18px;
       font-weight: bold;
       text-align: center;
-      margin: 20px;
+      margin: 15px 0;
     }
     .theme-toggle {
       cursor: pointer;
@@ -48,21 +48,20 @@
       color: white;
       border: none;
       border-radius: 5px;
-      margin: 10px;
     }
     .theme-toggle:hover {
       background-color: #444;
     }
     .tips-box {
-      margin-top: 15px;
+      margin-top: 10px;
       background-color: #e9f7ef;
       padding: 10px;
       border-radius: 5px;
     }
     .tips-box p {
-      margin: 5px 0;
+      margin: 4px 0;
     }
-    .dark-mode {
+    body.dark-mode {
       background-color: #222;
       color: white;
     }
@@ -82,17 +81,54 @@
 </header>
 
 <div class="section">
-  <h2>Choose Tip Category</h2>
-  <div class="cta">Select a category to view tips</div>
-  <button onclick="showTips('football')">Football Tips</button>
-  <button onclick="showTips('basketball')">Basketball Tips</button>
-  <button onclick="showTips('volleyball')">Volleyball Tips</button>
+  <h2>Free Tips</h2>
+  <p>Stay tuned for today's top tips in Football, Volleyball, and Basketball. We update daily!</p>
+  <div class="cta">Get your free tips now!</div>
+  <button onclick="showTips('football')">Football</button>
+  <button onclick="showTips('basketball')">Basketball</button>
+  <button onclick="showTips('volleyball')">Volleyball</button>
+  <button onclick="refreshTips()">Refresh Free Tips</button>
+  <div id="freeTips" class="tips-box"></div>
+</div>
+
+<div class="section">
+  <h2>VIP Tips</h2>
+  <p>Unlock exclusive, high-accuracy tips for betting on football, basketball, and crash games.</p>
+  <input type="text" id="vipCode" placeholder="Enter VIP Code" />
+  <button onclick="unlockVIP()">Unlock VIP Tips</button>
+  <div id="vipSection" class="tips-box" style="display:none;">
+    <button onclick="showTips('vipFootball')">Football</button>
+    <button onclick="showTips('vipBasketball')">Basketball</button>
+    <button onclick="showTips('vipVolleyball')">Volleyball</button>
+    <button onclick="refreshTips()">Refresh VIP Tips</button>
+    <div id="vipTips"></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Aviator, JetX, and Lucky Jet Tips</h2>
+  <p>Get the best crash game tips for Aviator, JetX, and Lucky Jet, with precise predictions to maximize your wins!</p>
+  <div class="cta">Start Winning with Crash Games!</div>
   <button onclick="showTips('aviator')">Aviator</button>
   <button onclick="showTips('jetx')">JetX</button>
   <button onclick="showTips('luckyjet')">Lucky Jet</button>
-  <button onclick="refreshTips()">Refresh Tips</button>
-  
-  <div id="tipsContainer" class="tips-box"></div>
+  <button onclick="refreshTips()">Refresh Crash Tips</button>
+  <div id="crashTips" class="tips-box"></div>
+</div>
+
+<div class="section">
+  <h2>Payment Info</h2>
+  <button onclick="showEcocash()">Pay via Ecocash</button>
+  <div id="ecocashPopup" style="display: none;">
+    <p>Ecocash Number: +263774309795</p>
+  </div>
+  <p>If you want to access premium features, pay via Ecocash. Your payments help us improve our predictions!</p>
+</div>
+
+<div class="section">
+  <h2>Referral Program</h2>
+  <p>Share our app with friends and earn rewards! For every successful referral, get a month of VIP tips for free.</p>
+  <button onclick="shareReferral()">Share Referral</button>
 </div>
 
 <script>
@@ -102,7 +138,10 @@
     volleyball: [],
     aviator: [],
     jetx: [],
-    luckyjet: []
+    luckyjet: [],
+    vipFootball: [],
+    vipBasketball: [],
+    vipVolleyball: []
   };
 
   function generateTime(index) {
@@ -112,43 +151,63 @@
   }
 
   function generateTips() {
-    const sampleTeams = ["Team A vs Team B", "Team X vs Team Y", "Team Alpha vs Beta", "Team C vs D", "Red vs Blue", "Green vs Orange", "Lions vs Tigers", "Falcons vs Eagles", "Sharks vs Wolves", "Stars vs Suns"];
+    const sample = ["Team A vs B", "Team X vs Y", "Team Alpha vs Beta", "Stars vs Suns", "Lions vs Tigers"];
     for (let cat in tipsData) {
       tipsData[cat] = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 5; i++) {
         const time = generateTime(i);
-        const tip = (cat === "aviator" || cat === "jetx" || cat === "luckyjet")
-          ? `${cat.toUpperCase()} Tip - Bet on ${(Math.random() * 5 + 1).toFixed(2)}x at ${time}`
-          : `${sampleTeams[i]} - Tip Time: ${time}`;
-        tipsData[cat].push(tip);
+        if (cat.includes("aviator") || cat.includes("jetx") || cat.includes("luckyjet")) {
+          tipsData[cat].push(`${cat.toUpperCase()} Tip: Bet on ${(Math.random() * 5 + 1).toFixed(2)}x at ${time}`);
+        } else {
+          tipsData[cat].push(`${sample[i % sample.length]} - Tip Time: ${time}`);
+        }
       }
     }
   }
 
   function showTips(category) {
-    const container = document.getElementById("tipsContainer");
-    container.innerHTML = "";
-    if (!tipsData[category] || tipsData[category].length === 0) {
-      container.innerHTML = "<p>No tips available yet. Click Refresh Tips first.</p>";
-      return;
-    }
+    let outputBox = "freeTips";
+    if (category.includes("vip")) outputBox = "vipTips";
+    if (["aviator", "jetx", "luckyjet"].includes(category)) outputBox = "crashTips";
+
+    const box = document.getElementById(outputBox);
+    box.innerHTML = "";
     tipsData[category].forEach(tip => {
       const p = document.createElement("p");
       p.textContent = tip;
-      container.appendChild(p);
+      box.appendChild(p);
     });
   }
 
   function refreshTips() {
     generateTips();
-    alert("Tips refreshed! Now click a category to view.");
+    alert("Tips refreshed! Select a category again.");
   }
 
   function toggleTheme() {
     document.body.classList.toggle('dark-mode');
   }
 
-  // Auto load tips on first load
+  function unlockVIP() {
+    var code = document.getElementById("vipCode").value;
+    if (code === "BJAYVIP2025") {
+      alert("VIP tips unlocked!");
+      document.getElementById("vipSection").style.display = "block";
+    } else {
+      alert("Incorrect VIP code. Try again.");
+    }
+  }
+
+  function showEcocash() {
+    const popup = document.getElementById("ecocashPopup");
+    popup.style.display = popup.style.display === "none" ? "block" : "none";
+  }
+
+  function shareReferral() {
+    alert("Share this app link with friends to earn rewards!");
+  }
+
+  // Generate tips on first load
   generateTips();
 </script>
 
