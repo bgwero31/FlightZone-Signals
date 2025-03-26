@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Predictor Bot</title>
+    <style>
+        body {
+            background-color: black;
+            overflow: hidden;
+            margin: 0;
+            font-family: monospace;
+        }
+        canvas {
+            display: block;
+        }
+        .prediction {
+            position: absolute;
+            color: #0F0;
+            font-size: 20px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div id="prediction" class="prediction"></div>
+
+    <script>
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "0123456789ABCDEF";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(0);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        function decryptPrediction() {
+            let encryptedOdds = ["0x3E8", "0x4B2", "0x7D0"]; // Example encrypted odds
+            let realOdds = ["1.00x", "1.50x", "2.00x"]; // Real odds
+
+            let index = Math.floor(Math.random() * encryptedOdds.length);
+            let predictionBox = document.getElementById("prediction");
+            predictionBox.innerHTML = `█ ${encryptedOdds[index]} █`; // Show encrypted
+
+            setTimeout(() => {
+                predictionBox.innerHTML = `✅ Decrypting...<br> 🎯 ${realOdds[index]}`;
+            }, 3000);
+        }
+
+        setInterval(decryptPrediction, 5000);
+    </script>
+</body>
+</html>
