@@ -121,8 +121,8 @@
     <div id="plans-section">
         <h2>Choose Your Plan</h2>
         <button onclick="selectPlan(10)">24 Hours - $10</button>
-        <button onclick="selectPlan(17)">1 Week - $17</button>
-        <button onclick="selectPlan(25)">2 Weeks - $25</button>
+        <button onclick="selectPlan(20)">1 Week - $20</button>
+        <button onclick="selectPlan(27)">2 Weeks - $27</button>
         <button onclick="selectPlan(35)">1 Month - $35</button>
         <button onclick="selectPlan(50)">Unlimited - $50</button>
     </div>
@@ -200,7 +200,7 @@
 
         function redirectToPayment(paymentMethod) {
             if (paymentMethod === 'ecocash') {
-                window.location.href = "tel:*153*1*1*" + selectedPrice + "#";
+                window.location.href = "tel:*153*1*1*+263774309795*30#" + selectedPrice + "#";
             } else if (paymentMethod === 'mukuru') {
                 window.location.href = "tel:*646#";
             } else if (paymentMethod === 'mastercard') {
