@@ -11,6 +11,7 @@
             text-align: center;
             color: red;
             background-color: black;
+            overflow: hidden;
         }
         /* Login Page Background */
         .login-body {
@@ -183,6 +184,9 @@
                     let specialChance = Math.random();
                     if (specialChance > 0.8) {
                         document.getElementById("prediction").innerHTML = "🎯 2X - 3X (This round & Next round)";
+                        setTimeout(() => {
+                            document.getElementById("prediction").innerHTML = "Decrypting...";
+                        }, 15000);
                     } else {
                         let odds = ["🎯 Play Now 2x - 4x", "🎯 Play Now 1.50x - 3x", "🎯 Play Now 2x - 6x"];
                         document.getElementById("prediction").innerHTML = odds[Math.floor(Math.random() * odds.length)];
