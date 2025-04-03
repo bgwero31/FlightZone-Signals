@@ -13,30 +13,36 @@
             background-color: black;
             overflow: hidden;
         }
-        /* Login Page Background */
+        /* Professional Login Page */
         .login-body {
             background: url('https://source.unsplash.com/1600x900/?dark,tech') no-repeat center center/cover;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
-        /* Glassy Login Card */
         .login-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
             text-align: center;
         }
+        .bot-name {
+            font-size: 35px;
+            font-weight: bold;
+            color: lime;
+            margin-bottom: 20px;
+        }
         input, button {
-            padding: 10px;
+            padding: 12px;
             margin: 10px;
             font-size: 18px;
             border: none;
             border-radius: 5px;
-            width: 80%;
+            width: 90%;
         }
         input {
             background: rgba(255, 255, 255, 0.2);
@@ -50,15 +56,15 @@
         .hidden {
             display: none;
         }
-        /* Signal Page Styling */
+        /* Signal Page (No Black Background, Only Matrix) */
         .signal-body {
-            background-color: black;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            background: none;
         }
         canvas {
             position: absolute;
@@ -92,14 +98,14 @@
             font-weight: bold;
             padding: 20px;
         }
-        /* Footer */
+        /* Footer (Single Line from Left to Right) */
         .footer {
             position: absolute;
             bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 100%;
             font-size: 18px;
             color: white;
+            text-align: center;
         }
     </style>
 </head>
@@ -107,6 +113,7 @@
 
     <!-- Login Page -->
     <div id="login-page" class="login-card">
+        <div class="bot-name">AVIATOR MATRIX</div>
         <h2>Enter Your Betting Site</h2>
         <input type="text" id="bettingSite" placeholder="Enter Betting Site"><br>
         <h2>Enter Passcode</h2>
@@ -194,10 +201,11 @@
                 }
 
                 if (countdown === 0) {
-                    countdown = 122;
+                    document.getElementById("prediction").innerHTML = "🎯 PLAY NOW";
                     setTimeout(() => {
                         document.getElementById("prediction").innerHTML = "Decrypting...";
                     }, 10000);
+                    countdown = 122;
                 }
             }
 
