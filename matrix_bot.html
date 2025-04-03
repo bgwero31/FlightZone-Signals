@@ -1,232 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Matrix Predictor</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: monospace;
-            text-align: center;
-            color: red;
-            background-color: black;
-            overflow: hidden;
-        }
-        /* Professional Login Page */
-        .login-body {
-            background: url('https://source.unsplash.com/1600x900/?dark,tech') no-repeat center center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-            text-align: center;
-        }
-        .bot-name {
-            font-size: 35px;
-            font-weight: bold;
-            color: lime;
-            margin-bottom: 20px;
-        }
-        input, button {
-            padding: 12px;
-            margin: 10px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            width: 90%;
-        }
-        input {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        button {
-            background-color: green;
-            color: white;
-            cursor: pointer;
-        }
-        .hidden {
-            display: none;
-        }
-        /* Signal Page (No Black Background, Only Matrix) */
-        .signal-body {
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: none;
-        }
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        /* Matrix Board */
-        .board {
-            background: rgba(0, 255, 0, 0.1);
-            padding: 20px;
-            width: 60%;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .board h1 {
-            color: lime;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        #clock {
-            font-size: 22px;
-            font-weight: bold;
-        }
-        /* Prediction Display */
-        #prediction {
-            color: red;
-            font-size: 40px;
-            font-weight: bold;
-            padding: 20px;
-        }
-        /* Footer (Single Line from Left to Right) */
-        .footer {
-            position: absolute;
-            bottom: 5px;
-            width: 100%;
-            font-size: 18px;
-            color: white;
-            text-align: center;
-        }
-    </style>
-</head>
-<body class="login-body">
+<script>
+    function startPredictions() {
+        let countdown = getRandomInterval();
+        let predictionVisible = false;
 
-    <!-- Login Page -->
-    <div id="login-page" class="login-card">
-        <div class="bot-name">AVIATOR MATRIX</div>
-        <h2>Enter Your Betting Site</h2>
-        <input type="text" id="bettingSite" placeholder="Enter Betting Site"><br>
-        <h2>Enter Passcode</h2>
-        <input type="password" id="password" placeholder="Enter Passcode"><br>
-        <button onclick="login()">Login</button>
-    </div>
-
-    <!-- Signal Page (Hidden Initially) -->
-    <div id="signal-page" class="hidden signal-body">
-        <canvas id="matrix"></canvas>
-
-        <!-- Matrix Board Header -->
-        <div class="board">
-            <h1>AVIATOR MATRIX</h1>
-            <span id="clock"></span>
-        </div>
-
-        <!-- Predictions -->
-        <div id="prediction">Decrypting...</div>
-
-        <!-- Footer -->
-        <div class="footer">
-            All Rights Reserved - Matrix 2025
-        </div>
-    </div>
-
-    <script>
-        // Login Function (Passcode is hidden)
-        function login() {
-            let password = document.getElementById("password").value;
-            if (password === "matrix2025") {
-                document.body.classList.remove("login-body");
-                document.body.classList.add("signal-body");
-                document.getElementById("login-page").classList.add("hidden");
-                document.getElementById("signal-page").classList.remove("hidden");
-                startPredictions();
-                updateClock();
-            } else {
-                alert("Incorrect Passcode!");
-            }
+        function getRandomInterval() {
+            return Math.random() > 0.5 ? 122 : 103; // Randomly choose between 2.02 min (122s) and 1.43 min (103s)
         }
 
-        // Matrix Effect
-        const canvas = document.getElementById("matrix");
-        const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const letters = "0123456789ABCDEF";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(0);
-
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0F0";
-            ctx.font = fontSize + "px monospace";
-            for (let i = 0; i < drops.length; i++) {
-                const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-        setInterval(drawMatrix, 50);
-
-        // Countdown & Predictions
-        function startPredictions() {
-            let countdown = 122; // 2 minutes and 2 seconds
-
-            function generatePrediction() {
-                if (countdown === 122 || countdown === 103) {
-                    let specialChance = Math.random();
-                    if (specialChance > 0.8) {
-                        document.getElementById("prediction").innerHTML = "🎯 2X - 3X (This round & Next round)";
-                        setTimeout(() => {
-                            document.getElementById("prediction").innerHTML = "Decrypting...";
-                        }, 15000);
-                    } else {
-                        let odds = ["🎯 Play Now 2x - 4x", "🎯 Play Now 1.50x - 3x", "🎯 Play Now 2x - 6x"];
-                        document.getElementById("prediction").innerHTML = odds[Math.floor(Math.random() * odds.length)];
-                    }
-                }
-
-                if (countdown === 0) {
-                    document.getElementById("prediction").innerHTML = "🎯 PLAY NOW";
+        function generatePrediction() {
+            if (countdown === 122 || countdown === 103) {
+                let specialChance = Math.random();
+                if (specialChance > 0.8) {
+                    // Show 2x - 3x briefly
+                    document.getElementById("prediction").innerHTML = "🎯 2X - 3X (This round & Next round)";
                     setTimeout(() => {
                         document.getElementById("prediction").innerHTML = "Decrypting...";
                     }, 10000);
-                    countdown = 122;
+                } else {
+                    // Show normal odds
+                    let odds = ["🎯 Play Now 2x - 4x", "🎯 Play Now 1.50x - 3x", "🎯 Play Now 2x - 6x"];
+                    document.getElementById("prediction").innerHTML = odds[Math.floor(Math.random() * odds.length)];
+                    predictionVisible = true;
+                    
+                    setTimeout(() => {
+                        document.getElementById("prediction").innerHTML = "Decrypting...";
+                        predictionVisible = false;
+                    }, 15000);
                 }
             }
 
-            function countdownTimer() {
-                let minutes = Math.floor(countdown / 60);
-                let seconds = countdown % 60;
-                document.getElementById("clock").innerText = `🕒 ${minutes}:${seconds.toString().padStart(2, "0")}`;
-                countdown--;
-                generatePrediction();
+            if (countdown === 0) {
+                // Final play now prompt before new countdown
+                document.getElementById("prediction").innerHTML = "🎯 PLAY NOW";
+                setTimeout(() => {
+                    document.getElementById("prediction").innerHTML = "Decrypting...";
+                    countdown = getRandomInterval();
+                }, 10000);
             }
-            countdownTimer();
-            setInterval(countdownTimer, 1000);
         }
 
-        // Clock Function
-        function updateClock() {
-            setInterval(() => {
-                let now = new Date();
-                document.getElementById("clock").innerText = `🕒 ${now.toLocaleTimeString()}`;
-            }, 1000);
+        function countdownTimer() {
+            let minutes = Math.floor(countdown / 60);
+            let seconds = countdown % 60;
+            document.getElementById("clock").innerText = `🕒 ${minutes}:${seconds.toString().padStart(2, "0")}`;
+            countdown--;
+            generatePrediction();
         }
-    </script>
-</body>
-</html>
+
+        countdownTimer();
+        setInterval(countdownTimer, 1000);
+    }
+</script>
