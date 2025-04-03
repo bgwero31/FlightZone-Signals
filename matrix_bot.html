@@ -9,166 +9,111 @@
             overflow: hidden;
             margin: 0;
             font-family: monospace;
-            text-align: center;
             color: red;
-        }
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #1a1a1a, #333);
-        }
-        .login-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-        input {
-            padding: 10px;
-            border: none;
-            margin: 5px;
-        }
-        button {
-            padding: 10px 15px;
-            background: green;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-        .matrix-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: black;
-            overflow: hidden;
+            text-align: center;
         }
         canvas {
             display: block;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
         }
-        .prediction-board {
+        .container {
             position: absolute;
-            top: 50px;
-            width: 100%;
-            font-size: 24px;
-            font-weight: bold;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
         }
-        .clock {
-            font-size: 20px;
-            margin-top: 5px;
-        }
-        .prediction {
-            font-size: 30px;
-            font-weight: bold;
-        }
-        .footer {
-            position: absolute;
+        .big-text { font-size: 24px; font-weight: bold; }
+        .prediction { font-size: 30px; font-weight: bold; color: blue; }
+        footer {
+            position: fixed;
             bottom: 0;
             width: 100%;
             background: black;
-            color: red;
+            color: green;
             text-align: center;
-            padding: 10px;
+            padding: 10px 0;
         }
     </style>
 </head>
 <body>
-    <div class="login-container" id="login-page">
-        <div class="login-box">
-            <h2>AVIATOR MATRIX</h2>
-            <input type="password" id="password" placeholder="Enter Passcode">
-            <button onclick="checkLogin()">Login</button>
-        </div>
-    </div><div class="matrix-container" id="signal-page" style="display: none;">
     <canvas id="matrix"></canvas>
-    <div class="prediction-board">
-        <div>🟢 AVIATOR MATRIX</div>
-        <div class="clock" id="clock">🕒 00:00</div>
-        <div class="prediction" id="prediction">Decrypting...</div>
+    <div class="container" id="login">
+        <h1>AVIATOR MATRIX</h1>
+        <p>Enter Passcode:</p>
+        <input type="password" id="passcode">
+        <button onclick="checkPasscode()">Login</button>
     </div>
-    <div class="footer">All rights reserved &copy; Matrix 2025</div>
-</div>
-
-<script>
-    function checkLogin() {
-        let passcode = document.getElementById("password").value;
-        if (passcode === "matrix2025") {
-            document.getElementById("login-page").style.display = "none";
-            document.getElementById("signal-page").style.display = "block";
-            startMatrix();
-            startPredictions();
-        } else {
-            alert("Incorrect passcode");
-        }
-    }
-
-    function startMatrix() {
-        const canvas = document.getElementById("matrix");
-        const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    <div class="container" id="signals" style="display: none;">
+        <h1 style="color: green;">AVIATOR MATRIX</h1>
+        <p class="big-text" id="clock"></p>
+        <p class="big-text" id="countdown"></p>
+        <p class="prediction" id="prediction"></p>
+    </div>
+    <footer>All rights reserved &copy; Matrix 2025</footer>
+    <script>
+        const matrixCanvas = document.getElementById("matrix");
+        const ctx = matrixCanvas.getContext("2d");
+        matrixCanvas.width = window.innerWidth;
+        matrixCanvas.height = window.innerHeight;
         const letters = "0123456789ABCDEF";
         const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(0);
-
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0F0";
-            ctx.font = fontSize + "px monospace";
-            for (let i = 0; i < drops.length; i++) {
-                const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
+        const columns = matrixCanvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(0);function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        ctx.fillStyle = "#0F0";
+        ctx.font = fontSize + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters.charAt(Math.floor(Math.random() * letters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.95) {
+                drops[i] = 0;
             }
+            drops[i]++;
         }
-        setInterval(drawMatrix, 50);
+    }
+    setInterval(drawMatrix, 50);
+
+    function checkPasscode() {
+        const pass = document.getElementById("passcode").value;
+        if (pass === "matrix2025") {
+            document.getElementById("login").style.display = "none";
+            document.getElementById("signals").style.display = "block";
+            startSignalProcess();
+        } else {
+            alert("Incorrect passcode!");
+        }
     }
 
-    function startPredictions() {
-        let countdown = getRandomInterval();
+    function updateClock() {
+        const now = new Date();
+        document.getElementById("clock").innerText = now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
 
-        function getRandomInterval() {
-            return Math.random() > 0.5 ? 122 : 103;
+    let countdown = Math.random() > 0.5 ? 122 : 86;
+    function startCountdown() {
+        document.getElementById("countdown").innerText = countdown + "s";
+        countdown--;
+        if (countdown <= 0) {
+            showPrediction();
+            countdown = Math.random() > 0.5 ? 122 : 86;
         }
+    }
+    setInterval(startCountdown, 1000);
 
-        function generatePrediction() {
-            let predictionBox = document.getElementById("prediction");
-            if (countdown === 122 || countdown === 103) {
-                if (Math.random() > 0.8) {
-                    predictionBox.innerHTML = "🎯 2X - 3X (This round & Next round)";
-                    setTimeout(() => predictionBox.innerHTML = "Decrypting...", 10000);
-                } else {
-                    let odds = ["🎯 Play Now 2x - 4x", "🎯 Play Now 1.50x - 3x", "🎯 Play Now 2x - 6x"];
-                    predictionBox.innerHTML = odds[Math.floor(Math.random() * odds.length)];
-                    setTimeout(() => predictionBox.innerHTML = "Decrypting...", 15000);
-                }
-            }
-            if (countdown === 0) {
-                predictionBox.innerHTML = "🎯 PLAY NOW";
-                setTimeout(() => {
-                    predictionBox.innerHTML = "Decrypting...";
-                    countdown = getRandomInterval();
-                }, 10000);
-            }
-        }
-
-        function countdownTimer() {
-            let minutes = Math.floor(countdown / 60);
-            let seconds = countdown % 60;
-            document.getElementById("clock").innerText = `🕒 ${minutes}:${seconds.toString().padStart(2, "0")}`;
-            countdown--;
-            generatePrediction();
-        }
-
-        countdownTimer();
-        setInterval(countdownTimer, 1000);
+    function showPrediction() {
+        let odds = ["2x-4x", "2x-3x", "1.50x-3x", "2x-6x"];
+        let index = Math.floor(Math.random() * odds.length);
+        document.getElementById("prediction").innerText = "█ " + odds[index] + " █";
+        setTimeout(() => {
+            document.getElementById("prediction").innerText = "";
+        }, 15000);
     }
 </script>
 
