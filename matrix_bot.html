@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Predictor Bot</title>
+    <title>Aviator Matrix Predictor</title>
     <style>
         body {
             margin: 0;
             font-family: monospace;
             text-align: center;
-            color: white;
+            color: red;
+            background-color: black;
         }
         /* Login Page Background */
         .login-body {
-            background: url('https://source.unsplash.com/1600x900/?dark,abstract') no-repeat center center/cover;
+            background: url('https://source.unsplash.com/1600x900/?dark,tech') no-repeat center center/cover;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
-        /* Glassy Card for Login */
+        /* Glassy Login Card */
         .login-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -52,6 +53,11 @@
         .signal-body {
             background-color: black;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
         canvas {
             position: absolute;
@@ -63,14 +69,11 @@
         }
         /* Matrix Board */
         .board {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
             background: rgba(0, 255, 0, 0.1);
-            padding: 15px;
+            padding: 20px;
             width: 60%;
             border-radius: 10px;
+            margin-bottom: 20px;
         }
         .board h1 {
             color: lime;
@@ -78,25 +81,24 @@
             font-weight: bold;
         }
         #clock {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
         }
         /* Prediction Display */
         #prediction {
-            color: cyan;
-            font-size: 26px;
+            color: red;
+            font-size: 40px;
             font-weight: bold;
             padding: 20px;
-            margin-top: 50px;
         }
         /* Footer */
         .footer {
             position: absolute;
-            bottom: 10px;
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 16px;
-            color: gray;
+            font-size: 18px;
+            color: white;
         }
     </style>
 </head>
@@ -117,7 +119,7 @@
 
         <!-- Matrix Board Header -->
         <div class="board">
-            <h1>Matrix Predictor Board</h1>
+            <h1>AVIATOR MATRIX</h1>
             <span id="clock"></span>
         </div>
 
@@ -126,12 +128,12 @@
 
         <!-- Footer -->
         <div class="footer">
-            All rights reserved - AVIATOR MATRIX 2025 THE FUTURE OF BETTING...
+            All Rights Reserved - Matrix 2025
         </div>
     </div>
 
     <script>
-        // Login Function (Passcode is hidden in code)
+        // Login Function (Passcode is hidden)
         function login() {
             let password = document.getElementById("password").value;
             if (password === "matrix2025") {
@@ -172,37 +174,46 @@
         }
         setInterval(drawMatrix, 50);
 
-        // Decryption Predictions
+        // Countdown & Predictions
         function startPredictions() {
-            let oddsList = [
-                "Encrypted: 0x2A4", "Encrypted: 0x3B9", "Encrypted: 0x7D0", "Encrypted: 0x1F4"
-            ];
-            let realOdds = [
-                "⬇️ Play Now 2x - 4x", "⬇️ Play Now 2x - 3x", "⬇️ Play Now 1.50x - 3x", "⬇️ Play Now 2x - 6x"
-            ];
+            let countdown = 122; // 2 minutes and 2 seconds
 
             function generatePrediction() {
-                let index = Math.floor(Math.random() * oddsList.length);
-                document.getElementById("prediction").innerHTML = oddsList[index];
+                if (countdown === 122 || countdown === 103) {
+                    let specialChance = Math.random();
+                    if (specialChance > 0.8) {
+                        document.getElementById("prediction").innerHTML = "🎯 2X - 3X (This round & Next round)";
+                    } else {
+                        let odds = ["🎯 Play Now 2x - 4x", "🎯 Play Now 1.50x - 3x", "🎯 Play Now 2x - 6x"];
+                        document.getElementById("prediction").innerHTML = odds[Math.floor(Math.random() * odds.length)];
+                    }
+                }
 
-                setTimeout(() => {
-                    document.getElementById("prediction").innerHTML = realOdds[index];
-                }, 3000);
+                if (countdown === 0) {
+                    countdown = 122;
+                    setTimeout(() => {
+                        document.getElementById("prediction").innerHTML = "Decrypting...";
+                    }, 10000);
+                }
             }
-            generatePrediction();
-            setInterval(generatePrediction, 5000);
+
+            function countdownTimer() {
+                let minutes = Math.floor(countdown / 60);
+                let seconds = countdown % 60;
+                document.getElementById("clock").innerText = `🕒 ${minutes}:${seconds.toString().padStart(2, "0")}`;
+                countdown--;
+                generatePrediction();
+            }
+            countdownTimer();
+            setInterval(countdownTimer, 1000);
         }
 
         // Clock Function
         function updateClock() {
-            function displayTime() {
+            setInterval(() => {
                 let now = new Date();
-                let hours = now.getHours().toString().padStart(2, "0");
-                let minutes = now.getMinutes().toString().padStart(2, "0");
-                let seconds = now.getSeconds().toString().padStart(2, "0");
-                document.getElementById("clock").innerText = `🕒 ${hours}:${minutes}:${seconds}`;
-            }
-            setInterval(displayTime, 1000);
+                document.getElementById("clock").innerText = `🕒 ${now.toLocaleTimeString()}`;
+            }, 1000);
         }
     </script>
 </body>
