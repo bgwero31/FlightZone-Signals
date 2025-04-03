@@ -1,39 +1,159 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVIATOR MATRIX</title>
+    <style>
+        body {
+            background-color: black;
+            overflow: hidden;
+            margin: 0;
+            font-family: monospace;
+            text-align: center;
+            color: red;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a, #333);
+        }
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        input {
+            padding: 10px;
+            border: none;
+            margin: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background: green;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .matrix-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: black;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+        .prediction-board {
+            position: absolute;
+            top: 50px;
+            width: 100%;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .clock {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+        .prediction {
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: black;
+            color: red;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="login-page">
+        <div class="login-box">
+            <h2>AVIATOR MATRIX</h2>
+            <input type="password" id="password" placeholder="Enter Passcode">
+            <button onclick="checkLogin()">Login</button>
+        </div>
+    </div><div class="matrix-container" id="signal-page" style="display: none;">
+    <canvas id="matrix"></canvas>
+    <div class="prediction-board">
+        <div>🟢 AVIATOR MATRIX</div>
+        <div class="clock" id="clock">🕒 00:00</div>
+        <div class="prediction" id="prediction">Decrypting...</div>
+    </div>
+    <div class="footer">All rights reserved &copy; Matrix 2025</div>
+</div>
+
 <script>
+    function checkLogin() {
+        let passcode = document.getElementById("password").value;
+        if (passcode === "matrix2025") {
+            document.getElementById("login-page").style.display = "none";
+            document.getElementById("signal-page").style.display = "block";
+            startMatrix();
+            startPredictions();
+        } else {
+            alert("Incorrect passcode");
+        }
+    }
+
+    function startMatrix() {
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = "0123456789ABCDEF";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(0);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+    }
+
     function startPredictions() {
         let countdown = getRandomInterval();
-        let predictionVisible = false;
 
         function getRandomInterval() {
-            return Math.random() > 0.5 ? 122 : 103; // Randomly choose between 2.02 min (122s) and 1.43 min (103s)
+            return Math.random() > 0.5 ? 122 : 103;
         }
 
         function generatePrediction() {
+            let predictionBox = document.getElementById("prediction");
             if (countdown === 122 || countdown === 103) {
-                let specialChance = Math.random();
-                if (specialChance > 0.8) {
-                    // Show 2x - 3x briefly
-                    document.getElementById("prediction").innerHTML = "🎯 2X - 3X (This round & Next round)";
-                    setTimeout(() => {
-                        document.getElementById("prediction").innerHTML = "Decrypting...";
-                    }, 10000);
+                if (Math.random() > 0.8) {
+                    predictionBox.innerHTML = "🎯 2X - 3X (This round & Next round)";
+                    setTimeout(() => predictionBox.innerHTML = "Decrypting...", 10000);
                 } else {
-                    // Show normal odds
                     let odds = ["🎯 Play Now 2x - 4x", "🎯 Play Now 1.50x - 3x", "🎯 Play Now 2x - 6x"];
-                    document.getElementById("prediction").innerHTML = odds[Math.floor(Math.random() * odds.length)];
-                    predictionVisible = true;
-                    
-                    setTimeout(() => {
-                        document.getElementById("prediction").innerHTML = "Decrypting...";
-                        predictionVisible = false;
-                    }, 15000);
+                    predictionBox.innerHTML = odds[Math.floor(Math.random() * odds.length)];
+                    setTimeout(() => predictionBox.innerHTML = "Decrypting...", 15000);
                 }
             }
-
             if (countdown === 0) {
-                // Final play now prompt before new countdown
-                document.getElementById("prediction").innerHTML = "🎯 PLAY NOW";
+                predictionBox.innerHTML = "🎯 PLAY NOW";
                 setTimeout(() => {
-                    document.getElementById("prediction").innerHTML = "Decrypting...";
+                    predictionBox.innerHTML = "Decrypting...";
                     countdown = getRandomInterval();
                 }, 10000);
             }
@@ -51,3 +171,6 @@
         setInterval(countdownTimer, 1000);
     }
 </script>
+
+</body>
+</html>
