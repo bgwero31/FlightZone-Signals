@@ -1,41 +1,139 @@
-import React, { useState } from "react"; import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
+import "./App.css";
 
-const sampleMelodies = [ { title: "Harmony Flow 01", url: "/melodies/sample1.mp3" }, { title: "Vibe Line 02", url: "/melodies/sample2.mp3" }, { title: "Choral Loop 03", url: "/melodies/sample3.mp3" } ];
+const sampleMelodies = [
+  { title: "Harmony Flow 01", url: "/melodies/sample1.mp3" },
+  { title: "Vibe Line 02", url: "/melodies/sample2.mp3" },
+  { title: "Choral Loop 03", url: "/melodies/sample3.mp3" }
+];
 
-export default function Home() { const [selected, setSelected] = useState(null); const [authenticated, setAuthenticated] = useState(false); const [password, setPassword] = useState("");
+function App() {
+  const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [selected, setSelected] = useState(null);
 
-const handleLogin = () => { if (password === "acapella") { setAuthenticated(true); } else { alert("Incorrect password. Try again."); } };
+  const handleLogin = () => {
+    if (password === "acapella") {
+      setLoggedIn(true);
+    } else {
+      alert("Wrong password. Try again.");
+    }
+  };
 
-if (!authenticated) { return ( <div className="min-h-screen flex items-center justify-center bg-gray-100"> <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm text-center"> <h1 className="text-2xl font-bold mb-4">B.JAY Acapella Lab Login</h1> <input type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2 border rounded-md mb-4" /> <Button onClick={handleLogin} className="w-full"> Login </Button> </div> </div> ); }
-
-return ( <div className="min-h-screen bg-gray-100 p-4 text-center"> <h1 className="text-3xl font-bold mb-6">B.JAY Acapella Lab</h1>
-
-<div className="grid gap-4 md:grid-cols-3">
-    {sampleMelodies.map((melody, index) => (
-      <div key={index} className="bg-white shadow-md rounded-xl p-4">
-        <h2 className="text-xl font-semibold mb-2">{melody.title}</h2>
-        <audio controls src={melody.url} className="w-full" />
-        <Button onClick={() => setSelected(melody)} className="mt-4 w-full">
-          Select & Generate Acapella
-        </Button>
+  if (!loggedIn) {
+    return (
+      <div style={styles.loginContainer}>
+        <div style={styles.loginBox}>
+          <h2 style={styles.title}>B.JAY Acapella Lab Login</h2>
+          <input
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={styles.input}
+          />
+          <button onClick={handleLogin} style={styles.button}>
+            Login
+          </button>
+        </div>
       </div>
-    ))}
-  </div>
+    );
+  }
 
-  {selected && (
-    <div className="mt-8">
-      <h2 className="text-2xl font-semibold">Generated Acapella for: {selected.title}</h2>
-      <audio controls src="/generated/acapella_sample.mp3" className="w-full mt-2" />
-      <a
-        href="/generated/acapella_sample.mp3"
-        download
-        className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Download Acapella
-      </a>
+  return (
+    <div style={styles.page}>
+      <h1 style={styles.heading}>B.JAY Acapella Lab</h1>
+
+      <div style={styles.grid}>
+        {sampleMelodies.map((melody, index) => (
+          <div key={index} style={styles.card}>
+            <h3>{melody.title}</h3>
+            <audio controls src={melody.url} style={{ width: "100%" }} />
+            <button onClick={() => setSelected(melody)} style={styles.button}>
+              Generate Acapella
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {selected && (
+        <div style={{ marginTop: 30 }}>
+          <h2>Generated Acapella for: {selected.title}</h2>
+          <audio controls src="/generated/acapella_sample.mp3" />
+          <br />
+          <a href="/generated/acapella_sample.mp3" download style={styles.link}>
+            Download Acapella
+          </a>
+        </div>
+      )}
     </div>
-  )}
-</div>
+  );
+}
 
-); }
+const styles = {
+  loginContainer: {
+    height: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f5f5f5"
+  },
+  loginBox: {
+    padding: 30,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+    textAlign: "center"
+  },
+  title: {
+    marginBottom: 20,
+    fontSize: 22,
+    fontWeight: "bold"
+  },
+  input: {
+    width: "100%",
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 6,
+    border: "1px solid #ccc"
+  },
+  button: {
+    padding: "10px 20px",
+    backgroundColor: "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: 6,
+    cursor: "pointer",
+    width: "100%"
+  },
+  page: {
+    padding: 30,
+    backgroundColor: "#f0f0f0",
+    minHeight: "100vh"
+  },
+  heading: {
+    fontSize: 28,
+    textAlign: "center",
+    marginBottom: 30
+  },
+  grid: {
+    display: "grid",
+    gap: 20,
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))"
+  },
+  card: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 12,
+    boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+    textAlign: "center"
+  },
+  link: {
+    marginTop: 10,
+    display: "inline-block",
+    color: "#2563eb",
+    textDecoration: "underline"
+  }
+};
 
+export default App;
