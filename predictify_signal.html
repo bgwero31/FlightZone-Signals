@@ -1,182 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Predictify</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Odd Predictor</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
     body {
-      font-family: 'Orbitron', sans-serif;
-      text-align: center;
-      background: radial-gradient(circle, #000428, #004e92);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://www.transparenttextures.com/patterns/raindrops.png') repeat, linear-gradient(135deg, #1e3c72, #2a5298);
+      background-size: cover;
       color: white;
-      overflow: hidden;
-      position: relative;
-    }
-    .live-time {
-      font-size: 18px;
-      font-weight: bold;
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      color: cyan;
-      text-shadow: 0 0 5px cyan;
-    }
-    .background {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -1;
-    }
-    .star {
-      position: absolute;
-      background: white;
-      width: 2px;
-      height: 2px;
-      opacity: 0.8;
-      animation: moveStars linear infinite;
-    }
-    @keyframes moveStars {
-      from { transform: translateY(0); }
-      to { transform: translateY(100vh); }
-    }
-    .signal-container {
-      background: rgba(0, 0, 0, 0.8);
-      padding: 40px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
-      width: 360px;
-      animation: fadeIn 1s ease-in-out;
-    }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px cyan;
-    }
-    .spinner-container {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 250px;
+      justify-content: flex-start;
+      height: 100vh;
     }
+
+    .clock {
+      font-size: 1.5rem;
+      margin-top: 20px;
+    }
+
     .spinner {
       width: 200px;
       height: 200px;
-      border: 10px solid rgba(255, 255, 255, 0.2);
-      border-top: 10px solid cyan;
+      border: 12px solid rgba(255, 255, 255, 0.3);
+      border-top: 12px solid #007bff;
       border-radius: 50%;
-      animation: spin 0s linear infinite;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2em;
-      font-weight: bold;
-      color: cyan;
-      text-shadow: 0 0 10px cyan;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      cursor: pointer;
+      animation: spin 2s linear infinite;
+      margin-top: 50px;
     }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .spinning {
-      animation: spin 0.6s linear infinite;
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(-20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    button {
-      padding: 15px;
-      background: cyan;
-      color: black;
-      font-size: 18px;
-      width: 100%;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+
+    .status {
       margin-top: 20px;
+      font-size: 1.5rem;
+    }
+
+    .odds {
+      margin-top: 30px;
+      font-size: 2.5rem;
       font-weight: bold;
+      color: #00ffcc;
     }
-    button:hover {
-      background: #00e5ff;
-      transform: scale(1.05);
-    }
-    .footer {
+
+    footer {
       position: absolute;
       bottom: 10px;
-      font-size: 14px;
-      color: cyan;
-      text-shadow: 0 0 5px cyan;
+      font-size: 0.9rem;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
-
-  <div class="live-time" id="live-time"></div>
-  <div class="background"></div>
-
-  <div class="signal-container">
-    <h2>B.JAY AI Predictor</h2>
-    <div class="spinner-container">
-      <div class="spinner" id="spinner">Tap to Predict</div>
-    </div>
-    <button onclick="startPrediction()">Get Prediction</button>
-  </div>
-
-  <div class="footer">Powered by B.JAY AI Predictor | Accurate & Stylish</div>
+  <div class="clock" id="clock"></div>
+  <div class="spinner"></div>
+  <div class="status" id="status">Calculating odd...</div>
+  <div class="odds" id="odds">---</div>
+  <footer>B.JAY AI Predictor © 2025</footer>
 
   <script>
-    function generateOdds() {
-      let rand = Math.random();
-      if (rand < 0.75) return (Math.random() * (2.00 - 1.00) + 1.00).toFixed(2);
-      else if (rand < 0.90) return (Math.random() * (3.00 - 2.01) + 2.01).toFixed(2);
-      else return (Math.random() * (4.00 - 3.01) + 3.01).toFixed(2);
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function generateOdd() {
+      const r = Math.random();
+      let odd;
+      if (r < 0.75) {
+        odd = (1 + Math.random()).toFixed(2); // 1.00 to 2.00
+      } else if (r < 0.90) {
+        odd = (2 + Math.random()).toFixed(2); // 2.00 to 3.00
+      } else {
+        odd = (3 + Math.random()).toFixed(2); // 3.00 to 4.00
+      }
+      return odd;
     }
 
     function startPrediction() {
-      let spinner = document.getElementById("spinner");
-      spinner.innerHTML = "Calculating odd...";
-      spinner.classList.add("spinning");
+      document.getElementById('status').textContent = 'Calculating odd...';
+      document.getElementById('odds').textContent = '---';
 
       setTimeout(() => {
-        let result = generateOdds();
-        spinner.innerHTML = result + "x";
-        spinner.classList.remove("spinning");
-      }, 3000);
+        const odd = generateOdd();
+        document.getElementById('odds').textContent = `${odd}x`;
+        document.getElementById('status').textContent = 'Prediction ready';
+
+        setTimeout(() => {
+          document.getElementById('status').textContent = 'Calculating odd...';
+          document.getElementById('odds').textContent = '---';
+
+          const delay = Math.floor(Math.random() * 30000) + 30000; // 30s to 1min
+          setTimeout(startPrediction, delay);
+        }, Math.floor(Math.random() * 5000) + 10000); // Show for 10–15s
+
+      }, 2000);
     }
 
-    function updateTime() {
-      let now = new Date();
-      let hours = now.getHours().toString().padStart(2, "0");
-      let minutes = now.getMinutes().toString().padStart(2, "0");
-      let seconds = now.getSeconds().toString().padStart(2, "0");
-      document.getElementById("live-time").innerText = `Time: ${hours}:${minutes}:${seconds}`;
-    }
-
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    for (let i = 0; i < 100; i++) {
-      let star = document.createElement("div");
-      star.classList.add("star");
-      star.style.left = Math.random() * 100 + "vw";
-      star.style.animationDuration = (Math.random() * 3 + 2) + "s";
-      document.querySelector(".background").appendChild(star);
-    }
+    startPrediction();
   </script>
-
 </body>
 </html>
