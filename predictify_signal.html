@@ -2,111 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Odd Predictor</title>
+  <title>Smart Predictor Spinner</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('https://www.transparenttextures.com/patterns/raindrops.png') repeat, linear-gradient(135deg, #1e3c72, #2a5298);
-      background-size: cover;
+      background-color: #111;
       color: white;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
       height: 100vh;
+      flex-direction: column;
     }
-
-    .clock {
-      font-size: 1.5rem;
-      margin-top: 20px;
-    }
-
-    .spinner {
-      width: 200px;
-      height: 200px;
-      border: 12px solid rgba(255, 255, 255, 0.3);
-      border-top: 12px solid #007bff;
+    #spinner {
+      border: 16px solid #222;
+      border-top: 16px solid #00ffcc;
       border-radius: 50%;
+      width: 120px;
+      height: 120px;
       animation: spin 2s linear infinite;
-      margin-top: 50px;
+      margin-bottom: 30px;
     }
-
+    
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
-    .status {
-      margin-top: 20px;
-      font-size: 1.5rem;
-    }
-
-    .odds {
-      margin-top: 30px;
-      font-size: 2.5rem;
-      font-weight: bold;
+    #oddsDisplay {
+      font-size: 2.2rem;
       color: #00ffcc;
-    }
-
-    footer {
-      position: absolute;
-      bottom: 10px;
-      font-size: 0.9rem;
-      opacity: 0.8;
     }
   </style>
 </head>
 <body>
-  <div class="clock" id="clock"></div>
-  <div class="spinner"></div>
-  <div class="status" id="status">Calculating odd...</div>
-  <div class="odds" id="odds">---</div>
-  <footer>B.JAY AI Predictor © 2025</footer>
+  <div id="spinner"></div>
+  <div id="oddsDisplay">Loading odds...</div>
 
   <script>
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('clock').textContent = now.toLocaleTimeString();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    function generateOdds() {
+      const rand = Math.random();
+      let odds;
 
-    function generateOdd() {
-      const r = Math.random();
-      let odd;
-      if (r < 0.75) {
-        odd = (1 + Math.random()).toFixed(2); // 1.00 to 2.00
-      } else if (r < 0.90) {
-        odd = (2 + Math.random()).toFixed(2); // 2.00 to 3.00
+      if (rand < 0.75) {
+        odds = (Math.random() * (2.00 - 1.50) + 1.50).toFixed(2);
+      } else if (rand < 0.95) {
+        odds = (Math.random() * (3.30 - 2.01) + 2.01).toFixed(2);
       } else {
-        odd = (3 + Math.random()).toFixed(2); // 3.00 to 4.00
+        odds = (Math.random() * (4.00 - 3.31) + 3.31).toFixed(2);
       }
-      return odd;
+
+      document.getElementById("oddsDisplay").innerText = `Predicted Odds: ${odds}x`;
     }
 
-    function startPrediction() {
-      document.getElementById('status').textContent = 'Calculating odd...';
-      document.getElementById('odds').textContent = '---';
+    function smartOddsCycle() {
+      generateOdds();
+
+      const delay = Math.random() * (60000 - 30000) + 30000; // 30s - 1min
 
       setTimeout(() => {
-        const odd = generateOdd();
-        document.getElementById('odds').textContent = `${odd}x`;
-        document.getElementById('status').textContent = 'Prediction ready';
-
-        setTimeout(() => {
-          document.getElementById('status').textContent = 'Calculating odd...';
-          document.getElementById('odds').textContent = '---';
-
-          const delay = Math.floor(Math.random() * 30000) + 30000; // 30s to 1min
-          setTimeout(startPrediction, delay);
-        }, Math.floor(Math.random() * 5000) + 10000); // Show for 10–15s
-
-      }, 2000);
+        document.getElementById("oddsDisplay").innerText = "Spinning...";
+        setTimeout(smartOddsCycle, 10000 + Math.random() * 5000); // show odds for 10-15s then restart
+      }, delay);
     }
 
-    startPrediction();
+    window.onload = smartOddsCycle;
   </script>
 </body>
 </html>
