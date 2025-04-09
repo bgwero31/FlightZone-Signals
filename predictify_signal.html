@@ -18,8 +18,8 @@
       border: 16px solid #222;
       border-top: 16px solid #00ffcc;
       border-radius: 50%;
-      width: 120px;
-      height: 120px;
+      width: 200px;
+      height: 200px;
       animation: spin 2s linear infinite;
       margin-bottom: 30px;
     }
@@ -61,7 +61,7 @@
       const delay = Math.random() * (60000 - 30000) + 30000; // 30s - 1min
 
       setTimeout(() => {
-        document.getElementById("oddsDisplay").innerText = "Spinning...";
+        document.getElementById("oddsDisplay").innerText = "waiting for the next signal...";
         setTimeout(smartOddsCycle, 10000 + Math.random() * 5000); // show odds for 10-15s then restart
       }, delay);
     }
