@@ -5,22 +5,31 @@
   <title>Smart Predictor Spinner</title>
   <style>
     body {
-      background-color: #111;
-      color: white;
+      margin: 0;
+      height: 100vh;
       font-family: 'Segoe UI', sans-serif;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       flex-direction: column;
-      position: relative;
-      margin: 0;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #111111, #1a1a2e, #16213e);
+      background-size: 400% 400%;
+      animation: backgroundShift 15s ease infinite;
+      color: white;
+    }
+
+    @keyframes backgroundShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     #clock {
-      position: absolute;
-      top: 10px;
-      font-size: 1.5rem;
+      font-size: 2rem;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      color: #00ffee;
+      text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
     }
 
     #spinner {
@@ -30,10 +39,10 @@
       width: 240px;
       height: 240px;
       animation: spin 2s linear infinite;
+      position: relative;
       display: flex;
-      justify-content: center;
       align-items: center;
-      margin-top: 60px;
+      justify-content: center;
       margin-bottom: 30px;
     }
 
@@ -42,17 +51,26 @@
     }
 
     #oddsDisplay {
-      font-size: 1.6rem;
-      color: #00ffcc;
-      text-align: center;
       position: absolute;
+      font-size: 2.6rem;
+      font-weight: bold;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+      pointer-events: none;
     }
 
     footer {
       position: absolute;
-      bottom: 10px;
-      font-size: 0.9rem;
-      color: #aaa;
+      bottom: 15px;
+      font-size: 1rem;
+      color: #ccc;
+      text-shadow: 0 0 10px #00ffcc;
+      animation: glowText 3s ease-in-out infinite;
+    }
+
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 5px #00ffcc; }
+      50% { text-shadow: 0 0 15px #00ffcc, 0 0 20px #00ffcc; }
     }
 
     @keyframes spin {
@@ -62,13 +80,14 @@
   </style>
 </head>
 <body>
+
   <div id="clock">--:--:--</div>
 
   <div id="spinner">
-    <div id="oddsDisplay">Loading odds...</div>
+    <div id="oddsDisplay">Loading...</div>
   </div>
 
-  <footer>All rights reserved, PREDICTIFY 2025</footer>
+  <footer>All rights reserved,predictify2025</footer>
 
   <script>
     const spinner = document.getElementById("spinner");
@@ -100,7 +119,7 @@
 
     function smartOddsCycle() {
       spinner.classList.remove("paused");
-      oddsDisplay.innerText = "Loading odds...";
+      oddsDisplay.innerText = "Loading...";
 
       const delay = Math.random() * (60000 - 30000) + 30000;
 
@@ -110,9 +129,9 @@
 
         const showDuration = 10000 + Math.random() * 5000;
         setTimeout(() => {
-          oddsDisplay.innerText = "waiting for the next signal...";
+          oddsDisplay.innerText = "Waiting for next odd...";
           spinner.classList.remove("paused");
-          setTimeout(smartOddsCycle, 2000); // slight pause before restart
+          setTimeout(smartOddsCycle, 2000);
         }, showDuration);
       }, delay);
     }
