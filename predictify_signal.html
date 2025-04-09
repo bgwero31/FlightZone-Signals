@@ -13,33 +13,76 @@
       align-items: center;
       height: 100vh;
       flex-direction: column;
+      position: relative;
+      margin: 0;
     }
+
+    #clock {
+      position: absolute;
+      top: 10px;
+      font-size: 1.5rem;
+    }
+
     #spinner {
-      border: 16px solid #222;
-      border-top: 16px solid #00ffcc;
+      border: 20px solid #222;
+      border-top: 20px solid #00ffcc;
       border-radius: 50%;
-      width: 200px;
-      height: 200px;
+      width: 240px;
+      height: 240px;
       animation: spin 2s linear infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 60px;
       margin-bottom: 30px;
     }
-    
+
+    .paused {
+      animation-play-state: paused;
+    }
+
+    #oddsDisplay {
+      font-size: 1.6rem;
+      color: #00ffcc;
+      text-align: center;
+      position: absolute;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
-    #oddsDisplay {
-      font-size: 2.2rem;
-      color: #00ffcc;
-    }
   </style>
 </head>
 <body>
-  <div id="spinner"></div>
-  <div id="oddsDisplay">Loading odds...</div>
+  <div id="clock">--:--:--</div>
+
+  <div id="spinner">
+    <div id="oddsDisplay">Loading odds...</div>
+  </div>
+
+  <footer>All rights reserved, bjpredictify2025</footer>
 
   <script>
+    const spinner = document.getElementById("spinner");
+    const oddsDisplay = document.getElementById("oddsDisplay");
+
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString();
+      document.getElementById("clock").textContent = timeStr;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+
     function generateOdds() {
       const rand = Math.random();
       let odds;
@@ -52,17 +95,25 @@
         odds = (Math.random() * (4.00 - 3.31) + 3.31).toFixed(2);
       }
 
-      document.getElementById("oddsDisplay").innerText = `Predicted Odds: ${odds}x`;
+      oddsDisplay.innerText = `${odds}x`;
     }
 
     function smartOddsCycle() {
-      generateOdds();
+      spinner.classList.remove("paused");
+      oddsDisplay.innerText = "Loading odds...";
 
-      const delay = Math.random() * (60000 - 30000) + 30000; // 30s - 1min
+      const delay = Math.random() * (60000 - 30000) + 30000;
 
       setTimeout(() => {
-        document.getElementById("oddsDisplay").innerText = "waiting for the next signal...";
-        setTimeout(smartOddsCycle, 10000 + Math.random() * 5000); // show odds for 10-15s then restart
+        spinner.classList.add("paused");
+        generateOdds();
+
+        const showDuration = 10000 + Math.random() * 5000;
+        setTimeout(() => {
+          oddsDisplay.innerText = "waiting for the next signal...";
+          spinner.classList.remove("paused");
+          setTimeout(smartOddsCycle, 2000); // slight pause before restart
+        }, showDuration);
       }, delay);
     }
 
