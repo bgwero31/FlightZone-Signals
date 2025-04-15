@@ -193,7 +193,7 @@
   <div class="stars"></div>
 
   <div class="login-container" id="login">
-    <h1>Welcome to CRIX PREDICTOR</h1>
+    <h1>Welcome to CRICX PREDICTOR</h1>
     <input type="text" placeholder="Betting Site" id="bettingSite">
     <input type="password" placeholder="Password" id="password">
     <button onclick="login()">Enter</button>
@@ -267,7 +267,7 @@
 
     function showPrediction() {
       const first = Math.random() < 0.5 ? 2.00 : 3.00;
-      const second = (Math.random() * (20 - 3) + 3).toFixed(2);
+      const second = (Math.random() * (12 - 3) + 3).toFixed(2);
       const confidence = Math.floor(Math.random() * 41) + 60;
 
       document.getElementById('predictionText').innerText = `${first.toFixed(2)}x - ${second}x`;
