@@ -14,49 +14,43 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      transition: background 1s ease-in-out;
+      background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
       overflow: hidden;
+      transition: background 1s ease-in-out;
     }
 
-    body.login-mode {
-      background: linear-gradient(270deg, #e0eafc, #cfdef3, #e0eafc);
-      background-size: 600% 600%;
-      animation: loginWave 10s ease infinite;
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://i.imgur.com/U3nHdeK.png') repeat;
+      z-index: 0;
+      opacity: 0.2;
+      animation: moveStars 100s linear infinite;
     }
 
-    body.dashboard-mode {
-      background: linear-gradient(-45deg, #ffecd2, #fcb69f, #ffe259, #ffa751);
-      background-size: 400% 400%;
-      animation: dashboardShift 12s ease infinite;
-    }
-
-    @keyframes loginWave {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes dashboardShift {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
+    @keyframes moveStars {
+      0% { background-position: 0 0; }
+      100% { background-position: 10000px 10000px; }
     }
 
     .login-container {
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 32px rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 40px 30px;
       width: 90%;
       max-width: 380px;
       text-align: center;
+      z-index: 1;
     }
 
     .login-container h1 {
       margin-bottom: 30px;
-      color: #fff;
+      color: #00eaff;
       font-size: 28px;
+      text-shadow: 0 0 5px #00ffff;
     }
 
     .login-container input,
@@ -70,13 +64,19 @@
     }
 
     .login-container input {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .login-container input::placeholder {
+      color: #ccc;
     }
 
     .login-container button {
       background: linear-gradient(90deg, #00c6ff, #0072ff);
       color: white;
       cursor: pointer;
+      box-shadow: 0 0 10px #00f2ff;
     }
 
     .login-container button:hover {
@@ -87,8 +87,9 @@
       position: absolute;
       bottom: 20px;
       text-align: center;
-      color: #fff;
+      color: #888;
       font-size: 13px;
+      z-index: 1;
     }
 
     #dashboard {
@@ -97,47 +98,65 @@
       align-items: center;
       text-align: center;
       width: 100%;
+      z-index: 1;
     }
 
     #clock {
-      color: white;
+      color: #00eaff;
       font-size: 22px;
       margin-top: 15px;
     }
 
-    .info-box {
+    .info-button {
       position: absolute;
       top: 10px;
       right: 15px;
-      background: rgba(255,255,255,0.7);
-      border-radius: 8px;
+      background: #00f2ff;
+      color: #111;
+      border: none;
       padding: 8px 15px;
-      font-size: 13px;
-      color: #222;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .info-popup {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 15px;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      width: 250px;
+      font-size: 14px;
+      box-shadow: 0 0 10px #00f2ff;
+      z-index: 2;
     }
 
     .prediction-card {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
       border-radius: 16px;
       padding: 25px 20px;
       margin-top: 40px;
       width: 90%;
       max-width: 420px;
-      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+      box-shadow: 0 0 25px rgba(0,255,255,0.3);
       animation: glow 2s infinite alternate;
     }
 
     @keyframes glow {
-      from { box-shadow: 0 0 10px rgba(255,255,255,0.1); }
-      to   { box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+      from { box-shadow: 0 0 10px rgba(0,255,255,0.2); }
+      to   { box-shadow: 0 0 20px rgba(0,255,255,0.5); }
     }
 
     .prediction {
       font-size: 30px;
       font-weight: bold;
-      color: #fff;
+      color: #00eaff;
       margin-bottom: 15px;
     }
 
@@ -145,7 +164,7 @@
       display: flex;
       justify-content: space-between;
       font-size: 18px;
-      color: #fff;
+      color: #00eaff;
     }
 
     .confidence {
@@ -161,8 +180,8 @@
     #startBtn {
       margin-top: 20px;
       padding: 12px 25px;
-      background-color: #0072ff;
-      color: white;
+      background-color: #00eaff;
+      color: #000;
       border-radius: 10px;
       border: none;
       font-size: 16px;
@@ -171,96 +190,106 @@
   </style>
 </head>
 <body class="login-mode">
+  <div class="stars"></div>
 
-<div class="login-container" id="login">
-  <h1>Welcome to CRIX PREDICTOR</h1>
-  <input type="text" placeholder="Betting Site" id="bettingSite">
-  <input type="password" placeholder="Password" id="password">
-  <button onclick="login()">Enter</button>
-</div>
+  <div class="login-container" id="login">
+    <h1>Welcome to CRIX PREDICTOR</h1>
+    <input type="text" placeholder="Betting Site" id="bettingSite">
+    <input type="password" placeholder="Password" id="password">
+    <button onclick="login()">Enter</button>
+  </div>
 
-<div id="dashboard">
-  <div class="info-box">CRIX AI v1.0</div>
-  <div id="clock">--:--:--</div>
-  <button id="startBtn" onclick="startPrediction()">Get Predictions</button>
-  <div class="prediction-card">
-    <div class="prediction" id="predictionText">Waiting...</div>
-    <div class="countdown-box">
-      <div class="confidence" id="confidenceLevel">Confidence: --%</div>
-      <div id="timer">01:00</div>
+  <div id="dashboard">
+    <button class="info-button" onclick="toggleInfo()">How to Play</button>
+    <div class="info-popup" id="infoPopup">
+      1. Enter correct password<br>
+      2. Click "Get Predictions"<br>
+      3. Follow the timer and multipliers<br>
+      4. Bet according to prediction shown<br><br>
+      Stay sharp, watch the timer!
+    </div>
+
+    <div id="clock">--:--:--</div>
+    <button id="startBtn" onclick="startPrediction()">Get Predictions</button>
+    <div class="prediction-card">
+      <div class="prediction" id="predictionText">Waiting...</div>
+      <div class="countdown-box">
+        <div class="confidence" id="confidenceLevel">Confidence: --%</div>
+        <div id="timer">01:00</div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="footer">ALL RIGHTS RESERVED. CRIX 2025</div>
+  <div class="footer">ALL RIGHTS RESERVED. CRIX 2025</div>
 
-<audio id="predictionSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+  <audio id="predictionSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
-<script>
-  let countdown = 60;
-  let interval;
-  let skipNext = false;
+  <script>
+    let countdown = 60;
+    let interval;
+    let skipNext = false;
 
-  function login() {
-    const pass = document.getElementById("password").value;
-    if (pass === "crix2025") {
-      document.getElementById('login').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'flex';
-      document.body.classList.remove('login-mode');
-      document.body.classList.add('dashboard-mode');
-      document.getElementById("startBtn").style.display = "block";
-    } else {
-      alert("Incorrect password");
-    }
-  }
-
-  function startPrediction() {
-    document.getElementById("startBtn").style.display = "none";
-    showPrediction();
-    countdown = 60;
-    updateTimerDisplay();
-    interval = setInterval(() => {
-      countdown--;
-      updateTimerDisplay();
-      if (countdown <= 0) {
-        countdown = 60;
-        if (!skipNext) {
-          showPrediction();
-          skipNext = Math.random() < 0.3;
-        } else {
-          skipNext = false;
-        }
+    function login() {
+      const pass = document.getElementById("password").value;
+      if (pass === "crix2025") {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'flex';
+      } else {
+        alert("Incorrect password");
       }
-    }, 1000);
-  }
+    }
 
-  function updateTimerDisplay() {
-    const minutes = String(Math.floor(countdown / 60)).padStart(2, '0');
-    const seconds = String(countdown % 60).padStart(2, '0');
-    document.getElementById('timer').innerText = `${minutes}:${seconds}`;
-  }
+    function startPrediction() {
+      document.getElementById("startBtn").style.display = "none";
+      showPrediction();
+      countdown = 60;
+      updateTimerDisplay();
+      interval = setInterval(() => {
+        countdown--;
+        updateTimerDisplay();
+        if (countdown <= 0) {
+          countdown = 60;
+          if (!skipNext) {
+            showPrediction();
+            skipNext = Math.random() < 0.3;
+          } else {
+            skipNext = false;
+          }
+        }
+      }, 1000);
+    }
 
-  function showPrediction() {
-    const first = Math.random() < 0.5 ? 2.00 : 3.00;
-    const second = (Math.random() * (20 - 3) + 3).toFixed(2);
-    const confidence = Math.floor(Math.random() * 41) + 60;
+    function updateTimerDisplay() {
+      const minutes = String(Math.floor(countdown / 60)).padStart(2, '0');
+      const seconds = String(countdown % 60).padStart(2, '0');
+      document.getElementById('timer').innerText = `${minutes}:${seconds}`;
+    }
 
-    document.getElementById('predictionText').innerText = `${first.toFixed(2)}x - ${second}x`;
-    document.getElementById('confidenceLevel').innerText = `Confidence: ${confidence}%`;
-    document.getElementById("predictionSound").play();
-  }
+    function showPrediction() {
+      const first = Math.random() < 0.5 ? 2.00 : 3.00;
+      const second = (Math.random() * (20 - 3) + 3).toFixed(2);
+      const confidence = Math.floor(Math.random() * 41) + 60;
 
-  function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const s = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById("clock").innerText = `${h}:${m}:${s}`;
-  }
+      document.getElementById('predictionText').innerText = `${first.toFixed(2)}x - ${second}x`;
+      document.getElementById('confidenceLevel').innerText = `Confidence: ${confidence}%`;
+      document.getElementById("predictionSound").play();
+    }
 
-  setInterval(updateClock, 1000);
-  updateClock();
-</script>
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById("clock").innerText = `${h}:${m}:${s}`;
+    }
 
+    function toggleInfo() {
+      const popup = document.getElementById("infoPopup");
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 </body>
 </html>
