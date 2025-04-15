@@ -7,101 +7,150 @@
   <style>
     body {
       margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f3f3f3;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-    }
-    .container {
-      max-width: 400px;
-      width: 90%;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      padding: 30px;
-      text-align: center;
-    }
-    h1 {
-      margin-bottom: 20px;
-      font-size: 26px;
-      color: #333;
-    }
-    .card {
-      padding: 20px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-    .prediction {
-      font-size: 24px;
-      font-weight: bold;
-      color: #222;
-      margin-bottom: 10px;
-    }
-    .confidence {
-      font-size: 16px;
-      color: #666;
-    }
-    .timer {
-      font-size: 20px;
-      margin-top: 10px;
-      color: #555;
-    }
-    .login-screen {
-      display: flex;
       flex-direction: column;
     }
-    input {
-      padding: 10px;
-      margin-bottom: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(6.5px);
+      -webkit-backdrop-filter: blur(6.5px);
+      border-radius: 15px;
+      padding: 40px 30px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      animation: pulseFade 10s infinite;
     }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
+
+    @keyframes pulseFade {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+      }
+    }
+
+    .login-container h1 {
+      margin-bottom: 30px;
+      color: #222;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    .login-container input {
+      width: 100%;
       padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.7);
       font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
     }
-    button:hover {
-      background-color: #0056b3;
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .login-container button:hover {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      box-shadow: 0 0 20px #00c6ff;
+    }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #444;
+      font-size: 13px;
+    }
+
+    /* Hidden dashboard */
+    #dashboard {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .prediction-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 25px;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .prediction-card .prediction {
+      font-size: 24px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .prediction-card .confidence {
+      margin-top: 8px;
+      color: #555;
+    }
+
+    .prediction-card .timer {
+      margin-top: 12px;
+      font-size: 18px;
+      color: #0072ff;
     }
   </style>
 </head>
 <body>
 
-<div class="container" id="login">
-  <h1>Crix Login</h1>
-  <div class="login-screen">
-    <input type="email" placeholder="Email" id="email">
-    <input type="password" placeholder="Password" id="password">
-    <button onclick="login()">Login</button>
-  </div>
+<div class="login-container" id="login">
+  <h1>Welcome to CRIX</h1>
+  <input type="text" placeholder="Email" id="email">
+  <input type="password" placeholder="Password" id="password">
+  <button onclick="login()">Enter</button>
 </div>
 
-<div class="container" id="dashboard" style="display: none;">
-  <h1>Crix Prediction</h1>
-  <div class="card">
+<div id="dashboard">
+  <h1>CRIX Predictor</h1>
+  <div class="prediction-card">
     <div class="prediction" id="predictionText">Waiting...</div>
     <div class="confidence" id="confidenceLevel"></div>
     <div class="timer" id="timer">01:00</div>
   </div>
 </div>
 
+<div class="footer">ALL RIGHTS RESERVED. CRIX 2025</div>
+
 <script>
   let countdown = 60;
   let interval;
 
   function login() {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    startCountdown();
+    const pass = document.getElementById("password").value;
+    if (pass === "crix2025") {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'flex';
+      startCountdown();
+    } else {
+      alert("Incorrect password");
+    }
   }
 
   function startCountdown() {
