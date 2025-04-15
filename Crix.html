@@ -5,62 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CRIX PREDICTOR</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
       font-family: 'Segoe UI', sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      transition: background 1s ease-in-out;
       overflow: hidden;
+      background: #000;
+      color: white;
     }
 
-    body.login-mode {
-      background: linear-gradient(270deg, #e0eafc, #cfdef3, #e0eafc);
-      background-size: 600% 600%;
-      animation: loginWave 10s ease infinite;
+    body::before {
+      content: '';
+      position: fixed;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, #281a60, #000);
+      animation: rotateGalaxy 60s linear infinite;
+      z-index: -2;
     }
 
-    @keyframes loginWave {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.ibb.co/N12L5rx/stars-bg.gif');
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+      opacity: 0.35;
+      pointer-events: none;
     }
 
-    body.dashboard-mode {
-      background: linear-gradient(-45deg, #ffecd2, #fcb69f, #ffe259, #ffa751);
-      background-size: 400% 400%;
-      animation: dashboardShift 12s ease infinite;
+    @keyframes rotateGalaxy {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    @keyframes dashboardShift {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
+    .login-container, .prediction-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
     }
 
     .login-container {
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(8px);
-      border-radius: 20px;
-      padding: 40px 30px;
       width: 90%;
-      max-width: 380px;
+      max-width: 360px;
       text-align: center;
+      margin: auto;
+      margin-top: 100px;
     }
 
     .login-container h1 {
-      margin-bottom: 30px;
-      color: #fff;
+      margin-bottom: 25px;
       font-size: 28px;
+      color: #fff;
     }
 
-    .login-container input,
-    .login-container button {
+    .login-container input, .login-container button {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -70,7 +77,8 @@
     }
 
     .login-container input {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
     }
 
     .login-container button {
@@ -79,95 +87,106 @@
       cursor: pointer;
     }
 
-    .login-container button:hover {
-      background: linear-gradient(90deg, #0072ff, #00c6ff);
-    }
-
-    .footer {
-      position: absolute;
-      bottom: 20px;
-      text-align: center;
-      color: #fff;
-      font-size: 13px;
-    }
-
     #dashboard {
       display: none;
       flex-direction: column;
       align-items: center;
-      text-align: center;
+      margin-top: 40px;
     }
 
-    .prediction-card {
-      background: rgba(255,255,255,0.95);
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      padding: 25px;
-      margin-top: 20px;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    .prediction-card .prediction {
-      font-size: 26px;
-      font-weight: bold;
-      color: #222;
-    }
-
-    .prediction-card .confidence {
+    #clock {
+      font-size: 24px;
       margin-top: 10px;
-      font-size: 16px;
-      color: #444;
-    }
-
-    .prediction-card .timer {
-      margin-top: 12px;
-      font-size: 18px;
-      color: #ff5e62;
-    }
-
-    #startBtn {
-      margin-top: 20px;
-      padding: 12px 25px;
-      background-color: #0072ff;
-      color: white;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      display: none;
+      text-align: center;
     }
 
     .info-box {
       position: absolute;
-      top: 15px;
+      top: 10px;
       right: 15px;
-      background: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.2);
+      padding: 8px 15px;
       border-radius: 8px;
-      padding: 10px 15px;
       font-size: 13px;
-      color: #222;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      color: #fff;
+    }
+
+    .prediction-card {
+      width: 90%;
+      max-width: 420px;
+      margin-top: 30px;
+      text-align: center;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px rgba(255,255,255,0.1); }
+      to   { box-shadow: 0 0 25px rgba(0,255,255,0.3); }
+    }
+
+    .prediction {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .countdown-box {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      font-size: 18px;
+    }
+
+    .confidence {
+      animation: flicker 1s infinite;
+      color: #00ffee;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    #startBtn {
+      margin-top: 25px;
+      padding: 12px 30px;
+      background-color: #00c6ff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
     }
   </style>
 </head>
-<body class="login-mode">
+<body>
 
 <div class="login-container" id="login">
-  <h1>Welcome to CRIX PREDICTOR</h1>
+  <h1>CRIX PREDICTOR</h1>
   <input type="text" placeholder="Betting Site" id="bettingSite">
   <input type="password" placeholder="Password" id="password">
-  <button onclick="login()">Enter</button>
+  <button onclick="login()">Login</button>
 </div>
 
 <div id="dashboard">
   <div class="info-box">CRIX AI v1.0</div>
-  <h1>CRIX Predictor</h1>
-  <button id="startBtn" onclick="startPrediction()">Get Predictions</button>
+  <div id="clock">--:--:--</div>
+  <button id="startBtn" onclick="startPrediction()">Start Predictions</button>
   <div class="prediction-card">
     <div class="prediction" id="predictionText">Waiting...</div>
-    <div class="confidence" id="confidenceLevel">Confidence: --%</div>
-    <div class="timer" id="timer">01:00</div>
+    <div class="countdown-box">
+      <div class="confidence" id="confidenceLevel">Confidence: --%</div>
+      <div id="timer">01:00</div>
+    </div>
   </div>
 </div>
 
@@ -185,9 +204,6 @@
     if (pass === "crix2025") {
       document.getElementById('login').style.display = 'none';
       document.getElementById('dashboard').style.display = 'flex';
-      document.body.classList.remove('login-mode');
-      document.body.classList.add('dashboard-mode');
-      document.getElementById("startBtn").style.display = "block";
     } else {
       alert("Incorrect password");
     }
@@ -207,7 +223,6 @@
           showPrediction();
           skipNext = Math.random() < 0.3;
         } else {
-          // Just wait quietly
           skipNext = false;
         }
       }
@@ -229,6 +244,17 @@
     document.getElementById('confidenceLevel').innerText = `Confidence: ${confidence}%`;
     document.getElementById("predictionSound").play();
   }
+
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById("clock").innerText = `${h}:${m}:${s}`;
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
 </script>
 
 </body>
