@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crix </title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      max-width: 400px;
+      width: 90%;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 30px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #333;
+    }
+    .card {
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .prediction {
+      font-size: 24px;
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 10px;
+    }
+    .confidence {
+      font-size: 16px;
+      color: #666;
+    }
+    .timer {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #555;
+    }
+    .login-screen {
+      display: flex;
+      flex-direction: column;
+    }
+    input {
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="login">
+  <h1>Crix Login</h1>
+  <div class="login-screen">
+    <input type="email" placeholder="Email" id="email">
+    <input type="password" placeholder="Password" id="password">
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<div class="container" id="dashboard" style="display: none;">
+  <h1>Crix Prediction</h1>
+  <div class="card">
+    <div class="prediction" id="predictionText">Waiting...</div>
+    <div class="confidence" id="confidenceLevel"></div>
+    <div class="timer" id="timer">01:00</div>
+  </div>
+</div>
+
+<script>
+  let countdown = 60;
+  let interval;
+
+  function login() {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    startCountdown();
+  }
+
+  function startCountdown() {
+    updateTimerDisplay();
+    interval = setInterval(() => {
+      countdown--;
+      updateTimerDisplay();
+      if (countdown <= 0) {
+        showPrediction();
+        countdown = 60;
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    const minutes = String(Math.floor(countdown / 60)).padStart(2, '0');
+    const seconds = String(countdown % 60).padStart(2, '0');
+    document.getElementById('timer').innerText = `${minutes}:${seconds}`;
+  }
+
+  function showPrediction() {
+    const first = Math.random() < 0.5 ? 2.00 : 3.00;
+    const second = (Math.random() * (20 - 3) + 3).toFixed(2);
+    const confidenceLevels = ["Confidence: High", "Confidence: Medium", "Confidence: Low"];
+    const randomConfidence = confidenceLevels[Math.floor(Math.random() * confidenceLevels.length)];
+
+    document.getElementById('predictionText').innerText = `${first.toFixed(2)}x - ${second}x`;
+    document.getElementById('confidenceLevel').innerText = randomConfidence;
+  }
+</script>
+
+</body>
+</html>
