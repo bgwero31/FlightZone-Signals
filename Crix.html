@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Crix </title>
+  <title>Crix Bot 2025</title>
   <style>
     body {
       margin: 0;
@@ -138,6 +138,9 @@
 
 <div class="footer">ALL RIGHTS RESERVED. CRIX 2025</div>
 
+<!-- Sound Effect (Ding sound) -->
+<audio id="predictionSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
 <script>
   let countdown = 60;
   let interval;
@@ -179,6 +182,9 @@
 
     document.getElementById('predictionText').innerText = `${first.toFixed(2)}x - ${second}x`;
     document.getElementById('confidenceLevel').innerText = randomConfidence;
+
+    // Play sound effect when prediction is shown
+    document.getElementById("predictionSound").play();
   }
 </script>
 
