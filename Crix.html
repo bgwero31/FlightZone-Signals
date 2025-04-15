@@ -1,162 +1,223 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRIX PREDICTOR...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRIX PREDICTOR</title>
   <style>
-    * {
-      box-sizing: border-box;
+    body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }body {
-  background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: background 1s ease-in-out;
+    }
 
-.container {
-  background: rgba(0, 0, 0, 0.8);
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-  text-align: center;
-  width: 300px;
-}
+    body.login-mode {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Futuristic dark theme */
+    }
 
-h2 {
-  margin-bottom: 1.5rem;
-  color: cyan;
-}
+    body.dashboard-mode {
+      background: linear-gradient(to right, #f7971e, #ffd200); /* Golden bright dashboard */
+    }
 
-input {
-  width: 100%;
-  padding: 0.7rem;
-  margin: 0.5rem 0;
-  border: none;
-  border-radius: 10px;
-  background: #1e1e1e;
-  color: white;
-}
+    .login-container {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(6.5px);
+      border-radius: 15px;
+      padding: 40px 30px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      color: white;
+    }
 
-button {
-  padding: 0.8rem;
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  background: cyan;
-  color: black;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 1rem;
-}
+    .login-container h1 {
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
 
-.signal-page {
-  display: none;
-  background: linear-gradient(120deg, #111, #333);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 2rem;
-  text-align: center;
-}
+    .login-container input,
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+    }
 
-#clock {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
+    .login-container input {
+      background: rgba(255, 255, 255, 0.7);
+    }
 
-.info-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: #222;
-  color: white;
-  border: 1px solid cyan;
-  padding: 0.4rem 0.8rem;
-  border-radius: 10px;
-  cursor: pointer;
-}
+    .login-container button {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      cursor: pointer;
+    }
 
-.modal {
-  display: none;
-  position: fixed;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -20%);
-  background: #000;
-  color: white;
-  padding: 1rem;
-  border: 1px solid cyan;
-  border-radius: 10px;
-  z-index: 100;
-  width: 300px;
-}
+    .login-container button:hover {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+    }
 
-.modal h4 {
-  margin-bottom: 0.5rem;
-  color: cyan;
-}
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #eee;
+      font-size: 13px;
+    }
 
+    #dashboard {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .info-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .prediction-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 25px;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .prediction-card .prediction {
+      font-size: 24px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .prediction-card .confidence {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .prediction-card .timer {
+      margin-top: 12px;
+      font-size: 18px;
+      color: #0072ff;
+    }
+
+    #startBtn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background-color: #0072ff;
+      color: white;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+    }
   </style>
-</head><body>
-  <div class="container" id="login-container">
-    <h2>CRIX BOT 2025</h2>
-    <input type="text" placeholder="Username" id="username" />
-    <input type="text" placeholder="Betting Site" id="bettingSite" />
-    <button onclick="login()">Login</button>
-  </div>  <div class="signal-page" id="signal-page">
-    <button class="info-btn" onclick="toggleInfo()">Info</button>
-    <div id="clock"></div>
-    <button onclick="generateSignal()">Get Prediction</button>
-    <div id="signal-output" style="margin-top: 20px; font-size: 1.5rem;"></div>
-  </div>  <div class="modal" id="info-modal">
-    <h4>How to Play CRIX</h4>
-    <p>
-      Stake small amounts on low odds (2x - 4x). Watch for 5x+ for better returns.
-      Use signals below as guidance, and skip a round if no signal appears.
-    </p>
-  </div>  <script>
-    function login() {
-      const user = document.getElementById('username').value;
-      const site = document.getElementById('bettingSite').value;
-      if (user && site) {
-        document.getElementById('login-container').style.display = 'none';
-        document.getElementById('signal-page').style.display = 'block';
-        updateClock();
+</head>
+<body class="login-mode">
+
+<div class="login-container" id="login">
+  <h1>Welcome to CRIX PREDICTOR</h1>
+  <input type="text" placeholder="Betting site" id="betting-site">
+  <input type="password" placeholder="Password" id="password">
+  <button onclick="login()">Enter</button>
+</div>
+
+<div id="dashboard">
+  <div class="info-btn" onclick="showInfo()">i</div>
+  <h1>CRIX Predictor</h1>
+  <button id="startBtn" onclick="startPrediction()">Get Predictions</button>
+  <div class="prediction-card">
+    <div class="prediction" id="predictionText">Waiting...</div>
+    <div class="confidence" id="confidenceLevel">Confidence: --%</div>
+    <div class="timer" id="timer">01:00</div>
+  </div>
+</div>
+
+<div class="footer">ALL RIGHTS RESERVED. CRIX 2025</div>
+
+<audio id="predictionSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+<script>
+  let countdown = 60;
+  let interval;
+  let skipNext = false;
+
+  function login() {
+    const pass = document.getElementById("password").value;
+    if (pass === "crix2025") {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'flex';
+      document.body.classList.remove('login-mode');
+      document.body.classList.add('dashboard-mode');
+      document.getElementById("startBtn").style.display = "block";
+    } else {
+      alert("Incorrect password");
+    }
+  }
+
+  function startPrediction() {
+    document.getElementById("startBtn").style.display = "none";
+    showPrediction();
+    countdown = 60;
+    updateTimerDisplay();
+    interval = setInterval(() => {
+      countdown--;
+      updateTimerDisplay();
+      if (countdown <= 0) {
+        countdown = 60;
+        if (skipNext) {
+          document.getElementById('predictionText').innerText = "Waiting...";
+          document.getElementById('confidenceLevel').innerText = "Confidence: --%";
+          skipNext = false;
+        } else {
+          showPrediction();
+          skipNext = Math.random() < 0.3; // 30% skip chance
+        }
       }
-    }
+    }, 1000);
+  }
 
-    function generateSignal() {
-      const baseOdds = [2.00, 3.00];
-      const highOdds = [4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 10.00, 11.00, 12.00, 13.00];
-      const selectedBase = baseOdds[Math.floor(Math.random() * baseOdds.length)];
-      const selectedHigh = highOdds[Math.floor(Math.random() * highOdds.length)];
-      const prediction = `${selectedBase.toFixed(2)}x then ${selectedHigh.toFixed(2)}x`;
-      const confidence = Math.floor(Math.random() * 41) + 60; // 60% - 100%
+  function updateTimerDisplay() {
+    const minutes = String(Math.floor(countdown / 60)).padStart(2, '0');
+    const seconds = String(countdown % 60).padStart(2, '0');
+    document.getElementById('timer').innerText = `${minutes}:${seconds}`;
+  }
 
-      // Simulate occasional skipping
-      const skip = Math.random() < 0.2; // 20% chance to skip
-      document.getElementById('signal-output').innerHTML = skip ?
-        "No Signal - Skip This Round" :
-        `Prediction: ${prediction} | Confidence: ${confidence}%`;
-    }
+  function showPrediction() {
+    const low = Math.random() < 0.5 ? 2.00 : 3.00;
+    const high = (Math.random() * (13 - 4) + 4).toFixed(2);
+    const confidence = Math.floor(Math.random() * 41) + 60; // 60-100%
 
-    function updateClock() {
-      setInterval(() => {
-        const now = new Date();
-        const time = now.toLocaleTimeString();
-        document.getElementById('clock').innerText = time;
-      }, 1000);
-    }
+    document.getElementById('predictionText').innerText = `${low.toFixed(2)}x - ${high}x`;
+    document.getElementById('confidenceLevel').innerText = `Confidence: ${confidence}%`;
+    document.getElementById("predictionSound").play();
+  }
 
-    function toggleInfo() {
-      const modal = document.getElementById('info-modal');
-      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-    }
-  </script></body></html>
+  function showInfo() {
+    alert("Welcome to CRIX Game:\n\n- Place your stake before the countdown ends.\n- Stake at low odds (2x–3x) then cashout before the second signal hits.\n- Follow predictions carefully.\n\nAvoid staking when skipped!");
+  }
+</script>
+
+</body>
+</html>
