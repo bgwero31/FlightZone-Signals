@@ -15,30 +15,47 @@
       align-items: center;
       flex-direction: column;
       transition: background 1s ease-in-out;
+      overflow: hidden;
     }
 
     body.login-mode {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Futuristic dark theme */
+      background: linear-gradient(270deg, #e0eafc, #cfdef3, #e0eafc);
+      background-size: 600% 600%;
+      animation: loginWave 10s ease infinite;
+    }
+
+    @keyframes loginWave {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     body.dashboard-mode {
-      background: linear-gradient(to right, #f7971e, #ffd200); /* Golden bright dashboard */
+      background: linear-gradient(-45deg, #ffecd2, #fcb69f, #ffe259, #ffa751);
+      background-size: 400% 400%;
+      animation: dashboardShift 12s ease infinite;
+    }
+
+    @keyframes dashboardShift {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
     }
 
     .login-container {
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-      backdrop-filter: blur(6.5px);
-      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
       padding: 40px 30px;
       width: 90%;
       max-width: 380px;
       text-align: center;
-      color: white;
     }
 
     .login-container h1 {
       margin-bottom: 30px;
+      color: #fff;
       font-size: 28px;
     }
 
@@ -53,7 +70,7 @@
     }
 
     .login-container input {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.85);
     }
 
     .login-container button {
@@ -67,9 +84,10 @@
     }
 
     .footer {
-      margin-top: 30px;
+      position: absolute;
+      bottom: 20px;
       text-align: center;
-      color: #eee;
+      color: #fff;
       font-size: 13px;
     }
 
@@ -78,25 +96,12 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      position: relative;
-    }
-
-    .info-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 20px;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 5px 10px;
-      border-radius: 50%;
-      cursor: pointer;
     }
 
     .prediction-card {
-      background: white;
+      background: rgba(255,255,255,0.95);
       border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       padding: 25px;
       margin-top: 20px;
       width: 90%;
@@ -104,21 +109,21 @@
     }
 
     .prediction-card .prediction {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
-      color: #111;
+      color: #222;
     }
 
     .prediction-card .confidence {
       margin-top: 10px;
       font-size: 16px;
-      color: #333;
+      color: #444;
     }
 
     .prediction-card .timer {
       margin-top: 12px;
       font-size: 18px;
-      color: #0072ff;
+      color: #ff5e62;
     }
 
     #startBtn {
@@ -132,19 +137,31 @@
       cursor: pointer;
       display: none;
     }
+
+    .info-box {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 13px;
+      color: #222;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
   </style>
 </head>
 <body class="login-mode">
 
 <div class="login-container" id="login">
   <h1>Welcome to CRIX PREDICTOR</h1>
-  <input type="text" placeholder="Betting site" id="betting-site">
+  <input type="text" placeholder="Betting Site" id="bettingSite">
   <input type="password" placeholder="Password" id="password">
   <button onclick="login()">Enter</button>
 </div>
 
 <div id="dashboard">
-  <div class="info-btn" onclick="showInfo()">i</div>
+  <div class="info-box">CRIX AI v1.0</div>
   <h1>CRIX Predictor</h1>
   <button id="startBtn" onclick="startPrediction()">Get Predictions</button>
   <div class="prediction-card">
@@ -186,13 +203,12 @@
       updateTimerDisplay();
       if (countdown <= 0) {
         countdown = 60;
-        if (skipNext) {
-          document.getElementById('predictionText').innerText = "Waiting...";
-          document.getElementById('confidenceLevel').innerText = "Confidence: --%";
-          skipNext = false;
-        } else {
+        if (!skipNext) {
           showPrediction();
-          skipNext = Math.random() < 0.3; // 30% skip chance
+          skipNext = Math.random() < 0.3;
+        } else {
+          // Just wait quietly
+          skipNext = false;
         }
       }
     }, 1000);
@@ -205,17 +221,13 @@
   }
 
   function showPrediction() {
-    const low = Math.random() < 0.5 ? 2.00 : 3.00;
-    const high = (Math.random() * (13 - 4) + 4).toFixed(2);
-    const confidence = Math.floor(Math.random() * 41) + 60; // 60-100%
+    const first = Math.random() < 0.5 ? 2.00 : 3.00;
+    const second = (Math.random() * (20 - 3) + 3).toFixed(2);
+    const confidence = Math.floor(Math.random() * 41) + 60;
 
-    document.getElementById('predictionText').innerText = `${low.toFixed(2)}x - ${high}x`;
+    document.getElementById('predictionText').innerText = `${first.toFixed(2)}x - ${second}x`;
     document.getElementById('confidenceLevel').innerText = `Confidence: ${confidence}%`;
     document.getElementById("predictionSound").play();
-  }
-
-  function showInfo() {
-    alert("Welcome to CRIX Game:\n\n- Place your stake before the countdown ends.\n- Stake at low odds (2x–3x) then cashout before the second signal hits.\n- Follow predictions carefully.\n\nAvoid staking when skipped!");
   }
 </script>
 
