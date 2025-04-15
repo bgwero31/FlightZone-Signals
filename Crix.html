@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Crix Bot 2025</title>
+  <title>Crix 2025</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      background: url('https://i.imgur.com/WqM0at5.jpg') center/cover no-repeat; /* Cricket ground sketch */
       font-family: 'Segoe UI', sans-serif;
       height: 100vh;
       display: flex;
@@ -21,7 +21,6 @@
       background: rgba(255, 255, 255, 0.15);
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
       backdrop-filter: blur(6.5px);
-      -webkit-backdrop-filter: blur(6.5px);
       border-radius: 15px;
       padding: 40px 30px;
       width: 90%;
@@ -78,11 +77,10 @@
     .footer {
       margin-top: 30px;
       text-align: center;
-      color: #444;
+      color: #fff;
       font-size: 13px;
     }
 
-    /* Hidden dashboard */
     #dashboard {
       display: none;
       flex-direction: column;
@@ -91,28 +89,35 @@
     }
 
     .prediction-card {
-      background: white;
-      border-radius: 10px;
+      background: #fefefe;
+      border: 2px solid #0072ff;
+      border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 25px;
+      padding: 30px 20px;
       margin-top: 20px;
       width: 90%;
       max-width: 400px;
+      background-image: url('https://i.imgur.com/1OhzNVf.png'); /* Light cricket field overlay */
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: bottom;
     }
 
     .prediction-card .prediction {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
-      color: #111;
+      color: #0072ff;
     }
 
     .prediction-card .confidence {
-      margin-top: 8px;
-      color: #555;
+      margin-top: 12px;
+      color: #222;
+      font-size: 16px;
+      font-weight: 600;
     }
 
     .prediction-card .timer {
-      margin-top: 12px;
+      margin-top: 14px;
       font-size: 18px;
       color: #0072ff;
     }
@@ -122,13 +127,13 @@
 
 <div class="login-container" id="login">
   <h1>Welcome to CRIX</h1>
-  <input type="text" placeholder="Email" id="email">
+  <input type="text" placeholder="betting site" id="betting site">
   <input type="password" placeholder="Password" id="password">
   <button onclick="login()">Enter</button>
 </div>
 
 <div id="dashboard">
-  <h1>CRIX Predictor</h1>
+  <h1 style="color: white;">CRIX Predictor</h1>
   <div class="prediction-card">
     <div class="prediction" id="predictionText">Waiting...</div>
     <div class="confidence" id="confidenceLevel"></div>
@@ -177,13 +182,12 @@
   function showPrediction() {
     const first = Math.random() < 0.5 ? 2.00 : 3.00;
     const second = (Math.random() * (20 - 3) + 3).toFixed(2);
-    const confidenceLevels = ["Confidence: High", "Confidence: Medium", "Confidence: Low"];
-    const randomConfidence = confidenceLevels[Math.floor(Math.random() * confidenceLevels.length)];
+    const randomConfidence = Math.floor(Math.random() * 51) + 50; // 50% to 100%
 
     document.getElementById('predictionText').innerText = `${first.toFixed(2)}x - ${second}x`;
-    document.getElementById('confidenceLevel').innerText = randomConfidence;
+    document.getElementById('confidenceLevel').innerText = `Confidence: ${randomConfidence}%`;
 
-    // Play sound effect when prediction is shown
+    // Play sound
     document.getElementById("predictionSound").play();
   }
 </script>
